@@ -1,0 +1,25 @@
+"""timegraft: dated barcode trees for phylogenetic diversity.
+
+    records --filter--> representatives --shard by genus--> dated genus subtrees
+    dated backbone ----------------------------------------> graft --> timegraft.tre
+"""
+
+from pathlib import Path
+
+configfile: "config/config.yaml"
+
+OUT = config["outdir"]
+# the timegraft package, made importable for the rule scripts
+SRC = str(Path(workflow.basedir).parent / "src")
+SHARDS = list(range(int(config["n_shards"])))
+
+
+include: "rules/units.smk"
+include: "rules/genus.smk"
+include: "rules/graft.smk"
+
+
+rule all:
+    input:
+        f"{OUT}/timegraft.tre",
+        f"{OUT}/provenance.tsv",
