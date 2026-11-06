@@ -36,7 +36,7 @@ Milestone 1, working on synthetic data:
 - [ ] treePL as an alternative to mean-path-length dating
 - [ ] Embedding distances as a third distance method
 - [ ] Placement of units without a genus, and of unmatched metabarcoding sequences
-- [ ] Per-sample pruning and PD metrics
+- [x] Per-sample PD metrics: Faith's PD, MPD (presence and abundance-weighted), unweighted and weighted UniFrac, PhyloSor
 - [ ] Validation of the informative window per marker and clade
 
 ## Usage
@@ -53,11 +53,15 @@ pytest
 - `records`: tab-separated, with columns `record_id`, `unit_id`, `genus`, `sequence`. For `align: none` the sequences must already be aligned; set `align: mafft` otherwise.
 - `backbone`: Newick, ultrametric, ages in Ma, one tip per genus. Alternatively set `backbone_build.enabled: true` to build it from Open Tree of Life and TimeTree for all genera in the records. That needs network access to `api.opentreeoflife.org` and `api.timetree.org`; responses are cached in `backbone_build.cache`, so each query is made once. The build writes `backbone/genera.tsv` (how each genus was matched) and `backbone/node_ages.tsv` (each node's age and whether it came from TimeTree or was interpolated).
 - `crown_ages` (optional): tab-separated, `genus`, `crown_age`.
+- `samples` (optional): tab-separated, `sample`, `unit_id`, `abundance`. When given, the workflow also computes diversity metrics.
 
 ### Outputs (under `outdir`)
 
 - `timegraft.tre`: the dated tree, tips are unit identifiers.
 - `provenance.tsv`: per backbone genus, whether it received a subtree, a single unit or was pruned, with stem age, crown age and its source, the rooting method and the outgroup used.
+- `diversity/alpha.tsv`: per sample, richness, Faith's PD (including the path to the root), MPD and abundance-weighted MPD, in Ma.
+- `diversity/beta.tsv`: per pair of samples, unweighted and weighted (normalised) UniFrac and PhyloSor.
+- `diversity/units_not_in_tree.tsv`: sample units that are not in the tree, so they are visible rather than silently dropped.
 - `units/rejected.tsv`, `units/unassigned.tsv`, `genera/missing_from_backbone.tsv`: records and units that did not make it into the tree, and why.
 
 ## Layout
