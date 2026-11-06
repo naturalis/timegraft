@@ -13,7 +13,8 @@ from timegraft.seqio import read_tsv
 REPO = Path(__file__).resolve().parents[1]
 
 
-@pytest.mark.skipif(shutil.which("snakemake") is None, reason="snakemake not installed")
+@pytest.mark.skipif(shutil.which("snakemake") is None or shutil.which("vsearch") is None,
+                    reason="snakemake or vsearch not installed")
 def test_toy_workflow(tmp_path):
     outdir = tmp_path / "out"
     subprocess.run(
@@ -44,12 +45,20 @@ def test_toy_workflow(tmp_path):
         assert status[genus]["rooting"] == "outgroup"
         assert float(status[genus]["crown_age"]) < float(status[genus]["stem_age"])
 
+    placements = {r["asv_id"]: r for r in read_tsv(outdir / "placement" / "placements.tsv")}
+    assert {a: r["status"] for a, r in placements.items()} == {
+        "asv_01": "matched", "asv_02": "matched", "asv_03": "placed", "asv_04": "unplaced", "asv_05": "placed",
+    }
+    assert placements["asv_03"]["unit_id"] == "BOLD:AAA0008"
+    placed = dendropy.Tree.get(path=str(outdir / "placement" / "timegraft_placed.tre"), schema="newick",
+                               preserve_underscores=True, rooting="force-rooted")
+    assert is_ultrametric(placed, tolerance=1e-6)
+    assert {"asv_03", "asv_05"} <= {l.taxon.label for l in placed.leaf_node_iter()}
+
     alpha = {r["sample"]: r for r in read_tsv(outdir / "diversity" / "alpha.tsv")}
     assert set(alpha) == {"estuary_1", "estuary_2", "marina_1"}
-    assert all(float(r["faith_pd"]) > 0 for r in alpha.values())
+    assert alpha["estuary_2"]["richness"] == "3"
     assert len(read_tsv(outdir / "diversity" / "beta.tsv")) == 3
-    missing = read_tsv(outdir / "diversity" / "units_not_in_tree.tsv")
-    assert [(r["sample"], r["unit_id"]) for r in missing] == [("marina_1", "BOLD:AAZ0001")]
 
     rejected = {r["record_id"]: r["reason"] for r in read_tsv(outdir / "units" / "rejected.tsv")}
     assert rejected == {"BAD_stop": "stop_codon", "BAD_short": "too_short"}

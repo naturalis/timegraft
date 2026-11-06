@@ -8,7 +8,12 @@ records: tests/data/toy/records.tsv        # record_id, unit_id, genus, sequence
 backbone: tests/data/toy/backbone.tre      # dated, ultrametric, genera at the tips, ages in Ma
                                            # (ignored when backbone_build.enabled is true)
 crown_ages: tests/data/toy/crown_ages.tsv  # optional: genus, crown_age (Ma), e.g. from TimeTree
-samples: tests/data/toy/samples.tsv        # optional: sample, unit_id, abundance; enables PD metrics
+
+# Diversity per sample. Give either a table of units per sample, or ASVs plus
+# an ASV table: ASVs are then matched to units or placed on the tree first.
+samples:                                   # optional: sample, unit_id, abundance
+asvs: tests/data/toy/asvs.fasta            # optional: ASV sequences (FASTA)
+asv_table: tests/data/toy/asv_table.tsv    # optional: sample, asv_id, reads
 
 # Build the backbone from Open Tree of Life (topology) and TimeTree (ages)
 # for all genera in the records, instead of reading it from a file.
@@ -49,6 +54,12 @@ markers:
       method: rate           # used when crown_ages has no entry for a genus
       rate: 0.0115           # substitutions per site per Myr, per lineage (about 2.3% pairwise)
       cap_fraction: 0.9      # crown age never exceeds this fraction of the stem age
+    placement:
+      match_identity: 0.97   # at or above: the ASV counts as the unit it matches
+      place_identity: 0.80   # at or above: attached near its nearest unit; below: unplaced
+      query_cov: 0.9         # share of the ASV that must align
+      maxaccepts: 20
+      height: rate           # attach at age (1 - identity) / (2 * rate), using crown_age.rate
 
   its:
     filter:
@@ -62,3 +73,10 @@ markers:
       method: fraction       # no reliable ITS rate: a stated fraction of the stem age
       fraction: 0.5
       cap_fraction: 0.9
+    placement:
+      match_identity: 0.97
+      place_identity: 0.80
+      query_cov: 0.8
+      maxaccepts: 20
+      height: terminal       # no reliable rate: attach halfway along the nearest unit's terminal edge
+      terminal_fraction: 0.5
