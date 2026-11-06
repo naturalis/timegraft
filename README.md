@@ -55,7 +55,7 @@ pytest
 ### Inputs
 
 - `records`: tab-separated, with columns `record_id`, `unit_id`, `genus`, `sequence` (optionally `family`, `order` and other ranks, used by the validation).
-- Or `bcdm.path`: a BOLD data package in BCDM format (TSV or Parquet; Parquet is read with DuckDB and is much faster on a full dump), filtered by marker, taxa and country into a record table. The same filter runs on its own, which is handy for cutting a regional subset out of a full dump: `python -m timegraft.bcdm BOLD_Public.parquet records.tsv --taxon phylum=Annelida,Mollusca --country Portugal,Spain`. For `align: none` the sequences must already be aligned; set `align: mafft` otherwise.
+- Or `bcdm.path`: a BOLD data package in BCDM format (TSV or Parquet; Parquet is read with DuckDB and is much faster on a full dump), filtered by marker, taxa and country into a record table. The same filter runs on its own, which is handy for cutting a regional subset out of a full dump: `python -m timegraft.bcdm BOLD_Public.parquet records.tsv --taxon phylum=Annelida,Mollusca --country Portugal,Spain`. Use `--exclude class=Insecta` to drop taxa, `rank=@file` to read names from a file (one per line), and `--max-per-unit 10` to keep at most ten records per BIN, which is plenty for choosing a representative and keeps the table small. For `align: none` the sequences must already be aligned; set `align: mafft` otherwise.
 - `backbone`: Newick, ultrametric, ages in Ma, one tip per genus. Alternatively set `backbone_build.enabled: true` to build it for all genera in the records (see below).
 
 ### Building the backbone
