@@ -31,7 +31,8 @@ Milestone 1, working on synthetic data:
 - [x] Sister-genus outgroups from the backbone, BioNJ, rooting, mean-path-length dating, grafting
 - [x] Sharded execution so genera are processed in parallel
 - [x] Toy data set, unit tests and an end-to-end workflow test
-- [ ] Backbone assembly: OToL induced subtree dated with TimeTree ages
+- [x] Backbone assembly: OToL induced subtree dated with TimeTree node ages, the rest interpolated (TimeTree part tested live; OToL part tested against mocked responses, as the OToL API was down at the time of writing)
+- [ ] Genus crown ages from TimeTree (via species within each genus)
 - [ ] treePL as an alternative to mean-path-length dating
 - [ ] Embedding distances as a third distance method
 - [ ] Placement of units without a genus, and of unmatched metabarcoding sequences
@@ -50,7 +51,7 @@ pytest
 ### Inputs
 
 - `records`: tab-separated, with columns `record_id`, `unit_id`, `genus`, `sequence`. For `align: none` the sequences must already be aligned; set `align: mafft` otherwise.
-- `backbone`: Newick, ultrametric, ages in Ma, one tip per genus.
+- `backbone`: Newick, ultrametric, ages in Ma, one tip per genus. Alternatively set `backbone_build.enabled: true` to build it from Open Tree of Life and TimeTree for all genera in the records. That needs network access to `api.opentreeoflife.org` and `api.timetree.org`; responses are cached in `backbone_build.cache`, so each query is made once. The build writes `backbone/genera.tsv` (how each genus was matched) and `backbone/node_ages.tsv` (each node's age and whether it came from TimeTree or was interpolated).
 - `crown_ages` (optional): tab-separated, `genus`, `crown_age`.
 
 ### Outputs (under `outdir`)

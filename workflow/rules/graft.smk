@@ -3,7 +3,7 @@
 
 rule graft:
     input:
-        backbone=config["backbone"],
+        backbone=BACKBONE,
         subtrees=expand(f"{OUT}/subtrees/shard_{{i}}.tsv", i=SHARDS),
         singles=rules.shard_genera.output.singles,
     output:
