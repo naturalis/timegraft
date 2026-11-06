@@ -85,6 +85,7 @@ markers:
       method: rate           # used when crown_ages has no entry for a genus
       rate: 0.0115           # substitutions per site per Myr, per lineage (about 2.3% pairwise)
       cap_fraction: 0.9      # crown age never exceeds this fraction of the stem age
+      timetree_max_ratio: 3  # reject a TimeTree crown age more than this many times the rate-based one
     dating:
       method: mpl            # mpl (mean path length, built in) or lsd2 (least squares, built from source)
       seq_length: 658        # lsd2: barcode length, used for its variance model

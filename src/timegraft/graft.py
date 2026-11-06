@@ -11,6 +11,7 @@ PROVENANCE_COLUMNS = (
     "stem_age",
     "crown_age",
     "crown_source",
+    "timetree_crown",
     "rooting",
     "dating",
     "outgroup",

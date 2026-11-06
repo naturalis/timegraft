@@ -24,7 +24,8 @@ import dendropy
 @dataclass
 class CrownAge:
     age: float
-    source: str  # table | rate | rate_capped | fraction | fraction_capped
+    source: str  # table | timetree | rate | fraction, each possibly *_capped; or *_timetree_rejected
+    timetree: float | None = None  # the TimeTree estimate that was considered, if any
 
 
 def mean_root_to_tip(tree: dendropy.Tree) -> float:
@@ -50,28 +51,48 @@ def crown_age(
     rate: float | None = None,
     fraction: float | None = None,
     cap_fraction: float = 0.9,
+    suggested: dict[str, float] | None = None,
+    max_ratio: float | None = 3.0,
 ) -> CrownAge:
     """Choose the crown age for one genus.
 
+    In order: the user's table (``known``); a TimeTree estimate
+    (``suggested``) if it passes two checks; otherwise the marker's method.
     ``rate`` is in substitutions per site per million years, per lineage.
+
+    A TimeTree crown age is the MRCA of every species TimeTree knows under the
+    genus name, which is far too old when the genus is not monophyletic or
+    holds misplaced species. It is therefore rejected when it is not younger
+    than the stem age, or, with the rate method, when it exceeds ``max_ratio``
+    times the age implied by the barcodes and the rate.
     """
     cap = cap_fraction * stem_age
+
+    def capped(age: float, source: str, tt: float | None = None) -> CrownAge:
+        return CrownAge(age, source, tt) if age <= cap else CrownAge(cap, f"{source}_capped", tt)
+
     if genus in known:
         age = known[genus]
-        if age < stem_age:
-            return CrownAge(age, "table")
-        return CrownAge(cap, "table_capped")
+        return CrownAge(age, "table") if age < stem_age else CrownAge(cap, "table_capped")
+
     if method == "rate":
         if not rate:
             raise ValueError("crown age method 'rate' needs a rate")
-        age = mean_root_to_tip(tree) / rate
-        return CrownAge(age, "rate") if age <= cap else CrownAge(cap, "rate_capped")
-    if method == "fraction":
+        own = mean_root_to_tip(tree) / rate
+    elif method == "fraction":
         if fraction is None:
             raise ValueError("crown age method 'fraction' needs a fraction")
-        age = fraction * stem_age
-        return CrownAge(age, "fraction") if age <= cap else CrownAge(cap, "fraction_capped")
-    raise ValueError(f"unknown crown age method {method!r}")
+        own = fraction * stem_age
+    else:
+        raise ValueError(f"unknown crown age method {method!r}")
+
+    tt = (suggested or {}).get(genus)
+    if tt is not None:
+        too_old = tt >= stem_age or (method == "rate" and max_ratio and own > 0 and tt > max_ratio * own)
+        if not too_old:
+            return capped(tt, "timetree", tt)
+        return capped(own, f"{method}_timetree_rejected", tt)
+    return capped(own, method)
 
 
 def mpl_ultrametric(tree: dendropy.Tree, root_age: float) -> dendropy.Tree:

@@ -13,7 +13,9 @@ import dendropy
 
 from .timetree import TimeTree
 
-REPORT_COLUMNS = ("node", "n_genera", "age", "source", "example_genera")
+REPORT_COLUMNS = (
+    "node", "parent", "n_genera", "age", "source", "timetree_age", "conflict_ratio", "query_ids", "example_genera",
+)
 
 
 def _ids(value) -> list[int]:
@@ -96,6 +98,8 @@ def date_topology(
     """
     age: dict[dendropy.Node, float] = {}
     source: dict[dendropy.Node, str] = {}
+    raw: dict[dendropy.Node, float] = {}  # TimeTree's answer, kept even when it is later dropped
+    used: dict[dendropy.Node, list[int]] = {}
     # first picks for every node, fetched concurrently; later attempts are fetched as needed
     if hasattr(timetree, "prefetch"):
         timetree.prefetch(
@@ -115,11 +119,14 @@ def date_topology(
             value = timetree.split_age(sides)
             if value is not None:
                 age[node], source[node] = value, "timetree"
+                raw[node], used[node] = value, sorted({i for side in sides for i in side})
                 break
         if node not in age and higher:
-            value = timetree.split_age(_higher_sides(node, higher, per_side * per_genus))
+            sides = _higher_sides(node, higher, per_side * per_genus)
+            value = timetree.split_age(sides)
             if value is not None:
                 age[node], source[node] = value, "timetree_higher_taxa"
+                raw[node], used[node] = value, sorted({i for side in sides for i in side})
 
     root = tree.seed_node
     if root not in age:
@@ -127,21 +134,39 @@ def date_topology(
             raise ValueError("TimeTree has no age for the root; set backbone_build.root_age")
         age[root], source[root] = root_age, "configured"
 
-    # drop calibrations that are not younger than a dated ancestor
-    def prune(node: dendropy.Node, ceiling: float) -> None:
-        for child in node.child_node_iter():
-            if child.is_leaf():
-                continue
-            next_ceiling = ceiling
-            if child in age:
-                if age[child] >= ceiling:
-                    del age[child]
-                    source[child] = "dropped_inconsistent"
-                else:
-                    next_ceiling = age[child]
-            prune(child, next_ceiling)
+    # Resolve calibrations that are not younger than their nearest dated
+    # ancestor. Equal ages mean TimeTree does not resolve the node: the node
+    # is left to interpolation. Otherwise a direct TimeTree age outranks one
+    # from enclosing taxa; between equals, the ancestor is kept.
+    def dated_ancestor(node: dendropy.Node) -> dendropy.Node | None:
+        up = node.parent_node
+        while up is not None and up not in age:
+            up = up.parent_node
+        return up
 
-    prune(root, age[root])
+    conflict: dict[dendropy.Node, float] = {}
+    changed = True
+    while changed:
+        changed = False
+        for node in tree.preorder_node_iter():
+            if node.is_leaf() or node is root or node not in age:
+                continue
+            anc = dated_ancestor(node)
+            if anc is None or age[node] < age[anc]:
+                continue
+            if abs(age[node] - age[anc]) <= 1e-9 * max(1.0, age[anc]):
+                del age[node]
+                source[node] = "timetree_same_as_ancestor"
+            elif source[anc] == "timetree_higher_taxa" and source[node] == "timetree" and anc is not root:
+                conflict[anc] = age[node] / age[anc]
+                del age[anc]
+                source[anc] = "dropped_inconsistent"
+            else:
+                conflict[node] = age[node] / age[anc]
+                del age[node]
+                source[node] = "dropped_inconsistent"
+            changed = True
+            break
 
     # oldest dated descendant and the length of the undated chain leading to it
     below: dict[dendropy.Node, tuple[float, int]] = {}
@@ -165,7 +190,11 @@ def date_topology(
         parent_age = age[node.parent_node]
         floor, steps = below[node]
         age[node] = parent_age - (parent_age - floor) / (steps + 1)
-        source[node] = "interpolated" if source.get(node) != "dropped_inconsistent" else "interpolated_after_drop"
+        previous = source.get(node)
+        source[node] = {
+            "dropped_inconsistent": "interpolated_after_drop",
+            "timetree_same_as_ancestor": "interpolated_unresolved_in_timetree",
+        }.get(previous, "interpolated")
 
     for node in tree.preorder_node_iter():
         if node is root:
@@ -174,16 +203,23 @@ def date_topology(
             node.edge.length = age[node.parent_node] - age[node]
 
     report = []
-    for i, node in enumerate(tree.preorder_node_iter()):
+    names = {node: f"n{i}" for i, node in enumerate(tree.preorder_node_iter())}
+    for node in tree.preorder_node_iter():
         if node.is_leaf():
             continue
         genera = sorted(l.taxon.label for l in node.leaf_iter())
         report.append(
             {
-                "node": f"n{i}",
+                "node": names[node],
+                "parent": names.get(node.parent_node, ""),
                 "n_genera": len(genera),
                 "age": f"{age[node]:.4f}",
                 "source": source[node],
+                "timetree_age": f"{raw[node]:.4f}" if node in raw else "",
+                # TimeTree age over that of the dated ancestor it conflicted with; large values
+                # often point to a genus misplaced in the synthetic tree
+                "conflict_ratio": f"{conflict[node]:.3f}" if node in conflict else "",
+                "query_ids": "+".join(map(str, used.get(node, []))),
                 "example_genera": ";".join(genera[:3]),
             }
         )
