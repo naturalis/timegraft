@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "timegraft"
+version = "0.1.0"
+description = "Dated barcode trees for phylogenetic diversity: per-genus subtrees grafted onto a dated backbone"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "dendropy>=4.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "snakemake>=8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
