@@ -76,6 +76,9 @@ markers:
       method: rate           # used when crown_ages has no entry for a genus
       rate: 0.0115           # substitutions per site per Myr, per lineage (about 2.3% pairwise)
       cap_fraction: 0.9      # crown age never exceeds this fraction of the stem age
+    dating:
+      method: mpl            # mpl (mean path length, built in) or lsd2 (least squares, built from source)
+      seq_length: 658        # lsd2: barcode length, used for its variance model
     placement:
       match_identity: 0.97   # at or above: the ASV counts as the unit it matches
       place_identity: 0.80   # at or above: attached near its nearest unit; below: unplaced
@@ -95,6 +98,9 @@ markers:
       method: fraction       # no reliable ITS rate: a stated fraction of the stem age
       fraction: 0.5
       cap_fraction: 0.9
+    dating:
+      method: mpl
+      seq_length: 500
     placement:
       match_identity: 0.97
       place_identity: 0.80

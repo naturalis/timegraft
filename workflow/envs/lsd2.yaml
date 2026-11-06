@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+dependencies:
+  - cxx-compiler
+  - make
+  - git

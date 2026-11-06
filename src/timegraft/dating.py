@@ -11,7 +11,12 @@ dependency-free default; treePL can be plugged in later for larger subtrees.
 
 from __future__ import annotations
 
+import re
+import shutil
+import subprocess
+import tempfile
 from dataclasses import dataclass
+from pathlib import Path
 
 import dendropy
 
@@ -103,6 +108,47 @@ def mpl_ultrametric(tree: dendropy.Tree, root_age: float) -> dendropy.Tree:
         node.edge.length = parent_age - age[node]
     root.edge.length = None
     return tree
+
+
+def lsd2_ultrametric(
+    tree: dendropy.Tree, root_age: float, seq_length: int = 650, executable: str = "lsd2"
+) -> dendropy.Tree:
+    """Date ``tree`` with LSD2 (To et al. 2016): tips at 0, the root fixed at ``root_age``.
+
+    LSD2 fits a strict-clock least-squares model with variances that
+    down-weight long branches. Trees with fewer than three tips are dated
+    with mean path length, which gives the same answer there.
+    """
+    leaves = tree.leaf_nodes()
+    if len(leaves) < 3:
+        return mpl_ultrametric(tree, root_age)
+    exe = shutil.which(executable) or (executable if Path(executable).exists() else None)
+    if exe is None:
+        raise RuntimeError(f"{executable} not found; build it with the build_lsd2 rule or use dating method 'mpl'")
+    names = {leaf.taxon.label: f"t{i}" for i, leaf in enumerate(leaves)}
+    back = {v: k for k, v in names.items()}
+    work = tree.clone(depth=2)
+    for leaf in work.leaf_node_iter():
+        leaf.taxon.label = names[leaf.taxon.label]
+    for edge in work.postorder_edge_iter():
+        if edge.length is not None and edge.length < 0:
+            edge.length = 0.0
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        (tmp / "in.nwk").write_text(work.as_string(schema="newick", suppress_rooting=True).strip() + "\n")
+        (tmp / "dates.txt").write_text(f"{len(names)}\n" + "".join(f"{n} 0\n" for n in names.values()))
+        subprocess.run(
+            [exe, "-i", "in.nwk", "-d", "dates.txt", "-a", str(-root_age), "-s", str(seq_length), "-o", "out"],
+            cwd=tmp, check=True, capture_output=True, text=True,
+        )
+        nexus = (tmp / "out.date.nexus").read_text()
+    line = next(l for l in nexus.splitlines() if l.strip().startswith("tree "))
+    newick = re.sub(r"\[&[^\]]*\]", "", line.split("=", 1)[1]).strip()
+    dated = dendropy.Tree.get(data=newick, schema="newick", rooting="force-rooted", preserve_underscores=True)
+    for leaf in dated.leaf_node_iter():
+        leaf.taxon.label = back[leaf.taxon.label]
+    dated.seed_node.edge.length = None
+    return dated
 
 
 def is_ultrametric(tree: dendropy.Tree, tolerance: float = 1e-6) -> bool:

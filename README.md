@@ -21,6 +21,8 @@ Everything that differs between markers sits behind four plug-ins, configured pe
 | Distances within a genus | K2P on aligned sequences | k-mer (Mash) distance, no alignment |
 | Crown age when no known age is given | Substitution-rate prior, capped below S | Stated fraction of S |
 
+Within each genus, the rooted subtree is made ultrametric with its root at the crown age, by mean path length (built in, the default) or by LSD2 (`dating.method: lsd2`; the `build_lsd2` rule compiles a pinned version of [LSD2](https://github.com/tothuhien/lsd2) once, in a conda environment with a C++ compiler).
+
 Known crown ages (for instance from TimeTree) always take precedence. The provenance table records where every crown age came from.
 
 ## Status
@@ -33,7 +35,7 @@ Milestone 1, working on synthetic data:
 - [x] Toy data set, unit tests and an end-to-end workflow test
 - [x] Backbone assembly from static OToL release files (or the OToL API), dated with TimeTree node ages, the rest interpolated
 - [x] Genus crown ages from TimeTree, via species within each genus
-- [ ] treePL as an alternative to mean-path-length dating
+- [x] LSD2 (least-squares dating) as an alternative to mean path length; treePL is not packaged for conda, LSD2 is built from source by the workflow
 - [ ] Embedding distances as a third distance method
 - [x] Matching ASVs to units (VSEARCH) and placing unmatched ASVs on the tree near their nearest unit
 - [x] Placement of reference units without a genus, next to their nearest unit
