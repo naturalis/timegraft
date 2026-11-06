@@ -32,7 +32,12 @@ def test_toy_workflow(tmp_path):
         path=str(outdir / "timegraft.tre"), schema="newick", preserve_underscores=True, rooting="force-rooted"
     )
     tips = {leaf.taxon.label for leaf in tree.leaf_node_iter()}
-    assert tips == {f"BOLD:AAA{i:04d}" for i in range(1, 11)}
+    # the ten units with a genus, plus the unit without a genus that was placed
+    assert tips == {f"BOLD:AAA{i:04d}" for i in range(1, 11)} | {"BOLD:AAZ0002"}
+    units_placed = {r["unit_id"]: r for r in read_tsv(outdir / "units_placed.tsv")}
+    assert units_placed["BOLD:AAZ0002"]["status"] == "placed"
+    assert units_placed["BOLD:AAZ0002"]["nearest_units"] == "BOLD:AAA0009"
+    assert units_placed["BOLD:AAZ0001"]["status"] == "unplaced"
     assert is_ultrametric(tree, tolerance=1e-6)
     assert root_age(tree) == pytest.approx(50.0)
 

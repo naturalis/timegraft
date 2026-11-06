@@ -40,6 +40,10 @@ genus_agreement: 0.8       # share of records that must agree on the genus
 # Genera in the backbone without any units are removed from the output.
 prune_empty: true
 
+# Units without a genus (or with conflicting genera) are placed next to their
+# nearest unit in the finished tree, using the marker's placement settings.
+place_unassigned_units: true
+
 # Marker plug-ins. Everything outside this block is shared between markers.
 markers:
   coi:
