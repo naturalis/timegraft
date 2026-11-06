@@ -4,6 +4,8 @@ Dated barcode trees for phylogenetic diversity: per-genus subtrees from BOLD or 
 
 timegraft builds a time-calibrated tree with barcode reference units at the tips: BINs for COI, UNITE species hypotheses for ITS. Branch lengths are in millions of years, so phylogenetic diversity (Faith's PD, MPD, UniFrac, PhyloSor) is comparable across sites, studies and markers.
 
+Full documentation is in [docs/](docs/README.md): background, method (with assumptions and known weaknesses), usage and development.
+
 ## The idea
 
 Short barcodes cannot resolve deep relationships: COI saturates and ITS cannot be aligned beyond genus level. timegraft therefore never estimates deep structure from barcodes.
