@@ -1,9 +1,27 @@
 """From raw records to one representative per reference unit."""
 
 
+rule bcdm_records:
+    input:
+        BCDM.get("path") or [],
+    output:
+        f"{OUT}/units/records.tsv",
+    params:
+        src=SRC,
+        marker=BCDM.get("marker", "COI-5P"),
+        taxa=BCDM.get("taxa", {}),
+        countries=BCDM.get("countries", []),
+    log:
+        f"{OUT}/logs/bcdm_records.log",
+    conda:
+        "../envs/timegraft.yaml"
+    script:
+        "../scripts/bcdm_records.py"
+
+
 rule filter_records:
     input:
-        config["records"],
+        RECORDS,
     output:
         kept=f"{OUT}/units/filtered.tsv",
         rejected=f"{OUT}/units/rejected.tsv",

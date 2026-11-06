@@ -13,6 +13,8 @@ OUT = config["outdir"]
 SRC = str(Path(workflow.basedir).parent / "src")
 SHARDS = list(range(int(config["n_shards"])))
 BUILD_BACKBONE = bool(config.get("backbone_build", {}).get("enabled"))
+BCDM = config.get("bcdm") or {}
+RECORDS = f"{OUT}/units/records.tsv" if BCDM.get("path") else config["records"]
 USE_ASVS = bool(config.get("asvs") and config.get("asv_table"))
 BACKBONE = f"{OUT}/backbone/backbone.tre" if BUILD_BACKBONE else config["backbone"]
 
