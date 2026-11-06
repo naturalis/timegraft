@@ -39,3 +39,18 @@ def test_command_line(tmp_path, capsys):
     source.write_text("\n".join("\t".join(r) for r in [HEADER] + ROWS) + "\n")
     main([str(source), str(tmp_path / "out.tsv"), "--taxon", "family=Mytilidae", "--country", "Portugal"])
     assert "kept=1" in capsys.readouterr().out
+
+
+def test_parquet_gives_the_same_records(tmp_path):
+    duckdb = __import__("pytest").importorskip("duckdb")
+    source = tmp_path / "bold.tsv"
+    source.write_text("\n".join("\t".join(r) for r in [HEADER] + ROWS) + "\n")
+    parquet = tmp_path / "bold.parquet"
+    duckdb.execute(
+        f"COPY (SELECT * FROM read_csv('{source}', delim='\t', header=true, all_varchar=true)) TO '{parquet}' (FORMAT parquet)"
+    )
+    filters = dict(taxa={"phylum": {"Mollusca", "Annelida"}}, countries={"Portugal", "Spain"})
+    convert(source, tmp_path / "from_tsv.tsv", **filters)
+    counts = convert(parquet, tmp_path / "from_parquet.tsv", **filters)
+    assert read_tsv(tmp_path / "from_parquet.tsv") == read_tsv(tmp_path / "from_tsv.tsv")
+    assert counts["read"] == 6 and counts["kept"] == 2 and counts["no_unit"] == 1
