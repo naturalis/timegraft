@@ -58,6 +58,7 @@ def build_genus(
     stem_age: float,
     marker_cfg: dict,
     known_crowns: dict[str, float],
+    timetree_crowns: dict[str, float] | None = None,
 ) -> tuple[dendropy.Tree, dict]:
     """Return the dated ingroup subtree and a provenance record."""
     if len(ingroup) < 2:
@@ -81,6 +82,8 @@ def build_genus(
         rate=crown_cfg.get("rate"),
         fraction=crown_cfg.get("fraction"),
         cap_fraction=crown_cfg.get("cap_fraction", 0.9),
+        suggested=timetree_crowns,
+        max_ratio=crown_cfg.get("timetree_max_ratio", 3.0),
     )
     dating = marker_cfg.get("dating", {"method": "mpl"})
     if dating.get("method", "mpl") == "lsd2":
@@ -96,6 +99,7 @@ def build_genus(
         "stem_age": f"{stem_age:.4f}",
         "crown_age": f"{crown.age:.4f}",
         "crown_source": crown.source,
+        "timetree_crown": "" if crown.timetree is None else f"{crown.timetree:.4f}",
         "rooting": rooting,
         "dating": dating.get("method", "mpl"),
         "outgroup": ";".join(n for n, _ in outgroup),

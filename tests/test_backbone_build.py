@@ -111,3 +111,28 @@ def test_induced_subtree_retries_without_unknown_ids():
     # E was attached at the MRCA of A and B
     e = tree.find_node_with_taxon_label("E")
     assert {l.taxon.label for l in e.parent_node.leaf_iter()} == {"A", "B", "E"}
+
+
+def test_equal_ages_mean_unresolved_not_inconsistent():
+    tree = dendropy.Tree.get(data="((A,B),C);", schema="newick", rooting="force-rooted")
+    ncbi = {"A": 1, "B": 2, "C": 3}
+    ages = {frozenset({1, 2, 3}): 40.0, frozenset({1, 3}): 40.0, frozenset({1, 2}): 40.0}
+    tree, report = date_topology(tree, ncbi, fake_timetree(ages))
+    row = next(r for r in report if r["example_genera"] == "A;B")
+    assert row["source"] == "interpolated_unresolved_in_timetree"
+    assert row["conflict_ratio"] == ""
+
+
+def test_direct_age_outranks_higher_taxa_ancestor():
+    # (A,B) is dated directly at 30; its parent ((A,B),C) only via enclosing taxa, at 20
+    tree = dendropy.Tree.get(data="(((A,B),C),D);", schema="newick", rooting="force-rooted")
+    ncbi = {"A": 1, "B": 2, "C": 3, "D": 4}
+    ages = {frozenset({1, 2, 4}): 100.0, frozenset({1, 3, 4}): 100.0, frozenset({1, 2}): 30.0,
+            frozenset({11, 13}): 20.0}
+    higher = {"A": [(101, 11)], "B": [(101, 11)], "C": [(103, 13)], "D": [(104, 14)]}
+    tree, report = date_topology(tree, ncbi, fake_timetree(ages, missing={3}), higher=higher)
+    by = {r["example_genera"]: r for r in report}
+    assert by["A;B"]["source"] == "timetree"
+    assert by["A;B;C"]["source"] == "interpolated_after_drop"
+    assert float(by["A;B;C"]["conflict_ratio"]) == pytest.approx(1.5)
+    assert is_ultrametric(tree)

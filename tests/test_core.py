@@ -220,3 +220,16 @@ def test_bionj_on_a_larger_additive_tree():
         for b in labels[10:20]:
             assert pdm2(ns2.get_taxon(label=a), ns2.get_taxon(label=b)) == pytest.approx(
                 pdm(ns.get_taxon(label=a), ns.get_taxon(label=b)), rel=1e-6)
+
+
+def test_timetree_crown_checks():
+    tree = dendropy.Tree.get(data="(A:0.05,B:0.05);", schema="newick", rooting="force-rooted")
+    # rate-based estimate: 0.05 / 0.01 = 5 Ma
+    ok = crown_age("G", 50, tree, {}, method="rate", rate=0.01, suggested={"G": 12.0})
+    assert (ok.source, ok.age, ok.timetree) == ("timetree", 12.0, 12.0)
+    too_old = crown_age("G", 50, tree, {}, method="rate", rate=0.01, suggested={"G": 40.0})
+    assert too_old.source == "rate_timetree_rejected" and too_old.age == pytest.approx(5.0)
+    beyond_stem = crown_age("G", 30, tree, {}, method="fraction", fraction=0.5, suggested={"G": 31.0})
+    assert beyond_stem.source == "fraction_timetree_rejected" and beyond_stem.age == pytest.approx(15.0)
+    user_wins = crown_age("G", 50, tree, {"G": 20.0}, method="rate", rate=0.01, suggested={"G": 12.0})
+    assert user_wins.source == "table"
