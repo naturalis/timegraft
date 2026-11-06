@@ -12,9 +12,12 @@ from timegraft.build import build_genus, tree_to_newick
 from timegraft.graft import PROVENANCE_COLUMNS
 from timegraft.seqio import read_tsv, write_tsv
 
+# crown ages: TimeTree species MRCAs first, then the user's table, which takes precedence
 known = {}
+if snakemake.input.timetree_crowns:
+    known.update({r["genus"]: float(r["crown_age"]) for r in read_tsv(snakemake.input.timetree_crowns)})
 if snakemake.input.crown_ages:
-    known = {r["genus"]: float(r["crown_age"]) for r in read_tsv(snakemake.input.crown_ages)}
+    known.update({r["genus"]: float(r["crown_age"]) for r in read_tsv(snakemake.input.crown_ages)})
 
 groups = defaultdict(lambda: {"in": [], "out": [], "stem": None})
 for row in read_tsv(snakemake.input.shard):

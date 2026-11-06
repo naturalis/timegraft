@@ -1,0 +1,19 @@
+uid	|	parent_uid	|	name	|	rank	|	sourceinfo	|	uniqname	|	flags	|	
+1	|		|	life	|	no rank	|	ncbi:1	|		|		|	
+2	|	1	|	Metazoa	|	kingdom	|	ncbi:33208	|		|		|	
+3	|	2	|	Bivalvia	|	class	|	ncbi:6544	|		|		|	
+4	|	3	|	Mytilidae	|	family	|	ncbi:6545	|		|		|	
+5	|	4	|	Mytilus	|	genus	|	ncbi:6548	|		|		|	
+6	|	5	|	Mytilus edulis	|	species	|	ncbi:6550	|		|		|	
+7	|	5	|	Mytilus trossulus	|	species	|	ncbi:6551	|		|		|	
+8	|	3	|	Ostreidae	|	family	|	ncbi:6563	|		|		|	
+9	|	8	|	Ostrea	|	genus	|	ncbi:37858	|		|		|	
+10	|	9	|	Ostrea edulis	|	species	|	ncbi:37623	|		|		|	
+11	|	8	|	Magallana	|	genus	|		|		|		|	
+12	|	11	|	Magallana gigas	|	species	|	ncbi:29159	|		|		|	
+13	|	2	|	Asteroidea	|	class	|	ncbi:7588	|		|		|	
+14	|	13	|	Asterias	|	genus	|	ncbi:7601	|		|		|	
+15	|	14	|	Asterias rubens	|	species	|	ncbi:7604	|		|		|	
+16	|	1	|	Fungi	|	kingdom	|	ncbi:4751	|		|		|	
+17	|	16	|	Mytilus	|	genus	|		|	Mytilus (homonym in Fungi)	|		|	
+18	|	4	|	Lostgenus	|	genus	|		|		|		|	

@@ -31,8 +31,8 @@ Milestone 1, working on synthetic data:
 - [x] Sister-genus outgroups from the backbone, BioNJ, rooting, mean-path-length dating, grafting
 - [x] Sharded execution so genera are processed in parallel
 - [x] Toy data set, unit tests and an end-to-end workflow test
-- [x] Backbone assembly: OToL induced subtree dated with TimeTree node ages, the rest interpolated (TimeTree part tested live; OToL part tested against mocked responses, as the OToL API was down at the time of writing)
-- [ ] Genus crown ages from TimeTree (via species within each genus)
+- [x] Backbone assembly from static OToL release files (or the OToL API), dated with TimeTree node ages, the rest interpolated
+- [x] Genus crown ages from TimeTree, via species within each genus
 - [ ] treePL as an alternative to mean-path-length dating
 - [ ] Embedding distances as a third distance method
 - [x] Matching ASVs to units (VSEARCH) and placing unmatched ASVs on the tree near their nearest unit
@@ -53,7 +53,19 @@ pytest
 ### Inputs
 
 - `records`: tab-separated, with columns `record_id`, `unit_id`, `genus`, `sequence`. For `align: none` the sequences must already be aligned; set `align: mafft` otherwise.
-- `backbone`: Newick, ultrametric, ages in Ma, one tip per genus. Alternatively set `backbone_build.enabled: true` to build it from Open Tree of Life and TimeTree for all genera in the records. That needs network access to `api.opentreeoflife.org` and `api.timetree.org`; responses are cached in `backbone_build.cache`, so each query is made once. The build writes `backbone/genera.tsv` (how each genus was matched) and `backbone/node_ages.tsv` (each node's age and whether it came from TimeTree or was interpolated).
+- `backbone`: Newick, ultrametric, ages in Ma, one tip per genus. Alternatively set `backbone_build.enabled: true` to build it for all genera in the records (see below).
+
+### Building the backbone
+
+With `backbone_build.enabled: true`:
+
+1. **Topology.** By default (`source: static`) from Open Tree of Life release files: the OTT taxonomy and the labelled synthetic tree, downloaded once into `resources/otol` by the `download_otol` rule (about 140 MB). Genera are matched by name within `context` (e.g. `Metazoa`, `Fungi`) to avoid homonyms. A genus that is not a node in the synthesis is attached at the MRCA of its species, or else at its nearest enclosing taxon that is. `source: api` uses the OToL web API instead.
+2. **Node ages.** Each internal node is dated with a TimeTree MRCA age, from a few genera on each side of it, sent with some of their species, since TimeTree knows many species but not every genus. Other genera and species are tried when TimeTree knows none of the first picks. As a last resort, enclosing taxa (family up to phylum) stand in for a side, but only taxa that contain no genus from the other side, so the MRCA is still the same node. Ages older than a dated ancestor are dropped; remaining nodes are interpolated.
+3. **Genus crown ages.** The TimeTree MRCA of up to twelve species per genus. This is a lower bound, as the sampled species need not span the crown; a `crown_ages` table of your own takes precedence.
+
+Needs network access to `files.opentreeoflife.org` (or `api.opentreeoflife.org`) and `api.timetree.org`. All responses are cached in `backbone_build.cache`. The build writes `backbone/genera.tsv` (how each genus was matched and placed), `backbone/node_ages.tsv` (each node's age and its source) and `backbone/crown_ages.tsv`.
+
+Known limitation: TimeTree coverage of marine invertebrates is patchy (e.g. many polychaetes and amphipods), so some nodes are interpolated, and interpolation spaces nodes evenly, which tends to make shallow undated nodes too old.
 - `crown_ages` (optional): tab-separated, `genus`, `crown_age`.
 - `samples` (optional): tab-separated, `sample`, `unit_id`, `abundance`. When given, the workflow also computes diversity metrics.
 - `asvs` and `asv_table` (optional, instead of `samples`): ASV sequences (FASTA) and a table `sample`, `asv_id`, `reads`. Each ASV is matched to a unit at `match_identity` or above; below that, down to `place_identity`, it is attached on the path from its nearest unit to the root, at the age implied by its distance (COI: identity and the substitution rate; ITS: halfway along the nearest unit's terminal edge). Needs VSEARCH.

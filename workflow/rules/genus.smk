@@ -25,6 +25,7 @@ rule build_shard:
     input:
         shard=f"{OUT}/genera/shard_{{i}}.tsv",
         crown_ages=config["crown_ages"] if config.get("crown_ages") else [],
+        timetree_crowns=rules.build_backbone.output.crowns if BUILD_BACKBONE else [],
     output:
         f"{OUT}/subtrees/shard_{{i}}.tsv",
     params:

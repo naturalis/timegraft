@@ -16,38 +16,108 @@ from .timetree import TimeTree
 REPORT_COLUMNS = ("node", "n_genera", "age", "source", "example_genera")
 
 
-def _side(node: dendropy.Node, ncbi: dict[str, int | None], per_side: int) -> list[int]:
-    genera = sorted(l.taxon.label for l in node.leaf_iter() if ncbi.get(l.taxon.label))
+def _ids(value) -> list[int]:
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple)):
+        return [int(v) for v in value if v]
+    return [int(value)]
+
+
+def _side(
+    node: dendropy.Node, ncbi: dict[str, object], per_side: int, attempt: int = 0, per_genus: int = 3
+) -> list[int]:
+    """NCBI ids standing in for one child clade.
+
+    ``ncbi`` maps a genus to its NCBI id, or to a list whose first element is
+    the genus id and the rest species ids, since TimeTree knows many species
+    but not every genus. Each attempt shifts to other genera of the clade and
+    to the next ``per_genus`` species of each genus.
+    """
+    genera = sorted(l.taxon.label for l in node.leaf_iter() if _ids(ncbi.get(l.taxon.label)))
+    if not genera:
+        return []
     # spread the picks over the clade rather than taking neighbours
     if len(genera) > per_side:
         step = len(genera) / per_side
-        genera = [genera[int(i * step)] for i in range(per_side)]
-    return [ncbi[g] for g in genera]
+        genera = sorted({genera[(int(i * step) + attempt) % len(genera)] for i in range(per_side)})
+    out = []
+    for genus in genera:
+        value = ncbi[genus]
+        if isinstance(value, (list, tuple)):
+            head = [int(value[0])] if value and value[0] else []
+            species = [int(v) for v in value[1:] if v]
+        else:
+            head, species = _ids(value), []
+        window = species[attempt * per_genus : (attempt + 1) * per_genus]
+        if attempt and not window and len(genera) <= per_side:
+            continue
+        out.extend(head + window)
+    return out
+
+
+def _higher_sides(node: dendropy.Node, higher: dict, limit: int) -> list[list[int]]:
+    children = list(node.child_node_iter())
+    genera = [[l.taxon.label for l in c.leaf_iter()] for c in children]
+    lineages = [{uid for g in side for uid, _ in higher.get(g, [])} for side in genera]
+    sides = []
+    for i, side in enumerate(genera):
+        others = set().union(*(lineages[j] for j in range(len(children)) if j != i))
+        ids = []
+        for genus in side:
+            for uid, ncbi in higher.get(genus, []):
+                if uid in others:
+                    break  # from here up the taxon also holds genera of another side
+                if ncbi and ncbi not in ids:
+                    ids.append(ncbi)
+        if ids:
+            sides.append(ids[:limit])
+    return sides
 
 
 def date_topology(
     tree: dendropy.Tree,
-    ncbi: dict[str, int | None],
+    ncbi: dict[str, object],
     timetree: TimeTree,
     per_side: int = 2,
     root_age: float | None = None,
+    attempts: int = 4,
+    per_genus: int = 3,
+    higher: dict[str, list[tuple[int, int | None]]] | None = None,
 ) -> tuple[dendropy.Tree, list[dict]]:
-    """Set branch lengths in Ma on a genus-level topology, in place."""
+    """Set branch lengths in Ma on a genus-level topology, in place.
+
+    When TimeTree knows none of the picked taxa on one side of a node, up to
+    ``attempts`` different picks are tried. As a last resort, ``higher`` (per
+    genus, its enclosing taxa as (OTT id, NCBI id) pairs, nearest first) is
+    used: each side is represented by the enclosing taxa of its genera that
+    contain no genus of the other sides, so the MRCA stays the same node.
+    Such ages are marked ``timetree_higher_taxa``.
+    """
     age: dict[dendropy.Node, float] = {}
     source: dict[dendropy.Node, str] = {}
     for node in tree.postorder_node_iter():
         if node.is_leaf():
             age[node], source[node] = 0.0, "tip"
             continue
-        sides = [_side(child, ncbi, per_side) for child in node.child_node_iter()]
-        value = timetree.split_age([s for s in sides if s])
-        if value is not None:
-            age[node], source[node] = value, "timetree"
+        for attempt in range(attempts):
+            sides = [_side(child, ncbi, per_side, attempt, per_genus) for child in node.child_node_iter()]
+            sides = [s for s in sides if s]
+            if len(sides) < 2:
+                break
+            value = timetree.split_age(sides)
+            if value is not None:
+                age[node], source[node] = value, "timetree"
+                break
+        if node not in age and higher:
+            value = timetree.split_age(_higher_sides(node, higher, per_side * per_genus))
+            if value is not None:
+                age[node], source[node] = value, "timetree_higher_taxa"
 
     root = tree.seed_node
     if root not in age:
         if root_age is None:
-            raise ValueError("TimeTree has no age for the root; set backbone_root_age")
+            raise ValueError("TimeTree has no age for the root; set backbone_build.root_age")
         age[root], source[root] = root_age, "configured"
 
     # drop calibrations that are not younger than a dated ancestor
