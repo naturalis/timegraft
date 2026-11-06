@@ -1,9 +1,11 @@
-"""Turn a BOLD data package (BCDM TSV) into a timegraft record table.
+"""Turn a BOLD data package (BCDM, as TSV or Parquet) into a timegraft record table.
 
-Streams the file, so a full BOLD dump can be filtered without loading it.
+Streams TSV, so a full BOLD dump can be filtered without loading it. Parquet
+is filtered with DuckDB, which reads only the columns and row groups it
+needs, so it is much faster on a full dump.
 Usable from the workflow (rule ``bcdm_records``) or on its own:
 
-    python -m timegraft.bcdm BOLD_Public.tsv records.tsv \\
+    python -m timegraft.bcdm BOLD_Public.parquet records.tsv \\
         --taxon phylum=Annelida,Mollusca,Arthropoda --country Portugal,Spain
 """
 
@@ -45,6 +47,70 @@ def _clean(value: str | None) -> str:
     return "" if value.lower() in ("none", "na", "null") else value
 
 
+def _convert_parquet(source, target, marker, taxa, countries) -> dict[str, int]:
+    import duckdb
+
+    con = duckdb.connect()
+    names = [r[0] for r in con.execute("DESCRIBE SELECT * FROM read_parquet(?)", [str(source)]).fetchall()]
+    cols = _resolve(names)
+
+    def q(name: str) -> str:
+        return '"' + name.replace('"', '""') + '"'
+
+    def clean(name: str | None) -> str:
+        if not name:
+            return "''"
+        return (f"CASE WHEN lower(trim(CAST({q(name)} AS VARCHAR))) IN ('none', 'na', 'null') THEN '' "
+                f"ELSE coalesce(trim(CAST({q(name)} AS VARCHAR)), '') END")
+
+    where, params = [], []
+    if marker and cols["marker"]:
+        where.append(f"{clean(cols['marker'])} = ?")
+        params.append(marker)
+    for rank, allowed in taxa.items():
+        if not cols.get(rank):
+            raise ValueError(f"no column for rank {rank!r} in {source}")
+        where.append(f"{clean(cols[rank])} IN ({', '.join('?' for _ in allowed)})")
+        params.extend(sorted(allowed))
+    if countries:
+        if not cols["country"]:
+            raise ValueError(f"no country column in {source}")
+        where.append(f"{clean(cols['country'])} IN ({', '.join('?' for _ in countries)})")
+        params.extend(sorted(countries))
+    base = f"FROM read_parquet(?)" + (" WHERE " + " AND ".join(where) if where else "")
+    read = con.execute(f"SELECT count(*) FROM read_parquet(?)", [str(source)]).fetchone()[0]
+    selected = con.execute(f"SELECT count(*) {base}", [str(source), *params]).fetchone()[0]
+
+    select = ", ".join(
+        [f"{clean(cols['record_id'])} AS record_id", f"{clean(cols['unit_id'])} AS unit_id"]
+        + [f"{clean(cols.get(r))} AS {q(r)}" for r in ("genus", "family", "order", "class", "phylum", "species")]
+        + [f"{clean(cols['country'])} AS country", f"upper({clean(cols['sequence'])}) AS sequence"]
+    )
+    rows = con.execute(f"SELECT {select} {base}", [str(source), *params])
+    counts = {"read": read, "kept": 0, "other_marker": 0, "no_unit": 0, "no_sequence": 0,
+              "taxon": 0, "country": 0, "filtered_out": read - selected}
+    Path(target).parent.mkdir(parents=True, exist_ok=True)
+    with open(target, "w", newline="") as dst:
+        writer = csv.writer(dst, delimiter="\t", lineterminator="\n")
+        writer.writerow(OUT_COLUMNS)
+        while True:
+            batch = rows.fetchmany(10000)
+            if not batch:
+                break
+            for record in batch:
+                values = dict(zip(("record_id", "unit_id", "genus", "family", "order", "class", "phylum",
+                                   "species", "country", "sequence"), record))
+                if not values["unit_id"]:
+                    counts["no_unit"] += 1
+                    continue
+                if not values["sequence"]:
+                    counts["no_sequence"] += 1
+                    continue
+                writer.writerow([values[c] for c in OUT_COLUMNS])
+                counts["kept"] += 1
+    return counts
+
+
 def convert(
     source: str | Path,
     target: str | Path,
@@ -52,8 +118,14 @@ def convert(
     taxa: dict[str, set[str]] | None = None,
     countries: set[str] | None = None,
 ) -> dict[str, int]:
-    """Filter ``source`` and write ``target``; returns counts of kept and skipped records."""
+    """Filter ``source`` and write ``target``; returns counts of kept and skipped records.
+
+    For Parquet input, records removed by the marker, taxon and country
+    filters are counted together as ``filtered_out``.
+    """
     taxa = taxa or {}
+    if str(source).lower().endswith((".parquet", ".pq")):
+        return _convert_parquet(source, target, marker, taxa, countries)
     counts = {"read": 0, "kept": 0, "other_marker": 0, "no_unit": 0, "no_sequence": 0, "taxon": 0, "country": 0}
     csv.field_size_limit(sys.maxsize)
     Path(target).parent.mkdir(parents=True, exist_ok=True)
@@ -102,7 +174,7 @@ def _parse_taxa(items: list[str]) -> dict[str, set[str]]:
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument("source", help="BCDM TSV from a BOLD data package")
+    parser.add_argument("source", help="BCDM TSV or Parquet from a BOLD data package")
     parser.add_argument("target", help="record table to write")
     parser.add_argument("--marker", default="COI-5P", help="marker code to keep (empty for all)")
     parser.add_argument("--taxon", action="append", default=[], help="rank=Name1,Name2; repeatable")
