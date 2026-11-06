@@ -5,6 +5,15 @@ marker: coi
 
 # Inputs
 records: tests/data/toy/records.tsv        # record_id, unit_id, genus, sequence
+
+# Alternatively, read records straight from a BOLD data package (BCDM TSV);
+# when bcdm.path is set it replaces `records`.
+bcdm:
+  path:                      # e.g. resources/BOLD_Public.tsv
+  marker: COI-5P
+  taxa:                      # rank: [names]; all must match
+    # phylum: [Annelida, Mollusca, Arthropoda, Echinodermata, Cnidaria]
+  countries: []              # country/ocean values, e.g. [Portugal, Spain]
 backbone: tests/data/toy/backbone.tre      # dated, ultrametric, genera at the tips, ages in Ma
                                            # (ignored when backbone_build.enabled is true)
 crown_ages: tests/data/toy/crown_ages.tsv  # optional: genus, crown_age (Ma), e.g. from TimeTree
