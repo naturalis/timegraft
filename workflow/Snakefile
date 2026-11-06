@@ -20,9 +20,11 @@ include: "rules/units.smk"
 include: "rules/backbone.smk"
 include: "rules/genus.smk"
 include: "rules/graft.smk"
+include: "rules/diversity.smk"
 
 
 rule all:
     input:
         f"{OUT}/timegraft.tre",
         f"{OUT}/provenance.tsv",
+        [f"{OUT}/diversity/alpha.tsv", f"{OUT}/diversity/beta.tsv"] if config.get("samples") else [],

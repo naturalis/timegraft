@@ -8,6 +8,7 @@ records: tests/data/toy/records.tsv        # record_id, unit_id, genus, sequence
 backbone: tests/data/toy/backbone.tre      # dated, ultrametric, genera at the tips, ages in Ma
                                            # (ignored when backbone_build.enabled is true)
 crown_ages: tests/data/toy/crown_ages.tsv  # optional: genus, crown_age (Ma), e.g. from TimeTree
+samples: tests/data/toy/samples.tsv        # optional: sample, unit_id, abundance; enables PD metrics
 
 # Build the backbone from Open Tree of Life (topology) and TimeTree (ages)
 # for all genera in the records, instead of reading it from a file.
