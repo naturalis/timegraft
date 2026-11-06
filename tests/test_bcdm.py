@@ -31,7 +31,7 @@ def test_convert_filters_and_maps(tmp_path):
     assert rows[0]["sequence"] == "ACGT-ACGT"
     assert rows[1]["species"] == ""  # 'None' is cleaned
     assert counts == {"read": 6, "kept": 2, "other_marker": 1, "no_unit": 1, "no_sequence": 0,
-                      "taxon": 1, "country": 1}
+                      "taxon": 1, "country": 1, "unit_cap": 0}
 
 
 def test_command_line(tmp_path, capsys):
@@ -53,4 +53,22 @@ def test_parquet_gives_the_same_records(tmp_path):
     convert(source, tmp_path / "from_tsv.tsv", **filters)
     counts = convert(parquet, tmp_path / "from_parquet.tsv", **filters)
     assert read_tsv(tmp_path / "from_parquet.tsv") == read_tsv(tmp_path / "from_tsv.tsv")
-    assert counts["read"] == 6 and counts["kept"] == 2 and counts["no_unit"] == 1
+    assert counts == {"read": 6, "kept": 2, "filtered_out": 4}
+
+
+def test_exclude_and_cap_per_unit(tmp_path):
+    rows = ROWS + [["P7", "s7", "BOLD:AAA0001", *ROWS[0][3:]], ["P8", "s8", "BOLD:AAA0001", *ROWS[0][3:]]]
+    source = tmp_path / "bold.tsv"
+    source.write_text("\n".join("\t".join(r) for r in [HEADER] + rows) + "\n")
+    names = tmp_path / "phyla.txt"
+    names.write_text("Arthropoda\n")
+    main([str(source), str(tmp_path / "a.tsv"), "--exclude", f"phylum=@{names}", "--max-per-unit", "2"])
+    kept = read_tsv(tmp_path / "a.tsv")
+    assert [r["record_id"] for r in kept] == ["P1", "P2", "P5", "P7"]  # P3 is an insect, P8 is a third record of AAA0001
+    duckdb = __import__("pytest").importorskip("duckdb")
+    parquet = tmp_path / "bold.parquet"
+    duckdb.execute(
+        f"COPY (SELECT * FROM read_csv('{source}', delim='\t', header=true, all_varchar=true)) TO '{parquet}' (FORMAT parquet)"
+    )
+    main([str(parquet), str(tmp_path / "b.tsv"), "--exclude", f"phylum=@{names}", "--max-per-unit", "2"])
+    assert sorted(r["record_id"] for r in read_tsv(tmp_path / "b.tsv")) == ["P1", "P2", "P5", "P7"]

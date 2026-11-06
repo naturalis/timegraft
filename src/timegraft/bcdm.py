@@ -47,7 +47,7 @@ def _clean(value: str | None) -> str:
     return "" if value.lower() in ("none", "na", "null") else value
 
 
-def _convert_parquet(source, target, marker, taxa, countries) -> dict[str, int]:
+def _convert_parquet(source, target, marker, taxa, countries, exclude, max_per_unit) -> dict[str, int]:
     import duckdb
 
     con = duckdb.connect()
@@ -72,14 +72,24 @@ def _convert_parquet(source, target, marker, taxa, countries) -> dict[str, int]:
             raise ValueError(f"no column for rank {rank!r} in {source}")
         where.append(f"{clean(cols[rank])} IN ({', '.join('?' for _ in allowed)})")
         params.extend(sorted(allowed))
+    for rank, banned in exclude.items():
+        if not cols.get(rank):
+            raise ValueError(f"no column for rank {rank!r} in {source}")
+        where.append(f"{clean(cols[rank])} NOT IN ({', '.join('?' for _ in banned)})")
+        params.extend(sorted(banned))
     if countries:
         if not cols["country"]:
             raise ValueError(f"no country column in {source}")
         where.append(f"{clean(cols['country'])} IN ({', '.join('?' for _ in countries)})")
         params.extend(sorted(countries))
-    base = f"FROM read_parquet(?)" + (" WHERE " + " AND ".join(where) if where else "")
+    where.append(f"{clean(cols['unit_id'])} <> ''")
+    where.append(f"{clean(cols['sequence'])} <> ''")
+    base = f"FROM read_parquet(?) WHERE " + " AND ".join(where)
+    if max_per_unit:
+        base += (f" QUALIFY row_number() OVER (PARTITION BY {clean(cols['unit_id'])} "
+                 f"ORDER BY {clean(cols['record_id'])}) <= {int(max_per_unit)}")
     read = con.execute(f"SELECT count(*) FROM read_parquet(?)", [str(source)]).fetchone()[0]
-    selected = con.execute(f"SELECT count(*) {base}", [str(source), *params]).fetchone()[0]
+    selected = con.execute(f"SELECT count(*) FROM (SELECT 1 {base})", [str(source), *params]).fetchone()[0]
 
     select = ", ".join(
         [f"{clean(cols['record_id'])} AS record_id", f"{clean(cols['unit_id'])} AS unit_id"]
@@ -87,8 +97,7 @@ def _convert_parquet(source, target, marker, taxa, countries) -> dict[str, int]:
         + [f"{clean(cols['country'])} AS country", f"upper({clean(cols['sequence'])}) AS sequence"]
     )
     rows = con.execute(f"SELECT {select} {base}", [str(source), *params])
-    counts = {"read": read, "kept": 0, "other_marker": 0, "no_unit": 0, "no_sequence": 0,
-              "taxon": 0, "country": 0, "filtered_out": read - selected}
+    counts = {"read": read, "kept": 0, "filtered_out": read - selected}
     Path(target).parent.mkdir(parents=True, exist_ok=True)
     with open(target, "w", newline="") as dst:
         writer = csv.writer(dst, delimiter="\t", lineterminator="\n")
@@ -100,12 +109,6 @@ def _convert_parquet(source, target, marker, taxa, countries) -> dict[str, int]:
             for record in batch:
                 values = dict(zip(("record_id", "unit_id", "genus", "family", "order", "class", "phylum",
                                    "species", "country", "sequence"), record))
-                if not values["unit_id"]:
-                    counts["no_unit"] += 1
-                    continue
-                if not values["sequence"]:
-                    counts["no_sequence"] += 1
-                    continue
                 writer.writerow([values[c] for c in OUT_COLUMNS])
                 counts["kept"] += 1
     return counts
@@ -117,16 +120,24 @@ def convert(
     marker: str = "COI-5P",
     taxa: dict[str, set[str]] | None = None,
     countries: set[str] | None = None,
+    exclude: dict[str, set[str]] | None = None,
+    max_per_unit: int | None = None,
 ) -> dict[str, int]:
     """Filter ``source`` and write ``target``; returns counts of kept and skipped records.
 
-    For Parquet input, records removed by the marker, taxon and country
-    filters are counted together as ``filtered_out``.
+    ``taxa`` keeps records whose rank values are all in the given sets;
+    ``exclude`` drops records with a rank value in its sets; ``max_per_unit``
+    keeps at most that many records per unit (the first by record id), which
+    is plenty for choosing a representative and keeps the table small.
+    For Parquet input, all removed records are counted as ``filtered_out``.
     """
     taxa = taxa or {}
+    exclude = exclude or {}
     if str(source).lower().endswith((".parquet", ".pq")):
-        return _convert_parquet(source, target, marker, taxa, countries)
-    counts = {"read": 0, "kept": 0, "other_marker": 0, "no_unit": 0, "no_sequence": 0, "taxon": 0, "country": 0}
+        return _convert_parquet(source, target, marker, taxa, countries, exclude, max_per_unit)
+    counts = {"read": 0, "kept": 0, "other_marker": 0, "no_unit": 0, "no_sequence": 0, "taxon": 0, "country": 0,
+              "unit_cap": 0}
+    per_unit: dict[str, int] = {}
     csv.field_size_limit(sys.maxsize)
     Path(target).parent.mkdir(parents=True, exist_ok=True)
     with open(source, newline="", encoding="utf-8", errors="replace") as src, open(target, "w", newline="") as dst:
@@ -148,13 +159,19 @@ def convert(
                 counts["no_sequence"] += 1
                 continue
             values = {rank: _clean(row.get(cols[rank])) if cols[rank] else "" for rank in RANKS}
-            if any(values.get(rank) not in allowed for rank, allowed in taxa.items()):
+            if any(values.get(rank) not in allowed for rank, allowed in taxa.items()) or any(
+                values.get(rank) in banned for rank, banned in exclude.items()
+            ):
                 counts["taxon"] += 1
                 continue
             country = _clean(row.get(cols["country"])) if cols["country"] else ""
             if countries and country not in countries:
                 counts["country"] += 1
                 continue
+            if max_per_unit and per_unit.get(unit, 0) >= max_per_unit:
+                counts["unit_cap"] += 1
+                continue
+            per_unit[unit] = per_unit.get(unit, 0) + 1
             writer.writerow({"record_id": _clean(row.get(cols["record_id"])), "unit_id": unit,
                              "country": country, "sequence": seq,
                              **{k: values[k] for k in ("genus", "family", "order", "class", "phylum", "species")}})
@@ -167,7 +184,10 @@ def _parse_taxa(items: list[str]) -> dict[str, set[str]]:
     for item in items:
         rank, _, names = item.partition("=")
         if rank not in RANKS or not names:
-            raise SystemExit(f"--taxon expects rank=Name1,Name2 with rank one of {RANKS}")
+            raise SystemExit(f"--taxon and --exclude expect rank=Name1,Name2 with rank one of {RANKS}")
+        if names.startswith("@"):
+            # rank=@file: one name per line
+            names = ",".join(line.strip() for line in Path(names[1:]).read_text().splitlines())
         taxa.setdefault(rank, set()).update(n.strip() for n in names.split(",") if n.strip())
     return taxa
 
@@ -177,11 +197,17 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("source", help="BCDM TSV or Parquet from a BOLD data package")
     parser.add_argument("target", help="record table to write")
     parser.add_argument("--marker", default="COI-5P", help="marker code to keep (empty for all)")
-    parser.add_argument("--taxon", action="append", default=[], help="rank=Name1,Name2; repeatable")
+    parser.add_argument("--taxon", action="append", default=[],
+                        help="keep: rank=Name1,Name2 or rank=@file (one name per line); repeatable")
+    parser.add_argument("--exclude", action="append", default=[],
+                        help="drop: rank=Name1,Name2 or rank=@file; repeatable")
     parser.add_argument("--country", default="", help="comma-separated country/ocean values to keep")
+    parser.add_argument("--max-per-unit", type=int, default=None,
+                        help="keep at most this many records per BIN (the first by process id)")
     args = parser.parse_args(argv)
     countries = {c.strip() for c in args.country.split(",") if c.strip()} or None
-    counts = convert(args.source, args.target, args.marker, _parse_taxa(args.taxon), countries)
+    counts = convert(args.source, args.target, args.marker, _parse_taxa(args.taxon), countries,
+                     exclude=_parse_taxa(args.exclude), max_per_unit=args.max_per_unit)
     print("\t".join(f"{k}={v}" for k, v in counts.items()))
 
 
