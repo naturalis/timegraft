@@ -24,6 +24,18 @@ backbone_build:
   root_age:                  # Ma; only needed if TimeTree has no age for the root
   cache: resources/api_cache.json
 
+# Validation of the informative window: barcode distances against a trusted
+# reference tree whose tips are unit ids, per taxonomic stratum. Rank columns
+# (e.g. family, order) are read from the records when present.
+validation:
+  reference_tree: tests/data/toy/reference.tre   # leave empty to skip
+  ranks: [genus, family, order]
+  per_stratum: 200
+  seed: 1
+  methods:                   # label: distance method and its options
+    k2p: {method: k2p}       # needs aligned sequences
+    kmer: {method: kmer, k: 8}
+
 # Outputs
 outdir: results/toy
 

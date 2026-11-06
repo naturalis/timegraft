@@ -38,7 +38,8 @@ Milestone 1, working on synthetic data:
 - [x] Matching ASVs to units (VSEARCH) and placing unmatched ASVs on the tree near their nearest unit
 - [x] Placement of reference units without a genus, next to their nearest unit
 - [x] Per-sample PD metrics: Faith's PD, MPD (presence and abundance-weighted), unweighted and weighted UniFrac, PhyloSor
-- [ ] Validation of the informative window per marker and clade
+- [x] Validation of the informative window: barcode distances against a reference tree, per taxonomic stratum, with a saturation plot
+- [ ] Using the validation to set the informative window per clade automatically
 
 ## Usage
 
@@ -65,6 +66,7 @@ pytest
 - `diversity/alpha.tsv`: per sample, richness, Faith's PD (including the path to the root), MPD and abundance-weighted MPD, in Ma.
 - `diversity/beta.tsv`: per pair of samples, unweighted and weighted (normalised) UniFrac and PhyloSor.
 - `diversity/units_not_in_tree.tsv`: sample units that are not in the tree, so they are visible rather than silently dropped.
+- `validation/` (when `validation.reference_tree` is set): sampled pairs, rank correlations per stratum, binned medians, the reference distance at which each barcode distance plateaus, and `saturation.png`.
 - `units/rejected.tsv`, `units/unassigned.tsv`, `genera/missing_from_backbone.tsv`: records and units that did not make it into the tree, and why.
 
 ## Layout

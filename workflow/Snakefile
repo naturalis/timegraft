@@ -23,6 +23,7 @@ include: "rules/genus.smk"
 include: "rules/graft.smk"
 include: "rules/placement.smk"
 include: "rules/diversity.smk"
+include: "rules/validation.smk"
 
 
 rule all:
@@ -30,3 +31,4 @@ rule all:
         f"{OUT}/timegraft.tre",
         f"{OUT}/provenance.tsv",
         [f"{OUT}/diversity/alpha.tsv", f"{OUT}/diversity/beta.tsv"] if USE_ASVS or config.get("samples") else [],
+        f"{OUT}/validation/summary.tsv" if config.get("validation", {}).get("reference_tree") else [],

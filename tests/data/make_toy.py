@@ -16,6 +16,8 @@ CROWN_AGES = {"Alpha": 8.0}
 
 # genus -> number of BINs; Epsilon has none and should be pruned
 LAYOUT = {"Alpha": 4, "Beta": 3, "Gamma": 2, "Delta": 1}
+FAMILY = {"Alpha": "Alphidae", "Beta": "Alphidae", "Gamma": "Gammidae", "Delta": "Gammidae"}
+ORDER = "Toyformes"
 
 
 def random_orf(rng, n_codons=104):
@@ -67,9 +69,10 @@ def main():
     rows.append(("BAD_short", "BOLD:AAA0005", "Beta", root[:90]))
 
     with open(OUT / "records.tsv", "w") as handle:
-        handle.write("record_id\tunit_id\tgenus\tsequence\n")
-        for row in rows:
-            handle.write("\t".join(row) + "\n")
+        handle.write("record_id\tunit_id\tgenus\tfamily\torder\tsequence\n")
+        for record_id, unit, genus, seq in rows:
+            family = FAMILY.get(genus, "Gammidae" if unit == "BOLD:AAZ0002" else "")
+            handle.write("\t".join([record_id, unit, genus, family, ORDER, seq]) + "\n")
     (OUT / "backbone.tre").write_text(BACKBONE)
     with open(OUT / "crown_ages.tsv", "w") as handle:
         handle.write("genus\tcrown_age\n")
@@ -91,7 +94,8 @@ def make_asvs():
     with open(OUT / "records.tsv") as handle:
         next(handle)
         for line in handle:
-            record_id, _, _, seq = line.rstrip("\n").split("\t")
+            fields = line.rstrip("\n").split("\t")
+            record_id, seq = fields[0], fields[-1]
             records[record_id] = seq
     start, end = 60, 270  # a 210 bp window inside the 312 bp barcode
     window = lambda rid: records[rid][start:end]

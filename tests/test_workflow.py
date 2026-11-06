@@ -65,5 +65,9 @@ def test_toy_workflow(tmp_path):
     assert alpha["estuary_2"]["richness"] == "3"
     assert len(read_tsv(outdir / "diversity" / "beta.tsv")) == 3
 
+    summary = read_tsv(outdir / "validation" / "summary.tsv")
+    assert {(r["method"], r["stratum"]) for r in summary} >= {("k2p", "all"), ("kmer", "genus")}
+    assert (outdir / "validation" / "saturation.png").stat().st_size > 0
+
     rejected = {r["record_id"]: r["reason"] for r in read_tsv(outdir / "units" / "rejected.tsv")}
     assert rejected == {"BAD_stop": "stop_codon", "BAD_short": "too_short"}
