@@ -39,13 +39,18 @@ def bionj(labels: Sequence[str], dist: np.ndarray) -> dendropy.Tree:
         _attach(root, nodes[1], half)
         return dendropy.Tree(seed_node=root, taxon_namespace=namespace, is_rooted=False)
 
-    d = np.array(dist, dtype=float)
-    v = d.copy()  # variance estimates, initialised to the distances
+    # room for the n leaves and the n - 3 internal nodes created by joins
+    size = 2 * n
+    d = np.zeros((size, size))
+    v = np.zeros((size, size))
+    d[:n, :n] = dist
+    v[:n, :n] = dist  # variance estimates, initialised to the distances
     active = list(range(n))
 
     while len(active) > 3:
         m = len(active)
-        sub = d[np.ix_(active, active)]
+        idx = np.array(active)
+        sub = d[np.ix_(idx, idx)]
         r = sub.sum(axis=1)
         q = (m - 2) * sub - r[:, None] - r[None, :]
         np.fill_diagonal(q, np.inf)
@@ -55,9 +60,9 @@ def bionj(labels: Sequence[str], dist: np.ndarray) -> dendropy.Tree:
         bi = 0.5 * d[i, j] + (r[a] - r[b]) / (2.0 * (m - 2))
         bj = d[i, j] - bi
 
-        others = [k for k in active if k not in (i, j)]
+        others = np.array([k for k in active if k not in (i, j)])
         if v[i, j] > 0:
-            lam = 0.5 + sum(v[j, k] - v[i, k] for k in others) / (2.0 * (m - 2) * v[i, j])
+            lam = 0.5 + (v[j, others] - v[i, others]).sum() / (2.0 * (m - 2) * v[i, j])
             lam = min(1.0, max(0.0, lam))
         else:
             lam = 0.5
@@ -65,19 +70,11 @@ def bionj(labels: Sequence[str], dist: np.ndarray) -> dendropy.Tree:
         new = dendropy.Node()
         _attach(new, nodes[i], bi)
         _attach(new, nodes[j], bj)
-
         u = len(nodes)
         nodes.append(new)
-        size = u + 1
-        d2 = np.zeros((size, size))
-        v2 = np.zeros((size, size))
-        d2[:u, :u] = d
-        v2[:u, :u] = v
-        for k in others:
-            d2[u, k] = d2[k, u] = lam * d[i, k] + (1 - lam) * d[j, k] - lam * bi - (1 - lam) * bj
-            v2[u, k] = v2[k, u] = lam * v[i, k] + (1 - lam) * v[j, k] - lam * (1 - lam) * v[i, j]
-        d, v = d2, v2
-        active = others + [u]
+        d[u, others] = d[others, u] = lam * d[i, others] + (1 - lam) * d[j, others] - lam * bi - (1 - lam) * bj
+        v[u, others] = v[others, u] = lam * v[i, others] + (1 - lam) * v[j, others] - lam * (1 - lam) * v[i, j]
+        active = list(others) + [u]
 
     x, y, z = active
     centre = dendropy.Node()

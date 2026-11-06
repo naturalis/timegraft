@@ -96,6 +96,13 @@ def date_topology(
     """
     age: dict[dendropy.Node, float] = {}
     source: dict[dendropy.Node, str] = {}
+    # first picks for every node, fetched concurrently; later attempts are fetched as needed
+    if hasattr(timetree, "prefetch"):
+        timetree.prefetch(
+            [i for s in (_side(c, ncbi, per_side, 0, per_genus) for c in node.child_node_iter()) for i in s]
+            for node in tree.postorder_node_iter()
+            if not node.is_leaf()
+        )
     for node in tree.postorder_node_iter():
         if node.is_leaf():
             age[node], source[node] = 0.0, "tip"

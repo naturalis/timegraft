@@ -194,3 +194,29 @@ def test_lsd2_dating_fixes_root_and_tips():
     assert {l.taxon.label for l in dated.leaf_node_iter()} == {"BOLD:A1", "BOLD:A2", "BOLD:A3", "BOLD:A4"}
     assert is_ultrametric(dated, tolerance=1e-4)
     assert root_age(dated) == pytest.approx(8.0, rel=1e-4)
+
+
+def test_vectorised_k2p_matches_pairwise():
+    rng = np.random.default_rng(4)
+    seqs = ["".join(rng.choice(list("ACGT-N"), size=120, p=[0.24, 0.24, 0.24, 0.24, 0.02, 0.02])) for _ in range(12)]
+    fast = distances.matrix(seqs, "k2p")
+    for i in range(12):
+        for j in range(12):
+            if i != j:
+                assert fast[i, j] == pytest.approx(distances.k2p(seqs[i], seqs[j]))
+
+
+def test_bionj_on_a_larger_additive_tree():
+    tree = dendropy.simulate.treesim.birth_death_tree(birth_rate=1.0, death_rate=0.0, num_extant_tips=40,
+                                                      rng=__import__("random").Random(2))
+    labels = [l.taxon.label for l in tree.leaf_node_iter()]
+    pdm = tree.phylogenetic_distance_matrix()
+    ns = tree.taxon_namespace
+    d = np.array([[pdm(ns.get_taxon(label=a), ns.get_taxon(label=b)) if a != b else 0.0 for b in labels] for a in labels])
+    rebuilt = bionj(labels, d)
+    pdm2 = rebuilt.phylogenetic_distance_matrix()
+    ns2 = rebuilt.taxon_namespace
+    for a in labels[:10]:
+        for b in labels[10:20]:
+            assert pdm2(ns2.get_taxon(label=a), ns2.get_taxon(label=b)) == pytest.approx(
+                pdm(ns.get_taxon(label=a), ns.get_taxon(label=b)), rel=1e-6)

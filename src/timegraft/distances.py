@@ -83,8 +83,44 @@ def get_method(name: str) -> Callable[..., float]:
         raise ValueError(f"unknown distance method {name!r}; choose from {sorted(METHODS)}")
 
 
+_CODE = np.full(256, 4, dtype=np.uint8)  # 0..3 = A, C, G, T; 4 = gap or ambiguity
+for _i, _b in enumerate(b"ACGT"):
+    _CODE[_b] = _i
+
+
+def k2p_matrix(seqs: Sequence[str], max_distance: float = DEFAULT_MAX_DISTANCE) -> np.ndarray:
+    """All pairwise K2P distances at once, vectorised; same result as ``k2p`` per pair."""
+    if len({len(s) for s in seqs}) > 1:
+        raise ValueError("k2p needs aligned sequences of equal length")
+    codes = np.stack([_CODE[np.frombuffer(s.encode(), dtype=np.uint8)] for s in seqs])
+    valid = codes < 4
+    purine = (codes == 0) | (codes == 2)
+    n = len(seqs)
+    out = np.zeros((n, n))
+    for i in range(n - 1):
+        a, rest = codes[i], codes[i + 1 :]
+        both = valid[i] & valid[i + 1 :]
+        sites = both.sum(axis=1)
+        diff = both & (rest != a)
+        transitions = (diff & (purine[i + 1 :] == purine[i])).sum(axis=1)
+        transversions = diff.sum(axis=1) - transitions
+        if (sites == 0).any():
+            raise ValueError("no comparable sites between sequences")
+        p = transitions / sites
+        q = transversions / sites
+        w1, w2 = 1.0 - 2.0 * p - q, 1.0 - 2.0 * q
+        with np.errstate(divide="ignore", invalid="ignore"):
+            d = -0.5 * np.log(w1) - 0.25 * np.log(w2)
+        d = np.where((w1 <= 0) | (w2 <= 0), max_distance, np.minimum(d, max_distance))
+        out[i, i + 1 :] = d
+        out[i + 1 :, i] = d
+    return out
+
+
 def matrix(seqs: Sequence[str], method: str = "k2p", **options) -> np.ndarray:
     """Symmetric distance matrix for a list of sequences."""
+    if method == "k2p":
+        return k2p_matrix(seqs, **{k: v for k, v in options.items() if k == "max_distance"})
     func = get_method(method)
     n = len(seqs)
     out = np.zeros((n, n))

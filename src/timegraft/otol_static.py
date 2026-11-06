@@ -270,14 +270,18 @@ def crown_ages(taxonomy: Taxonomy, timetree, genera: list[str], max_species: int
     This is a lower bound: the sampled species need not span the crown.
     Genera with fewer than two species known to TimeTree get no age.
     """
-    rows = []
+    picks_by_genus = {}
     for genus in genera:
         species = sorted(n for _, n in taxonomy.species.get(genus, []) if n)
         if len(species) < 2:
             continue
         step = max(1, len(species) // max_species)
-        picks = species[::step][:max_species]
-        result = timetree._query(sorted(set(picks)))
+        picks_by_genus[genus] = sorted(set(species[::step][:max_species]))
+    if hasattr(timetree, "prefetch"):
+        timetree.prefetch(picks_by_genus.values())
+    rows = []
+    for genus, picks in picks_by_genus.items():
+        result = timetree._query(picks)
         if result["age"] is not None and len(result["found"]) >= 2:
             rows.append({"genus": genus, "crown_age": f"{result['age']:.4f}", "n_species": len(result["found"])})
     return rows
