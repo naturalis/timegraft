@@ -73,5 +73,45 @@ def main():
             handle.write(f"{genus}\t{age}\n")
 
 
+def substitute(rng, seq, n):
+    seq = list(seq)
+    for i in rng.sample(range(len(seq)), n):
+        seq[i] = rng.choice([b for b in BASES if b != seq[i]])
+    return "".join(seq)
+
+
+def make_asvs():
+    """Metabarcoding-style fragments of the reference records, plus a stranger."""
+    rng = random.Random(7)
+    records = {}
+    with open(OUT / "records.tsv") as handle:
+        next(handle)
+        for line in handle:
+            record_id, _, _, seq = line.rstrip("\n").split("\t")
+            records[record_id] = seq
+    start, end = 60, 270  # a 210 bp window inside the 312 bp barcode
+    window = lambda rid: records[rid][start:end]
+    asvs = {
+        "asv_01": window("BOLDAAA0001_0"),                      # exact: matched
+        "asv_02": substitute(rng, window("BOLDAAA0006_0"), 2),  # 99%: matched
+        "asv_03": substitute(rng, window("BOLDAAA0008_0"), 13), # ~94%: placed near AAA0008
+        "asv_04": "".join(rng.choice(BASES) for _ in range(210)),  # unrelated: unplaced
+        "asv_05": substitute(rng, window("BOLDAAA0010_0"), 21), # 90%: placed near AAA0010
+    }
+    with open(OUT / "asvs.fasta", "w") as handle:
+        for name, seq in asvs.items():
+            handle.write(f">{name}\n{seq}\n")
+    table = [
+        ("estuary_1", "asv_01", 120), ("estuary_1", "asv_03", 30), ("estuary_1", "asv_04", 9),
+        ("estuary_2", "asv_01", 60), ("estuary_2", "asv_02", 15), ("estuary_2", "asv_05", 22),
+        ("marina_1", "asv_02", 200), ("marina_1", "asv_05", 41),
+    ]
+    with open(OUT / "asv_table.tsv", "w") as handle:
+        handle.write("sample\tasv_id\treads\n")
+        for row in table:
+            handle.write("\t".join(map(str, row)) + "\n")
+
+
 if __name__ == "__main__":
     main()
+    make_asvs()

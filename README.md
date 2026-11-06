@@ -35,7 +35,8 @@ Milestone 1, working on synthetic data:
 - [ ] Genus crown ages from TimeTree (via species within each genus)
 - [ ] treePL as an alternative to mean-path-length dating
 - [ ] Embedding distances as a third distance method
-- [ ] Placement of units without a genus, and of unmatched metabarcoding sequences
+- [x] Matching ASVs to units (VSEARCH) and placing unmatched ASVs on the tree near their nearest unit
+- [ ] Placement of reference units without a genus
 - [x] Per-sample PD metrics: Faith's PD, MPD (presence and abundance-weighted), unweighted and weighted UniFrac, PhyloSor
 - [ ] Validation of the informative window per marker and clade
 
@@ -54,11 +55,13 @@ pytest
 - `backbone`: Newick, ultrametric, ages in Ma, one tip per genus. Alternatively set `backbone_build.enabled: true` to build it from Open Tree of Life and TimeTree for all genera in the records. That needs network access to `api.opentreeoflife.org` and `api.timetree.org`; responses are cached in `backbone_build.cache`, so each query is made once. The build writes `backbone/genera.tsv` (how each genus was matched) and `backbone/node_ages.tsv` (each node's age and whether it came from TimeTree or was interpolated).
 - `crown_ages` (optional): tab-separated, `genus`, `crown_age`.
 - `samples` (optional): tab-separated, `sample`, `unit_id`, `abundance`. When given, the workflow also computes diversity metrics.
+- `asvs` and `asv_table` (optional, instead of `samples`): ASV sequences (FASTA) and a table `sample`, `asv_id`, `reads`. Each ASV is matched to a unit at `match_identity` or above; below that, down to `place_identity`, it is attached on the path from its nearest unit to the root, at the age implied by its distance (COI: identity and the substitution rate; ITS: halfway along the nearest unit's terminal edge). Needs VSEARCH.
 
 ### Outputs (under `outdir`)
 
 - `timegraft.tre`: the dated tree, tips are unit identifiers.
 - `provenance.tsv`: per backbone genus, whether it received a subtree, a single unit or was pruned, with stem age, crown age and its source, the rooting method and the outgroup used.
+- `placement/placements.tsv`: per ASV, matched, placed or unplaced, with the unit, identity and attachment age; `placement/timegraft_placed.tre`: the tree with placed ASVs added.
 - `diversity/alpha.tsv`: per sample, richness, Faith's PD (including the path to the root), MPD and abundance-weighted MPD, in Ma.
 - `diversity/beta.tsv`: per pair of samples, unweighted and weighted (normalised) UniFrac and PhyloSor.
 - `diversity/units_not_in_tree.tsv`: sample units that are not in the tree, so they are visible rather than silently dropped.

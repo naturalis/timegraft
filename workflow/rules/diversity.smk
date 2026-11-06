@@ -3,8 +3,8 @@
 
 rule diversity:
     input:
-        tree=rules.graft.output.tree,
-        samples=config.get("samples") or [],
+        tree=rules.place_asvs.output.tree if USE_ASVS else rules.graft.output.tree,
+        samples=rules.place_asvs.output.samples if USE_ASVS else (config.get("samples") or []),
     output:
         alpha=f"{OUT}/diversity/alpha.tsv",
         beta=f"{OUT}/diversity/beta.tsv",
