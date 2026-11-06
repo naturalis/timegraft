@@ -180,3 +180,17 @@ def test_graft_keeps_tree_ultrametric():
     }
     assert is_ultrametric(tree)
     assert root_age(tree) == pytest.approx(50.0)
+
+
+@pytest.mark.skipif(__import__("shutil").which("lsd2") is None, reason="lsd2 not installed")
+def test_lsd2_dating_fixes_root_and_tips():
+    from timegraft.dating import lsd2_ultrametric
+
+    tree = dendropy.Tree.get(
+        data="(('BOLD:A1':0.05,'BOLD:A2':0.07):0.02,('BOLD:A3':0.03,'BOLD:A4':0.04):0.03);",
+        schema="newick", rooting="force-rooted",
+    )
+    dated = lsd2_ultrametric(tree, 8.0, seq_length=300)
+    assert {l.taxon.label for l in dated.leaf_node_iter()} == {"BOLD:A1", "BOLD:A2", "BOLD:A3", "BOLD:A4"}
+    assert is_ultrametric(dated, tolerance=1e-4)
+    assert root_age(dated) == pytest.approx(8.0, rel=1e-4)

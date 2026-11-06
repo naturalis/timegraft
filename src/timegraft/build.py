@@ -11,7 +11,7 @@ import dendropy
 
 from . import distances
 from .bionj import bionj
-from .dating import crown_age, mpl_ultrametric
+from .dating import crown_age, lsd2_ultrametric, mpl_ultrametric
 from .rooting import root_on_outgroup
 from .seqio import read_fasta, write_fasta
 
@@ -82,7 +82,14 @@ def build_genus(
         fraction=crown_cfg.get("fraction"),
         cap_fraction=crown_cfg.get("cap_fraction", 0.9),
     )
-    mpl_ultrametric(tree, crown.age)
+    dating = marker_cfg.get("dating", {"method": "mpl"})
+    if dating.get("method", "mpl") == "lsd2":
+        tree = lsd2_ultrametric(
+            tree, crown.age, seq_length=int(dating.get("seq_length", 650)),
+            executable=dating.get("executable", "lsd2"),
+        )
+    else:
+        mpl_ultrametric(tree, crown.age)
     provenance = {
         "genus": genus,
         "n_units": len(ingroup),
@@ -90,6 +97,7 @@ def build_genus(
         "crown_age": f"{crown.age:.4f}",
         "crown_source": crown.source,
         "rooting": rooting,
+        "dating": dating.get("method", "mpl"),
         "outgroup": ";".join(n for n, _ in outgroup),
         "status": "subtree",
     }

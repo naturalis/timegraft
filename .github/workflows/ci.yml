@@ -16,6 +16,9 @@ jobs:
       - name: Install
         run: |
           sudo apt-get update && sudo apt-get install -y vsearch
+          git clone --quiet https://github.com/tothuhien/lsd2.git /tmp/lsd2
+          git -C /tmp/lsd2 checkout --quiet c61110f3a4fa05325b45c97b2134792ff9d55d4c
+          make -s -C /tmp/lsd2/src && sudo cp /tmp/lsd2/src/lsd2 /usr/local/bin/
           pip install -e ".[dev]"
       - name: Lint workflow
         run: snakemake --lint

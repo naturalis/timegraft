@@ -25,11 +25,15 @@ for row in read_tsv(snakemake.input.shard):
     group[row["role"]].append((row["unit_id"], row["sequence"]))
     group["stem"] = float(row["stem_age"])
 
+marker_cfg = dict(snakemake.params.marker_cfg)
+if snakemake.input.lsd2:
+    marker_cfg["dating"] = {**marker_cfg.get("dating", {}), "executable": str(Path(snakemake.input.lsd2).resolve())}
+
 out = []
 for genus in sorted(groups):
     group = groups[genus]
     tree, provenance = build_genus(genus, group["in"], group["out"], group["stem"],
-                                   snakemake.params.marker_cfg, known)
+                                   marker_cfg, known)
     out.append({**provenance, "newick": tree_to_newick(tree)})
     logging.info("%s: %d units, crown %s Ma (%s), rooting %s", genus, provenance["n_units"],
                  provenance["crown_age"], provenance["crown_source"], provenance["rooting"])

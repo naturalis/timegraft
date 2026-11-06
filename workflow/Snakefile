@@ -17,6 +17,7 @@ USE_ASVS = bool(config.get("asvs") and config.get("asv_table"))
 BACKBONE = f"{OUT}/backbone/backbone.tre" if BUILD_BACKBONE else config["backbone"]
 
 
+include: "rules/tools.smk"
 include: "rules/units.smk"
 include: "rules/backbone.smk"
 include: "rules/genus.smk"

@@ -12,6 +12,7 @@ PROVENANCE_COLUMNS = (
     "crown_age",
     "crown_source",
     "rooting",
+    "dating",
     "outgroup",
 )
 
