@@ -36,7 +36,7 @@ Milestone 1, working on synthetic data:
 - [ ] treePL as an alternative to mean-path-length dating
 - [ ] Embedding distances as a third distance method
 - [x] Matching ASVs to units (VSEARCH) and placing unmatched ASVs on the tree near their nearest unit
-- [ ] Placement of reference units without a genus
+- [x] Placement of reference units without a genus, next to their nearest unit
 - [x] Per-sample PD metrics: Faith's PD, MPD (presence and abundance-weighted), unweighted and weighted UniFrac, PhyloSor
 - [ ] Validation of the informative window per marker and clade
 
@@ -59,7 +59,7 @@ pytest
 
 ### Outputs (under `outdir`)
 
-- `timegraft.tre`: the dated tree, tips are unit identifiers.
+- `timegraft.tre`: the dated tree, tips are unit identifiers. Units without a usable genus are placed next to their nearest unit (`units_placed.tsv`); `grafted.tre` is the tree before that step.
 - `provenance.tsv`: per backbone genus, whether it received a subtree, a single unit or was pruned, with stem age, crown age and its source, the rooting method and the outgroup used.
 - `placement/placements.tsv`: per ASV, matched, placed or unplaced, with the unit, identity and attachment age; `placement/timegraft_placed.tre`: the tree with placed ASVs added.
 - `diversity/alpha.tsv`: per sample, richness, Faith's PD (including the path to the root), MPD and abundance-weighted MPD, in Ma.

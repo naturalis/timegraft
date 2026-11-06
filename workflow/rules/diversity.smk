@@ -3,7 +3,7 @@
 
 rule diversity:
     input:
-        tree=rules.place_asvs.output.tree if USE_ASVS else rules.graft.output.tree,
+        tree=rules.place_asvs.output.tree if USE_ASVS else rules.place_units.output.tree,
         samples=rules.place_asvs.output.samples if USE_ASVS else (config.get("samples") or []),
     output:
         alpha=f"{OUT}/diversity/alpha.tsv",

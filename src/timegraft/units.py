@@ -6,7 +6,7 @@ from collections import Counter, defaultdict
 
 from . import distances
 
-UNASSIGNED_COLUMNS = ("unit_id", "reason", "genera", "n_records")
+UNASSIGNED_COLUMNS = ("unit_id", "reason", "genera", "n_records", "record_id", "sequence")
 REPRESENTATIVE_COLUMNS = ("unit_id", "genus", "n_records", "genus_share", "record_id", "sequence")
 
 
@@ -45,17 +45,22 @@ def representatives(
         group = sorted(by_unit[unit_id], key=lambda r: r["record_id"])
         genera = Counter(r["genus"] for r in group if r["genus"])
         if not genera:
-            unassigned.append({"unit_id": unit_id, "reason": "no_genus", "genera": "", "n_records": len(group)})
+            chosen = medoid(group[:max_records], k=k)
+            unassigned.append({"unit_id": unit_id, "reason": "no_genus", "genera": "", "n_records": len(group),
+                               "record_id": chosen["record_id"], "sequence": chosen["sequence"]})
             continue
         genus, votes = genera.most_common(1)[0]
         share = votes / sum(genera.values())
         if share < genus_agreement:
+            chosen = medoid(group[:max_records], k=k)
             unassigned.append(
                 {
                     "unit_id": unit_id,
                     "reason": "genus_conflict",
                     "genera": ";".join(f"{g}:{n}" for g, n in sorted(genera.items())),
                     "n_records": len(group),
+                    "record_id": chosen["record_id"],
+                    "sequence": chosen["sequence"],
                 }
             )
             continue

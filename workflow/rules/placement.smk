@@ -3,7 +3,7 @@
 
 rule place_asvs:
     input:
-        tree=rules.graft.output.tree,
+        tree=rules.place_units.output.tree,
         asvs=config.get("asvs") or [],
         asv_table=config.get("asv_table") or [],
         records=rules.filter_records.output.kept,

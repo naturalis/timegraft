@@ -57,6 +57,10 @@ def main():
                 rows.append((f"{unit.replace(':', '')}_{r}", unit, genus, mutate(rng, bin_seq, 0.003)))
     # a unit with no genus, to be reported for later placement
     rows.append(("BOLDAAZ0001_0", "BOLD:AAZ0001", "", mutate(rng, root, 0.5)))
+    # a unit without a genus that is close to BOLD:AAA0009, to be placed next to it
+    extra = random.Random(11)
+    near = next(r[3] for r in rows if r[1] == "BOLD:AAA0009")
+    rows.append(("BOLDAAZ0002_0", "BOLD:AAZ0002", "", mutate(extra, near, 0.15)))
     # a record with stop codons in every frame, to be rejected
     rows.append(("BAD_stop", "BOLD:AAA0005", "Beta", ("TAATAGATAAG" * 29)[:312]))
     # a record that is too short
