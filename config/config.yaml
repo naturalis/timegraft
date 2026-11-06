@@ -6,7 +6,17 @@ marker: coi
 # Inputs
 records: tests/data/toy/records.tsv        # record_id, unit_id, genus, sequence
 backbone: tests/data/toy/backbone.tre      # dated, ultrametric, genera at the tips, ages in Ma
+                                           # (ignored when backbone_build.enabled is true)
 crown_ages: tests/data/toy/crown_ages.tsv  # optional: genus, crown_age (Ma), e.g. from TimeTree
+
+# Build the backbone from Open Tree of Life (topology) and TimeTree (ages)
+# for all genera in the records, instead of reading it from a file.
+backbone_build:
+  enabled: false
+  context: All life          # OToL TNRS context, e.g. Animals or Fungi, to avoid homonyms
+  per_side: 2                # genera per child clade sent to TimeTree for each node
+  root_age:                  # Ma; only needed if TimeTree has no age for the root
+  cache: resources/api_cache.json
 
 # Outputs
 outdir: results/toy

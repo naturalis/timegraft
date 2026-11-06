@@ -4,7 +4,7 @@
 rule shard_genera:
     input:
         reps=rules.representatives.output.reps,
-        backbone=config["backbone"],
+        backbone=BACKBONE,
     output:
         shards=expand(f"{OUT}/genera/shard_{{i}}.tsv", i=SHARDS),
         singles=f"{OUT}/genera/singles.tsv",
