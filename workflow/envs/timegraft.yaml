@@ -7,3 +7,4 @@ dependencies:
   - dendropy >=4.6
   - mafft
   - vsearch
+  - matplotlib-base
