@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import http.client
 import json
 import time
 import urllib.error
@@ -18,7 +19,7 @@ class ApiError(RuntimeError):
         self.body = body
 
 
-def request_json(url: str, payload: dict | None = None, retries: int = 3, timeout: int = 120):
+def request_json(url: str, payload: dict | None = None, retries: int = 5, timeout: int = 120):
     data = json.dumps(payload).encode() if payload is not None else None
     headers = {"User-Agent": USER_AGENT, "Accept": "application/json"}
     if data is not None:
@@ -34,7 +35,8 @@ def request_json(url: str, payload: dict | None = None, retries: int = 3, timeou
                 time.sleep(2 ** attempt)
                 continue
             raise ApiError(err.code, body) from None
-        except urllib.error.URLError:
+        except (urllib.error.URLError, http.client.HTTPException, OSError):
+            # connection resets and dropped tunnels surface as several exception types
             if attempt < retries - 1:
                 time.sleep(2 ** attempt)
                 continue

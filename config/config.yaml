@@ -19,8 +19,14 @@ asv_table: tests/data/toy/asv_table.tsv    # optional: sample, asv_id, reads
 # for all genera in the records, instead of reading it from a file.
 backbone_build:
   enabled: false
-  context: All life          # OToL TNRS context, e.g. Animals or Fungi, to avoid homonyms
+  source: static             # static: OToL release files (downloaded once); api: OToL web API
+  synthesis: opentree16.1    # static: synthesis release
+  taxonomy: ott3.7.3         # static: OTT release
+  otol_dir: resources/otol
+  context: Metazoa           # taxon to search genera in, to avoid homonyms (e.g. Metazoa, Fungi)
   per_side: 2                # genera per child clade sent to TimeTree for each node
+  species_per_genus: 3       # species ids sent along with each genus, as TimeTree misses many genera
+  crown_ages_from_timetree: true  # static only: genus crown ages from TimeTree species
   root_age:                  # Ma; only needed if TimeTree has no age for the root
   cache: resources/api_cache.json
 
