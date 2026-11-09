@@ -134,6 +134,15 @@ def _write_taxdump(directory):
         (99, 6656, "genus", 5),
         (98, 99, "species", 1),             # a species code does not make its phylum mixed
         (2763, 2759, "phylum", 4),          # an algal phylum also called "Insecta" (homonym)
+        (6231, 33208, "phylum", 5),         # Nematoda: mixed because of one family
+        (119089, 6231, "class", 5),         # Chromadorea: mixed too
+        (1001, 119089, "family", 14),       # Fam14: written, as an exception
+        (1002, 1001, "genus", 14),          # Gen14: same as its family, not written
+        (1003, 119089, "genus", 5),         # Gen5: all ancestors mixed, so written
+        (1004, 50557, "genus", 5),          # Plainus: same as Insecta, not written
+        (1007, 119089, "genus", 5),         # Twin: written, but a homonym of an algal genus
+        (1008, 2763, "genus", 4),           # Twin (alga): same as Rhodophyta, not written
+        (1009, 2763, "genus", 4),           # an algal genus named like a class of tunicates
     ]
     names = [
         (6656, "Arthropoda", "scientific name"), (50557, "Insecta", "scientific name"),
@@ -143,6 +152,11 @@ def _write_taxdump(directory):
         (7712, "Urochordata", "synonym"), (7713, "Ascidiacea", "scientific name"),
         (7713, "sea squirts", "common name"), (33208, "Metazoa", "scientific name"),
         (2763, "Rhodophyta", "scientific name"), (2763, "Insecta", "synonym"),
+        (6231, "Nematoda", "scientific name"), (119089, "Chromadorea", "scientific name"),
+        (1001, "Fam14", "scientific name"), (1002, "Gen14", "scientific name"),
+        (1003, "Gen5", "scientific name"), (1004, "Plainus", "scientific name"),
+        (1007, "Twin", "scientific name"), (1008, "Twin", "scientific name"),
+        (1009, "Ascidiacea", "scientific name"),
     ]
     with open(directory / "nodes.dmp", "w") as handle:
         for taxid, parent, rank, mgc in nodes:
@@ -165,10 +179,22 @@ def test_build_table(tmp_path):
     assert rows["Metazoa"]["code"] == MIXED
     assert "Vertebrata" not in rows and "sea squirts" not in rows
 
+    # families and genera only where they change the outcome
+    assert rows["Nematoda"]["code"] == rows["Chromadorea"]["code"] == MIXED
+    assert rows["Fam14"]["code"] == "14" and rows["Fam14"]["rank"] == "family"
+    assert rows["Gen5"]["code"] == "5"
+    assert "Gen14" not in rows and "Plainus" not in rows
+    assert rows["Twin"]["code"] == MIXED  # genus homonym with another code
+    assert rows["Ascidiacea"]["code"] == "13" and rows["Ascidiacea"]["ncbi_taxid"] == "7713"
+
     out = tmp_path / "codes.tsv"
     geneticcode.write_table(list(rows.values()), out, "test")
     codes = GeneticCodes(table=out)
     assert codes.resolve({"phylum": "Chordata", "class": "Elasmobranchii"})[:2] == (2, "table")
+    assert codes.resolve({"phylum": "Nematoda", "class": "Chromadorea", "family": "Fam14", "genus": "Gen14"}) == (
+        14, "table", "Fam14")
+    assert codes.resolve({"phylum": "Nematoda", "class": "Chromadorea", "genus": "Gen5"})[:2] == (5, "table")
+    assert codes.resolve({"phylum": "Nematoda", "class": "Chromadorea", "genus": "Twin"})[1] == "default"
     assert codes.resolve({"phylum": "Arthropoda", "class": "Insecta"})[:2] == (5, "table")
 
 

@@ -164,14 +164,18 @@ class GeneticCodes:
 
 # Building the mapping from the NCBI taxonomy dump ----------------------------
 
-# Ranks written to the mapping. Ranks between these are included because
+# Ranks always written to the mapping. Ranks between these are included because
 # BOLD and NCBI do not always agree on rank (e.g. Elasmobranchii, Actinopterygii).
 EMIT_RANKS = frozenset({
     "kingdom", "subkingdom", "phylum", "subphylum", "superclass", "class", "subclass",
     "infraclass", "superorder", "order",
 })
+# Ranks written only where they change the outcome: where the code differs from
+# what the nearest written, single-code ancestor would give (e.g. the families and
+# genera with table 14 inside the otherwise mixed Nematoda).
+EXCEPTION_RANKS = frozenset({"family", "subfamily", "genus"})
 # Ranks whose codes count when deciding if a name is mixed.
-CODE_RANKS = EMIT_RANKS | {"suborder", "infraorder", "superfamily", "family", "subfamily", "genus"}
+CODE_RANKS = EMIT_RANKS | EXCEPTION_RANKS | {"suborder", "infraorder", "superfamily"}
 NAME_CLASSES = frozenset({"scientific name", "synonym", "equivalent name"})
 
 
@@ -212,29 +216,53 @@ def build_table(taxdump: str | Path, root: int = 2759) -> list[dict[str, str]]:
     # codes used at or below each node, at the ranks that count
     # (children come before their parent in reversed preorder)
     below: dict[int, set[int]] = {}
-    emitted: dict[int, frozenset[int]] = {}
+    codes_of: dict[int, frozenset[int]] = {}
     for node in reversed(order):
         codes = below.pop(node, set())
         if rank[node] in CODE_RANKS and mgc[node]:
             codes.add(mgc[node])
-        if rank[node] in EMIT_RANKS:
-            emitted[node] = frozenset(codes)
+        if rank[node] in EMIT_RANKS | EXCEPTION_RANKS and codes:
+            codes_of[node] = frozenset(codes)
         if node != root and codes:
             below.setdefault(parent[node], set()).update(codes)
 
-    names = defaultdict(list)
+    # which nodes to write: every node at EMIT_RANKS; a single-code node at
+    # EXCEPTION_RANKS only if its code differs from the one it would otherwise
+    # resolve to (None when every written ancestor is mixed)
+    written: set[int] = set()
+    stack = [(root, None)]
+    while stack:
+        node, inherited = stack.pop()
+        codes = codes_of.get(node)
+        if codes:
+            single = next(iter(codes)) if len(codes) == 1 else None
+            if rank[node] in EMIT_RANKS:
+                written.add(node)
+                inherited = single if single is not None else inherited
+            elif single is not None and single != inherited:
+                written.add(node)
+                inherited = single
+        stack.extend((child, inherited) for child in children.get(node, ()))
+
+    # names of all nodes that count, so that a written name shared with an
+    # unwritten node using another code (a homonym) becomes mixed
+    names = defaultdict(set)
     with _open_taxdump(taxdump, "names.dmp") as handle:
         for f in _dmp(handle):
             taxid = int(f[0])
-            if taxid in emitted and f[3] in NAME_CLASSES:
-                names[f[1]].append(taxid)
+            if taxid in codes_of and f[3] in NAME_CLASSES:
+                names[f[1]].add(taxid)
 
     rows = []
     for name in sorted(names):
-        taxids = sorted(set(names[name]))
-        codes = sorted(set().union(*(emitted[t] for t in taxids)))
-        if not codes:
+        taxids = sorted(names[name])
+        if not written.intersection(taxids):
             continue
+        # A name used at a higher rank is judged on its higher-rank uses only,
+        # so that a genus homonym elsewhere cannot make a whole class mixed.
+        high = [t for t in taxids if rank[t] in EMIT_RANKS]
+        taxids = high or taxids
+        codes = sorted(set().union(*(codes_of[t] for t in taxids)))
         rows.append({
             "name": name,
             "rank": ";".join(sorted({rank[t] for t in taxids})),
@@ -251,6 +279,7 @@ def write_table(rows: list[dict[str, str]], path: str | Path, source: str) -> No
     with open(path, "w", newline="") as handle:
         handle.write(f"# Mitochondrial genetic code per taxon name, from {source} ({date.today().isoformat()}).\n")
         handle.write("# Built with: python -m timegraft.geneticcode. 'mixed': descendants use more than one code.\n")
+        handle.write("# Families and genera appear only where their code differs from that of the group above.\n")
         writer = csv.DictWriter(handle, fieldnames=["name", "rank", "code", "codes", "ncbi_taxid"], delimiter="\t")
         writer.writeheader()
         writer.writerows(rows)

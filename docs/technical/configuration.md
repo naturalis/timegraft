@@ -81,7 +81,7 @@ The COI reading-frame check needs the mitochondrial genetic code of each record,
 2. otherwise, going up from genus through subfamily, family, order, class, phylum and kingdom, the first name found in `filter.genetic_codes` or in the mapping (at the same rank, `filter.genetic_codes` wins);
 3. otherwise `filter.genetic_code`.
 
-The mapping ships as `src/timegraft/data/genetic_codes.tsv` (columns `name`, `rank`, `code`, `codes`, `ncbi_taxid`). Names are matched at any rank, because BOLD and NCBI do not always agree on rank. A name marked `mixed` covers more than one code (e.g. Chordata) and is skipped, so that a more specific name decides. To regenerate the mapping from the [NCBI taxonomy dump](https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz):
+The mapping ships as `src/timegraft/data/genetic_codes.tsv` (columns `name`, `rank`, `code`, `codes`, `ncbi_taxid`). Names are matched at any rank, because BOLD and NCBI do not always agree on rank. A name marked `mixed` covers more than one code (e.g. Chordata) and is skipped, so that a more specific name decides. The mapping holds every taxon from kingdom to order, plus families and genera wherever their code differs from what the group above would give (e.g. the families with table 14 inside Nematoda, which is mixed). To regenerate the mapping from the [NCBI taxonomy dump](https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz):
 
 ```bash
 python -m timegraft.geneticcode taxdump.tar.gz src/timegraft/data/genetic_codes.tsv
