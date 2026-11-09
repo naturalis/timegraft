@@ -31,6 +31,7 @@ from datetime import date
 from pathlib import Path
 from typing import Iterable, Mapping
 
+# All NCBI codes used for mitochondria (and 11, which NCBI assigns to Jakobida).
 # Amino acids per codon, in NCBI order (first, second, third base each TCAG);
 # '*' is a stop. Generated from Biopython's Bio.Data.CodonTable, which follows
 # https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi; tests check them.
@@ -41,9 +42,13 @@ TABLES: dict[int, str] = {
     4: "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",  # Mold, Protozoan, Coelenterate Mito.
     5: "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNKKSSSSVVVVAAAADDEEGGGG",  # Invertebrate Mitochondrial
     9: "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNNKSSSSVVVVAAAADDEEGGGG",  # Echinoderm and Flatworm Mito.
+    11: "FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",  # Bacterial, Archaeal and Plant Plastid
     13: "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNKKSSGGVVVVAAAADDEEGGGG",  # Ascidian Mitochondrial
     14: "FFLLSSSSYYY*CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNNKSSSSVVVVAAAADDEEGGGG",  # Alternative Flatworm Mito.
+    16: "FFLLSSSSYY*LCC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",  # Chlorophycean Mitochondrial
     21: "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNNKSSSSVVVVAAAADDEEGGGG",  # Trematode Mitochondrial
+    22: "FFLLSS*SYY*LCC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",  # Scenedesmus obliquus Mitochondrial
+    23: "FF*LSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",  # Thraustochytrium Mitochondrial
     24: "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSSKVVVVAAAADDEEGGGG",  # Pterobranchia Mitochondrial
     33: "FFLLSSSSYYY*CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSSKVVVVAAAADDEEGGGG",  # Cephalodiscidae Mitochondrial
 }
@@ -258,6 +263,9 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--root", type=int, default=2759, help="NCBI taxid to restrict to (default 2759, Eukaryota)")
     args = parser.parse_args(argv)
     rows = build_table(args.taxdump, args.root)
+    unsupported = sorted({int(c) for r in rows for c in r["codes"].split(";")} - set(TABLES))
+    if unsupported:
+        parser.error(f"the taxdump uses genetic codes {unsupported}, which TABLES lacks; add them first")
     write_table(rows, args.output, f"NCBI taxdump {Path(args.taxdump).name}, root {args.root}")
     print(f"{len(rows)} names, {sum(r['code'] == MIXED for r in rows)} mixed")
 

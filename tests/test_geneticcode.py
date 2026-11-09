@@ -63,7 +63,14 @@ def test_shipped_table_resolves_common_groups():
     assert codes.resolve({"phylum": "Chordata", "class": "Ascidiacea"})[:2] == (13, "table")
     assert codes.resolve({"phylum": "Echinodermata"})[0] == 9
     assert codes.resolve({"phylum": "Cnidaria"})[0] == 4
-    assert codes.resolve({"phylum": "Platyhelminthes", "class": "Trematoda"})[0] == 21
+    assert codes.resolve({"phylum": "Platyhelminthes", "class": "Cestoda"})[0] == 9
+    # mixed in NCBI (genera with tables 9, 14 and 21): falls to the default
+    assert codes.resolve({"phylum": "Platyhelminthes", "class": "Trematoda"})[1] == "default"
+
+
+def test_shipped_table_codes_are_all_supported():
+    for name, code in geneticcode.read_table(geneticcode.DEFAULT_TABLE).items():
+        assert code is None or code in geneticcode.TABLES, name
 
 
 def test_most_specific_name_wins():
