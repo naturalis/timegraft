@@ -10,7 +10,9 @@ workflow/scripts/*.py         thin wrappers: read inputs, call the package, writ
 workflow/envs/*.yaml          conda environments
 src/timegraft/                the package (all logic lives here, so it can be tested without Snakemake)
 tests/                        unit tests, a toy workflow test, small fixtures
-docs/                         this documentation
+docs/technical/                using and developing timegraft
+docs/science/                  background, method, limitations, results
+docs/manuscript/               draft preprint (Markdown + BibTeX)
 ```
 
 Rule scripts import the package from `src/` through the `src` parameter that every rule passes (`params.src`), so the workflow runs without installing the package into each conda environment.
@@ -52,12 +54,12 @@ Marker-specific behaviour is selected by name from the marker block in the confi
 ## Adding a distance method (e.g. embeddings)
 
 1. Write a function `name(a: str, b: str, **options) -> float`, or better a matrix function for speed, and register it in `distances.METHODS` and `NEEDS_ALIGNMENT`.
-2. For embeddings, the function would look vectors up by sequence or unit id rather than embed on the fly; compute embeddings in a separate rule (GPU) and pass the file as an option.
+2. For embeddings, the function would look vectors up by sequence or unit id rather than embed on the fly; compute embeddings in a separate rule (GPU) and pass the file as an option ([issue #25](https://github.com/naturalis/timegraft/issues/25)).
 3. Add it to `validation.methods` first and compare it with `k2p` and `kmer` before using it for trees.
 
 ## Adding a marker (e.g. ITS)
 
-A marker is a block under `markers` plus, where needed, new plug-in functions. For ITS, see the issue on extending to ITS; the main pieces are a UNITE reader (species hypotheses as units), ITSx extraction, a check of k-mer distances within genera, crown ages without a rate, `context: Fungi` for the backbone, and a fungal test set.
+A marker is a block under `markers` plus, where needed, new plug-in functions. For ITS, see [issue #15](https://github.com/naturalis/timegraft/issues/15) and the [roadmap](roadmap.md); the main pieces are a UNITE reader (species hypotheses as units), ITSx extraction, a check of k-mer distances within genera, crown ages without a rate, `context: Fungi` for the backbone, and a fungal test set.
 
 ## Testing
 
@@ -71,6 +73,11 @@ snakemake --lint            # workflow style checks
 - Network calls are tested with fake fetch functions; nothing in the tests needs network access.
 
 CI (GitHub Actions) installs VSEARCH, builds LSD2, runs the lint, a dry run and the tests.
+
+## Documentation
+
+- Technical documentation in `docs/technical`, scientific in `docs/science`, the manuscript in `docs/manuscript`.
+- Diagrams are Mermaid code blocks, which GitHub renders. Regenerate the workflow graph with `snakemake --rulegraph mermaid-js` after changing rules, and update `running.md`.
 
 ## Conventions
 

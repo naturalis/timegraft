@@ -54,18 +54,4 @@ The collaboration with Microsoft has ended. The repository is public domain and 
 4. **Keep it alignment-free where needed** (ITS) and parallel by construction (every genus independently).
 5. **Embeddings are useful for search and coarse placement**; whether they beat k-mers or K2P for distances within a genus is an empirical question for the validation step.
 
-This is the design timegraft implements; see [method.md](method.md).
-
-## Related work
-
-- **Greengenes2** ([McDonald et al. 2023](https://www.nature.com/articles/s41587-023-01845-1)) is the closest precedent: a genome-based tree kept fixed, with over 21 million 16S sequences placed onto it using DEPP. timegraft is in effect the same architecture for BOLD and UNITE, with a dated backbone.
-- **DEPP** ([Jiang et al.](https://doi.org/10.1101/2021.01.22.427808)) learns an embedding in which distances match (the square root of) distances on a reference tree, and places single-gene sequences on a species tree. It needs a reference tree to learn from; its use here would be clade recognition for placement, not estimating deep distances.
-- **Chesters' insect synthesis trees** ([Chesters 2020](https://doi.org/10.1111/syen.12414); [insectphylo.org](https://fis.leuphana.de/en/publications/launching-insectphyloorg-a-new-hub-facilitating-construction-and-/)) combine phylogenomic backbones with barcodes for tens of thousands of insect species, including a Lepidoptera synthesis applied to PD of caterpillar barcodes. Alignment-based, species-level and insects only, but a candidate backbone for insects and the most direct comparison.
-- **T-BAS** ([Carbone et al. 2017](https://doi.org/10.1093/bioinformatics/btw808)) places fungal sequences on curated multilocus backbones; it relies on alignable loci and leaves the variable part of ITS out.
-- **COI placement on backbones** ([Fernando et al. 2025](https://doi.org/10.1002/ece3.70817)): on fishes, 70 to 78% of COI sequences were placed correctly by EPA-ng, and the distance-based APPLES did worse. A benchmark for the cost of distance-based placement.
-- **TimeTree 5** ([Kumar et al. 2022](https://doi.org/10.1093/molbev/msac174)) synthesises published divergence times and has a REST API keyed by NCBI taxon ids. Its coverage of marine invertebrates turned out to be patchy (see the [first results](results/2026-11-iberia.md)).
-- **Wei & Koslicki** ([preprint](https://www.biorxiv.org/content/10.1101/2024.07.29.605688v2)): bottom-up branch length assignment on a taxonomy, used in evospaice.
-
-## What timegraft adds
-
-A dated tree, in millions of years, of all reference units of a marker for the genera of interest; alignment-free where needed and therefore usable for both COI and ITS; regularly rebuildable from public releases; and explicit about where each age comes from (TimeTree, enclosing taxa, interpolation, barcode rate, or a user's table). It is not a tree of life inferred from barcodes and should not be presented as one.
+This is the design timegraft implements; see [how it works](how-it-works.md). Work elsewhere on the same problem is discussed under [prior art](prior-art.md).
