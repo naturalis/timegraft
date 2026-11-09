@@ -68,11 +68,27 @@ def main():
     # a record that is too short
     rows.append(("BAD_short", "BOLD:AAA0005", "Beta", root[:90]))
 
+    # Genetic codes. A fish record with AGA in every frame: no stop under the
+    # invertebrate code (5), but rejected under the vertebrate code (2), which
+    # the shipped mapping assigns to Actinopterygii.
+    special = {
+        "BAD_vertebrate_stop": {"class": "Actinopterygii", "phylum": "Chordata"},
+        "BAD_standard_stop": {"genetic_code": "1"},
+    }
+    rows.append(("BAD_vertebrate_stop", "BOLD:AAV0001", "Piscis", ("AGACC" * 63)[:312]))
+    # TGA in every frame, a stop only under the standard code (1), set by the
+    # record's own genetic_code column
+    rows.append(("BAD_standard_stop", "BOLD:AAV0002", "Algula", ("TGACC" * 63)[:312]))
+
     with open(OUT / "records.tsv", "w") as handle:
-        handle.write("record_id\tunit_id\tgenus\tfamily\torder\tsequence\n")
+        handle.write("record_id\tunit_id\tgenus\tfamily\torder\tclass\tphylum\tgenetic_code\tsequence\n")
         for record_id, unit, genus, seq in rows:
             family = FAMILY.get(genus, "Gammidae" if unit == "BOLD:AAZ0002" else "")
-            handle.write("\t".join([record_id, unit, genus, family, ORDER, seq]) + "\n")
+            order = "" if unit.startswith("BOLD:AAV") else ORDER
+            extra = special.get(record_id, {})
+            fields = [record_id, unit, genus, family, order,
+                      extra.get("class", ""), extra.get("phylum", ""), extra.get("genetic_code", ""), seq]
+            handle.write("\t".join(fields) + "\n")
     (OUT / "backbone.tre").write_text(BACKBONE)
     with open(OUT / "crown_ages.tsv", "w") as handle:
         handle.write("genus\tcrown_age\n")

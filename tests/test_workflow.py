@@ -69,5 +69,13 @@ def test_toy_workflow(tmp_path):
     assert {(r["method"], r["stratum"]) for r in summary} >= {("k2p", "all"), ("kmer", "genus")}
     assert (outdir / "validation" / "saturation.png").stat().st_size > 0
 
-    rejected = {r["record_id"]: r["reason"] for r in read_tsv(outdir / "units" / "rejected.tsv")}
-    assert rejected == {"BAD_stop": "stop_codon", "BAD_short": "too_short"}
+    rejected = {r["record_id"]: r for r in read_tsv(outdir / "units" / "rejected.tsv")}
+    assert {k: r["reason"] for k, r in rejected.items()} == {
+        "BAD_stop": "stop_codon", "BAD_short": "too_short",
+        "BAD_vertebrate_stop": "stop_codon", "BAD_standard_stop": "stop_codon",
+    }
+    # genetic code per record: from the shipped mapping, the record's own column, or the default
+    assert (rejected["BAD_vertebrate_stop"]["genetic_code"], rejected["BAD_vertebrate_stop"]["genetic_code_source"]) == ("2", "table")
+    assert (rejected["BAD_standard_stop"]["genetic_code"], rejected["BAD_standard_stop"]["genetic_code_source"]) == ("1", "column")
+    assert (rejected["BAD_stop"]["genetic_code"], rejected["BAD_stop"]["genetic_code_source"]) == ("5", "default")
+    assert {r["genetic_code"] for r in read_tsv(outdir / "units" / "filtered.tsv")} == {"5"}

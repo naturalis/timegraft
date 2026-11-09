@@ -23,7 +23,8 @@ Rule scripts import the package from `src/` through the `src` parameter that eve
 | --- | --- |
 | `seqio` | TSV and FASTA reading and writing |
 | `bcdm` | BOLD data packages (TSV, Parquet via DuckDB) to record tables |
-| `filters` | marker filters (COI reading frame per genetic code; ITS length and ambiguity) |
+| `filters` | marker filters (COI reading frame; ITS length and ambiguity) |
+| `geneticcode` | NCBI translation tables, translation, the genetic code per record, and building the taxon-to-code mapping from the NCBI taxdump |
 | `units` | medoid representative and genus per unit |
 | `distances` | distance methods (`k2p`, vectorised; `kmer`); the registry `METHODS` |
 | `bionj` | BioNJ on a distance matrix |

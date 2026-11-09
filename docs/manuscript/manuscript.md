@@ -39,7 +39,7 @@ timegraft builds a dated tree in four stages (Fig. 2): (i) one representative se
 
 ## Reference units
 
-Records are read from a BOLD data package or a table of record identifier, unit, genus and sequence. COI records are kept if they meet a minimum length, contain few ambiguous bases, and have a reading frame without stop codons under the appropriate mitochondrial genetic code. For each unit, the representative is the medoid record by *k*-mer distance [@ondov2016mash], which requires no alignment. A unit is assigned to the genus that at least 80% of its identified records agree on; units without a genus, or with conflicting identifications, are set aside for placement.
+Records are read from a BOLD data package or a table of record identifier, unit, genus and sequence. COI records are kept if they meet a minimum length, contain few ambiguous bases, and have a reading frame without stop codons under the appropriate mitochondrial genetic code. Because a taxonomically broad data set spans several codes, the code is chosen per record: the most specific of the record's genus, family, order, class or phylum that occurs in a mapping derived from the NCBI Taxonomy decides it, with a default for records that match nothing. For each unit, the representative is the medoid record by *k*-mer distance [@ondov2016mash], which requires no alignment. A unit is assigned to the genus that at least 80% of its identified records agree on; units without a genus, or with conflicting identifications, are set aside for placement.
 
 ## Dated backbone
 
