@@ -1,0 +1,60 @@
+# Mitochondrial genetic code per taxon name. HAND-CURATED starter mapping for Metazoa, after the systematic
+# ranges on https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi; replace with the generated mapping:
+#   python -m timegraft.geneticcode taxdump.tar.gz src/timegraft/data/genetic_codes.tsv
+# Names are matched at any rank. 'mixed': descendants use more than one code, so a more specific name decides.
+name	rank	code	codes	ncbi_taxid
+Annelida	phylum	5
+Arthropoda	phylum	5
+Brachiopoda	phylum	5
+Bryozoa	phylum	5
+Chaetognatha	phylum	5
+Entoprocta	phylum	5
+Mollusca	phylum	5
+Nematoda	phylum	5
+Nemertea	phylum	5
+Onychophora	phylum	5
+Phoronida	phylum	5
+Priapulida	phylum	5
+Rotifera	phylum	5
+Sipuncula	phylum	5
+Tardigrada	phylum	5
+Cnidaria	phylum	4
+Ctenophora	phylum	4
+Placozoa	phylum	4
+Porifera	phylum	4
+Echinodermata	phylum	9
+Platyhelminthes	phylum	9
+Rhabditophora	class	9
+Trematoda	class	21
+Hemichordata	phylum	mixed
+Pterobranchia	class	mixed
+Rhabdopleuridae	family	24
+Cephalodiscidae	family	33
+Chordata	phylum	mixed
+Tunicata	subphylum	13
+Ascidiacea	class	13
+Thaliacea	class	13
+Appendicularia	class	13
+Cephalochordata	subphylum	5
+Leptocardii	class	5
+Vertebrata	clade	2
+Myxini	class	2
+Petromyzonti	class	2
+Hyperoartia	class	2
+Cephalaspidomorphi	class	2
+Chondrichthyes	class	2
+Elasmobranchii	class	2
+Holocephali	class	2
+Actinopterygii	class	2
+Actinopteri	class	2
+Sarcopterygii	class	2
+Coelacanthi	class	2
+Dipnoi	class	2
+Amphibia	class	2
+Reptilia	class	2
+Aves	class	2
+Mammalia	class	2
+Squamata	order	2
+Testudines	order	2
+Crocodylia	order	2
+Rhynchocephalia	order	2

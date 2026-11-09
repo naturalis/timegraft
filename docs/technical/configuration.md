@@ -12,7 +12,7 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 
 | Key | Meaning |
 | --- | --- |
-| `records` | Record table, tab-separated: `record_id`, `unit_id`, `genus`, `sequence`; optionally `family`, `order`, `class`, `phylum` (used by the validation and, later, the genetic code) |
+| `records` | Record table, tab-separated: `record_id`, `unit_id`, `genus`, `sequence`; optionally `family`, `order`, `class`, `phylum` (used by the validation and the genetic code) and `genetic_code` (an NCBI table number that overrides the lookup for that record) |
 | `bcdm.path` | A BOLD data package (BCDM, TSV or Parquet). When set, it replaces `records` |
 | `bcdm.marker`, `bcdm.taxa`, `bcdm.countries` | Filters applied to the BOLD package: marker code, `rank: [names]`, `country/ocean` values |
 | `backbone` | A dated, ultrametric Newick tree in millions of years with one tip per genus. Ignored when `backbone_build.enabled` is true |
@@ -56,7 +56,9 @@ Everything that differs between markers sits in `markers.<name>`:
 | --- | --- | --- | --- |
 | `filter.min_length` | 200 | 100 | Minimum sequence length without gaps |
 | `filter.max_ambiguous` | 0.01 | 0.01 | Maximum share of ambiguous bases |
-| `filter.genetic_code` | 5 | | Translation table for the reading-frame check (COI only) |
+| `filter.genetic_code` | 5 | | Default translation table for the reading-frame check (COI only); see [genetic codes](#genetic-codes) |
+| `filter.genetic_codes` | `{}` | | Overrides, `rank: {name: code}` |
+| `filter.genetic_code_table` | | | Your own name-to-code mapping instead of the shipped one |
 | `align` | `none` | `none` | `none` (input already aligned) or `mafft` |
 | `distance.method` | `k2p` | `kmer` | `k2p` needs aligned sequences; `kmer` takes `k` |
 | `crown_age.method` | `rate` | `fraction` | How to set a genus crown age when no better source exists |
@@ -70,6 +72,22 @@ Everything that differs between markers sits in `markers.<name>`:
 | `placement.place_identity` | 0.80 | 0.80 | At or above: attached near its nearest unit; below: unplaced |
 | `placement.query_cov` | 0.9 | 0.8 | Share of the query that must align |
 | `placement.height` | `rate` | `terminal` | How to set the attachment age |
+
+### Genetic codes
+
+The COI reading-frame check needs the mitochondrial genetic code of each record, and a broad data set spans several (2 for vertebrates, 13 for tunicates, 9 for echinoderms and most flatworms, 4 for cnidarians and sponges, 5 for most other invertebrates). The code is resolved per record:
+
+1. a `genetic_code` value in the record table, if there is one;
+2. otherwise, going up from genus through subfamily, family, order, class, phylum and kingdom, the first name found in `filter.genetic_codes` or in the mapping (at the same rank, `filter.genetic_codes` wins);
+3. otherwise `filter.genetic_code`.
+
+The mapping ships as `src/timegraft/data/genetic_codes.tsv` (columns `name`, `rank`, `code`, `codes`, `ncbi_taxid`). Names are matched at any rank, because BOLD and NCBI do not always agree on rank. A name marked `mixed` covers more than one code (e.g. Chordata) and is skipped, so that a more specific name decides. To regenerate the mapping from the [NCBI taxonomy dump](https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz):
+
+```bash
+python -m timegraft.geneticcode taxdump.tar.gz src/timegraft/data/genetic_codes.tsv
+```
+
+`filtered.tsv` and `rejected.tsv` record the code used for each record and where it came from (`column`, `config`, `table` or `default`). The `filter_records` log lists the stop-codon rejection rate per code: a code with a much higher rate than the others suggests a wrong mapping.
 
 ## Validation
 

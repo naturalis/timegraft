@@ -10,7 +10,7 @@ What timegraft takes for granted, and where it is known to be weak. Evidence com
 - **A roughly constant rate of change within each genus.** Both dating methods (mean path length, LSD2) assume clock-like evolution within a genus.
 - **A known COI rate** (0.0115 substitutions per site per million years per lineage, about 2.3% pairwise) where no crown age is known. It also sets how far back placed sample sequences attach, and the threshold for rejecting TimeTree crown ages.
 - **One representative per BIN** stands in for the variation within it.
-- **One genetic code per run** for the reading-frame check on COI.
+- **The genetic code follows from the taxonomy.** The reading-frame check on COI uses a mitochondrial code per record, looked up from its genus, family, order, class or phylum (see [configuration](../technical/configuration.md#genetic-codes)). Records whose names match nothing get a default code, and misidentified records get the code of the wrong group.
 
 ## Known weaknesses
 
@@ -21,7 +21,6 @@ What timegraft takes for granted, and where it is known to be weak. Evidence com
 | The Open Tree of Life contains misplacements, which nothing corrects automatically | the gastropod *Onchidella* among the sea urchins, because OTT merged it with an echinoderm homonym | [#20](https://github.com/naturalis/timegraft/issues/20) |
 | Rooting with the sister genus often fails | in 194 of 1,046 genera (19%), midpoint rooting was used instead | [#19](https://github.com/naturalis/timegraft/issues/19) |
 | Placement by nearest neighbour is less accurate than likelihood-based placement, and its thresholds are not calibrated | at 80% identity the attachment age is already about 9 Ma | [#21](https://github.com/naturalis/timegraft/issues/21) |
-| One genetic code for all taxa | vertebrate, echinoderm and cnidarian sequences use other codes | [#22](https://github.com/naturalis/timegraft/issues/22) |
 | BINs and UNITE species hypotheses are delimited differently | PD across markers is comparable in time but not in the granularity of the tips | [#15](https://github.com/naturalis/timegraft/issues/15) |
 
 ## What timegraft is not

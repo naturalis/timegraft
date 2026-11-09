@@ -77,7 +77,13 @@ markers:
     filter:
       min_length: 200
       max_ambiguous: 0.01
-      genetic_code: 5        # 5 invertebrates, 9 echinoderms and flatworms, 4 cnidarians
+      # Genetic code for the reading-frame check, resolved per record: a
+      # genetic_code column in the records wins; otherwise, from genus up to
+      # phylum, the first name in genetic_codes below or in the shipped
+      # mapping (src/timegraft/data/genetic_codes.tsv); otherwise this default.
+      genetic_code: 5        # NCBI table; 5 is the invertebrate mitochondrial code
+      genetic_codes: {}      # rank: {name: code}, e.g. {class: {Ascidiacea: 13}}
+      genetic_code_table:    # optional: your own name-to-code mapping instead of the shipped one
     align: none              # none (input already aligned) or mafft
     distance:
       method: k2p

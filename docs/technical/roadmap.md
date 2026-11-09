@@ -31,7 +31,6 @@ The weakest parts of the first real run were the ages, so they come first.
 | [#23](https://github.com/naturalis/timegraft/issues/23) | Build the tree from the genera found in the samples |
 | [#24](https://github.com/naturalis/timegraft/issues/24) | Validation against independent reference trees: how deep does COI carry signal, per phylum |
 | [#21](https://github.com/naturalis/timegraft/issues/21) | Calibrate placement thresholds; compare with EPA-ng |
-| [#22](https://github.com/naturalis/timegraft/issues/22) | Genetic code per taxon |
 
 ## Then: fungal ITS (eDentity)
 
