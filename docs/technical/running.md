@@ -28,7 +28,7 @@ python -m timegraft.bcdm BOLD.parquet records.tsv --taxon genus=@genera.txt --ma
 
 ### The Iberian run
 
-The run in [the first results](../science/results/2026-11-iberia.md) used the BOLD public data package of 27 March 2026 and `config/iberia.yaml`:
+The run in [the first results](../science/results/2026-11-iberia.md) used the BOLD public data package of 27 March 2026 and `config/iberia.yaml`. The records, the TimeTree answers and the outputs are in `data/iberia/` (see its README to rebuild the run without the data package); to cut the records yourself:
 
 ```bash
 python -m timegraft.bcdm BOLD_Public.27-Mar-2026.parquet regional.tsv \

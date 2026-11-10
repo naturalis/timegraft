@@ -4,7 +4,7 @@
 #
 # The records come from the BOLD public data package of 27 March 2026,
 # cut down with timegraft.bcdm as described in docs/technical/running.md
-# ("Preparing BOLD data", Iberian example).
+# ("Preparing BOLD data", Iberian example); they are in data/iberia/records.tsv.gz.
 
 records: resources/iberia/records.tsv
 outdir: results/iberia
@@ -25,6 +25,15 @@ backbone_build:
   context: Metazoa
 
 n_shards: 8
+
+# Rooting as in the manuscript; fixed here so the run does not change with the defaults.
+# The earlier strict run: {rule: strict, n_outgroup: 2, outgroup_choice: sister, fallback: midpoint}
+rooting:
+  rule: tolerant
+  n_outgroup: 10
+  outgroup_choice: spread
+  outgroup_levels: 3
+  fallback: mad
 
 markers:
   coi:
