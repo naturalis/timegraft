@@ -66,6 +66,7 @@ rooting:
                              # sister: first units by id of the sister genus (before #19)
   outgroup_levels: 3         # spread: sister clades to draw from, going up the backbone
   fallback: mad              # without an outgroup, or when the strict rule fails: mad or midpoint
+  uncertainty: true          # record in provenance.tsv how much crown age and PD depend on the root (#34)
 
 # Representative per unit
 max_records_per_unit: 50   # records considered when choosing the medoid

@@ -15,6 +15,11 @@ PROVENANCE_COLUMNS = (
     "rooting",
     "violations",
     "misplaced",
+    "root_ambiguity",
+    "root_alternatives",
+    "crown_age_min",
+    "crown_age_max",
+    "pd_rel_range",
     "dating",
     "outgroup",
 )

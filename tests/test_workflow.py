@@ -49,6 +49,15 @@ def test_toy_workflow(tmp_path):
     for genus in ("Alpha", "Beta", "Gamma"):
         assert status[genus]["rooting"] == "outgroup"
         assert float(status[genus]["crown_age"]) < float(status[genus]["stem_age"])
+        assert int(status[genus]["root_alternatives"]) >= 1
+        assert float(status[genus]["pd_rel_range"]) >= 0.0
+    # root uncertainty (#34): crown age ranges only where the age comes from the barcodes
+    assert status["Alpha"]["crown_age_min"] == ""
+    for genus in ("Beta", "Gamma"):
+        if status[genus]["crown_source"].startswith("rate"):
+            row = status[genus]
+            assert float(row["crown_age_min"]) <= float(row["crown_age"]) <= float(row["crown_age_max"])
+    assert status["Delta"]["root_alternatives"] == ""
 
     placements = {r["asv_id"]: r for r in read_tsv(outdir / "placement" / "placements.tsv")}
     assert {a: r["status"] for a, r in placements.items()} == {
