@@ -29,6 +29,7 @@ Rule scripts import the package from `src/` through the `src` parameter that eve
 | `distances` | distance methods (`k2p`, vectorised; `kmer`); the registry `METHODS` |
 | `bionj` | BioNJ on a distance matrix |
 | `rooting` | outgroup rooting with midpoint fall-back |
+| `rooting_diagnostics` | after a run: why outgroup rooting failed, midpoint and MAD against the outgroup root, outgroup and distance variants ([#19](https://github.com/naturalis/timegraft/issues/19)) |
 | `dating` | crown age choice, mean path length, LSD2 |
 | `build` | one dated subtree per genus |
 | `backbone` | reading a dated backbone, stem ages, sister genera, sharding |

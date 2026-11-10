@@ -119,3 +119,13 @@ All under `outdir`.
 ## Run times
 
 The first real run (102,794 records, 1,232 genera, 25,578 BINs; the largest genus has 1,035 BINs) took 20 to 28 minutes on 2 cores: about 5 minutes for representatives, 10 for the backbone on a first run (mostly TimeTree; later runs use the cache) and 13 for the genus subtrees with MAFFT.
+
+## Rooting diagnostics
+
+After a run, `timegraft.rooting_diagnostics` rebuilds every genus tree from the run's outputs and reports why outgroup rooting failed and how much the fallback changes ([#19](https://github.com/naturalis/timegraft/issues/19)):
+
+```bash
+python -m timegraft.rooting_diagnostics --configfile config/config.yaml my_run.yaml --threads 8
+```
+
+It writes `diagnostics/rooting/per_genus.tsv` and `report.md` under the run's `outdir`. Use `--no-variants` to skip re-running the failed genera with other outgroups and a gamma-corrected distance, and `--genera` to look at a few genera only.
