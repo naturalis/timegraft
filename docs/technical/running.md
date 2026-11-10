@@ -26,6 +26,22 @@ python -m timegraft.bcdm BOLD.parquet records.tsv --taxon genus=@genera.txt --ma
 
 `rank=@file` reads names from a file, one per line. A list of genera from the samples themselves is a better filter than a country, as a regional BOLD subset also holds terrestrial and freshwater taxa.
 
+### The Iberian run
+
+The run in [the first results](../science/results/2026-11-iberia.md) used the BOLD public data package of 27 March 2026 and `config/iberia.yaml`:
+
+```bash
+python -m timegraft.bcdm BOLD_Public.27-Mar-2026.parquet regional.tsv \
+    --taxon phylum=Annelida,Mollusca,Arthropoda,Echinodermata,Cnidaria,Bryozoa,Porifera,Chordata \
+    --exclude class=Insecta,Arachnida,Collembola,Diplopoda,Chilopoda,Amphibia,Reptilia,Aves,Mammalia \
+    --country Portugal,Spain
+cut -f3 regional.tsv | tail -n +2 | grep -v '^$' | sort -u > genera.txt
+mkdir -p resources/iberia
+python -m timegraft.bcdm BOLD_Public.27-Mar-2026.parquet resources/iberia/records.tsv \
+    --taxon genus=@genera.txt --max-per-unit 10
+snakemake --cores 8 --use-conda --configfile config/config.yaml config/iberia.yaml
+```
+
 ## The workflow
 
 Which rules run depends on the configuration: the backbone is either read or built, LSD2 is only built when selected, and placement, diversity and validation only run when their inputs are given. With everything switched on:
