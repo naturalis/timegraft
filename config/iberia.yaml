@@ -1,0 +1,31 @@
+# Genera of western Iberia, COI (docs/science/results/2026-11-iberia.md).
+# Use on top of the defaults:
+#   snakemake --cores 8 --use-conda --configfile config/config.yaml config/iberia.yaml
+#
+# The records come from the BOLD public data package of 27 March 2026,
+# cut down with timegraft.bcdm as described in docs/technical/running.md
+# ("Preparing BOLD data", Iberian example).
+
+records: resources/iberia/records.tsv
+outdir: results/iberia
+
+# no toy inputs
+crown_ages:
+samples:
+asvs:
+asv_table:
+validation:
+  reference_tree:
+
+backbone_build:
+  enabled: true
+  source: static
+  synthesis: opentree16.1
+  taxonomy: ott3.7.3
+  context: Metazoa
+
+n_shards: 8
+
+markers:
+  coi:
+    align: mafft             # BOLD sequences are not aligned
