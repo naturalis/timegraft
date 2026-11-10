@@ -119,3 +119,13 @@ All under `outdir`.
 ## Run times
 
 The first real run (102,794 records, 1,232 genera, 25,578 BINs; the largest genus has 1,035 BINs) took 20 to 28 minutes on 2 cores: about 5 minutes for representatives, 10 for the backbone on a first run (mostly TimeTree; later runs use the cache) and 13 for the genus subtrees with MAFFT.
+
+## Rooting diagnostics
+
+After a run, `timegraft.rooting_diagnostics` rebuilds every genus tree from the run's outputs and reports why outgroup rooting failed and how much the fallback changes ([#19](https://github.com/naturalis/timegraft/issues/19)). Point `--run` at the run's output folder (the one holding `genera/` and `subtrees/`), and run it where MAFFT is on the path, for instance in the workflow's conda environment:
+
+```bash
+python -m timegraft.rooting_diagnostics --run results/iberia --threads 8
+```
+
+Settings come from `config/config.yaml` unless other files are given with `--configfile`. If the run's sequences are unaligned and the marker says `align: none`, they are aligned with MAFFT, as the run must have done. The output goes to `diagnostics/rooting/per_genus.tsv` and `report.md` in the run folder. Use `--no-variants` to skip re-running the failed genera with other outgroups and a gamma-corrected distance, `--genera` to look at a few genera only, and `--random-pairs 20` to also test 20 random outgroup pairs from the sister genus per genus (this roughly doubles the run time).
