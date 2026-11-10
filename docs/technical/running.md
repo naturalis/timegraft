@@ -118,7 +118,7 @@ All under `outdir`.
 
 ## Run times
 
-The first real run (102,794 records, 1,232 genera, 25,578 BINs; the largest genus has 1,035 BINs) took 20 to 28 minutes on 2 cores: about 5 minutes for representatives, 10 for the backbone on a first run (mostly TimeTree; later runs use the cache) and 13 for the genus subtrees with MAFFT.
+The first real run (102,794 records, 1,232 genera, 25,166 BINs; the largest genus has 1,035 BINs) took 20 to 28 minutes on 2 cores: about 5 minutes for representatives, 10 for the backbone on a first run (mostly TimeTree; later runs use the cache) and 13 for the genus subtrees with MAFFT.
 
 ## Rooting diagnostics
 
