@@ -19,8 +19,10 @@ Both runs used `config/iberia.yaml` on top of `config/config.yaml`, on 10 Novemb
 
 | Run | timegraft commit | Rooting | Time |
 | --- | --- | --- | --- |
-| tolerant | `f0f55bd` | as in `config/iberia.yaml` | 36 minutes |
+| tolerant | `f0f55bd`, rerun with `df16e3d` | as in `config/iberia.yaml` | 36 minutes; rerun 28 |
 | strict | `96375a9` | `rule: strict, n_outgroup: 2, outgroup_choice: sister, fallback: midpoint` | 32 minutes |
+
+The tolerant run was rerun the same evening with `df16e3d`, which adds the root uncertainty columns to `provenance.tsv` ([#34](https://github.com/naturalis/timegraft/issues/34)). All other outputs, and the other columns of `provenance.tsv`, were identical to the first run, so the archive now holds the rerun. It used the same tool versions, with MAFFT and VSEARCH on the path rather than through `--use-conda`.
 
 To rebuild the tolerant run from the repository root:
 
