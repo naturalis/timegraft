@@ -33,9 +33,10 @@ out = []
 for genus in sorted(groups):
     group = groups[genus]
     tree, provenance = build_genus(genus, group["in"], group["out"], group["stem"],
-                                   marker_cfg, known, timetree_crowns)
+                                   marker_cfg, known, timetree_crowns, rooting=snakemake.params.rooting)
     out.append({**provenance, "newick": tree_to_newick(tree)})
-    logging.info("%s: %d units, crown %s Ma (%s), rooting %s", genus, provenance["n_units"],
-                 provenance["crown_age"], provenance["crown_source"], provenance["rooting"])
+    logging.info("%s: %d units, crown %s Ma (%s), rooting %s (%s misplaced)", genus, provenance["n_units"],
+                 provenance["crown_age"], provenance["crown_source"], provenance["rooting"],
+                 provenance["violations"] or 0)
 
 write_tsv(snakemake.output[0], out, list(PROVENANCE_COLUMNS) + ["newick"])

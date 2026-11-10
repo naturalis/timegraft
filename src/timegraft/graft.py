@@ -13,6 +13,8 @@ PROVENANCE_COLUMNS = (
     "crown_source",
     "timetree_crown",
     "rooting",
+    "violations",
+    "misplaced",
     "dating",
     "outgroup",
 )

@@ -12,7 +12,7 @@ rule shard_genera:
     params:
         src=SRC,
         n_shards=len(SHARDS),
-        n_outgroup=config["n_outgroup"],
+        rooting=ROOTING,
     log:
         f"{OUT}/logs/shard_genera.log",
     conda:
@@ -32,6 +32,7 @@ rule build_shard:
     params:
         src=SRC,
         marker_cfg=config["markers"][config["marker"]],
+        rooting=ROOTING,
     log:
         f"{OUT}/logs/build_shard_{{i}}.log",
     conda:

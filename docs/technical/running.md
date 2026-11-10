@@ -100,7 +100,7 @@ All under `outdir`.
 | --- | --- |
 | `timegraft.tre` | The dated tree; tips are unit ids |
 | `grafted.tre` | The same, before units without a genus were placed |
-| `provenance.tsv` | Per backbone genus: subtree, single unit or pruned; stem and crown age; where the crown age came from and the TimeTree value considered; rooting and dating method; outgroup |
+| `provenance.tsv` | Per backbone genus: subtree, single unit or pruned; stem and crown age; where the crown age came from and the TimeTree value considered; rooting method, number of units on the wrong side of the root and the genus's units among the outgroup (`violations`, `misplaced`); dating method; outgroup |
 | `backbone/genera.tsv` | How each genus was matched in OTT and placed in the synthesis |
 | `backbone/node_ages.tsv` | Per backbone node: age, its source, TimeTree's raw answer, the NCBI ids queried, and a conflict ratio |
 | `backbone/crown_ages.tsv` | TimeTree crown age estimates, before checking |

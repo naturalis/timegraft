@@ -38,11 +38,11 @@ import dendropy
 import numpy as np
 
 from . import distances
-from .backbone import read_backbone, stem_ages
+from .backbone import pick_spread, read_backbone, sister_clades, stem_ages  # noqa: F401 (re-exported)
 from .bionj import bionj
 from .build import prepare_sequences
 from .dating import mean_root_to_tip, mpl_ultrametric
-from .rooting import midpoint, root_on_outgroup
+from .rooting import copy_tree, leaf_sets, mad_root, midpoint, reroot, root_on_outgroup  # noqa: F401
 from .seqio import read_tsv, write_tsv
 
 NUC = {"A": 0, "C": 1, "G": 2, "T": 3}
@@ -119,21 +119,6 @@ def k2p_from_pq(P, Q, alpha: float | None = None, cap: float = distances.DEFAULT
 
 # ---------------------------------------------------------------- tree helpers
 
-def leaf_sets(tree: dendropy.Tree) -> dict[dendropy.Node, frozenset[str]]:
-    sets = {}
-    for node in tree.postorder_node_iter():
-        if node.is_leaf():
-            sets[node] = frozenset([node.taxon.label])
-        else:
-            sets[node] = frozenset().union(*(sets[c] for c in node.child_node_iter()))
-    return sets
-
-
-def copy_tree(tree: dendropy.Tree) -> dendropy.Tree:
-    return dendropy.Tree.get(data=tree.as_string(schema="newick", suppress_rooting=True),
-                             schema="newick", preserve_underscores=True)
-
-
 def rogue_counts(tree: dendropy.Tree, ingroup: frozenset, outgroup: frozenset) -> dict:
     """Fewest units to remove for the ingroup to be one side of an edge.
 
@@ -165,103 +150,6 @@ def rogue_counts(tree: dendropy.Tree, ingroup: frozenset, outgroup: frozenset) -
         "rogue_out": best_out[0] if best_out[1] is not None else "",
         "min_violation": best_mv[0],
     }
-
-
-def _all_node_distances(tree: dendropy.Tree):
-    nodes = list(tree.preorder_node_iter())
-    index = {node: i for i, node in enumerate(nodes)}
-    adj = defaultdict(list)
-    for node in nodes:
-        if node.parent_node is not None:
-            length = max(0.0, node.edge.length or 0.0)
-            adj[index[node]].append((index[node.parent_node], length))
-            adj[index[node.parent_node]].append((index[node], length))
-    leaves = [index[n] for n in nodes if n.is_leaf()]
-    L = np.zeros((len(leaves), len(nodes)))
-    for row, start in enumerate(leaves):
-        dist = {start: 0.0}
-        stack = [start]
-        while stack:
-            u = stack.pop()
-            for v, length in adj[u]:
-                if v not in dist:
-                    dist[v] = dist[u] + length
-                    stack.append(v)
-        L[row] = [dist[i] for i in range(len(nodes))]
-    return nodes, index, leaves, L
-
-
-def mad_root(tree: dendropy.Tree) -> tuple[frozenset[str], float, float, float]:
-    """Minimal ancestor deviation root (Tria et al. 2017) of an unrooted tree.
-
-    Returns the leaf set on the child side of the root edge, the distance of the
-    root from that child, the MAD score and the root ambiguity index (best score
-    over second best; close to 1 means another root is about as good).
-    """
-    nodes, index, leaves, L = _all_node_distances(tree)
-    n = len(leaves)
-    leaf_col = np.array(leaves)
-    D = L[:, leaf_col]
-    iu = np.triu_indices(n, 1)
-    usable = D[iu] > 0
-    n_pairs = int(usable.sum())
-    sets = leaf_sets(tree)
-    label_row = {nodes[c].taxon.label: r for r, c in enumerate(leaves)}
-
-    def within(rows: np.ndarray, col: int) -> float:
-        if len(rows) < 2:
-            return 0.0
-        lu = L[rows, col]
-        sub = D[np.ix_(rows, rows)]
-        k = np.triu_indices(len(rows), 1)
-        d = sub[k]
-        diff = (lu[:, None] - lu[None, :])[k]
-        keep = d > 0
-        return float(np.sum((diff[keep] / d[keep]) ** 2))
-
-    scores = []
-    for node in nodes:
-        parent = node.parent_node
-        if parent is None:
-            continue
-        length = max(0.0, node.edge.length or 0.0)
-        u, v = index[parent], index[node]
-        B = np.array(sorted(label_row[l] for l in sets[node]))
-        mask = np.ones(n, bool)
-        mask[B] = False
-        A = np.nonzero(mask)[0]
-        if len(A) == 0:
-            continue
-        ss = within(A, u) + within(B, v)
-        dbc = D[np.ix_(A, B)]
-        ok = dbc > 0
-        a = (2.0 * L[A, u][:, None] / np.where(ok, dbc, 1.0)) - 1.0
-        w = np.where(ok, 1.0 / np.where(ok, dbc, 1.0), 0.0)
-        a = np.where(ok, a, 0.0)
-        denom = 2.0 * np.sum(w ** 2)
-        x = -np.sum(a * w) / denom if denom > 0 else 0.0
-        x = min(max(x, 0.0), length)
-        ss += float(np.sum(np.where(ok, (a + 2.0 * x * w) ** 2, 0.0)))
-        scores.append((math.sqrt(ss / max(n_pairs, 1)), sets[node], length - x))
-    scores.sort(key=lambda t: t[0])
-    best = scores[0]
-    rai = best[0] / scores[1][0] if len(scores) > 1 and scores[1][0] > 0 else float("nan")
-    return best[1], best[2], best[0], rai
-
-
-def reroot(tree: dendropy.Tree, child_side: frozenset[str], to_child: float) -> dendropy.Tree:
-    labels = frozenset(l.taxon.label for l in tree.leaf_node_iter())
-    for node, below in leaf_sets(tree).items():
-        if node.parent_node is None:
-            continue
-        if below == child_side or below == labels - child_side:
-            length = max(0.0, node.edge.length or 0.0)
-            d = to_child if below == child_side else length - to_child
-            tree.reroot_at_edge(node.edge, length1=length - d, length2=d, update_bipartitions=False)
-            tree.is_rooted = True
-            tree.suppress_unifurcations()
-            return tree
-    raise ValueError("root edge not found")
 
 
 def root_split(tree: dendropy.Tree, keep: frozenset[str] | None = None) -> frozenset | None:
@@ -411,39 +299,6 @@ def _variant(name, ingroup_items, out_items, cfg, rate) -> dict:
 
 # ---------------------------------------------------------------- outgroup variants
 
-def sister_clades(tree: dendropy.Tree, genus: str, available: set[str], levels: int = 3) -> list[list[str]]:
-    """Genera with units in successively more distant clades beside ``genus``."""
-    node = tree.find_node_with_taxon_label(genus)
-    seen = {genus}
-    clades = []
-    while node.parent_node is not None and len(clades) < levels:
-        node = node.parent_node
-        found = sorted(l.taxon.label for l in node.leaf_iter() if l.taxon.label in available and l.taxon.label not in seen)
-        if found:
-            clades.append(found)
-            seen.update(found)
-    return clades
-
-
-def _sites(seq: str) -> int:
-    return sum(ch in "ACGTacgt" for ch in seq)
-
-
-def pick_spread(clades, by_genus, n: int, n_genera: int | None = None) -> list[tuple[str, str]]:
-    """Round-robin over sister genera, nearest clade first, longest sequences first."""
-    genera = [g for clade in clades for g in clade]
-    if n_genera is not None:
-        genera = genera[:n_genera]
-    queues = {g: sorted(by_genus[g], key=lambda r: (-_sites(r["sequence"]), r["unit_id"])) for g in genera}
-    picked = []
-    while len(picked) < n and any(queues.values()):
-        for g in genera:
-            if queues[g] and len(picked) < n:
-                r = queues[g].pop(0)
-                picked.append((r["unit_id"], r["sequence"]))
-    return picked
-
-
 def pick_longest_first_sister(clades, by_genus, n: int) -> list[tuple[str, str]]:
     if not clades:
         return []
@@ -524,7 +379,9 @@ def report(rows: list[dict], variant_names: list[str], gammas: list[float]) -> s
     with_og = [r for r in rows if r["n_out"] > 0]
     fails = [r for r in with_og if not r["split_ok"]]
     oks = [r for r in with_og if r["split_ok"]]
-    mism = [r for r in rows if r.get("recorded") and r["recorded"] != r["reproduced"]]
+    # the run rooted on a clean split exactly when its rooting is "outgroup", whatever its rule
+    mism = [r for r in rows if r.get("recorded") and r["n_out"] > 0
+            and (r["recorded"] == "outgroup") != bool(r["split_ok"])]
     out += [f"Genus subtrees: {len(rows)}; with an outgroup: {len(with_og)}; "
             f"outgroup not a split: {_fmt_rate(len(fails), len(with_og))}.",
             f"Rooting recorded in the run but not reproduced here: {len(mism)}"

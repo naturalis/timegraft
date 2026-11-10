@@ -42,11 +42,17 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `marker` | `coi` | Which block under `markers` to use |
 | `outdir` | `results/toy` | Output directory |
 | `n_shards` | 4 | Parallel jobs for the genus subtrees |
-| `n_outgroup` | 2 | Units from the sister genus used to root each genus |
+| `rooting.rule` | `tolerant` | `tolerant`: root on the edge with the fewest units on the wrong side; `strict`: the genus must be a clade with respect to the outgroup, else the fallback is used |
+| `rooting.n_outgroup` | 10 | Outgroup units per genus. A top-level `n_outgroup` (the setting before #19) still overrides it |
+| `rooting.outgroup_choice` | `spread` | `spread`: in turn from the genera of the nearest sister clades, longest sequences first; `sister`: the first units by id of the sister genus (before #19) |
+| `rooting.outgroup_levels` | 3 | `spread`: how many sister clades to draw from, going up the backbone |
+| `rooting.fallback` | `mad` | Without an outgroup, or when the strict rule fails: `mad` (minimal ancestor deviation) or `midpoint` |
 | `max_records_per_unit` | 50 | Records considered when choosing a unit's representative |
 | `genus_agreement` | 0.8 | Share of a unit's records that must agree on its genus |
 | `prune_empty` | `true` | Drop backbone genera without units |
 | `place_unassigned_units` | `true` | Place units without a usable genus next to their nearest unit |
+
+Runs before #19 rooted with `rooting: {rule: strict, n_outgroup: 2, outgroup_choice: sister, fallback: midpoint}`. Why the defaults changed is in the [first results](../science/results/2026-11-iberia.md#why-rooting-fails).
 
 ## Marker plug-ins
 

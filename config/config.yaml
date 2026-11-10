@@ -57,8 +57,15 @@ outdir: results/toy
 # Genera are processed in this many parallel shards.
 n_shards: 4
 
-# Units from the sister genus used to root each genus subtree.
-n_outgroup: 2
+# Rooting of genus subtrees (docs/science/results/2026-11-iberia.md, #19).
+rooting:
+  rule: tolerant             # tolerant: root on the edge with the fewest units on the wrong side;
+                             # strict: the genus must be a clade with respect to the outgroup
+  n_outgroup: 10             # outgroup units per genus
+  outgroup_choice: spread    # spread: over the nearest sister clades, longest sequences first;
+                             # sister: first units by id of the sister genus (before #19)
+  outgroup_levels: 3         # spread: sister clades to draw from, going up the backbone
+  fallback: mad              # without an outgroup, or when the strict rule fails: mad or midpoint
 
 # Representative per unit
 max_records_per_unit: 50   # records considered when choosing the medoid

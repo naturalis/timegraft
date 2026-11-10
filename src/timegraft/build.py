@@ -12,7 +12,7 @@ import dendropy
 from . import distances
 from .bionj import bionj
 from .dating import crown_age, lsd2_ultrametric, mpl_ultrametric
-from .rooting import root_on_outgroup
+from .rooting import root_genus
 from .seqio import read_fasta, write_fasta
 
 
@@ -59,8 +59,14 @@ def build_genus(
     marker_cfg: dict,
     known_crowns: dict[str, float],
     timetree_crowns: dict[str, float] | None = None,
+    rooting: dict | None = None,
 ) -> tuple[dendropy.Tree, dict]:
-    """Return the dated ingroup subtree and a provenance record."""
+    """Return the dated ingroup subtree and a provenance record.
+
+    ``rooting`` holds ``rule`` (tolerant or strict) and ``fallback`` (mad or
+    midpoint); the defaults are tolerant and mad.
+    """
+    rooting = rooting or {}
     if len(ingroup) < 2:
         raise ValueError("build_genus needs at least two units")
     method = marker_cfg["distance"]["method"]
@@ -70,7 +76,8 @@ def build_genus(
     dist = distances.matrix([seq for _, seq in items], method=method, **options)
 
     tree = bionj(labels, dist)
-    tree, rooting = root_on_outgroup(tree, [n for n, _ in ingroup], [n for n, _ in outgroup])
+    tree, how, rooted = root_genus(tree, [n for n, _ in ingroup], [n for n, _ in outgroup],
+                                   rule=rooting.get("rule", "tolerant"), fallback=rooting.get("fallback", "mad"))
 
     crown_cfg = marker_cfg["crown_age"]
     crown = crown_age(
@@ -100,7 +107,9 @@ def build_genus(
         "crown_age": f"{crown.age:.4f}",
         "crown_source": crown.source,
         "timetree_crown": "" if crown.timetree is None else f"{crown.timetree:.4f}",
-        "rooting": rooting,
+        "rooting": how,
+        "violations": rooted["violations"],
+        "misplaced": ";".join(rooted["misplaced"]),
         "dating": dating.get("method", "mpl"),
         "outgroup": ";".join(n for n, _ in outgroup),
         "status": "subtree",
