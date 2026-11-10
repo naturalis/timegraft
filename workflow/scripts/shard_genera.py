@@ -8,14 +8,17 @@ from pathlib import Path
 sys.path.insert(0, snakemake.params.src)
 logging.basicConfig(filename=snakemake.log[0], level=logging.INFO, format="%(message)s")
 
-from timegraft.backbone import nearest_genera, read_backbone, shard_of, stem_ages
+from timegraft.backbone import pick_outgroup, read_backbone, shard_of, stem_ages
 from timegraft.seqio import read_tsv, write_tsv
 
 reps = read_tsv(snakemake.input.reps)
 backbone = read_backbone(snakemake.input.backbone)
 stems = stem_ages(backbone)
 n_shards = snakemake.params.n_shards
-n_outgroup = snakemake.params.n_outgroup
+rooting = snakemake.params.rooting
+n_outgroup = int(rooting.get("n_outgroup", 10))
+choice = rooting.get("outgroup_choice", "spread")
+levels = int(rooting.get("outgroup_levels", 3))
 
 by_genus = defaultdict(list)
 for rep in reps:
@@ -35,11 +38,7 @@ for genus in sorted(available):
     for unit in units:
         rows.append({"genus": genus, "role": "in", "unit_id": unit["unit_id"],
                      "stem_age": stems[genus], "sequence": unit["sequence"]})
-    picked = []
-    for sister in nearest_genera(backbone, genus, available):
-        for unit in sorted(by_genus[sister], key=lambda r: r["unit_id"]):
-            if len(picked) < n_outgroup:
-                picked.append(unit)
+    picked = pick_outgroup(backbone, genus, by_genus, available, n_outgroup, choice, levels)
     for unit in picked:
         rows.append({"genus": genus, "role": "out", "unit_id": unit["unit_id"],
                      "stem_age": stems[genus], "sequence": unit["sequence"]})

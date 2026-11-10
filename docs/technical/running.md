@@ -100,7 +100,7 @@ All under `outdir`.
 | --- | --- |
 | `timegraft.tre` | The dated tree; tips are unit ids |
 | `grafted.tre` | The same, before units without a genus were placed |
-| `provenance.tsv` | Per backbone genus: subtree, single unit or pruned; stem and crown age; where the crown age came from and the TimeTree value considered; rooting and dating method; outgroup |
+| `provenance.tsv` | Per backbone genus: subtree, single unit or pruned; stem and crown age; where the crown age came from and the TimeTree value considered; rooting method, number of units on the wrong side of the root and the genus's units among the outgroup (`violations`, `misplaced`); dating method; outgroup |
 | `backbone/genera.tsv` | How each genus was matched in OTT and placed in the synthesis |
 | `backbone/node_ages.tsv` | Per backbone node: age, its source, TimeTree's raw answer, the NCBI ids queried, and a conflict ratio |
 | `backbone/crown_ages.tsv` | TimeTree crown age estimates, before checking |
@@ -118,7 +118,7 @@ All under `outdir`.
 
 ## Run times
 
-The first real run (102,794 records, 1,232 genera, 25,578 BINs; the largest genus has 1,035 BINs) took 20 to 28 minutes on 2 cores: about 5 minutes for representatives, 10 for the backbone on a first run (mostly TimeTree; later runs use the cache) and 13 for the genus subtrees with MAFFT.
+The first real run (102,794 records, 1,232 genera, 25,166 BINs; the largest genus has 1,035 BINs) took 20 to 28 minutes on 2 cores: about 5 minutes for representatives, 10 for the backbone on a first run (mostly TimeTree; later runs use the cache) and 13 for the genus subtrees with MAFFT.
 
 ## Rooting diagnostics
 

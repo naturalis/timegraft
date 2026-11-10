@@ -17,6 +17,9 @@ BCDM = config.get("bcdm") or {}
 RECORDS = f"{OUT}/units/records.tsv" if BCDM.get("path") else config["records"]
 USE_ASVS = bool(config.get("asvs") and config.get("asv_table"))
 BACKBONE = f"{OUT}/backbone/backbone.tre" if BUILD_BACKBONE else config["backbone"]
+ROOTING = dict(config.get("rooting") or {})
+if "n_outgroup" in config:  # setting from before #19, still honoured
+    ROOTING["n_outgroup"] = config["n_outgroup"]
 
 
 include: "rules/tools.smk"

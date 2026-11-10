@@ -49,13 +49,15 @@ Each genus in the backbone then has a **stem age**: when it split from its close
 
 ```mermaid
 flowchart TB
-    bins["The genus's BINs<br/>+ a few BINs from<br/>the closest related genus"] --> distances["How different is each pair?<br/>(barcode distances)"]
+    bins["The genus's BINs<br/>+ ten BINs from<br/>the closest related genera"] --> distances["How different is each pair?<br/>(barcode distances)"]
     distances --> join["Join the most similar<br/>step by step into a tree"]
-    join --> root["Find the root:<br/>where the related genus<br/>attaches"]
-    root --> drop["Remove the related genus"]
+    join --> root["Find the root:<br/>where the related genera<br/>attach"]
+    root --> drop["Remove the related genera"]
     drop --> crown{"How old is the genus?<br/>(crown age)"}
     crown --> date["Stretch the tree so its<br/>root sits at that age and<br/>all tips at the present"]
 ```
+
+A genus and its relatives are rarely separated perfectly by barcodes: a few BINs of the genus may fall among the related genera, or the other way round. The root is therefore put where the fewest BINs are on the wrong side; BINs of the genus that end up among the relatives stay in the tree as its earliest branches and are listed in the provenance, as some of them will be misidentified. When several places are equally good, the one that makes the genus tree most clock-like decides (minimal ancestor deviation, which is also used when there are no relatives to root with).
 
 The **crown age** is when the living members of the genus last shared an ancestor. It comes, in order of preference, from:
 
