@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import math
+import random
 import statistics
 import sys
 from collections import Counter, defaultdict
@@ -341,6 +342,7 @@ def analyse(task: dict) -> dict:
                 rc = rogue_counts(t, ingroup, outgroup)
                 row[f"gamma{alpha}_split_ok"] = rc["rogue_in"] == 0
                 row[f"gamma{alpha}_rogue_in"] = rc["rogue_in"]
+                row[f"gamma{alpha}_min_violation"] = rc["min_violation"]
     return row
 
 
@@ -404,7 +406,7 @@ def _variant(name, ingroup_items, out_items, cfg, rate) -> dict:
     tree = bionj(labels, distances.matrix([s for _, s in items], method=method, **options))
     rc = rogue_counts(tree, frozenset(n for n, _ in ingroup_items), frozenset(n for n, _ in out_items))
     return {f"{name}_split_ok": rc["rogue_in"] == 0, f"{name}_rogue_in": rc["rogue_in"],
-            f"{name}_min_violation": rc["min_violation"]}
+            f"{name}_min_violation": rc["min_violation"], f"{name}_n_out": len(out_items)}
 
 
 # ---------------------------------------------------------------- outgroup variants
@@ -448,6 +450,37 @@ def pick_longest_first_sister(clades, by_genus, n: int) -> list[tuple[str, str]]
     g = clades[0][0]
     rows = sorted(by_genus[g], key=lambda r: (-_sites(r["sequence"]), r["unit_id"]))[:n]
     return [(r["unit_id"], r["sequence"]) for r in rows]
+
+
+def random_pairs(task: dict) -> dict | None:
+    """Share of random outgroup pairs from the first sister genus that root the genus cleanly.
+
+    The ingroup is aligned once with up to ``pool`` units of the sister genus;
+    each draw takes two of them, builds BioNJ on that part of the K2P matrix and
+    applies the pipeline's test. Pairwise deletion makes this equivalent to
+    aligning each subset, up to MAFFT's choices.
+    """
+    genus, ingroup_items, sister_items = task["genus"], task["in"], task["sister"]
+    if len(ingroup_items) < 3 or len(sister_items) < 3:
+        return None
+    rng = random.Random(genus)
+    pool = rng.sample(sister_items, min(task.get("pool", 150), len(sister_items)))
+    cfg = task["marker_cfg"]
+    method = cfg["distance"]["method"]
+    options = {k: v for k, v in cfg["distance"].items() if k != "method"}
+    items = prepare_sequences(ingroup_items + pool, method, cfg.get("align", "none"))
+    labels = [n for n, _ in items]
+    D = distances.matrix([s for _, s in items], method=method, **options)
+    n_in = len(ingroup_items)
+    ok = 0
+    for _ in range(task["draws"]):
+        pair = rng.sample(range(n_in, len(labels)), 2)
+        idx = list(range(n_in)) + pair
+        tree = bionj([labels[i] for i in idx], D[np.ix_(idx, idx)])
+        rc = rogue_counts(tree, frozenset(labels[:n_in]), frozenset(labels[i] for i in pair))
+        ok += rc["rogue_in"] == 0
+    return {"genus": genus, "sister": task["sister_name"], "n_sister": len(sister_items),
+            "random_pair_ok": ok / task["draws"]}
 
 
 # ---------------------------------------------------------------- report
@@ -498,23 +531,26 @@ def report(rows: list[dict], variant_names: list[str], gammas: list[float]) -> s
             + (f" ({', '.join(r['genus'] for r in mism[:10])}{'...' if len(mism) > 10 else ''})" if mism else "") + ".", ""]
 
     out += ["## How badly do the failures fail?", "",
-            "Fewest ingroup units to remove for the ingroup to be a split (rogue_in), and fewest "
-            "outgroup units to remove instead (rogue_out: the outgroup nested in the genus).", "",
-            "| rogue_in | genera | | rogue_out | genera |", "| --- | --- | --- | --- | --- |"]
+            "Fewest ingroup units to remove for the ingroup to be a split (rogue_in). With two "
+            "outgroup units these are the ingroup units on the path between them.", "",
+            "| rogue_in | genera |", "| --- | --- |"]
     def bucket(v):
-        if v == "":
-            return "none possible"
         v = int(v)
         return str(v) if v <= 2 else ("3 to 5" if v <= 5 else "more than 5")
-    ci = Counter(bucket(r["rogue_in"]) for r in fails)
-    co = Counter(bucket(r["rogue_out"]) for r in fails)
-    order = ["1", "2", "3 to 5", "more than 5", "none possible"]
-    for key in order:
-        if ci.get(key) or co.get(key):
-            out.append(f"| {key} | {ci.get(key, 0)} | | {key} | {co.get(key, 0)} |")
+    ci = Counter(bucket(r["rogue_in"]) for r in fails if r["rogue_in"] != "")
+    for key in ["1", "2", "3 to 5", "more than 5"]:
+        if ci.get(key):
+            out.append(f"| {key} | {ci[key]} |")
     frac = [int(r["rogue_in"]) / r["n_in"] for r in fails if r["rogue_in"] != ""]
     if frac:
         out += ["", f"Rogue units as a share of the genus: median {statistics.median(frac):.0%}."]
+    many = [r for r in fails if r["n_out"] >= 3 and r["rogue_out"] != ""]
+    if many:
+        co = Counter(bucket(r["rogue_out"]) for r in many)
+        out += ["", "Where there were three or more outgroup units, fewest outgroup units to remove "
+                "instead (rogue_out: outgroup units nested in the genus):", "",
+                "| rogue_out | genera |", "| --- | --- |"]
+        out += [f"| {k} | {co[k]} |" for k in ["1", "2", "3 to 5", "more than 5"] if co.get(k)]
     out.append("")
 
     out += ["## What predicts failure?", "", "Failure rate by quartile of each variable.", ""]
@@ -554,9 +590,8 @@ def report(rows: list[dict], variant_names: list[str], gammas: list[float]) -> s
         for label, sub in _quantile_bins(comp, "stem_age"):
             a = sum(1 for r in sub if r["midpoint_same_root"]); b = sum(1 for r in sub if r["mad_same_root"])
             out.append(f"- stem age {label} Ma: midpoint {a}/{len(sub)}, MAD {b}/{len(sub)}")
-        out += ["", "Agreement is not correctness: the outgroup root can pass the test and still be wrong, "
-                "more often in old genera. Falling agreement with stem age points to saturation of the "
-                "outgroup distances rather than to poor fallbacks."]
+        out += ["", "Agreement is not correctness: an outgroup root can pass the test and still be wrong. "
+                "If agreement falls with stem age, saturation of the outgroup distances is the likely reason."]
         out.append("")
     fcomp = [r for r in fails if r.get("midpoint_same_root") not in ("", None)]
     if fcomp:
@@ -566,17 +601,39 @@ def report(rows: list[dict], variant_names: list[str], gammas: list[float]) -> s
 
     if variant_names or gammas:
         out += ["## Would other outgroups or distances help?", "",
-                "Re-run on the failed genera only; 'rescued' means the ingroup is now a split.", "",
-                "| variant | rescued | median rogue_in |", "| --- | --- | --- |"]
+                "Re-run on the failed genera only. 'Rescued': the ingroup is now a split; with a single "
+                "outgroup unit that is always so. 'Min. violation': fewest units (ingroup or outgroup) "
+                "on the wrong side of the best root, the error a tolerant rooting rule would accept.", "",
+                "| variant | rescued | of which one outgroup unit | median rogue_in | median min. violation |",
+                "| --- | --- | --- | --- | --- |"]
         for name in variant_names + [f"gamma{a}" for a in gammas]:
             vals = [r for r in fails if r.get(f"{name}_split_ok") not in ("", None)]
             if not vals:
                 continue
-            ok = sum(1 for r in vals if r[f"{name}_split_ok"])
+            ok = [r for r in vals if r[f"{name}_split_ok"]]
+            single = sum(1 for r in ok if r.get(f"{name}_n_out", 2) == 1 or (name.startswith("gamma") and r["n_out"] == 1))
             med = statistics.median(int(r[f"{name}_rogue_in"]) for r in vals)
-            out.append(f"| {name} | {ok}/{len(vals)} | {med:g} |")
+            mv = [int(r[f"{name}_min_violation"]) for r in vals if r.get(f"{name}_min_violation") not in ("", None)]
+            mvs = f"{statistics.median(mv):g}" if mv else ""
+            out.append(f"| {name} | {len(ok)}/{len(vals)} | {single} | {med:g} | {mvs} |")
         out.append("")
     return "\n".join(out)
+
+
+def random_pairs_report(rp: list[dict], draws: int) -> list[str]:
+    lines = ["", "## Is failure a matter of which two units are drawn?", "",
+             f"For each genus, {draws} random pairs of units from the first sister genus "
+             "were used as the outgroup instead.", "",
+             "| genera | n | mean share of pairs that work | always | never | sometimes |",
+             "| --- | --- | --- | --- | --- | --- |"]
+    for label, flag in (("rooted on the outgroup in the run", True), ("midpoint in the run", False)):
+        v = [r["random_pair_ok"] for r in rp if r["baseline_ok"] == flag]
+        if v:
+            lines.append(f"| {label} | {len(v)} | {statistics.mean(v):.2f} | {sum(x == 1 for x in v)} | "
+                         f"{sum(x == 0 for x in v)} | {sum(0 < x < 1 for x in v)} |")
+    allv = [r["random_pair_ok"] for r in rp]
+    lines += ["", f"Expected failure rate with a random pair: {1 - statistics.mean(allv):.0%}.", ""]
+    return lines
 
 
 # ---------------------------------------------------------------- main
@@ -592,6 +649,8 @@ def main(argv=None) -> None:
     ap.add_argument("--threads", type=int, default=1)
     ap.add_argument("--genera", nargs="*", help="only these genera")
     ap.add_argument("--no-variants", action="store_true", help="skip the outgroup and distance variants")
+    ap.add_argument("--random-pairs", type=int, default=0, metavar="N",
+                    help="also draw N random outgroup pairs from the sister genus per genus (slow)")
     ap.add_argument("--gamma", type=float, nargs="*", default=[0.5], help="gamma shape(s) for K2P+G variants")
     args = ap.parse_args(argv)
 
@@ -679,6 +738,31 @@ def main(argv=None) -> None:
     gammas = [] if args.no_variants else args.gamma
     (outdir / "report.md").write_text(report(rows, variant_names, gammas))
     print(f"wrote {outdir / 'per_genus.tsv'} and {outdir / 'report.md'}", file=sys.stderr)
+
+    if args.random_pairs:
+        ok_by_genus = {r["genus"]: r["split_ok"] for r in rows}
+        rp_tasks = []
+        for t in tasks:
+            clades = sister_clades(backbone, t["genus"], available, levels=1)
+            if not clades:
+                continue
+            sister = clades[0][0]
+            rp_tasks.append({"genus": t["genus"], "in": t["in"], "marker_cfg": marker_cfg,
+                             "sister_name": sister, "draws": args.random_pairs,
+                             "sister": [(r["unit_id"], r["sequence"]) for r in by_genus[sister]]})
+        if args.threads > 1:
+            with Pool(args.threads) as pool:
+                rp = [r for r in pool.imap_unordered(random_pairs, rp_tasks, chunksize=1) if r]
+        else:
+            rp = [r for r in map(random_pairs, rp_tasks) if r]
+        for r in rp:
+            r["baseline_ok"] = ok_by_genus[r["genus"]]
+        rp.sort(key=lambda r: r["genus"])
+        write_tsv(outdir / "random_pairs.tsv", rp, ["genus", "baseline_ok", "sister", "n_sister", "random_pair_ok"])
+        lines = random_pairs_report(rp, args.random_pairs)
+        with open(outdir / "report.md", "a") as fh:
+            fh.write("\n".join(lines))
+        print(f"wrote {outdir / 'random_pairs.tsv'}", file=sys.stderr)
 
 
 if __name__ == "__main__":
