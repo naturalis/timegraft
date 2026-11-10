@@ -122,10 +122,10 @@ The first real run (102,794 records, 1,232 genera, 25,578 BINs; the largest genu
 
 ## Rooting diagnostics
 
-After a run, `timegraft.rooting_diagnostics` rebuilds every genus tree from the run's outputs and reports why outgroup rooting failed and how much the fallback changes ([#19](https://github.com/naturalis/timegraft/issues/19)):
+After a run, `timegraft.rooting_diagnostics` rebuilds every genus tree from the run's outputs and reports why outgroup rooting failed and how much the fallback changes ([#19](https://github.com/naturalis/timegraft/issues/19)). Point `--run` at the run's output folder (the one holding `genera/` and `subtrees/`), and run it where MAFFT is on the path, for instance in the workflow's conda environment:
 
 ```bash
-python -m timegraft.rooting_diagnostics --configfile config/config.yaml my_run.yaml --threads 8
+python -m timegraft.rooting_diagnostics --run results/iberia --threads 8
 ```
 
-It writes `diagnostics/rooting/per_genus.tsv` and `report.md` under the run's `outdir`. Use `--no-variants` to skip re-running the failed genera with other outgroups and a gamma-corrected distance, and `--genera` to look at a few genera only.
+Settings come from `config/config.yaml` unless other files are given with `--configfile`. If the run's sequences are unaligned and the marker says `align: none`, they are aligned with MAFFT, as the run must have done. The output goes to `diagnostics/rooting/per_genus.tsv` and `report.md` in the run folder. Use `--no-variants` to skip re-running the failed genera with other outgroups and a gamma-corrected distance, and `--genera` to look at a few genera only.

@@ -16,8 +16,11 @@ unrooted BioNJ tree exactly as the pipeline did, then reports:
 
 Usage::
 
-    python -m timegraft.rooting_diagnostics --configfile config/config.yaml my_run.yaml \\
-        --outdir diagnostics/rooting --threads 8
+    python -m timegraft.rooting_diagnostics --run results/iberia --threads 8
+
+``--run`` is the run's output folder. Settings come from ``config/config.yaml``
+unless other config files are given; when the sequences turn out to be
+unaligned and the marker says ``align: none``, they are aligned with MAFFT.
 """
 
 from __future__ import annotations
@@ -580,7 +583,11 @@ def report(rows: list[dict], variant_names: list[str], gammas: list[float]) -> s
 
 def main(argv=None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--configfile", nargs="+", required=True, help="the run's config files, as given to snakemake")
+    ap.add_argument("--run", help="the run's output folder (default: outdir from the config)")
+    ap.add_argument("--configfile", nargs="+", default=["config/config.yaml"],
+                    help="config files, as given to snakemake (default: config/config.yaml)")
+    ap.add_argument("--marker", help="marker block to use (default: marker from the config)")
+    ap.add_argument("--align", choices=["none", "mafft"], help="override the marker's align setting")
     ap.add_argument("--outdir", default=None, help="default: <run outdir>/diagnostics/rooting")
     ap.add_argument("--threads", type=int, default=1)
     ap.add_argument("--genera", nargs="*", help="only these genera")
@@ -589,10 +596,14 @@ def main(argv=None) -> None:
     args = ap.parse_args(argv)
 
     cfg = load_config(args.configfile)
-    run = Path(cfg["outdir"])
+    run = Path(args.run or cfg["outdir"])
+    if not (run / "genera").is_dir():
+        sys.exit(f"{run} has no genera/ folder; point --run at the run's output folder")
     outdir = Path(args.outdir) if args.outdir else run / "diagnostics" / "rooting"
     outdir.mkdir(parents=True, exist_ok=True)
-    marker_cfg = cfg["markers"][cfg["marker"]]
+    marker_cfg = dict(cfg["markers"][args.marker or cfg["marker"]])
+    if args.align:
+        marker_cfg["align"] = args.align
 
     groups = defaultdict(lambda: {"in": [], "out": [], "stem": None})
     for path in sorted((run / "genera").glob("shard_*.tsv")):
@@ -600,6 +611,11 @@ def main(argv=None) -> None:
             g = groups[r["genus"]]
             g[r["role"]].append((r["unit_id"], r["sequence"]))
             g["stem"] = float(r["stem_age"])
+    if (marker_cfg.get("align", "none") == "none" and not args.align
+            and distances.NEEDS_ALIGNMENT.get(marker_cfg["distance"]["method"], False)
+            and any(len({len(seq) for _, seq in g["in"] + g["out"]}) > 1 for g in groups.values())):
+        marker_cfg["align"] = "mafft"
+        print("sequences are unaligned: aligning with MAFFT, as the run must have done", file=sys.stderr)
     recorded = {}
     for path in sorted((run / "subtrees").glob("shard_*.tsv")):
         for r in read_tsv(path):
