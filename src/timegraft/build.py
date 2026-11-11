@@ -12,7 +12,7 @@ import dendropy
 
 from . import distances
 from .bionj import bionj
-from .dating import crown_age, lsd2_ultrametric, mpl_ultrametric
+from .dating import chronos_ultrametric, crown_age, lsd2_ultrametric, mean_root_to_tip, mpl_ultrametric
 from .rooting import _root_split, copy_tree, root_genus, root_uncertainty
 from .seqio import read_fasta, write_fasta
 
@@ -61,8 +61,14 @@ def build_genus(
     known_crowns: dict[str, float],
     timetree_crowns: dict[str, float] | None = None,
     rooting: dict | None = None,
+    rate: tuple[float | None, str] | None = None,
 ) -> tuple[dendropy.Tree, dict]:
     """Return the dated ingroup subtree and a provenance record.
+
+    ``known_crowns`` holds, per genus, a point age or a mapping with ``age``,
+    ``min`` and ``max`` (see ``dating.crown_age``). ``rate`` is the substitution
+    rate for this genus and where it came from (see ``rates.Rates``); without
+    it the marker's ``crown_age.rate`` is used.
 
     ``rooting`` holds ``rule`` (tolerant or strict), ``fallback`` (mad or
     midpoint) and ``uncertainty`` (whether to record how much the crown age
@@ -85,6 +91,8 @@ def build_genus(
                                    rule=rooting.get("rule", "tolerant"), fallback=rooting.get("fallback", "mad"))
 
     crown_cfg = marker_cfg["crown_age"]
+    genus_rate, rate_source = rate if rate is not None else (crown_cfg.get("rate"), "default")
+    root_to_tip = mean_root_to_tip(tree)
 
     def choose_crown(t: dendropy.Tree):
         return crown_age(
@@ -93,16 +101,24 @@ def build_genus(
             t,
             known_crowns,
             method=crown_cfg["method"],
-            rate=crown_cfg.get("rate"),
+            rate=genus_rate,
             fraction=crown_cfg.get("fraction"),
             cap_fraction=crown_cfg.get("cap_fraction", 0.9),
             suggested=timetree_crowns,
-            max_ratio=crown_cfg.get("timetree_max_ratio", 3.0),
+            timetree_bound=crown_cfg.get("timetree_bound", "max"),
         )
 
     dating = marker_cfg.get("dating", {"method": "mpl"})
 
+    if dating.get("method", "mpl") not in ("mpl", "lsd2", "chronos"):
+        raise ValueError(f"unknown dating method {dating.get('method')!r}; use mpl, lsd2 or chronos")
+
     def date(t: dendropy.Tree, age: float) -> dendropy.Tree:
+        if dating.get("method", "mpl") == "chronos":
+            return chronos_ultrametric(
+                t, age, model=dating.get("model", "correlated"), lam=float(dating.get("lambda", 1.0)),
+                executable=dating.get("rscript", "Rscript"),
+            )
         if dating.get("method", "mpl") == "lsd2":
             return lsd2_ultrametric(
                 t, age, seq_length=int(dating.get("seq_length", 650)),
@@ -110,6 +126,7 @@ def build_genus(
             )
         return mpl_ultrametric(t, age)
 
+    by_rate_method = crown_cfg["method"] == "rate"
     crown = choose_crown(tree)
     chosen_split = _root_split(tree)
     tree = date(tree, crown.age)
@@ -124,7 +141,11 @@ def build_genus(
         "stem_age": f"{stem_age:.4f}",
         "crown_age": f"{crown.age:.4f}",
         "crown_source": crown.source,
+        "barcode_age": "" if crown.barcode is None else f"{crown.barcode:.4f}",
         "timetree_crown": "" if crown.timetree is None else f"{crown.timetree:.4f}",
+        "root_to_tip": f"{root_to_tip:.6f}",
+        "rate": f"{genus_rate:.5f}" if by_rate_method and genus_rate else "",
+        "rate_source": rate_source if by_rate_method and genus_rate else "",
         "rooting": how,
         "violations": rooted["violations"],
         "misplaced": ";".join(rooted["misplaced"]),
@@ -145,8 +166,8 @@ def _root_spread(unrooted, ingroup, outgroup, misplaced, dated, crown, chosen_sp
     """Crown ages and within-genus PD over the other plausible roots (issue #34).
 
     Crown age ranges are given only for crown ages taken from the barcodes
-    (``rate`` sources); table, TimeTree and fraction ages do not depend on the
-    root. The PD range is relative to the PD of the chosen subtree and covers
+    (``rate`` sources, including those moved to a bound); table and fraction
+    ages do not depend on the root. The PD range is relative to the PD of the chosen subtree and covers
     the alternatives with all units, not the one without the misplaced units.
     Alternatives whose crown age comes out at or below zero are skipped.
     """

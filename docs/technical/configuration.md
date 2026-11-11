@@ -16,7 +16,7 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `bcdm.path` | A BOLD data package (BCDM, TSV or Parquet). When set, it replaces `records` |
 | `bcdm.marker`, `bcdm.taxa`, `bcdm.countries` | Filters applied to the BOLD package: marker code, `rank: [names]`, `country/ocean` values |
 | `backbone` | A dated, ultrametric Newick tree in millions of years with one tip per genus. Ignored when `backbone_build.enabled` is true |
-| `crown_ages` | Optional table `genus`, `crown_age` (Ma). Always used as given; the place for literature values |
+| `crown_ages` | Optional table of known crown ages (Ma), the place for literature values: `genus` and any of `crown_age` (a point age, used as given), `crown_age_min` and `crown_age_max` (bounds on the age from the barcodes); other columns, such as a reference, are ignored. See [crown ages and rates](#crown-ages-and-rates). A starting table is in `data/crown_ages/literature.tsv` |
 | `samples` | Optional table `sample`, `unit_id`, `abundance`; enables diversity metrics |
 | `asvs`, `asv_table` | Optional ASV sequences (FASTA) and table `sample`, `asv_id`, `reads`, instead of `samples` |
 | `validation.reference_tree` | Optional trusted tree whose tips are unit ids; enables the validation step |
@@ -69,16 +69,45 @@ Everything that differs between markers sits in `markers.<name>`:
 | `align` | `none` | `none` | `none` (input already aligned) or `mafft` |
 | `distance.method` | `k2p` | `kmer` | `k2p` needs aligned sequences; `kmer` takes `k` |
 | `crown_age.method` | `rate` | `fraction` | How to set a genus crown age when no better source exists |
-| `crown_age.rate` | 0.0115 | | Substitutions per site per Myr, per lineage |
+| `crown_age.rate` | 0.0115 | | Default substitution rate, per site per Myr, per lineage; see [crown ages and rates](#crown-ages-and-rates) |
+| `crown_age.rates` | `{}` | | Rate per taxon, `rank: {name: rate}` |
+| `crown_age.rate_table` | | | The same as a table (`rank`, `name`, `rate`), as written by `timegraft.calibrate` |
 | `crown_age.fraction` | | 0.5 | Crown age as a fraction of the stem age |
 | `crown_age.cap_fraction` | 0.9 | 0.9 | A crown age never exceeds this fraction of the stem age |
-| `crown_age.timetree_max_ratio` | 3 | | Reject a TimeTree crown age above this many times the rate-based one |
-| `dating.method` | `mpl` | `mpl` | `mpl` (mean path length) or `lsd2` |
+| `crown_age.timetree_bound` | `max` | `max` | `max`: a TimeTree crown age is an upper bound on the age from the barcodes; `none`: TimeTree crown ages are not used |
+| `dating.method` | `mpl` | `mpl` | `mpl` (mean path length), `lsd2`, or `chronos` (penalised likelihood; see [dating within a genus](#dating-within-a-genus)) |
 | `dating.seq_length` | 658 | 500 | Barcode length, for LSD2's variance model |
+| `dating.model`, `dating.lambda` | | | `chronos` only: `correlated` (default), `relaxed`, `discrete` or `clock`, and the smoothing parameter (default 1) |
 | `placement.match_identity` | 0.97 | 0.97 | At or above: an ASV counts as the unit it matches |
 | `placement.place_identity` | 0.80 | 0.80 | At or above: attached near its nearest unit; below: unplaced |
 | `placement.query_cov` | 0.9 | 0.8 | Share of the query that must align |
 | `placement.height` | `rate` | `terminal` | How to set the attachment age |
+
+### Crown ages and rates
+
+The crown age of a genus is an age from the barcodes, kept within bounds from outside sources ([#36](https://github.com/naturalis/timegraft/issues/36)):
+
+1. A point age for the genus in the `crown_ages` table is used as it is (if it is not below the stem age, the cap of step 3 applies).
+2. Otherwise the age from the barcodes is the mean root-to-tip distance of the rooted genus tree divided by a substitution rate (`method: rate`), or a fraction of the stem age (`method: fraction`).
+3. That age is moved to the nearest bound it violates: at most `cap_fraction` of the stem age; at most the TimeTree crown age of the genus (`timetree_bound: max`); and within `crown_age_min` and `crown_age_max` of the table, which replace TimeTree for that genus.
+
+A TimeTree crown age is the MRCA of the species TimeTree knows under the genus name. It is far too old when the genus is not a natural group, which is why it only ever lowers an age. Earlier versions accepted it outright unless it exceeded `timetree_max_ratio` times the barcode age; that threshold made ages jump and is gone (the key is ignored, with a warning in the log). `provenance.tsv` records the result: `crown_source` is `table`, `rate` or `fraction`, with a suffix when a bound was applied (`_capped` for the stem age, `_timetree_max`, `_table_max`, `_table_min`), and `barcode_age` keeps the age before any bound.
+
+The rate is resolved per genus from its taxonomy, from genus up to phylum (the most common family, order, class and phylum among the genus's records, written to `genera/taxonomy.tsv`): the first name found in `crown_age.rates` or, failing that, in `crown_age.rate_table` decides; otherwise `crown_age.rate`. `provenance.tsv` records the rate and where it came from (`rate`, `rate_source`).
+
+The default of 0.0115 is a textbook value for arthropod mitochondrial DNA and is too fast for the genera of the first application, where rates also differ between classes ([results](../science/results/2026-11-dating.md)). To calibrate on your own data, run the workflow once and then:
+
+```bash
+python -m timegraft.calibrate --provenance results/my_run/provenance.tsv \
+    --taxonomy results/my_run/genera/taxonomy.tsv \
+    --crown-ages data/crown_ages/literature.tsv --out my_rates.tsv
+```
+
+For each genus with a known crown age (a point age in the table or, failing that, a TimeTree crown age below the stem age), the implied rate is its `root_to_tip` distance over that age. Per class with at least `--min-genera` (10) such genera, and pooled over all, the rate is a trimmed median: genera more than `--window` (3) times above or below the median are left out, repeatedly, which removes the TimeTree ages inflated by genera that are not natural groups. Give the table to the workflow as `crown_age.rate_table`, set `crown_age.rate` to the pooled value (the `all` row), and run again. The mean root-to-tip distance does not depend on the rate, so one round is enough.
+
+### Dating within a genus
+
+Once the crown age is set, the nodes below it are dated by mean path length (`mpl`, built in) or LSD2 (`lsd2`, built from source), which both assume a clock within the genus. Penalised likelihood, which lets the rate vary over the tree, is available as `dating.method: chronos` (the `chronos` function of the R package ape; the workflow then uses `workflow/envs/chronos.yaml`, or R with ape on the path). It is not the default. On the Iberian genera it gave nearly the same within-genus branch lengths as mean path length, its own information criterion preferred the strict clock in every genus tested, and it cannot estimate the crown age: with all tips at the present and only bounds on the root, rate and time are not separable ([results](../science/results/2026-11-dating.md)). Genera with fewer than four units are dated by mean path length under any setting.
 
 ### Genetic codes
 

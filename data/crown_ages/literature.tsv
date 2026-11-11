@@ -1,0 +1,4 @@
+genus	crown_age	crown_age_min	crown_age_max	reference	doi	note
+Daphnia		145		Kotov & Taylor 2011, BMC Evolutionary Biology 11:129	10.1186/1471-2148-11-129	Minimum: ephippia of both subgenera (Daphnia s. str. and Ctenodaphnia) in deposits at the Jurassic/Cretaceous boundary, about 145 Ma
+Gammarus	61			Hou et al. 2011, PNAS 108:14533-14538	10.1073/pnas.1104636108	Origin of the genus (their node b) in a BEAST analysis of four genes and 115 species; point estimate only, interval in their Table S2 not copied
+Niphargus	87			McInerney et al. 2014, Molecular Ecology 23:1153-1166	10.1111/mec.12664	Origin of the genus in north-west Europe, Bayesian dating; point estimate only (87 Ma in the published abstract, 88 Ma in the accepted version)

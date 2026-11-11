@@ -21,6 +21,7 @@ The documentation has three parts.
 | [How it works](science/how-it-works.md) | The method explained without code, with flowcharts |
 | [Assumptions and limitations](science/limitations.md) | What the method takes for granted, and where it is weak |
 | [First results](science/results/2026-11-iberia.md) | The first run on real data: genera of western Iberia |
+| [Crown ages: rates, bounds and penalised likelihood](science/results/2026-11-dating.md) | Why crown ages are a calibrated rate within bounds, and why penalised likelihood is not the default |
 
 ## Manuscript
 

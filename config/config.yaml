@@ -16,7 +16,9 @@ bcdm:
   countries: []              # country/ocean values, e.g. [Portugal, Spain]
 backbone: tests/data/toy/backbone.tre      # dated, ultrametric, genera at the tips, ages in Ma
                                            # (ignored when backbone_build.enabled is true)
-crown_ages: tests/data/toy/crown_ages.tsv  # optional: genus, crown_age (Ma), e.g. from TimeTree
+crown_ages: tests/data/toy/crown_ages.tsv  # optional: genus and crown_age (Ma, used as given) and/or
+                                           # crown_age_min, crown_age_max (bounds on the age from the
+                                           # barcodes); literature values: data/crown_ages/literature.tsv
 
 # Diversity per sample. Give either a table of units per sample, or ASVs plus
 # an ASV table: ASVs are then matched to units or placed on the tree first.
@@ -97,12 +99,22 @@ markers:
       method: k2p
     crown_age:
       method: rate           # used when crown_ages has no entry for a genus
-      rate: 0.0115           # substitutions per site per Myr, per lineage (about 2.3% pairwise)
+      rate: 0.0115           # default rate: substitutions per site per Myr, per lineage (about 2.3%
+                             # pairwise). A textbook value; calibrate it on your own data with
+                             # python -m timegraft.calibrate (see docs/technical/configuration.md)
+      rates: {}              # rate per taxon, rank: {name: rate}, e.g. {class: {Teleostei: 0.0043}};
+                             # resolved per genus from genus up to phylum, before the default
+      rate_table:            # the same as a table (rank, name, rate), as written by timegraft.calibrate
       cap_fraction: 0.9      # crown age never exceeds this fraction of the stem age
-      timetree_max_ratio: 3  # reject a TimeTree crown age more than this many times the rate-based one
+      timetree_bound: max    # max: a TimeTree crown age is an upper bound on the age from the
+                             # barcodes; none: TimeTree crown ages are not used
     dating:
-      method: mpl            # mpl (mean path length, built in) or lsd2 (least squares, built from source)
+      method: mpl            # mpl (mean path length, built in), lsd2 (least squares, built from source)
+                             # or chronos (penalised likelihood, needs R with ape; not the default, as
+                             # it changes little within genera: docs/science/results/2026-11-dating.md)
       seq_length: 658        # lsd2: barcode length, used for its variance model
+      # model: correlated    # chronos: correlated, relaxed, discrete or clock
+      # lambda: 1            # chronos: smoothing parameter
     placement:
       match_identity: 0.97   # at or above: the ASV counts as the unit it matches
       place_identity: 0.80   # at or above: attached near its nearest unit; below: unplaced
@@ -122,6 +134,7 @@ markers:
       method: fraction       # no reliable ITS rate: a stated fraction of the stem age
       fraction: 0.5
       cap_fraction: 0.9
+      timetree_bound: max
     dating:
       method: mpl
       seq_length: 500

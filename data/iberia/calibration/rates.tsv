@@ -1,0 +1,6 @@
+rank	name	rate	n	n_trimmed	q1	q3	untrimmed_median
+all	all	0.00366	213	49	0.00269	0.00553	0.00373
+class	Teleostei	0.00431	117	11	0.00308	0.00614	0.00454
+class	Gastropoda	0.00414	33	5	0.00245	0.00590	0.00469
+class	Malacostraca	0.00288	32	8	0.00198	0.00397	0.00327
+class	Elasmobranchii	0.00142	12	0	0.00114	0.00172	0.00142

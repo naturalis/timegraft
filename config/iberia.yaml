@@ -9,8 +9,8 @@
 records: resources/iberia/records.tsv
 outdir: results/iberia
 
-# no toy inputs
-crown_ages:
+# no toy inputs; crown ages from the literature where TimeTree has none (#17)
+crown_ages: data/crown_ages/literature.tsv
 samples:
 asvs:
 asv_table:
@@ -38,3 +38,9 @@ rooting:
 markers:
   coi:
     align: mafft             # BOLD sequences are not aligned
+    crown_age:
+      # Rates calibrated on the genera of this data set with a known crown age
+      # (data/iberia/calibration/README.md, #18): one per class with at least
+      # ten such genera, and the pooled value for all other taxa.
+      rate: 0.0037
+      rate_table: data/iberia/calibration/rates.tsv
