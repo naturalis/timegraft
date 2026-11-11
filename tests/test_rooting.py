@@ -2,7 +2,7 @@ import dendropy
 import pytest
 
 from timegraft.backbone import pick_outgroup
-from timegraft.rooting import mad, root_genus, root_on_outgroup
+from timegraft.rooting import _root_split, mad, root_genus, root_on_outgroup, root_uncertainty
 
 
 def unrooted(newick):
@@ -90,6 +90,57 @@ def test_unknown_rule_or_fallback():
         root_genus(unrooted(CLEAN), IN, OUT, rule="lenient")
     with pytest.raises(ValueError):
         root_genus(unrooted(CLEAN), IN, OUT, fallback="random")
+
+
+# root uncertainty (#34) ------------------------------------------------
+
+def splits(info, label):
+    return [_root_split(t) for name, t in info["trees"] if name == label]
+
+
+def test_uncertainty_of_a_clean_split():
+    tree = unrooted(CLEAN)
+    before = tree.as_string(schema="newick")
+    info = root_uncertainty(tree, IN, OUT)
+    assert tree.as_string(schema="newick") == before  # the input is left alone
+    assert info["root_alternatives"] == 1
+    assert splits(info, "violation") == [frozenset([frozenset("AB"), frozenset("CDE")])]
+    assert 0.0 <= info["root_ambiguity"] <= 1.0
+    assert splits(info, "without_misplaced") == []
+
+
+def test_uncertainty_counts_roots_within_one_violation():
+    # the two tied minimum-violation edges root the genus at AB | CDE and at C | ABDE
+    info = root_uncertainty(unrooted(OUTGROUP_IN), IN, OUT)
+    assert info["root_alternatives"] == 2
+    assert set(splits(info, "violation")) == {
+        frozenset([frozenset("AB"), frozenset("CDE")]),
+        frozenset([frozenset("C"), frozenset("ABDE")]),
+    }
+    assert splits(info, "mad") == [frozenset([frozenset("AB"), frozenset("CDE")])]
+
+
+def test_uncertainty_roots_the_genus_without_its_misplaced_units():
+    _, _, rooted = root_genus(unrooted(INGROUP_OUT), IN, OUT + ["O3"], rule="tolerant")
+    info = root_uncertainty(unrooted(INGROUP_OUT), IN, OUT + ["O3"], rooted["misplaced"])
+    assert rooted["misplaced"] == ["E"]
+    without = [t for name, t in info["trees"] if name == "without_misplaced"]
+    assert len(without) == 1
+    assert leaves(without[0]) == set("ABCD")
+    assert _root_split(without[0]) == frozenset([frozenset("AB"), frozenset("CD")])
+
+
+def test_uncertainty_without_outgroup():
+    info = root_uncertainty(unrooted(CLEAN), IN, [])
+    assert info["root_alternatives"] is None
+    assert [name for name, _ in info["trees"]] == ["mad", "midpoint"]
+    assert all(leaves(t) == set(IN) for _, t in info["trees"])
+
+
+def test_uncertainty_of_two_units():
+    info = root_uncertainty(unrooted("((A:1,B:1):1,(O1:1,O2:1):1);"), ["A", "B"], OUT)
+    assert info["root_ambiguity"] != info["root_ambiguity"]  # NaN: MAD needs three units
+    assert info["root_alternatives"] == 1
 
 
 # outgroup choice --------------------------------------------------------

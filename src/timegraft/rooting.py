@@ -238,16 +238,16 @@ def _drop_outgroup(tree: dendropy.Tree, outgroup: frozenset[str]) -> dendropy.Tr
 
 
 def minimum_violation_sides(
-    tree: dendropy.Tree, ingroup: frozenset[str], outgroup: frozenset[str]
+    tree: dendropy.Tree, ingroup: frozenset[str], outgroup: frozenset[str], slack: int = 0
 ) -> tuple[int, list[tuple[frozenset[str], frozenset[str], float]]]:
     """The edges that best separate ingroup from outgroup (minimum violation).
 
     Returns the number of units on the wrong side, and for every edge that
-    attains it: the leaf set below the edge, the side of the edge holding the
-    ingroup, and the edge length.
+    attains it (or comes within ``slack`` of it): the leaf set below the edge,
+    the side of the edge holding the ingroup, and the edge length.
     """
     labels = ingroup | outgroup
-    best, ties = None, []
+    found = []
     for node, below in _leaf_sets(tree).items():
         if node.parent_node is None:
             continue
@@ -255,11 +255,9 @@ def minimum_violation_sides(
             if not ingroup & side:
                 continue
             cost = len(ingroup - side) + len(outgroup & side)
-            if best is None or cost < best:
-                best, ties = cost, []
-            if cost == best:
-                ties.append((below, side, max(0.0, node.edge.length or 0.0)))
-    return best, ties
+            found.append((cost, below, side, max(0.0, node.edge.length or 0.0)))
+    best = min(cost for cost, *_ in found)
+    return best, [(below, side, length) for cost, below, side, length in found if cost <= best + slack]
 
 
 def root_genus(
@@ -347,3 +345,78 @@ def root_on_outgroup(
     """
     rooted, how, _ = root_genus(tree, ingroup, outgroup, rule="strict", fallback="midpoint")
     return rooted, how
+
+
+def _genus_root(tree: dendropy.Tree, below: frozenset[str], length: float,
+                outgroup: frozenset[str]) -> dendropy.Tree:
+    """The ingroup tree when ``tree`` is rooted halfway along the edge above ``below``."""
+    return _drop_outgroup(reroot(copy_tree(tree), below, length / 2.0), outgroup)
+
+
+def root_uncertainty(
+    tree: dendropy.Tree,
+    ingroup: Iterable[str],
+    outgroup: Iterable[str],
+    misplaced: Iterable[str] = (),
+) -> dict:
+    """Other plausible roots of a genus tree (issue #34).
+
+    ``tree`` is the unrooted tree of the genus and its outgroup, as it went into
+    ``root_genus``; it is not changed. Returns:
+
+    ``root_ambiguity``
+        MAD's root ambiguity index on the genus tree without the outgroup: the
+        best score over the second best, so close to 1 means another root is
+        about as good. NaN with fewer than three units.
+    ``root_alternatives``
+        The number of distinct root positions on the genus tree whose outgroup
+        edge has at most one unit more on the wrong side than the best
+        (minimum-violation) edge, the best included; ``None`` without an outgroup.
+    ``trees``
+        ``(label, rooted ingroup tree)`` for those positions (``violation``),
+        the MAD root (``mad``), the midpoint root when there is no outgroup
+        (``midpoint``), and, when units of the genus sit among the outgroup,
+        the genus without them, rooted on the outgroup by the tolerant rule
+        (``without_misplaced``). Positions are not deduplicated against the
+        root that was chosen.
+    """
+    ingroup = frozenset(ingroup)
+    labels = {leaf.taxon.label for leaf in tree.leaf_node_iter()}
+    outgroup = (frozenset(outgroup) - ingroup) & labels
+    misplaced = frozenset(misplaced) & ingroup
+    base = copy_tree(tree)
+    base.prune_taxa_with_labels(list(labels - ingroup - outgroup))
+
+    genus_tree = _drop_outgroup(copy_tree(base), outgroup)
+    trees: list[tuple[str, dendropy.Tree]] = []
+    scores = mad_scores(genus_tree)  # once: the costly part on large genera
+    rai = float("nan")
+    if len(ingroup) >= 3 and len(scores) > 1 and scores[1][0] > 0:
+        rai = scores[0][0] / scores[1][0]
+    trees.append(("mad", reroot(copy_tree(genus_tree), scores[0][1], scores[0][2])))
+
+    n_alternatives = None
+    if outgroup:
+        _, sides = minimum_violation_sides(base, ingroup, outgroup, slack=1)
+        seen = {}
+        for below, side, length in sides:
+            inside, rest = below & ingroup, ingroup - below
+            if inside and rest:
+                # the root falls between the two parts of the genus
+                key = frozenset([inside, rest])
+                if key not in seen:
+                    seen[key] = _genus_root(base, below, length, outgroup)
+            else:
+                rooted = _genus_root(base, below, length, outgroup)
+                seen.setdefault(_root_split(rooted), rooted)
+        n_alternatives = len(seen)
+        trees.extend(("violation", t) for t in seen.values())
+        keep = ingroup - misplaced
+        if misplaced and len(keep) >= 2:
+            pruned = copy_tree(base)
+            pruned.prune_taxa_with_labels(list(misplaced))
+            rooted, _, _ = root_genus(pruned, keep, outgroup, rule="tolerant", fallback="mad")
+            trees.append(("without_misplaced", rooted))
+    else:
+        trees.append(("midpoint", midpoint(copy_tree(genus_tree))))
+    return {"root_ambiguity": rai, "root_alternatives": n_alternatives, "trees": trees}

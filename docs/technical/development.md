@@ -28,7 +28,7 @@ Rule scripts import the package from `src/` through the `src` parameter that eve
 | `units` | medoid representative and genus per unit |
 | `distances` | distance methods (`k2p`, vectorised; `kmer`); the registry `METHODS` |
 | `bionj` | BioNJ on a distance matrix |
-| `rooting` | rooting genus trees: tolerant (minimum violation) or strict outgroup rule, MAD and midpoint |
+| `rooting` | rooting genus trees: tolerant (minimum violation) or strict outgroup rule, MAD and midpoint; other plausible roots ([#34](https://github.com/naturalis/timegraft/issues/34)) |
 | `rooting_diagnostics` | after a run: why outgroup rooting failed, midpoint and MAD against the outgroup root, outgroup and distance variants ([#19](https://github.com/naturalis/timegraft/issues/19)) |
 | `dating` | crown age choice, mean path length, LSD2 |
 | `build` | one dated subtree per genus |

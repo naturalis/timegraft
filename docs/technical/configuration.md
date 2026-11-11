@@ -47,6 +47,7 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `rooting.outgroup_choice` | `spread` | `spread`: in turn from the genera of the nearest sister clades, longest sequences first; `sister`: the first units by id of the sister genus (before #19) |
 | `rooting.outgroup_levels` | 3 | `spread`: how many sister clades to draw from, going up the backbone |
 | `rooting.fallback` | `mad` | Without an outgroup, or when the strict rule fails: `mad` (minimal ancestor deviation) or `midpoint` |
+| `rooting.uncertainty` | `true` | Record per genus how uncertain the root is and how much the crown age and PD depend on it (the `root_*`, `crown_age_min`/`_max` and `pd_rel_range` columns of `provenance.tsv`, [#34](https://github.com/naturalis/timegraft/issues/34)). Off leaves those columns empty and saves the extra dating of each alternative root |
 | `max_records_per_unit` | 50 | Records considered when choosing a unit's representative |
 | `genus_agreement` | 0.8 | Share of a unit's records that must agree on its genus |
 | `prune_empty` | `true` | Drop backbone genera without units |
