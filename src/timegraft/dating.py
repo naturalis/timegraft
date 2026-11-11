@@ -1,12 +1,14 @@
 """Dating a rooted genus subtree: the crown age and the ages of the nodes below it.
 
-The crown age C of a genus is an age from the barcodes (mean root-to-tip
-distance over a substitution rate, or a stated fraction of the stem age S)
-kept within bounds from outside sources: never older than a fraction of the
-stem age, nor than a TimeTree estimate for the genus, and within a minimum
-and maximum from the user's table. A point age in that table is used as it is.
+The crown age C of a genus lies between bounds: not younger than the age
+from the barcodes (mean root-to-tip distance over a substitution rate), which
+saturation makes a minimum, and not older than a fraction of the stem age S or
+a TimeTree estimate for the genus, with a minimum and maximum from the user's
+table where given. A point age in that table is used as it is. The age within
+the bounds is the minimum itself or the midpoint of the range on a log scale.
 Bounds replace the earlier rule that accepted or rejected a TimeTree age at a
-threshold (issue #36).
+threshold (issue #36), and both bounds are recorded so that diversity can be
+computed at either end.
 
 Below the crown, node ages come from mean path length (MPL, Britton et al.
 2002) or LSD2, both of which assume a clock within the genus. Penalised
@@ -31,11 +33,15 @@ import dendropy
 @dataclass
 class CrownAge:
     age: float
-    # table | rate | fraction, followed for the last two by the bound that was
-    # applied, if any: _capped (stem age), _timetree_max, _table_max, _table_min
+    # table | rate | fraction | midpoint; rate and fraction are followed by the
+    # bound that was applied, if any: _capped (stem age), _timetree_max,
+    # _table_max, _table_min
     source: str
     timetree: float | None = None  # the TimeTree estimate for the genus, if any
     barcode: float | None = None  # the age from the barcodes before any bound
+    lower: float | None = None  # the youngest crown age the sources allow (None: no lower bound)
+    upper: float | None = None  # the oldest
+    upper_source: str = ""  # stem | timetree | table
 
 
 def mean_root_to_tip(tree: dendropy.Tree) -> float:
@@ -70,32 +76,46 @@ def crown_age(
     cap_fraction: float = 0.9,
     suggested: Mapping[str, float] | None = None,
     timetree_bound: str = "max",
+    estimate: str = "minimum",
 ) -> CrownAge:
-    """Choose the crown age for one genus.
+    """Choose the crown age for one genus, and the range the sources allow.
 
     ``known`` is the user's table: per genus a point age, or a mapping with
     ``age``, ``min`` and ``max``. A point age is used as it is (below the stem
-    age). Otherwise the age from the barcodes (``rate``, in substitutions per
-    site per million years per lineage, or ``fraction`` of the stem age) is
-    moved to the nearest bound it violates:
+    age). Otherwise the crown age lies between two bounds.
 
-    - at most ``cap_fraction`` of the stem age;
-    - at most the TimeTree estimate in ``suggested`` (``timetree_bound`` "max";
-      "none" ignores it). That estimate is the MRCA of the species TimeTree
-      knows under the genus name: about right for a natural group, far too old
-      for a genus that is not one, so it can only lower an age, never raise it;
-    - within ``min`` and ``max`` of the table, which then replace TimeTree.
+    The upper bound is the smallest of ``cap_fraction`` of the stem age, the
+    TimeTree estimate in ``suggested`` (``timetree_bound`` "max"; "none"
+    ignores it) and ``max`` of the table, which replaces TimeTree. The TimeTree
+    estimate is the MRCA of the species TimeTree knows under the genus name:
+    about right for a natural group, far too old for a genus that is not one,
+    so it can only lower an age, never raise it.
 
-    Where bounds conflict, the stem age wins over the table minimum.
+    The lower bound (method ``rate``) is the age from the barcodes: the mean
+    root-to-tip distance over ``rate``, in substitutions per site per million
+    years per lineage. Distances saturate, also within genera, so with a rate
+    from young calibrations this is a minimum, not an estimate. ``min`` of the
+    table raises it. Method ``fraction`` has no lower bound of its own.
+
+    ``estimate`` picks the age within the bounds:
+
+    - ``minimum``: the age from the barcodes (or ``fraction`` of the stem
+      age), moved to the nearest bound it violates;
+    - ``midpoint`` (method ``rate``): the geometric mean of the two bounds,
+      which is the age with the smallest worst-case relative error.
+
+    Where bounds conflict, the upper bound wins.
     """
     if timetree_bound not in ("max", "none"):
         raise ValueError(f"unknown timetree_bound {timetree_bound!r}; use 'max' or 'none'")
+    if estimate not in ("minimum", "midpoint"):
+        raise ValueError(f"unknown crown age estimate {estimate!r}; use 'minimum' or 'midpoint'")
     cap = cap_fraction * stem_age
     tt = (suggested or {}).get(genus)
     entry = _table_entry(known[genus]) if genus in known else {"age": None, "min": None, "max": None}
     if entry["age"] is not None:
-        age = entry["age"]
-        return CrownAge(age, "table", tt) if age < stem_age else CrownAge(cap, "table_capped", tt)
+        age, source = (entry["age"], "table") if entry["age"] < stem_age else (cap, "table_capped")
+        return CrownAge(age, source, tt, lower=age, upper=age, upper_source="table")
 
     if method == "rate":
         if not rate:
@@ -104,25 +124,39 @@ def crown_age(
     elif method == "fraction":
         if fraction is None:
             raise ValueError("crown age method 'fraction' needs a fraction")
+        if estimate == "midpoint":
+            raise ValueError("crown age estimate 'midpoint' needs a lower bound, so method 'rate'")
         own = fraction * stem_age
     else:
         raise ValueError(f"unknown crown age method {method!r}")
 
-    upper, upper_source = cap, "capped"
-    lower = None
+    upper, upper_source = cap, "stem"
+    table_min = None
     if entry["min"] is not None or entry["max"] is not None:
         if entry["max"] is not None and entry["max"] < upper:
-            upper, upper_source = entry["max"], "table_max"
-        if entry["min"] is not None:
-            lower = min(entry["min"], upper)
+            upper, upper_source = entry["max"], "table"
+        table_min = entry["min"]
     elif tt is not None and timetree_bound == "max" and tt < upper:
-        upper, upper_source = tt, "timetree_max"
+        upper, upper_source = tt, "timetree"
+    suffix = {"stem": "capped", "timetree": "timetree_max", "table": "table_max"}[upper_source]
+
+    lower = own if method == "rate" else None
+    if table_min is not None:
+        lower = table_min if lower is None else max(lower, table_min)
+    if lower is not None:
+        lower = min(lower, upper)
+    bounds = dict(lower=lower, upper=upper, upper_source=upper_source)
 
     if own > upper:
-        return CrownAge(upper, f"{method}_{upper_source}", tt, own)
-    if lower is not None and own < lower:
-        return CrownAge(lower, f"{method}_table_min" if lower < upper else f"{method}_{upper_source}", tt, own)
-    return CrownAge(own, method, tt, own)
+        return CrownAge(upper, f"{method}_{suffix}", tt, own, **bounds)
+    if table_min is not None and own < table_min:
+        if table_min >= upper:
+            return CrownAge(upper, f"{method}_{suffix}", tt, own, **bounds)
+        if estimate == "minimum":
+            return CrownAge(table_min, f"{method}_table_min", tt, own, **bounds)
+    if estimate == "midpoint":
+        return CrownAge((lower * upper) ** 0.5, "midpoint", tt, own, **bounds)
+    return CrownAge(own, method, tt, own, **bounds)
 
 
 def mpl_ultrametric(tree: dendropy.Tree, root_age: float) -> dendropy.Tree:

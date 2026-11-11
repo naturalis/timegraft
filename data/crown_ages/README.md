@@ -6,7 +6,7 @@
 | --- | --- |
 | `genus` | Genus name as in the records |
 | `crown_age` | Point age in Ma. Used as given, in place of the age from the barcodes |
-| `crown_age_min`, `crown_age_max` | Bounds in Ma on the age from the barcodes, for sources that give a limit and no estimate (a fossil gives a minimum). Only used when `crown_age` is empty |
+| `crown_age_min`, `crown_age_max` | Bounds in Ma on the crown age, for sources that give a limit and no estimate (a fossil gives a minimum). Only used when `crown_age` is empty |
 | `reference`, `doi` | Where the age comes from |
 | `note` | What the age refers to in the source, and anything a user should know |
 

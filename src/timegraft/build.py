@@ -106,6 +106,7 @@ def build_genus(
             cap_fraction=crown_cfg.get("cap_fraction", 0.9),
             suggested=timetree_crowns,
             timetree_bound=crown_cfg.get("timetree_bound", "max"),
+            estimate=crown_cfg.get("estimate", "minimum"),
         )
 
     dating = marker_cfg.get("dating", {"method": "mpl"})
@@ -141,6 +142,9 @@ def build_genus(
         "stem_age": f"{stem_age:.4f}",
         "crown_age": f"{crown.age:.4f}",
         "crown_source": crown.source,
+        "crown_lower": "" if crown.lower is None else f"{crown.lower:.4f}",
+        "crown_upper": "" if crown.upper is None else f"{crown.upper:.4f}",
+        "crown_upper_source": crown.upper_source,
         "barcode_age": "" if crown.barcode is None else f"{crown.barcode:.4f}",
         "timetree_crown": "" if crown.timetree is None else f"{crown.timetree:.4f}",
         "root_to_tip": f"{root_to_tip:.6f}",
@@ -189,7 +193,7 @@ def _root_spread(unrooted, ingroup, outgroup, misplaced, dated, crown, chosen_sp
         if full:
             pds.append(tree_length(date(alt, alt_crown.age)))
     rai = info["root_ambiguity"]
-    by_rate = crown.source.startswith("rate")
+    by_rate = crown.source.startswith(("rate", "midpoint"))
     return {
         "root_ambiguity": "" if math.isnan(rai) else f"{rai:.4f}",
         "root_alternatives": "" if info["root_alternatives"] is None else info["root_alternatives"],

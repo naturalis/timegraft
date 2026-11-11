@@ -59,20 +59,20 @@ flowchart TB
 
 A genus and its relatives are rarely separated perfectly by barcodes: a few BINs of the genus may fall among the related genera, or the other way round. The root is therefore put where the fewest BINs are on the wrong side; BINs of the genus that end up among the relatives stay in the tree as its earliest branches and are listed in the provenance, as some of them will be misidentified. When several places are equally good, the one that makes the genus tree most clock-like decides (minimal ancestor deviation, which is also used when there are no relatives to root with). Because the root is often uncertain, the provenance also says, per genus, how many other places are nearly as good, and how much the crown age and the genus's PD would change if the root were put there or if the genus's BINs among the relatives were left out.
 
-The **crown age** is when the living members of the genus last shared an ancestor. Barcodes alone cannot give it: they say how much the BINs of a genus differ, not how long that took. The crown age is therefore an estimate from the barcodes, kept within limits from outside sources:
+The **crown age** is when the living members of the genus last shared an ancestor. Barcodes alone cannot give it. They say how much the BINs of a genus differ, and that difference stops growing after a while (saturation), also within genera: in half of the Iberian genera, the two most different BINs of the genus differ as much as the genus differs from its relatives. What the sources can give is a range:
 
 ```mermaid
 flowchart LR
     q{"Crown age in the<br/>literature table?"} -->|"yes"| use1["use it"]
-    q -->|"no"| rate["estimate it from how much<br/>the BINs differ, with the rate<br/>of change of their class"]
-    rate --> b1["not older than TimeTree's<br/>age for the genus"]
-    b1 --> b2["within the minimum and<br/>maximum of the literature<br/>table, if given"]
-    b2 --> cap["never older than<br/>90% of the stem age"]
-    use1 --> cap
+    q -->|"no"| low["at least: how much the BINs<br/>differ, at the rate of change<br/>measured on young splits"]
+    q -->|"no"| up["at most: 90% of the stem age,<br/>and TimeTree's age for the genus"]
+    low --> pick["choose within the range:<br/>the minimum, or the midpoint"]
+    up --> pick
 ```
 
-- **The rate of change differs between groups.** Fishes change more slowly than most invertebrates, and sharks more slowly still. The rate is therefore set per class, calibrated on the genera whose crown age is known, with one pooled value for classes without enough such genera.
-- **TimeTree's age for a genus is a limit, not the answer.** It is the age of the common ancestor of all species TimeTree knows under the genus name. For a natural group that is about right. For a genus that is not a natural group it spans a much older split, and gave crown ages of hundreds of millions of years. Used as an upper limit, a good TimeTree age keeps the estimate in check and an inflated one does no harm.
+- **The barcodes give a minimum.** Dividing the difference between BINs by the rate at which COI changes over a few million years gives the age the genus must at least have. Saturation hides older change, so the true age can be much higher but not lower.
+- **TimeTree's age for a genus is a maximum, not the answer.** It is the age of the common ancestor of all species TimeTree knows under the genus name. For a natural group that is about right. For a genus that is not a natural group it spans a much older split, and gave crown ages of hundreds of millions of years. Used as an upper limit, a good TimeTree age keeps the estimate in check and an inflated one does no harm.
+- **The crown age is chosen within the range, and the range is kept.** By default the minimum is used. The alternative is the midpoint of the range on a logarithmic scale, which agrees better with TimeTree's crown ages. Both limits are recorded, and diversity is also computed with every genus at its minimum and at its maximum, so that the effect of this uncertainty on a result can be read off.
 - **No thresholds.** An earlier version used TimeTree's age outright unless it was more than three times the barcode estimate. A small change in the data could then move a crown age by a factor of three. With limits, a small change in the data gives a small change in the age.
 
 Below the crown, the tree is stretched so that its root sits at the crown age and all tips at the present, assuming that the BINs of a genus change at about the same rate (mean path length, or LSD2). Methods that let the rate vary over the tree (penalised likelihood) were tested and are available, but are not the default: within a genus they gave nearly the same branch lengths, and they cannot estimate the crown age itself. The [dating results](results/2026-11-dating.md) give the evidence.

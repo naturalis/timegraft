@@ -12,6 +12,8 @@ Scripts and tables behind [docs/science/results/2026-11-dating.md](../../../docs
 | `chronos_fixed.R`, `C_fixed.tsv`, `C_fixed_trees.tsv.gz`, `C_big.tsv` | `chronos` with the crown fixed, five settings, on 200 random genera of 4 to 60 units, and run times for three larger genera |
 | `summarise.py` | The numbers quoted for the two `chronos` tests, including the comparison with mean path length |
 | `holdout.py` | Crown age estimators against TimeTree crown ages, saturation of the distance to the outgroup, and the implied rate by crown age |
+| `estimators.py` | Estimates that need no fitted rate (half and fitted fraction of the stem age, birth model, midpoint of the bounds, regressions) against TimeTree crown ages |
+| `pd_sensitivity.py` | Faith's PD of random samples with every genus crown at its lower bound, midpoint and upper bound, on a run made after the change (needs `crown_lower` and `crown_upper` in its `provenance.tsv`) |
 | `provenance_before.tsv` | `provenance.tsv` of the run before the change; its `crown_source` says which TimeTree crown ages the earlier rule accepted |
 
 ## Rerunning
@@ -26,6 +28,8 @@ Rscript $B/chronos_bounds.R $W/out $B/provenance_before.tsv 300           # abou
 Rscript $B/chronos_fixed.R $W/out                                         # about 10 minutes
 python $B/summarise.py $W/out
 python $B/holdout.py $W/out $B/provenance_before.tsv
+python $B/estimators.py $W/out $B/provenance_before.tsv
+python $B/pd_sensitivity.py results/iberia                               # the current archive, unpacked
 ```
 
 To check the numbers from the stored tables without rerunning, unpack `trees.tsv.gz` and `outgroup_ages.tsv.gz` into a folder with the other tables; `summarise.py` also needs the `newick` column of `C_fixed_trees.tsv.gz` joined to `C_fixed.tsv`.

@@ -11,7 +11,7 @@ Where timegraft stands and what comes next. Each item links to its issue, where 
 - Faith's PD, MPD, UniFrac and PhyloSor
 - Validation of barcode distances against a reference tree
 - A first run on real data: 25,000 BINs in 1,232 genera ([results](../science/results/2026-11-iberia.md))
-- Crown ages as an age from the barcodes within bounds from TimeTree, the stem age and the literature, with a substitution rate per class calibrated on the data ([#36](https://github.com/naturalis/timegraft/issues/36), [#18](https://github.com/naturalis/timegraft/issues/18); [results](../science/results/2026-11-dating.md)); penalised likelihood tested and kept as an option
+- Crown ages as a range, from a barcode minimum to TimeTree and the stem age, with the bounds recorded and diversity reported at both ([#36](https://github.com/naturalis/timegraft/issues/36); [results](../science/results/2026-11-dating.md)); penalised likelihood and rates fitted to TimeTree tested and not adopted
 
 ## Next: getting the ages right
 
@@ -19,7 +19,7 @@ The weakest parts of the first real run were the ages, so they come first.
 
 | Issue | Topic |
 | --- | --- |
-| [#18](https://github.com/naturalis/timegraft/issues/18) | The rate is now calibrated per class, but barcode distances within genera grow far less than in proportion to age: replace the constant rate by a calibration that allows for this |
+| [#18](https://github.com/naturalis/timegraft/issues/18) | A rate cannot be fitted to these data (distances saturate within genera). Decide whether the estimate within the bounds becomes the midpoint; set rates per class from the literature where they are known to differ (elasmobranchs) |
 | [#16](https://github.com/naturalis/timegraft/issues/16) | Better ages for backbone nodes that TimeTree does not date |
 | [#17](https://github.com/naturalis/timegraft/issues/17) | Literature crown ages for groups that TimeTree covers poorly: the table and its format are in place (`data/crown_ages/literature.tsv`, three genera); it needs filling, with the PhD project |
 | [#20](https://github.com/naturalis/timegraft/issues/20) | Errors in the OToL backbone, and a way to correct them |

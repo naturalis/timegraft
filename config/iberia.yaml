@@ -38,9 +38,3 @@ rooting:
 markers:
   coi:
     align: mafft             # BOLD sequences are not aligned
-    crown_age:
-      # Rates calibrated on the genera of this data set with a known crown age
-      # (data/iberia/calibration/README.md, #18): one per class with at least
-      # ten such genera, and the pooled value for all other taxa.
-      rate: 0.0037
-      rate_table: data/iberia/calibration/rates.tsv
