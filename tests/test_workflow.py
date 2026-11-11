@@ -69,6 +69,9 @@ def test_toy_workflow(tmp_path):
     assert is_ultrametric(placed, tolerance=1e-6)
     assert {"asv_03", "asv_05"} <= {l.taxon.label for l in placed.leaf_node_iter()}
 
+    screened = read_tsv(outdir / "units" / "screened.tsv")  # every unit gets a screening decision (#38)
+    assert len(screened) == len(read_tsv(outdir / "units" / "representatives.tsv"))
+    assert {r["decision"] for r in screened} <= {"keep", "other_genus", "isolated", "kept_whole_genus"}
     alpha = {r["sample"]: r for r in read_tsv(outdir / "diversity" / "alpha.tsv")}
     assert set(alpha) == {"estuary_1", "estuary_2", "marina_1"}
     assert alpha["estuary_2"]["richness"] == "3"

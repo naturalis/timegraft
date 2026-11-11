@@ -324,10 +324,21 @@ def test_rescale_crowns_keeps_the_tree_ultrametric():
     assert crown(tree, ["G1", "G2"]).age == pytest.approx(0.5)  # nodes keep their fraction of the crown age
     assert crown(tree, ["H1", "H2"]).age == pytest.approx(4.0)
     assert crown(tree, ["G1", "P"]).age == pytest.approx(6.0)  # nothing above the crown moves
-    # an age above the node over the crown (here the placed unit) stops just below it
+    # an age above the node over the crown stops just below it, unless that node only joins placed tips
     tree = load()
     assert rescale_crowns(tree, units, {"G": 9.0})["G"] == pytest.approx(6.0)
     assert is_ultrametric(tree)
+    tree = load()
+    assert rescale_crowns(tree, units, {"G": 8.0}, placed={"P"})["G"] == pytest.approx(8.0)
+    assert is_ultrametric(tree) and root_age(tree) == pytest.approx(10.0)
+    tree.calc_node_ages(ultrametricity_precision=1e-6)
+    # P joined at 6, a third of the way from the crown (4) to the stem node (10); now a third of the way from 8 to 10
+    assert crown(tree, ["G1", "P"]).age == pytest.approx(8 + (10 - 8) / 3)
+    assert crown(tree, ["G1", "G2"]).age == pytest.approx(2.0)
+    tree = load()
+    rescale_crowns(tree, units, {"G": 2.0}, placed={"P"})
+    tree.calc_node_ages(ultrametricity_precision=1e-6)
+    assert crown(tree, ["G1", "P"]).age == pytest.approx(2 + (10 - 2) / 3) and is_ultrametric(tree)
     # no lower bound: the genus collapses to its stem
     tree = load()
     rescale_crowns(tree, units, {"G": 0.0})

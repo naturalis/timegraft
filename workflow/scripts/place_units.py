@@ -9,7 +9,9 @@ logging.basicConfig(filename=snakemake.log[0], level=logging.INFO, format="%(mes
 
 import dendropy
 
-from timegraft.placement import classify, place_all, vsearch_hits
+from collections import defaultdict
+
+from timegraft.placement import attach_to_genus_stem, classify, place_all, vsearch_hits
 from timegraft.seqio import read_tsv, write_tsv
 
 COLUMNS = ["unit_id", "reason", "status", "nearest_units", "genus", "identity", "attach_age"]
@@ -34,8 +36,19 @@ if snakemake.params.enabled and unassigned:
     placed = place_all(tree, rows, height=cfg.get("height", "rate"), rate=snakemake.params.rate,
                        terminal_fraction=cfg.get("terminal_fraction", 0.5))
     reason = {u["unit_id"]: u["reason"] for u in unassigned}
+    # units set aside by screening (#38) that match nothing well enough to be placed go on the stem
+    # of their own genus: they stay with it, but at an age the genus's crown and stem set
+    own_genus = {u["unit_id"]: u["genera"].split(":")[0] for u in unassigned if u["reason"].startswith("screen_")}
+    genus_units = defaultdict(list)
+    for unit, genus in unit_genus.items():
+        genus_units[genus].append(unit)
     for p in placed:
-        rows_out.append({"unit_id": p["asv_id"], "reason": reason[p["asv_id"]], "status": p["status"],
+        unit = p["asv_id"]
+        if p["status"] == "unplaced" and unit in own_genus:
+            age = attach_to_genus_stem(tree, unit, genus_units[own_genus[unit]], cfg.get("stem_fraction", 0.5))
+            if age is not None:
+                p.update(status="genus_stem", genus=own_genus[unit], attach_age=f"{age:.4f}")
+        rows_out.append({"unit_id": unit, "reason": reason[unit], "status": p["status"],
                          "nearest_units": p["unit_id"], "genus": p["genus"], "identity": p["identity"],
                          "attach_age": p["attach_age"]})
 else:
@@ -45,5 +58,5 @@ Path(snakemake.output.tree).write_text(
     tree.as_string(schema="newick", suppress_rooting=True, preserve_spaces=True)
 )
 write_tsv(snakemake.output.placements, rows_out, COLUMNS)
-logging.info("%d unassigned units; placed %d", len(unassigned),
-             sum(1 for r in rows_out if r["status"] == "placed"))
+logging.info("%d unassigned units; placed %d; on the stem of their genus %d", len(unassigned),
+             sum(1 for r in rows_out if r["status"] == "placed"), sum(1 for r in rows_out if r["status"] == "genus_stem"))

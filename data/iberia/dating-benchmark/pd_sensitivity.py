@@ -33,6 +33,7 @@ by_genus = {g: list(u) for g, u in genus_units.items()}
 for row in read(run / "genera" / "singles.tsv"):
     by_genus[row["genus"]] = [row["unit_id"]]
 prov = [r for r in read(run / "provenance.tsv") if r["status"] == "subtree"]
+placed = {r["unit_id"] for r in read(run / "units_placed.tsv") if r["status"] in ("placed", "genus_stem")}
 targets = {
     "lower bound": {r["genus"]: float(r["crown_lower"]) for r in prov},
     "midpoint": {r["genus"]: (float(r["crown_lower"]) * float(r["crown_upper"])) ** 0.5 for r in prov},
@@ -82,7 +83,7 @@ trees = {}
 for name, ages in targets.items():
     tree = dendropy.Tree.get(path=str(run / "timegraft.tre"), schema="newick", preserve_underscores=True,
                              rooting="force-rooted")
-    rescale_crowns(tree, genus_units, ages)
+    rescale_crowns(tree, genus_units, ages, placed)
     total = sum(e.length or 0 for e in tree.postorder_edge_iter())
     crown = st.median(ages.values())
     print(f"{name:<12} median crown age {crown:6.1f} Ma; total branch length of the tree {total:,.0f} Ma")

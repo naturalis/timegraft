@@ -32,6 +32,7 @@ Rule scripts import the package from `src/` through the `src` parameter that eve
 | `rooting_diagnostics` | after a run: why outgroup rooting failed, midpoint and MAD against the outgroup root, outgroup and distance variants ([#19](https://github.com/naturalis/timegraft/issues/19)) |
 | `dating` | crown age within bounds, mean path length, LSD2, chronos (optional) |
 | `rates` | substitution rate per genus from its taxonomy |
+| `screening` | units that do not fit their genus (`screen`), from an all-against-all search |
 | `calibrate` | rates per class from genera of known crown age (`python -m timegraft.calibrate`) |
 | `build` | one dated subtree per genus |
 | `backbone` | reading a dated backbone, stem ages, sister genera and outgroup units, sharding |

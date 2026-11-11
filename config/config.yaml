@@ -97,11 +97,16 @@ markers:
     align: none              # none (input already aligned) or mafft
     distance:
       method: k2p
+    screening:               # set aside units that do not fit their genus before subtrees are built
+      enabled: true
+      margin: 0.02           # ... at least this much more similar to another genus than to any congener
+      min_identity: 0.80     # ... or no congener at this identity (while the genus has units that do)
+      query_cov: 0.7         # all-against-all search of the representatives with VSEARCH
     crown_age:
       method: rate           # used when crown_ages has no entry for a genus
       rate: 0.0115           # default rate: substitutions per site per Myr, per lineage (about 2.3%
-                             # pairwise). A textbook value; calibrate it on your own data with
-                             # python -m timegraft.calibrate (see docs/technical/configuration.md)
+                             # pairwise), within the range of COI rates from young splits; sets the
+                             # lower bound of the crown age (see docs/technical/configuration.md)
       rates: {}              # rate per taxon, rank: {name: rate}, e.g. {class: {Teleostei: 0.0043}};
                              # resolved per genus from genus up to phylum, before the default
       rate_table:            # the same as a table (rank, name, rate), as written by timegraft.calibrate
@@ -124,6 +129,8 @@ markers:
       query_cov: 0.9         # share of the ASV that must align
       maxaccepts: 20
       height: rate           # attach at age (1 - identity) / (2 * rate), using crown_age.rate
+      stem_fraction: 0.5     # units set aside by screening that match nothing: joined to the stem of
+                             # their own genus, this fraction of the way from its crown to its stem node
 
   its:
     filter:
@@ -133,6 +140,8 @@ markers:
     distance:
       method: kmer
       k: 8
+    screening:
+      enabled: false         # identity thresholds not yet tested for ITS (#38)
     crown_age:
       method: fraction       # no reliable ITS rate: a stated fraction of the stem age
       fraction: 0.5

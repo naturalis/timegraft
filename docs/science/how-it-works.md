@@ -35,6 +35,8 @@ Because everything is expressed in millions of years, the pieces fit together wi
 
 Barcode libraries hold many sequences per species. BOLD groups them into BINs, clusters that correspond roughly to species; UNITE does the same for fungi with species hypotheses. timegraft keeps one representative sequence per BIN (the one most similar to the others), after removing sequences that are too short, too ambiguous, or that cannot be read as a protein-coding gene. Each BIN is assigned to the genus that most of its records are identified as.
 
+Some BINs do not fit the genus they are assigned to: the records were misidentified, the sample was contaminated, or the genus is not a natural group. Because the differences between the BINs of a genus set how old the genus is taken to be (step 3), one such BIN can make a genus look much older than it is. Every BIN is therefore compared with every other, and a BIN is set aside when it is clearly more similar to a BIN of another genus than to any of its own genus, or when it is unlike all the others of its genus. A set-aside BIN is not thrown away: it is attached to the tree next to its closest relative, or, if it resembles nothing, on the branch leading to its own genus, so that it still counts in diversity but no longer sets the age of the genus.
+
 ## Step 2: the dated backbone
 
 The backbone is a tree of genera with known ages:

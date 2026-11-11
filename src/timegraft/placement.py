@@ -190,3 +190,30 @@ def place_all(
             record["attach_age"] = f"{attach(tree, row['asv_id'], anchor, age):.4f}"
         out.append(record)
     return out
+
+
+def attach_to_genus_stem(
+    tree: dendropy.Tree,
+    label: str,
+    genus_units: list[str],
+    fraction: float = 0.5,
+) -> float | None:
+    """Add tip ``label`` on the stem of a genus, at ``fraction`` of the way from its crown to its stem node.
+
+    For units set aside as isolated within their genus (issue #38) that match
+    nothing well enough to be placed elsewhere: they stay with their genus,
+    as its earliest branch, but at an age set by the genus's crown and stem
+    ages and not by their own distance. ``genus_units`` are the genus's units;
+    those in the tree define the crown (a single one: its tip). Returns the
+    attachment age, or None if no unit of the genus is in the tree.
+    """
+    labels = [u for u in genus_units if tree.find_node_with_taxon_label(u) is not None]
+    if not labels:
+        return None
+    crown = _mrca(tree, labels) if len(labels) > 1 else tree.find_node_with_taxon_label(labels[0])
+    if crown.parent_node is None:
+        return None
+    crown_age = _age(crown)
+    stem_age = crown_age + (crown.edge.length or 0.0)
+    return attach(tree, label, crown, crown_age + fraction * (stem_age - crown_age))
+
