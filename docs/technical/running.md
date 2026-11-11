@@ -102,7 +102,7 @@ flowchart TB
     validate --> all
 ```
 
-Dashed arrows are optional: `bcdm_records` only runs when `bcdm.path` is set, `build_lsd2` only with `dating.method: lsd2`. To draw the graph for your own configuration:
+Dashed arrows are optional: `bcdm_records` only runs when `bcdm.path` is set, `build_lsd2` only with `dating.method: lsd2`. With `dating.method: chronos` the genus subtrees are built in an environment that also holds R and ape. To draw the graph for your own configuration:
 
 ```bash
 snakemake --configfile config/config.yaml my_run.yaml --rulegraph mermaid-js
@@ -116,17 +116,18 @@ All under `outdir`.
 | --- | --- |
 | `timegraft.tre` | The dated tree; tips are unit ids |
 | `grafted.tre` | The same, before units without a genus were placed |
-| `provenance.tsv` | Per backbone genus: subtree, single unit or pruned; stem and crown age; where the crown age came from and the TimeTree value considered; rooting method, number of units on the wrong side of the root and the genus's units among the outgroup (`violations`, `misplaced`); how uncertain the root is and what that does to the ages (see below); dating method; outgroup |
+| `provenance.tsv` | Per backbone genus: subtree, single unit or pruned; stem and crown age; where the crown age came from (`crown_source`), the bounds it lies between (`crown_lower`, `crown_upper`, `crown_upper_source`), the age from the barcodes before any bound (`barcode_age`), the TimeTree value (`timetree_crown`), the mean root-to-tip distance of the rooted genus tree (`root_to_tip`) and the substitution rate with its source (`rate`, `rate_source`); rooting method, number of units on the wrong side of the root and the genus's units among the outgroup (`violations`, `misplaced`); how uncertain the root is and what that does to the ages (see below); dating method; outgroup |
 | `backbone/genera.tsv` | How each genus was matched in OTT and placed in the synthesis |
 | `backbone/node_ages.tsv` | Per backbone node: age, its source, TimeTree's raw answer, the NCBI ids queried, and a conflict ratio |
-| `backbone/crown_ages.tsv` | TimeTree crown age estimates, before checking |
+| `backbone/crown_ages.tsv` | TimeTree crown age estimates, used as upper bounds on the genus crown ages |
 | `units/rejected.tsv` | Records rejected by the filter, with the reason |
 | `units/representatives.tsv`, `units/unassigned.tsv` | One representative per unit; units without a usable genus |
 | `genera/missing_from_backbone.tsv` | Genera with units that are not in the backbone |
+| `genera/taxonomy.tsv` | Family, order, class and phylum per genus (the most common value among its records), used to resolve rates per taxon |
 | `units_placed.tsv` | What happened to each unit without a genus |
 | `placement/placements.tsv` | Per ASV: matched, placed or unplaced, with unit, identity and attachment age |
 | `placement/timegraft_placed.tre` | The tree with placed ASVs added |
-| `diversity/alpha.tsv` | Per sample: richness, Faith's PD, MPD (presence and abundance-weighted), in Ma |
+| `diversity/alpha.tsv` | Per sample: richness, Faith's PD, MPD (presence and abundance-weighted), in Ma. `faith_pd_crown_min`, `faith_pd_crown_max`, `mpd_crown_min` and `mpd_crown_max` give PD and MPD with every genus crown at its lower and at its upper bound (`crown_lower`, `crown_upper` in `provenance.tsv`): the part of a value that rests on crown ages. A genus without a lower bound collapses to its stem |
 | `diversity/beta.tsv` | Per pair of samples: unweighted and weighted UniFrac, PhyloSor |
 | `diversity/units_not_in_tree.tsv` | Sample units not in the tree |
 | `validation/` | Sampled pairs, correlations per stratum, binned medians, plateau onset, `saturation.png` |
@@ -138,7 +139,7 @@ The root uncertainty columns of `provenance.tsv` ([#34](https://github.com/natur
 | --- | --- |
 | `root_ambiguity` | MAD's root ambiguity index on the genus tree: the best root's score over the second best. Close to 1: another root is about as good. Empty with two units |
 | `root_alternatives` | Distinct root positions on the genus tree whose outgroup edge has at most one unit more on the wrong side than the best edge, the chosen root included. 1: no plausible alternative. Empty without an outgroup |
-| `crown_age_min`, `crown_age_max` | Range of the crown age over the chosen root, those alternatives, the MAD root (and the midpoint root without an outgroup), and the genus without its `misplaced` units, rooted on the outgroup. Only for crown ages taken from the barcodes (`rate` sources); table, TimeTree and fraction ages do not depend on the root |
+| `crown_age_min`, `crown_age_max` | Not the bounds of the crown age (those are `crown_lower` and `crown_upper`): the range of the crown age over the chosen root, those alternatives, the MAD root (and the midpoint root without an outgroup), and the genus without its `misplaced` units, rooted on the outgroup. Only for crown ages taken from the barcodes (`rate` and `midpoint` sources, including those moved to a bound); table and fraction ages do not depend on the root |
 | `pd_rel_range` | Range of the subtree's total branch length (within-genus PD) over the same roots, dated as the subtree was, divided by the chosen subtree's. The root without the misplaced units is left out here, as it covers fewer units |
 
 ## Run times

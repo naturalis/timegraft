@@ -9,6 +9,7 @@ sys.path.insert(0, snakemake.params.src)
 logging.basicConfig(filename=snakemake.log[0], level=logging.INFO, format="%(message)s")
 
 from timegraft.backbone import pick_outgroup, read_backbone, shard_of, stem_ages
+from timegraft.rates import RANKS, genus_taxonomy
 from timegraft.seqio import read_tsv, write_tsv
 
 reps = read_tsv(snakemake.input.reps)
@@ -48,5 +49,8 @@ for i, path in enumerate(snakemake.output.shards):
     write_tsv(path, shards.get(i, []), columns)
 write_tsv(snakemake.output.singles, singles, ["genus", "unit_id"])
 write_tsv(snakemake.output.missing, missing, ["genus", "n_units"])
+# higher taxa per genus (the most common value among its records), for rates per taxon
+taxonomy = genus_taxonomy(read_tsv(snakemake.input.records))
+write_tsv(snakemake.output.taxonomy, [taxonomy[g] for g in sorted(taxonomy) if g in by_genus], RANKS)
 logging.info("%d genera with subtrees, %d single-unit genera, %d genera missing from backbone",
              len(available) - len(singles), len(singles), len(missing))

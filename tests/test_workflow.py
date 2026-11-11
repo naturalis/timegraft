@@ -72,6 +72,9 @@ def test_toy_workflow(tmp_path):
     alpha = {r["sample"]: r for r in read_tsv(outdir / "diversity" / "alpha.tsv")}
     assert set(alpha) == {"estuary_1", "estuary_2", "marina_1"}
     assert alpha["estuary_2"]["richness"] == "3"
+    for row in alpha.values():  # diversity with the genus crowns at their bounds brackets the estimate
+        assert float(row["faith_pd_crown_min"]) <= float(row["faith_pd"]) + 1e-6
+        assert float(row["faith_pd"]) <= float(row["faith_pd_crown_max"]) + 1e-6
     assert len(read_tsv(outdir / "diversity" / "beta.tsv")) == 3
 
     summary = read_tsv(outdir / "validation" / "summary.tsv")

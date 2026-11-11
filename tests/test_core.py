@@ -222,14 +222,115 @@ def test_bionj_on_a_larger_additive_tree():
                 pdm(ns.get_taxon(label=a), ns.get_taxon(label=b)), rel=1e-6)
 
 
-def test_timetree_crown_checks():
+def test_timetree_crown_age_is_an_upper_bound():
     tree = dendropy.Tree.get(data="(A:0.05,B:0.05);", schema="newick", rooting="force-rooted")
-    # rate-based estimate: 0.05 / 0.01 = 5 Ma
-    ok = crown_age("G", 50, tree, {}, method="rate", rate=0.01, suggested={"G": 12.0})
-    assert (ok.source, ok.age, ok.timetree) == ("timetree", 12.0, 12.0)
-    too_old = crown_age("G", 50, tree, {}, method="rate", rate=0.01, suggested={"G": 40.0})
-    assert too_old.source == "rate_timetree_rejected" and too_old.age == pytest.approx(5.0)
-    beyond_stem = crown_age("G", 30, tree, {}, method="fraction", fraction=0.5, suggested={"G": 31.0})
-    assert beyond_stem.source == "fraction_timetree_rejected" and beyond_stem.age == pytest.approx(15.0)
+    # age from the barcodes: 0.05 / 0.01 = 5 Ma
+    below = crown_age("G", 50, tree, {}, method="rate", rate=0.01, suggested={"G": 12.0})
+    assert (below.source, below.age, below.timetree, below.barcode) == ("rate", 5.0, 12.0, 5.0)
+    above = crown_age("G", 50, tree, {}, method="rate", rate=0.01, suggested={"G": 3.0})
+    assert (above.source, above.age, above.barcode) == ("rate_timetree_max", 3.0, 5.0)
+    # an inflated TimeTree age (a genus that is not a natural group) changes nothing, at any size
+    for inflated in (14.9, 15.1, 40.0, 400.0):
+        assert crown_age("G", 50, tree, {}, method="rate", rate=0.01, suggested={"G": inflated}).age == 5.0
+    ignored = crown_age("G", 50, tree, {}, method="rate", rate=0.01, suggested={"G": 3.0}, timetree_bound="none")
+    assert (ignored.source, ignored.age) == ("rate", 5.0)
+    fraction = crown_age("G", 30, tree, {}, method="fraction", fraction=0.5, suggested={"G": 10.0})
+    assert (fraction.source, fraction.age) == ("fraction_timetree_max", 10.0)
     user_wins = crown_age("G", 50, tree, {"G": 20.0}, method="rate", rate=0.01, suggested={"G": 12.0})
     assert user_wins.source == "table"
+    with pytest.raises(ValueError):
+        crown_age("G", 50, tree, {}, method="rate", rate=0.01, timetree_bound="min")
+
+
+def test_crown_age_has_no_threshold_jump():
+    """A small change in the barcode age moves the crown age by as little (the Idas case of #36)."""
+    ages = []
+    for length in (0.0900, 0.1029, 0.1031, 0.1200):
+        tree = dendropy.Tree.get(data=f"(A:{length},B:{length});", schema="newick", rooting="force-rooted")
+        ages.append(crown_age("Idas", 60, tree, {}, method="rate", rate=0.01, suggested={"Idas": 30.9}).age)
+    assert ages == pytest.approx([9.0, 10.29, 10.31, 12.0])
+
+
+def test_table_bounds_on_the_crown_age():
+    tree = dendropy.Tree.get(data="(A:0.05,B:0.05);", schema="newick", rooting="force-rooted")
+    kw = dict(method="rate", rate=0.01, suggested={"G": 3.0})  # barcode age 5 Ma
+    raised = crown_age("G", 50, tree, {"G": {"min": 8.0}}, **kw)
+    assert (raised.source, raised.age) == ("rate_table_min", 8.0)  # the table replaces TimeTree
+    lowered = crown_age("G", 50, tree, {"G": {"max": 4.0}}, **kw)
+    assert (lowered.source, lowered.age) == ("rate_table_max", 4.0)
+    inside = crown_age("G", 50, tree, {"G": {"min": 2.0, "max": 9.0}}, **kw)
+    assert (inside.source, inside.age) == ("rate", 5.0)
+    # the stem age wins over a minimum above it
+    stem_wins = crown_age("G", 6, tree, {"G": {"min": 8.0}}, **kw)
+    assert (stem_wins.source, stem_wins.age) == ("rate_capped", pytest.approx(5.4))
+    assert (stem_wins.lower, stem_wins.upper, stem_wins.upper_source) == (pytest.approx(5.4), pytest.approx(5.4), "stem")
+    point = crown_age("G", 50, tree, {"G": {"age": 7.0, "min": 8.0}}, **kw)
+    assert (point.source, point.age) == ("table", 7.0)
+    beyond = crown_age("G", 6, tree, {"G": 61.0}, **kw)
+    assert (beyond.source, beyond.age) == ("table_capped", pytest.approx(5.4))
+
+
+def test_crown_age_bounds_and_midpoint():
+    tree = dendropy.Tree.get(data="(A:0.05,B:0.05);", schema="newick", rooting="force-rooted")
+    kw = dict(method="rate", rate=0.01)  # barcode minimum 5 Ma
+    plain = crown_age("G", 50, tree, {}, **kw)
+    assert (plain.age, plain.lower, plain.upper, plain.upper_source) == (5.0, 5.0, 45.0, "stem")
+    mid = crown_age("G", 50, tree, {}, estimate="midpoint", **kw)
+    assert (mid.source, mid.age) == ("midpoint", pytest.approx(15.0))  # sqrt(5 * 45)
+    assert (mid.lower, mid.upper, mid.barcode) == (5.0, 45.0, 5.0)
+    timetree = crown_age("G", 50, tree, {}, estimate="midpoint", suggested={"G": 20.0}, **kw)
+    assert (timetree.age, timetree.upper, timetree.upper_source) == (pytest.approx(10.0), 20.0, "timetree")
+    # the minimum above the upper bound: both estimates are that bound
+    for estimate in ("minimum", "midpoint"):
+        tight = crown_age("G", 50, tree, {}, estimate=estimate, suggested={"G": 3.0}, **kw)
+        assert (tight.source, tight.age, tight.lower, tight.upper) == ("rate_timetree_max", 3.0, 3.0, 3.0)
+    # a table minimum raises the lower bound
+    table = crown_age("G", 50, tree, {"G": {"min": 20.0}}, estimate="midpoint", **kw)
+    assert (table.age, table.lower, table.upper) == (pytest.approx(30.0), 20.0, 45.0)
+    point = crown_age("G", 50, tree, {"G": 7.0}, estimate="midpoint", **kw)
+    assert (point.source, point.age, point.lower, point.upper, point.upper_source) == ("table", 7.0, 7.0, 7.0, "table")
+    # no rate, no lower bound, no midpoint
+    fraction = crown_age("G", 50, tree, {}, method="fraction", fraction=0.5)
+    assert (fraction.age, fraction.lower, fraction.upper) == (25.0, None, 45.0)
+    with pytest.raises(ValueError):
+        crown_age("G", 50, tree, {}, method="fraction", fraction=0.5, estimate="midpoint")
+    with pytest.raises(ValueError):
+        crown_age("G", 50, tree, {}, estimate="mean", **kw)
+    # continuous: the midpoint moves by the square root of a change in the minimum
+    ages = [crown_age("G", 50, dendropy.Tree.get(data=f"(A:{d},B:{d});", schema="newick", rooting="force-rooted"),
+                      {}, estimate="midpoint", **kw).age for d in (0.05, 0.0505)]
+    assert ages[1] / ages[0] == pytest.approx(1.01 ** 0.5)
+
+
+def test_rescale_crowns_keeps_the_tree_ultrametric():
+    from timegraft.graft import rescale_crowns
+
+    # genus G (crown at 4, stem node at 10), a placed unit P on its stem at 6, and genus H (crown at 2)
+    newick = "((((G1:1,G2:1):3,G3:4):2,P:6):4,((H1:2,H2:2):6,X:8):2);"
+    units = {"G": ["G1", "G2", "G3"], "H": ["H1", "H2"], "Absent": ["Z1", "Z2"], "Single": ["X"]}
+
+    def load():
+        return dendropy.Tree.get(data=newick, schema="newick", rooting="force-rooted")
+
+    def crown(tree, labels):
+        return tree.mrca(taxon_labels=labels)
+
+    tree = load()
+    moved = rescale_crowns(tree, units, {"G": 2.0, "H": 4.0, "Absent": 1.0, "Single": 1.0})
+    assert moved == {"G": 2.0, "H": 4.0}
+    assert is_ultrametric(tree) and root_age(tree) == pytest.approx(10.0)
+    tree.calc_node_ages(ultrametricity_precision=1e-6)
+    assert crown(tree, ["G1", "G3"]).age == pytest.approx(2.0)
+    assert crown(tree, ["G1", "G2"]).age == pytest.approx(0.5)  # nodes keep their fraction of the crown age
+    assert crown(tree, ["H1", "H2"]).age == pytest.approx(4.0)
+    assert crown(tree, ["G1", "P"]).age == pytest.approx(6.0)  # nothing above the crown moves
+    # an age above the node over the crown (here the placed unit) stops just below it
+    tree = load()
+    assert rescale_crowns(tree, units, {"G": 9.0})["G"] == pytest.approx(6.0)
+    assert is_ultrametric(tree)
+    # no lower bound: the genus collapses to its stem
+    tree = load()
+    rescale_crowns(tree, units, {"G": 0.0})
+    tree.calc_node_ages(ultrametricity_precision=1e-6)
+    assert crown(tree, ["G1", "G3"]).age == pytest.approx(0.0) and is_ultrametric(tree)
+

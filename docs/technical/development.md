@@ -30,7 +30,9 @@ Rule scripts import the package from `src/` through the `src` parameter that eve
 | `bionj` | BioNJ on a distance matrix |
 | `rooting` | rooting genus trees: tolerant (minimum violation) or strict outgroup rule, MAD and midpoint; other plausible roots ([#34](https://github.com/naturalis/timegraft/issues/34)) |
 | `rooting_diagnostics` | after a run: why outgroup rooting failed, midpoint and MAD against the outgroup root, outgroup and distance variants ([#19](https://github.com/naturalis/timegraft/issues/19)) |
-| `dating` | crown age choice, mean path length, LSD2 |
+| `dating` | crown age within bounds, mean path length, LSD2, chronos (optional) |
+| `rates` | substitution rate per genus from its taxonomy |
+| `calibrate` | rates per class from genera of known crown age (`python -m timegraft.calibrate`) |
 | `build` | one dated subtree per genus |
 | `backbone` | reading a dated backbone, stem ages, sister genera and outgroup units, sharding |
 | `otol_static` | OTT taxonomy and synthetic tree from release files; genus topology; species and lineages |
@@ -49,7 +51,7 @@ Marker-specific behaviour is selected by name from the marker block in the confi
 
 - **Filter**: `filters.CHECKS` maps a marker name to a check function returning `None` or a reason.
 - **Distance**: `distances.METHODS` maps a name to a pairwise function; `NEEDS_ALIGNMENT` says whether it needs aligned input; `distances.matrix` can take a vectorised fast path (as for `k2p`).
-- **Crown age**: `dating.crown_age` with `method` `rate` or `fraction`.
+- **Crown age**: `dating.crown_age` with `method` `rate` or `fraction`; bounds from the stem age, TimeTree and the crown age table.
 - **Dating**: `mpl` or `lsd2`, chosen in `build.build_genus`.
 - **Placement height**: `rate` or `terminal`, in `placement.place_all`.
 
