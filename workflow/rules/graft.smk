@@ -23,9 +23,9 @@ rule graft:
 rule place_units:
     input:
         tree=rules.graft.output.tree,
-        unassigned=rules.representatives.output.unassigned,
+        unassigned=rules.screen_units.output.unassigned,
         records=rules.filter_records.output.kept,
-        reps=rules.representatives.output.reps,
+        reps=rules.screen_units.output.reps,
     output:
         tree=f"{OUT}/timegraft.tre",
         placements=f"{OUT}/units_placed.tsv",

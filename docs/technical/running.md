@@ -56,6 +56,7 @@ flowchart TB
         bcdm_records["bcdm_records"]
         filter_records["filter_records"]
         representatives["representatives"]
+        screen_units["screen_units"]
     end
     subgraph backbone["Backbone"]
         build_backbone["build_backbone"]
@@ -79,7 +80,8 @@ flowchart TB
     filter_records --> representatives
     representatives --> build_backbone
     download_otol --> build_backbone
-    representatives --> shard_genera
+    representatives --> screen_units
+    screen_units --> shard_genera
     build_backbone --> shard_genera
     shard_genera --> build_shard
     build_backbone --> build_shard
@@ -88,7 +90,7 @@ flowchart TB
     shard_genera --> graft
     build_shard --> graft
     graft --> place_units
-    representatives --> place_units
+    screen_units --> place_units
     filter_records --> place_units
     place_units --> place_asvs
     filter_records --> place_asvs
@@ -122,9 +124,11 @@ All under `outdir`.
 | `backbone/crown_ages.tsv` | TimeTree crown age estimates, used as upper bounds on the genus crown ages |
 | `units/rejected.tsv` | Records rejected by the filter, with the reason |
 | `units/representatives.tsv`, `units/unassigned.tsv` | One representative per unit; units without a usable genus |
+| `units/screened.tsv` | Per unit: the screening decision (`keep`, `other_genus`, `isolated`, `kept_whole_genus`, or `not_screened` with screening off), its nearest unit of the same genus and of another genus, and their identities ([#38](https://github.com/naturalis/timegraft/issues/38)) |
+| `units/screened_representatives.tsv`, `units/screened_unassigned.tsv` | The representatives that build the genus subtrees, and the units to be placed: those without a usable genus plus those set aside by screening (reason `screen_other_genus` or `screen_isolated`) |
 | `genera/missing_from_backbone.tsv` | Genera with units that are not in the backbone |
 | `genera/taxonomy.tsv` | Family, order, class and phylum per genus (the most common value among its records), used to resolve rates per taxon |
-| `units_placed.tsv` | What happened to each unit without a genus |
+| `units_placed.tsv` | What happened to each unit without a genus or set aside by screening: `placed` next to its nearest unit, `genus_stem` (set aside, matching nothing: on the stem of its own genus), or `unplaced` |
 | `placement/placements.tsv` | Per ASV: matched, placed or unplaced, with unit, identity and attachment age |
 | `placement/timegraft_placed.tre` | The tree with placed ASVs added |
 | `diversity/alpha.tsv` | Per sample: richness, Faith's PD, MPD (presence and abundance-weighted), in Ma. `faith_pd_crown_min`, `faith_pd_crown_max`, `mpd_crown_min` and `mpd_crown_max` give PD and MPD with every genus crown at its lower and at its upper bound (`crown_lower`, `crown_upper` in `provenance.tsv`): the part of a value that rests on crown ages. A genus without a lower bound collapses to its stem |

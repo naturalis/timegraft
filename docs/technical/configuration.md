@@ -68,6 +68,10 @@ Everything that differs between markers sits in `markers.<name>`:
 | `filter.genetic_code_table` | | | Your own name-to-code mapping instead of the shipped one |
 | `align` | `none` | `none` | `none` (input already aligned) or `mafft` |
 | `distance.method` | `k2p` | `kmer` | `k2p` needs aligned sequences; `kmer` takes `k` |
+| `screening.enabled` | `true` | `false` | Set aside units that do not fit their genus before subtrees are built; see [screening units](#screening-units) |
+| `screening.margin` | 0.02 | | A unit at least this much more similar (identity) to another genus than to any congener is set aside |
+| `screening.min_identity` | 0.80 | | A unit with no congener at this identity is set aside, if the genus has units that do |
+| `screening.query_cov` | 0.7 | | Share of a representative that must align in the search |
 | `crown_age.method` | `rate` | `fraction` | How to set a genus crown age when no better source exists |
 | `crown_age.rate` | 0.0115 | | Default substitution rate, per site per Myr, per lineage; sets the lower bound of the crown age, see [crown ages and rates](#crown-ages-and-rates) |
 | `crown_age.rates` | `{}` | | Rate per taxon, `rank: {name: rate}` |
@@ -83,6 +87,18 @@ Everything that differs between markers sits in `markers.<name>`:
 | `placement.place_identity` | 0.80 | 0.80 | At or above: attached near its nearest unit; below: unplaced |
 | `placement.query_cov` | 0.9 | 0.8 | Share of the query that must align |
 | `placement.height` | `rate` | `terminal` | How to set the attachment age |
+| `placement.stem_fraction` | 0.5 | | Units set aside by screening that match nothing: joined to the stem of their own genus, this fraction of the way from crown to stem node |
+
+### Screening units
+
+Within-genus barcode distances set the lower bound of a genus's crown age, so a unit that does not belong in its genus (a misidentification, a contaminant, or a genus that is not a natural group) can make the genus look much older. Before genus subtrees are built, `screen_units` searches all representatives against each other with VSEARCH and sets a unit aside when:
+
+- **`other_genus`**: it is at least `margin` more similar to a unit of another genus than to any unit of its own genus; or
+- **`isolated`**: no unit of its own genus reaches `min_identity`, while other units of the genus do.
+
+Genera with one unit are not screened, and a genus never loses all its units: if every unit would be set aside, all are kept (`kept_whole_genus`). Set-aside units are not discarded. They are placed like units without a usable genus: next to their nearest unit, at the age implied by their distance to it, or, if nothing reaches `placement.place_identity`, on the stem of their own genus (`stem_fraction` of the way from its crown to its stem node). They stay in the tree and in diversity, but do not shape the genus subtree or its crown age. `units/screened.tsv` gives every decision with its evidence.
+
+The thresholds are judgements. On the Iberian data the search takes two minutes for 25,000 units, and these settings set aside about 5% of units ([results](../science/results/2026-11-screening.md)). Screening is off for ITS until the thresholds are tested on fungal data: identities across fungal genera are lower and less comparable.
 
 ### Crown ages and rates
 
