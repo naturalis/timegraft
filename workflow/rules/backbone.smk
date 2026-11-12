@@ -5,6 +5,9 @@ STATIC = BB.get("source", "static") == "static"
 OTOL_DIR = BB.get("otol_dir", "resources/otol")
 SYNTH = f"{OTOL_DIR}/{BB.get('synthesis', 'opentree16.1')}/labelled_supertree.tre"
 TAXONOMY = f"{OTOL_DIR}/{BB.get('taxonomy', 'ott3.7.3')}/taxonomy.tsv"
+# support of each synthesis node by source trees, recorded in node_ages.tsv (#47)
+SUPPORT = STATIC and BB.get("synthesis_support", True)
+ANNOTATIONS = f"{OTOL_DIR}/{BB.get('synthesis', 'opentree16.1')}/annotations.json"
 
 
 rule download_otol:
@@ -30,16 +33,37 @@ rule download_otol:
         """
 
 
+rule download_otol_annotations:
+    output:
+        ANNOTATIONS,
+    params:
+        synthesis=BB.get("synthesis", "opentree16.1"),
+    log:
+        f"{OUT}/logs/download_otol_annotations.log",
+    conda:
+        "../envs/download.yaml"
+    shell:
+        """
+        curl -sSfL -o {output} \
+          https://files.opentreeoflife.org/synthesis/{params.synthesis}/{params.synthesis}_tree/annotations.json \
+          > {log} 2>&1
+        """
+
+
 rule build_backbone:
     input:
         reps=rules.representatives.output.reps,
+        records=rules.filter_records.output.kept,
         synth=SYNTH if STATIC else [],
         taxonomy=TAXONOMY if STATIC else [],
+        annotations=ANNOTATIONS if SUPPORT else [],
     output:
         tree=f"{OUT}/backbone/backbone.tre",
         genera=f"{OUT}/backbone/genera.tsv",
         nodes=f"{OUT}/backbone/node_ages.tsv",
         crowns=f"{OUT}/backbone/crown_ages.tsv",
+        metadata=f"{OUT}/backbone/metadata.json",
+        col_species=f"{OUT}/backbone/col_species.tsv",
     params:
         src=SRC,
         settings=BB,

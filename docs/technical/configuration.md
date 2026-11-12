@@ -34,6 +34,13 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.crown_ages_from_timetree` | `true` | Estimate genus crown ages from TimeTree species |
 | `backbone_build.root_age` | | Root age in Ma, only needed if TimeTree cannot date the root |
 | `backbone_build.interpolation` | `pure_birth` | Ages for nodes TimeTree does not date: `pure_birth`, by the number of genera in the full clade in the synthetic tree (static source only; otherwise `even`), or `even`, spaced evenly as in BLADJ ([results](../science/results/2026-11-interpolation.md)) |
+| `backbone_build.synthesis_support` | `true` | Static source only: record per backbone node how many source trees of the synthesis support or conflict with it; downloads the synthesis `annotations.json` ([provenance](provenance.md)) |
+| `backbone_build.upgrade_cache` | `true` | Ask TimeTree again for the evidence behind answers cached by versions before #47, keeping the cached ages ([provenance](provenance.md)) |
+| `backbone_build.col.enabled` | `true` | Resolve genera in the Catalogue of Life and derive NCBI and OTT ids from it ([provenance](provenance.md#catalogue-of-life-as-identifier-hub), #48) |
+| `backbone_build.col.release` | `316691` | ChecklistBank dataset key of the COL release (COL26.10 XR); an alias such as `3LXR` follows the latest release |
+| `backbone_build.col.join` | `col` | `col`: send a genus to TimeTree with COL's NCBI id where it is one of the ids OTT holds for it, or OTT has none; `ott`: always OTT's |
+| `backbone_build.col.species` | `false` | Also resolve every species name of the records (`backbone/col_species.tsv`) |
+| `backbone_build.col.workers` | 4 | Concurrent requests to ChecklistBank |
 | `backbone_build.cache` | `resources/api_cache.json` | Cache of TimeTree answers; keep it between runs |
 
 ## General settings
