@@ -1,0 +1,26 @@
+{
+ "context": "Metazoa",
+ "output_format": {
+  "crown_ages.tsv": 2,
+  "genera.tsv": 2,
+  "node_ages.tsv": 2,
+  "timetree_cache": 2
+ },
+ "source": "static",
+ "synthesis": "opentree16.1",
+ "synthesis_support": true,
+ "taxonomy": "ott3.7.3",
+ "timegraft_version": "0.1.0",
+ "timetree": {
+  "api_versions": {
+   "20260820": 759
+  },
+  "cache_entries": 2507,
+  "cache_entries_fresh_age_differs": 0,
+  "cache_entries_legacy": 0,
+  "cache_entries_upgraded": 2507,
+  "queries_by_evidence": {
+   "full": 759
+  }
+ }
+}
