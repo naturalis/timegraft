@@ -381,10 +381,11 @@ GENERA_COLUMNS = (
     # reference family part, and the merged NCBI ids part; share of barcode neighbours in the phyla of the
     # backbone sisters; flag, review, empty or not_evaluable
     "lineage_distance", "merged_id_distance", "neighbour_concordance", "concordance_flag",
-    # filled by a later issue of #46: re-anchoring (#50)
-    "placement_action",
+    # re-anchoring of flagged genera (#50): what was done, from where to where, why, on whose authority
+    "placement_action", "original_status", "original_anchor", "reanchor_target", "reanchor_how",
+    "reanchor_trigger", "reanchor_source", "reanchor_note",
 )
-GENERA_RESERVED = ("placement_action",)
+GENERA_RESERVED = ()
 LINEAGE_RANKS = ("family", "order", "class", "phylum")
 
 

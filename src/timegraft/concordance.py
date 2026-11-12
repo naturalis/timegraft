@@ -48,6 +48,8 @@ COLUMNS = (
     "neighbour_hits", "neighbour_phyla", "sister_phyla", "neighbour_concordance", "neighbour_flag",
     # aggregate
     "n_evaluable", "n_flags", "severity", "concordance_flag",
+    # what was done about it (#50), and the barcode-neighbour check again on the corrected topology
+    "placement_action", "neighbour_concordance_after",
 )
 
 
@@ -207,3 +209,31 @@ def rank_rows(rows: list[dict]) -> list[dict]:
     for i, row in enumerate(rows, 1):
         row["rank"] = str(i)
     return rows
+
+
+def assess(taxonomy, names, genera, matches, reference, merged, classifications, hits, sisters, phylum,
+           lineage_names, flag_level: int, max_share: float, min_hits: int, min_flags: int) -> list[dict]:
+    """All three checks and the aggregate for every genus, ranked for review (rows of concordance.tsv).
+
+    ``reference`` maps a genus to (source, {rank: name}); ``merged`` to the
+    NCBI ids OTT merged into it; ``hits`` to the genera of its units' nearest
+    units outside the genus; ``sisters`` to its backbone sisters; ``phylum``
+    any genus to its reference phylum; ``lineage_names`` gives the OTT
+    lineage columns of a genus.
+    """
+    rows = []
+    for g in genera:
+        match = matches[g]
+        row = {c: "" for c in COLUMNS}
+        row.update({"genus": g, "status": match["status"], "ott_id": match.get("ott_id") or "",
+                    **{k: v for k, v in lineage_names(taxonomy, g).items() if k in COLUMNS}})
+        source, ref = reference.get(g, ("", {}))
+        row["reference_source"] = source
+        if match.get("ott_id"):
+            row.update(lineage_distance(taxonomy, names, match["ott_id"], ref))
+            row["merged_ncbi_ids"] = ";".join(merged.get(g, [])) if len(merged.get(g, [])) > 1 else ""
+            row.update(merged_id_distance(classifications, merged.get(g, [])))
+        if g in sisters:
+            row.update(neighbour_concordance(g, hits.get(g, []), sisters[g], phylum, min_hits=min_hits))
+        rows.append(aggregate(row, flag_level, max_share, min_flags))
+    return rank_rows(rows)

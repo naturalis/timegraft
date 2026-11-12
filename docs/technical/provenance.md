@@ -116,7 +116,7 @@ With `backbone_build.col.species: true`, every species name of the records is re
 
 ## Placement concordance
 
-Is each genus where OToL puts it? Three checks, each independent of OToL's placement and of the others, test that before any age is derived from the placement ([#49](https://github.com/naturalis/timegraft/issues/49)). They only report; nothing in the backbone changes. Correcting flagged genera is [#50](https://github.com/naturalis/timegraft/issues/50).
+Is each genus where OToL puts it? Three checks, each independent of OToL's placement and of the others, test that before any age is derived from the placement ([#49](https://github.com/naturalis/timegraft/issues/49)). The checks themselves change nothing; what is done with a flagged genus is described [below](#re-anchoring-flagged-genera) ([#50](https://github.com/naturalis/timegraft/issues/50)).
 
 | Check | Question | Distance |
 | --- | --- | --- |
@@ -143,9 +143,32 @@ A lineage or merged-id check fails when the level is at least `concordance.flag_
 
 The four columns in `genera.tsv` are `lineage_distance`, `merged_id_distance`, `neighbour_concordance` and `concordance_flag`. How these settings behave on the Iberian run, with every genus each check fails on, is in `data/iberia/consistency/README.md`.
 
+## Re-anchoring flagged genera
+
+A genus that placement concordance flags sits in the wrong clade of the synthetic tree, and its stem age, the ages above it, its own outgroup and those of its neighbours all follow from that placement. It is therefore moved before any of these are derived ([#50](https://github.com/naturalis/timegraft/issues/50)); the TimeTree queries, the interpolation and the outgroups are then built from the corrected backbone as for any other genus, and the enclosing taxa used for TimeTree queries become those of the new place.
+
+**When.** With `reanchor.mode: apply` (the default), a genus is moved when its `concordance_flag` is `flag` and its `severity` is at least `reanchor.min_severity` (default `class`). `mode: report` makes the same decisions and records them (`would_reanchor`) without changing anything; `mode: off` skips them. Re-anchoring needs `concordance.enabled`.
+
+**Where to.** To the most specific taxon of the genus's reference lineage that OTT holds (the reference family, else order, else class), taking only an OTT taxon of that name whose own lineage contains another name of the reference lineage, so that a homonym elsewhere is not chosen. The genus is attached in the synthetic tree at that taxon's node; where the taxon is not a node of the synthesis, at the MRCA of its members there; failing that, at its nearest ancestor that is. The genus's own synthesis node and species are left out of that search, since they are what is misplaced.
+
+**Curated table.** `reanchor.overrides` names a TSV with columns `genus`, `action`, `target`, `source` and `note`. `action` is `keep` (never move this genus, whatever the checks say) or `reanchor` (move it to `target`, given as `rank:name` such as `family:Onchidiidae` or as `ott:<id>`, flagged or not). `source` and `note` record who decided and why. `config/placement_overrides.tsv` is an empty table to start from.
+
+Columns in `genera.tsv`:
+
+| Column | Meaning |
+| --- | --- |
+| `placement_action` | `reanchored`; `would_reanchor` (mode `report`); `kept_override` (flagged, but `keep` in the table); `flagged_no_target` (flagged, but no taxon of the reference lineage could be found or placed); empty for every other genus |
+| `original_status`, `original_anchor` | The `status` and synthesis node of the genus before the move. After a move, `status` is `reanchored:<node>` and `anchor_node` is the new node |
+| `reanchor_target` | The taxon moved to, as `rank:name (ott<id>)` |
+| `reanchor_how` | How it was chosen (`reference_lineage`, `reference_name` or `override`) and how it was placed (`taxon_in_synthesis`, `mrca_of_members`, `ancestor_in_synthesis`), separated by `;` |
+| `reanchor_trigger` | The concordance result that triggered it: checks failed and made, severity and the three metrics |
+| `reanchor_source`, `reanchor_note` | `auto`, or `override:<source>` with the note from the table |
+
+`ott_family` to `ott_phylum` keep OTT's own lineage, which is what was wrong. In `concordance.tsv`, `placement_action` repeats the action, and `neighbour_concordance_after` gives the barcode-neighbour check again on the corrected topology, for every genus, so that a correction can be seen to make the neighbours agree (for the genus and for its former sisters).
+
 ## `backbone/metadata.json`
 
-New. What the backbone was built from: the format version of each output and of the cache, the timegraft version, the source, OTT and synthesis releases, the matching context, whether synthesis support was read, the concordance settings with the number of genera per `concordance_flag`, the COL release (key, alias, version) with counts of genera by confidence and crosswalk path and of genera joined with COL's NCBI id, and a summary of the TimeTree evidence (queries per evidence level, TimeTree database versions, and how many cache entries are at version 1, were upgraded, or now get a different answer from TimeTree).
+New. What the backbone was built from: the format version of each output and of the cache, the timegraft version, the source, OTT and synthesis releases, the matching context, whether synthesis support was read, the concordance and re-anchoring settings with the number of genera per `concordance_flag` and per `placement_action`, the COL release (key, alias, version) with counts of genera by confidence and crosswalk path and of genera joined with COL's NCBI id, and a summary of the TimeTree evidence (queries per evidence level, TimeTree database versions, and how many cache entries are at version 1, were upgraded, or now get a different answer from TimeTree).
 
 ## Migration note for downstream consumers
 
@@ -156,4 +179,5 @@ New. What the backbone was built from: the format version of each output and of 
 - **COL needs ChecklistBank** on the first run with a release (for 1,200 genera, about six requests each), and changes which NCBI id some genera are sent to TimeTree with, so some backbone ages change ([#48](https://github.com/naturalis/timegraft/issues/48)). `col.join: ott` keeps the identifiers as before while still recording COL's; `col.enabled: false` skips COL altogether.
 - **`genera.tsv` format 3** (#48) replaces the three reserved `col_*` columns of format 2 with the filled ones above, adds `ott_resolution` and the `join_*` columns, and keeps the earlier columns and their order.
 - **`genera.tsv` format 4** (#49) fills `lineage_distance`, `merged_id_distance`, `neighbour_concordance` and `concordance_flag`; `backbone/concordance.tsv` is new. The build now also reads `units/screened.tsv`, so it runs after screening.
+- **`genera.tsv` format 5 and `concordance.tsv` format 2** (#50) add the re-anchoring columns above. With the default `reanchor.mode: apply` the backbone changes wherever a genus is flagged: the genus has a new place and `status` (`reanchored:<node>`), and the ages around its old and new place change. `mode: report` keeps the earlier backbone.
 - **The build reads the filtered records** (`units/filtered.tsv`) for the reference lineage, besides the representatives, so it runs again when the records change.

@@ -1,0 +1,65 @@
+{
+ "col": {
+  "alias": "COL26.10 XR",
+  "genera_by_confidence": {
+   "high": 1123,
+   "low": 8,
+   "medium": 87
+  },
+  "genera_by_ncbi_path": {
+   "names_index": 1169,
+   "names_index+classification": 33,
+   "none": 16
+  },
+  "genera_joined_with_col_ncbi": 48,
+  "issued": "2026-10-16",
+  "join": "col",
+  "key": 316691,
+  "origin": "xrelease",
+  "species": 0,
+  "title": "Catalogue of Life",
+  "version": "2026-10-16 XR"
+ },
+ "concordance": {
+  "genera_by_flag": {
+   "concordant": 1181,
+   "flag": 1,
+   "not_evaluable": 34,
+   "review": 2
+  },
+  "settings": {}
+ },
+ "context": "Metazoa",
+ "output_format": {
+  "concordance.tsv": 2,
+  "crown_ages.tsv": 2,
+  "genera.tsv": 5,
+  "node_ages.tsv": 2,
+  "timetree_cache": 2
+ },
+ "reanchor": {
+  "genera_by_action": {
+   "reanchored": 1
+  },
+  "settings": {
+   "mode": "apply"
+  }
+ },
+ "source": "static",
+ "synthesis": "opentree16.1",
+ "synthesis_support": true,
+ "taxonomy": "ott3.7.3",
+ "timegraft_version": "0.1.0",
+ "timetree": {
+  "api_versions": {
+   "20260820": 765
+  },
+  "cache_entries": 2734,
+  "cache_entries_fresh_age_differs": 0,
+  "cache_entries_legacy": 0,
+  "cache_entries_upgraded": 2507,
+  "queries_by_evidence": {
+   "full": 765
+  }
+ }
+}

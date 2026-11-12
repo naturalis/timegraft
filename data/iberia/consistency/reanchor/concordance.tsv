@@ -1,0 +1,1219 @@
+rank	genus	status	ott_id	ott_family	ott_class	ott_phylum	reference_source	reference_taxon	lineage_mrca	lineage_split	lineage_distance	lineage_flag	merged_ncbi_ids	merged_mrca	merged_split	merged_id_distance	merged_flag	neighbour_hits	neighbour_phyla	sister_phyla	neighbour_concordance	neighbour_flag	n_evaluable	n_flags	severity	concordance_flag	placement_action	neighbour_concordance_after
+1	Onchidella	in_synthesis	162893	Laganidae	Echinoidea		col	family:Onchidiidae	Bilateria	phylum	5	yes	262330;36932	Metazoa	phylum	5	yes	16	Mollusca:16	Echinodermata	0.000	yes	3	3	5	flag	reanchored	1.000
+2	Arbacia	in_synthesis	146854	Arbaciidae	Echinoidea		col	family:Arbaciidae	Arbaciidae		0							6	Echinodermata:6	Mollusca	0.000	yes	2	1	0	review		1.000
+3	Magelona	in_synthesis	1067343	Magelonidae	Polychaeta	Annelida	col	family:Magelonidae	Magelonidae		0							11	Mollusca:11	Annelida	0.000	yes	2	1	0	review		0.000
+4	Achaeta	in_synthesis	276969	Megascolecidae	Clitellata	Annelida	col	family:Enchytraeidae	Oligochaeta	order	3							48	Annelida:48	Annelida	1.000		2	0	3			1.000
+5	Antigonia	in_synthesis	917943	Caproidae	Actinopteri	Chordata	col	order:Acanthuriformes	Eupercaria	order	3							11	Chordata:11	Chordata	1.000		2	0	3			1.000
+6	Gobio	attached_at_mrca	230483	Cyprinidae	Actinopteri	Chordata	col	family:Gobionidae	Cypriniformes	order	3							22	Chordata:22	Chordata	1.000		2	0	3			1.000
+7	Phakellia	attached_at_mrca	779640	Axinellidae	Demospongiae	Porifera	col	family:Bubaridae	Heteroscleromorpha	order	3							5	Porifera:5	Porifera	1.000		2	0	3			1.000
+8	Myosotella	attached_at_taxon:ott409995	205113	Ellobiidae	Gastropoda	Mollusca	col	family:Ellobiidae	Ellobiidae		0		252579;268183	Eupulmonata	order	3		0		Mollusca			2	0	3			
+9	Paratimea	attached_at_mrca	253712	Hemiasterellidae	Demospongiae	Porifera	col	family:Stelligeridae	Heteroscleromorpha	order	3							3	Porifera:3	Porifera			1	0	3			
+10	Telmatactis	in_synthesis	519651	Isophelliidae	Anthozoa	Cnidaria	col	family:Andvakiidae	Actiniaria	order	3							1	Cnidaria:1	Cnidaria			1	0	3			
+11	Tinca	in_synthesis	753549	Cyprinidae	Actinopteri	Chordata	col	family:Tincidae	Cypriniformes	order	3							1	Chordata:1	Chordata			1	0	3			
+12	Celleporaria	in_synthesis	882021	Lepraliellidae	Gymnolaemata	Bryozoa	col	family:Celleporidae	Flustrina	superfamily	2							21	Bryozoa:21	Bryozoa	1.000		2	0	2			1.000
+13	Euconulus	in_synthesis	432971	Helicarionidae	Gastropoda	Mollusca	col	family:Euconulidae	Sigmurethra	superfamily	2							11	Mollusca:11	Mollusca	1.000		2	0	2			1.000
+14	Patella	in_synthesis	717802	Patellidae	Gastropoda	Mollusca	col	family:Patellidae	Patellidae		0		146278;6463	Patellogastropoda	superfamily	2		0		Mollusca			2	0	2			
+15	Lepidochitona	in_synthesis	947428	Lepidochitonidae	Polyplacophora	Mollusca	col	family:Tonicellidae	Mopalioidea	family	1							13	Mollusca:12;Arthropoda:1	Mollusca	0.923		2	0	1			0.923
+16	Bulinus	in_synthesis	182017	Planorbidae	Gastropoda	Mollusca	col	family:Bulinidae	Planorbidae	family	1							27	Mollusca:26;Annelida:1	Mollusca	0.963		2	0	1			0.963
+17	Nassarius	attached_at_mrca	54415	Nassariidae	Gastropoda	Mollusca	col	family:Nassariidae	Nassariidae		0		462232;6484	Nassariidae	family	1		133	Mollusca:131;Annelida:2	Mollusca	0.985		3	0	1			0.985
+18	Actinella	in_synthesis	4155414		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							6	Mollusca:6	Mollusca	1.000		2	0	1			1.000
+19	Aegopinella	in_synthesis	2882354	Oxychilidae	Gastropoda	Mollusca	col	family:Gastrodontidae	Gastrodontoidea	family	1							9	Mollusca:9	Mollusca	1.000		2	0	1			1.000
+20	Alona	in_synthesis	1075386	Chydoridae	Branchiopoda	Arthropoda	col	family:Eurycercidae	Anomopoda	family	1							37	Arthropoda:37	Arthropoda	1.000		2	0	1			1.000
+21	Aphanius	in_synthesis	763268	Aphaniidae	Actinopteri	Chordata	col	family:Cyprinodontidae	Cyprinodontoidei	family	1							15	Chordata:15	Chordata	1.000		2	0	1			1.000
+22	Apristurus	in_synthesis	415518	Scyliorhinidae	Chondrichthyes	Chordata	col	family:Pentanchidae	Scyliorhinidae	family	1							12	Chordata:12	Chordata	1.000		2	0	1			1.000
+23	Backeljaia	attached_at_taxon:ott324670	7500668	Hygromiidae	Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							17	Mollusca:17	Mollusca	1.000		2	0	1			1.000
+24	Calocalanus	in_synthesis	102940	Calocalanidae	Hexanauplia	Arthropoda	col	family:Paracalanidae	Calanoida	family	1							12	Arthropoda:12	Arthropoda	1.000		2	0	1			1.000
+25	Candidula	in_synthesis	324670	Hygromiidae	Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							19	Mollusca:19	Mollusca	1.000		2	0	1			1.000
+26	Cernuella	in_synthesis	418227	Hygromiidae	Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							21	Mollusca:21	Mollusca	1.000		2	0	1			1.000
+27	Chydorus	in_synthesis	1022213	Chydoridae	Branchiopoda	Arthropoda	col	family:Eurycercidae	Anomopoda	family	1							29	Arthropoda:29	Arthropoda	1.000		2	0	1			1.000
+28	Cochlicella	in_synthesis	1045324	Cochlicellidae	Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							10	Mollusca:10	Mollusca	1.000		2	0	1			1.000
+29	Conopea	attached_at_mrca	1024428	Archaeobalanidae	Hexanauplia	Arthropoda	col	family:Balanidae	Sessilia	family	1							15	Arthropoda:15	Arthropoda	1.000		2	0	1			1.000
+30	Cuthona	in_synthesis	951821	Fionidae	Gastropoda	Mollusca	col	order:Nudibranchia	Nudibranchia		0		154643;2066955	Fionoidea	family	1		14	Mollusca:14	Mollusca	1.000		3	0	1			1.000
+31	Deroceras	in_synthesis	518943	Limacidae	Gastropoda	Mollusca	col	family:Agriolimacidae	Limacoidea	family	1							67	Mollusca:67	Mollusca	1.000		2	0	1			1.000
+32	Discula	in_synthesis	4957331	Helicidae	Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							11	Mollusca:11	Mollusca	1.000		2	0	1			1.000
+33	Escharoides	attached_at_mrca	236790	Romancheinidae	Gymnolaemata	Bryozoa	col	family:Exochellidae	Lepralielloidea	family	1							7	Bryozoa:7	Bryozoa	1.000		2	0	1			1.000
+34	Flabellina	in_synthesis	896650	Flabellinidae	Gastropoda	Mollusca	col	family:Flabellinidae	Flabellinidae		0		2059234;2078608;2078618;2068012;71484	Flabellinoidea	family	1		14	Mollusca:14	Mollusca	1.000		3	0	1			1.000
+35	Galeus	attached_at_mrca	327707	Scyliorhinidae	Chondrichthyes	Chordata	col	family:Pentanchidae	Scyliorhinidae	family	1							8	Chordata:8	Chordata	1.000		2	0	1			1.000
+36	Helicella	in_synthesis	211714		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							19	Mollusca:19	Mollusca	1.000		2	0	1			1.000
+37	Hystricella	in_synthesis	4155402		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							5	Mollusca:5	Mollusca	1.000		2	0	1			1.000
+38	Ilyocryptus	in_synthesis	782549	Macrotrichidae	Branchiopoda	Arthropoda	col	family:Ilyocryptidae	Macrotrichidae	family	1							16	Arthropoda:16	Arthropoda	1.000		2	0	1			1.000
+39	Lacydonia	in_synthesis	1049551	Phyllodocidae	Polychaeta	Annelida	col	family:Lacydoniidae	Phyllodocidae	family	1							17	Annelida:17	Annelida	1.000		2	0	1			1.000
+40	Microscolex	in_synthesis	657265	Megascolecidae	Clitellata	Annelida	col	family:Acanthodrilidae	Lumbricina	family	1							16	Annelida:16	Annelida	1.000		2	0	1			1.000
+41	Pisione	in_synthesis	928613	Pisionidae	Polychaeta	Annelida	col	family:Sigalionidae	Phyllodocida	family	1							15	Annelida:15	Annelida	1.000		2	0	1			1.000
+42	Pleuroxus	in_synthesis	1075390	Chydoridae	Branchiopoda	Arthropoda	col	family:Eurycercidae	Anomopoda	family	1							19	Arthropoda:19	Arthropoda	1.000		2	0	1			1.000
+43	Ponentina	in_synthesis	2882412		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							9	Mollusca:9	Mollusca	1.000		2	0	1			1.000
+44	Pontoscolex	in_synthesis	640497	Glossoscolecidae	Clitellata	Annelida	col	family:Rhinodrilidae	Glossoscolecidae	family	1							35	Annelida:35	Annelida	1.000		2	0	1			1.000
+45	Rhinoptera	in_synthesis	151428	Myliobatidae	Chondrichthyes	Chordata	col	family:Rhinopteridae	Myliobatiformes	family	1							6	Chordata:6	Chordata	1.000		2	0	1			1.000
+46	Rumina	in_synthesis	139555	Subulinidae	Gastropoda	Mollusca	col	family:Achatinidae	Achatinoidea	family	1							6	Mollusca:6	Mollusca	1.000		2	0	1			1.000
+47	Spicara	attached_at_mrca	528671	Centracanthidae	Actinopteri	Chordata	col	family:Sparidae	Spariformes	family	1							7	Chordata:7	Chordata	1.000		2	0	1			1.000
+48	Trochoidea	in_synthesis	845180	Hygromiidae	Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							9	Mollusca:9	Mollusca	1.000		2	0	1			1.000
+49	Xerocrassa	in_synthesis	256937		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							62	Mollusca:62	Mollusca	1.000		2	0	1			1.000
+50	Xerogyra	in_synthesis	7501058		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							7	Mollusca:7	Mollusca	1.000		2	0	1			1.000
+51	Xeroplexa	attached_at_taxon:ott324670	7500790	Hygromiidae	Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							10	Mollusca:10	Mollusca	1.000		2	0	1			1.000
+52	Xerosecta	in_synthesis	86406		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							8	Mollusca:8	Mollusca	1.000		2	0	1			1.000
+53	Xerotricha	attached_at_taxon:ott95157	607767	Hygromiidae	Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							6	Mollusca:6	Mollusca	1.000		2	0	1			1.000
+54	Bosellia	in_synthesis	462111	Boselliidae	Gastropoda	Mollusca	col	family:Plakobranchidae	Plakobranchoidea	family	1							4	Mollusca:4	Mollusca			1	0	1			
+55	Callina	in_synthesis	5327243		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							1	Mollusca:1	Mollusca			1	0	1			
+56	Canariella	in_synthesis	4957320	Hygromiidae	Gastropoda	Mollusca	col	family:Canariellidae	Hygromiidae	family	1							2	Mollusca:2	Mollusca			1	0	1			
+57	Caracollina	in_synthesis	238303	Helicodontidae	Gastropoda	Mollusca	col	family:Trissexodontidae	Helicoidea	family	1							1	Mollusca:1	Mollusca			1	0	1			
+58	Caseolus	attached_at_taxon:ott95157	4155424	Hygromiidae	Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							2	Mollusca:2	Mollusca			1	0	1			
+59	Centracanthus	in_synthesis	965165	Centracanthidae	Actinopteri	Chordata	col	family:Sparidae	Spariformes	family	1							2	Chordata:2	Chordata			1	0	1			
+60	Ctenocalanus	in_synthesis	619907	Calanidae	Hexanauplia	Arthropoda	col	family:Clausocalanidae	Calanoida	family	1							2	Arthropoda:2	Arthropoda			1	0	1			
+61	Euterpina	in_synthesis	926398	Euterpinidae	Hexanauplia	Arthropoda	col	family:Tachidiidae	Harpacticoida	family	1							0		Arthropoda			1	0	1			
+62	Gittenbergeria	in_synthesis	254484	Gittenbergeriidae	Gastropoda	Mollusca	col	family:Trissexodontidae	Helicoidea	family	1							2	Mollusca:2	Mollusca			1	0	1			
+63	Isurus	in_synthesis	500595	Alopiidae	Chondrichthyes	Chordata	col	family:Lamnidae	Lamninae	family	1							2	Chordata:2	Chordata			1	0	1			
+64	Monilearia	in_synthesis	4155326		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							1	Mollusca:1	Mollusca			1	0	1			
+65	Montserratina	in_synthesis	4155420	Hygromiidae	Gastropoda	Mollusca	col	family:Canariellidae	Hygromiidae	family	1							1	Mollusca:1	Mollusca			1	0	1			
+66	Ophlitaspongia	in_synthesis	703765	Clathriidae	Demospongiae	Porifera	col	family:Microcionidae	Poecilosclerida	family	1							1	Porifera:1	Porifera			1	0	1			
+67	Orexana	in_synthesis	7501018		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							1	Mollusca:1	Mollusca			1	0	1			
+68	Paracentrotus	in_synthesis	95160	Echinidae	Echinoidea		col	family:Parechinidae	Echinidae	family	1							1	Echinodermata:1	Echinodermata			1	0	1			
+69	Paraflabellina	in_synthesis	7497962	Flabellinopsidae	Gastropoda	Mollusca	col	family:Flabellinidae	Flabellinoidea	family	1							2	Mollusca:2	Mollusca			1	0	1			
+70	Phacellophora	in_synthesis	263065	Ulmaridae	Scyphozoa	Cnidaria	col	family:Phacellophoridae	Ulmaridae	family	1							4	Cnidaria:4	Cnidaria			1	0	1			
+71	Plentuisa	in_synthesis	4155408		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							1	Mollusca:1	Mollusca			1	0	1			
+72	Psammechinus	in_synthesis	43153	Echinidae	Echinoidea		col	family:Parechinidae	Echinidae	family	1							1	Echinodermata:1	Echinodermata			1	0	1			
+73	Serratorotula	in_synthesis	4155448		Gastropoda	Mollusca	col	family:Geomitridae	Helicoidea	family	1							2	Mollusca:2	Mollusca			1	0	1			
+74	Sphincterochila	attached_at_taxon:ott95157	600166	Hygromiidae	Gastropoda	Mollusca	col	family:Sphincterochilidae	Helicoidea	family	1							2	Mollusca:2	Mollusca			1	0	1			
+75	Truncatellina	in_synthesis	551075	Vertiginidae	Gastropoda	Mollusca	col	family:Truncatellinidae	Vertigininae	family	1							1	Mollusca:1	Mollusca			1	0	1			
+76	Vayssierea	in_synthesis	2876525	Okadaiidae	Gastropoda	Mollusca	col	family:Polyceridae	Polyceroidea	family	1							4	Mollusca:4	Mollusca			1	0	1			
+77	Plumularia	attached_at_mrca	566403	Plumulariidae	Hydrozoa	Cnidaria	col	family:Plumulariidae	Plumulariidae		0							32	Echinodermata:24;Cnidaria:8	Cnidaria	0.250		2	0	0			0.250
+78	Dero	in_synthesis	870819	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							12	Annelida:6;Mollusca:6	Annelida	0.500		2	0	0			0.500
+79	Aegaeon	in_synthesis	923653	Crangonidae	Malacostraca	Arthropoda	col	family:Crangonidae	Crangonidae		0							5	Arthropoda:3;Mollusca:2	Arthropoda	0.600		2	0	0			0.600
+80	Zanclea	in_synthesis	707207	Zancleidae	Hydrozoa	Cnidaria	col	family:Zancleidae	Zancleidae		0							29	Cnidaria:21;Arthropoda:5;Mollusca:3	Cnidaria	0.724		2	0	0			0.724
+81	Spiophanes	in_synthesis	752055	Spionidae	Polychaeta	Annelida	col	family:Spionidae	Spionidae		0							13	Annelida:11;Mollusca:2	Annelida	0.846		2	0	0			0.846
+82	Haliclona	attached_at_mrca	588763	Chalinidae	Demospongiae	Porifera	col	family:Chalinidae	Chalinidae		0							41	Porifera:35;Annelida:4;Cnidaria:2	Porifera	0.854		2	0	0			0.854
+83	Columbella	in_synthesis	2899721	Columbellidae	Gastropoda	Mollusca	col	family:Columbellidae	Columbellidae		0							7	Mollusca:6;Arthropoda:1	Mollusca	0.857		2	0	0			0.857
+84	Anthopleura	attached_at_mrca	1084470	Actiniidae	Anthozoa	Cnidaria	col	family:Actiniidae	Actiniidae		0							8	Cnidaria:7;Arthropoda:1	Cnidaria	0.875		2	0	0			0.875
+85	Urothoe	in_synthesis	115762	Urothoidae	Malacostraca	Arthropoda	col	family:Urothoidae	Urothoidae		0							8	Arthropoda:7;Chordata:1	Arthropoda	0.875		2	0	0			0.875
+86	Balanus	attached_at_mrca	580065	Balanidae	Hexanauplia	Arthropoda	col	family:Balanidae	Balanidae		0							18	Arthropoda:16;Cnidaria:2	Arthropoda	0.889		2	0	0			0.889
+87	Turritopsis	in_synthesis	566398	Oceaniidae	Hydrozoa	Cnidaria	col	family:Oceaniidae	Oceaniidae		0							9	Cnidaria:8;Arthropoda:1	Cnidaria	0.889		2	0	0			0.889
+88	Theodoxus	in_synthesis	264186	Neritidae	Gastropoda	Mollusca	col	family:Neritidae	Neritidae		0							20	Mollusca:18;Arthropoda:2	Mollusca	0.900		2	0	0			0.900
+89	Cochlostoma	in_synthesis	500902	Cochlostomatidae	Gastropoda	Mollusca	col	family:Cochlostomatidae	Cochlostomatidae		0							31	Mollusca:28;Annelida:3	Mollusca	0.903		2	0	0			0.903
+90	Nephtys	in_synthesis	336918	Nephtyidae	Polychaeta	Annelida	col	family:Nephtyidae	Nephtyidae		0							31	Annelida:28;Mollusca:3	Annelida	0.903		2	0	0			0.903
+91	Acanthochitona	in_synthesis	965470	Acanthochitonidae	Polyplacophora	Mollusca	col	family:Acanthochitonidae	Acanthochitonidae		0							26	Mollusca:24;Arthropoda:2	Mollusca	0.923		2	0	0			0.923
+92	Carychium	attached_at_taxon:ott409995	1096309	Ellobiidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							14	Mollusca:13;Echinodermata:1	Mollusca	0.929		2	0	0			0.929
+93	Euglesa	in_synthesis	4966681	Sphaeriidae	Bivalvia	Mollusca	col	family:Sphaeriidae	Sphaeriidae		0							15	Mollusca:14;Arthropoda:1	Mollusca	0.933		2	0	0			0.933
+94	Sinotaia	in_synthesis	884083	Viviparidae	Gastropoda	Mollusca	col	family:Viviparidae	Viviparidae		0							19	Mollusca:18;Annelida:1	Mollusca	0.947		2	0	0			0.947
+95	Barbus	attached_at_mrca	257936	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							46	Chordata:44;Arthropoda:2	Chordata	0.957		2	0	0			0.957
+96	Ampelisca	in_synthesis	166911	Ampeliscidae	Malacostraca	Arthropoda	col	family:Ampeliscidae	Ampeliscidae		0							31	Arthropoda:30;Annelida:1	Arthropoda	0.968		2	0	0			0.968
+97	Clausilia	in_synthesis	514637	Clausiliidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							31	Mollusca:30;Echinodermata:1	Mollusca	0.968		2	0	0			0.968
+98	Epinephelus	attached_at_mrca	457801	Serranidae	Actinopteri	Chordata	col	order:Perciformes	Perciformes		0							71	Chordata:69;Arthropoda:2	Chordata	0.972		2	0	0			0.972
+99	Eumida	attached_at_mrca	494974	Phyllodocidae	Polychaeta	Annelida	col	family:Phyllodocidae	Phyllodocidae		0							36	Annelida:35;Arthropoda:1	Annelida	0.972		2	0	0			0.972
+100	Holothuria	in_synthesis	924443	Holothuriidae	Holothuroidea		col	family:Holothuriidae	Holothuriidae		0							36	Echinodermata:35;Mollusca:1	Echinodermata	0.972		2	0	0			0.972
+101	Dardanus	in_synthesis	899842	Diogenidae	Malacostraca	Arthropoda	col	family:Diogenidae	Diogenidae		0							41	Arthropoda:40;Cnidaria:1	Arthropoda	0.976		2	0	0			0.976
+102	Eulalia	attached_at_mrca	369884	Phyllodocidae	Polychaeta	Annelida	col	family:Phyllodocidae	Phyllodocidae		0							42	Annelida:41;Arthropoda:1	Annelida	0.976		2	0	0			0.976
+103	Galathea	in_synthesis	331357	Galatheidae	Malacostraca	Arthropoda	col	family:Galatheidae	Galatheidae		0							144	Arthropoda:142;Annelida:1;Mollusca:1	Arthropoda	0.986		2	0	0			0.986
+104	Marionina	in_synthesis	28827	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							138	Annelida:137;Arthropoda:1	Annelida	0.993		2	0	0			0.993
+105	Abida	in_synthesis	582682	Chondrinidae	Gastropoda	Mollusca	col	family:Chondrinidae	Chondrinidae		0							14	Mollusca:14	Mollusca	1.000		2	0	0			1.000
+106	Acanthephyra	in_synthesis	147382	Acanthephyridae	Malacostraca	Arthropoda	col	family:Acanthephyridae	Acanthephyridae		0							23	Arthropoda:23	Arthropoda	1.000		2	0	0			1.000
+107	Acanthocyclops	in_synthesis	493477	Cyclopidae	Hexanauplia	Arthropoda	col	family:Cyclopidae	Cyclopidae		0							12	Arthropoda:12	Arthropoda	1.000		2	0	0			1.000
+108	Acanthonyx	in_synthesis	586096	Epialtidae	Malacostraca	Arthropoda	col	family:Epialtidae	Epialtidae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+109	Acartia	in_synthesis	966237	Acartiidae	Hexanauplia	Arthropoda	col	family:Acartiidae	Acartiidae		0							47	Arthropoda:47	Arthropoda	1.000		2	0	0			1.000
+110	Aegires	in_synthesis	621868	Aegiridae	Gastropoda	Mollusca	col	family:Aegiridae	Aegiridae		0							13	Mollusca:13	Mollusca	1.000		2	0	0			1.000
+111	Aeolidia	in_synthesis	823221	Aeolidiidae	Gastropoda	Mollusca	col	family:Aeolidiidae	Aeolidiidae		0							5	Mollusca:5	Mollusca	1.000		2	0	0			1.000
+112	Aeolidiella	in_synthesis	863497	Aeolidiidae	Gastropoda	Mollusca	col	family:Aeolidiidae	Aeolidiidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+113	Aetideus	in_synthesis	642166	Aetideidae	Hexanauplia	Arthropoda	col	family:Aetideidae	Aetideidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+114	Aglaja	in_synthesis	867354	Aglajidae	Gastropoda	Mollusca	col	family:Aglajidae	Aglajidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+115	Aglaophamus	in_synthesis	910977	Nephtyidae	Polychaeta	Annelida	col	family:Nephtyidae	Nephtyidae		0							19	Annelida:19	Annelida	1.000		2	0	0			1.000
+116	Alburnus	attached_at_mrca	957582	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							12	Chordata:12	Chordata	1.000		2	0	0			1.000
+117	Aldisa	in_synthesis	779154	Cadlinidae	Gastropoda	Mollusca	col	family:Cadlinidae	Cadlinidae		0							16	Mollusca:16	Mollusca	1.000		2	0	0			1.000
+118	Alepocephalus	attached_at_mrca	993269	Alepocephalidae	Actinopteri	Chordata	col	family:Alepocephalidae	Alepocephalidae		0							14	Chordata:14	Chordata	1.000		2	0	0			1.000
+119	Allognathus	in_synthesis	2879975	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							23	Mollusca:23	Mollusca	1.000		2	0	0			1.000
+120	Allolobophora	in_synthesis	790931	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							66	Annelida:66	Annelida	1.000		2	0	0			1.000
+121	Alosa	in_synthesis	272032	Clupeidae	Actinopteri	Chordata	col	order:Clupeiformes	Clupeiformes		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+122	Alpheus	in_synthesis	812822	Alpheidae	Malacostraca	Arthropoda	col	family:Alpheidae	Alpheidae		0							129	Arthropoda:129	Arthropoda	1.000		2	0	0			1.000
+123	Alpioniscus	in_synthesis	994498	Trichoniscidae	Malacostraca	Arthropoda	col	family:Trichoniscidae	Trichoniscidae		0							31	Arthropoda:31	Arthropoda	1.000		2	0	0			1.000
+124	Alvania	in_synthesis	606380	Rissoidae	Gastropoda	Mollusca	col	family:Rissoidae	Rissoidae		0							21	Mollusca:21	Mollusca	1.000		2	0	0			1.000
+125	Amathia	in_synthesis	377466	Vesiculariidae	Gymnolaemata	Bryozoa	col	family:Vesiculariidae	Vesiculariidae		0							20	Bryozoa:20	Bryozoa	1.000		2	0	0			1.000
+126	Ambigolimax	in_synthesis	2928217	Limacidae	Gastropoda	Mollusca	col	family:Limacidae	Limacidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+127	Amblyosyllis	in_synthesis	364889	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							9	Annelida:9	Annelida	1.000		2	0	0			1.000
+128	Ameiurus	in_synthesis	687155	Ictaluridae	Actinopteri	Chordata	col	family:Ictaluridae	Ictaluridae		0							9	Chordata:9	Chordata	1.000		2	0	0			1.000
+129	Ampharete	attached_at_mrca	620561	Ampharetidae	Polychaeta	Annelida	col	family:Ampharetidae	Ampharetidae		0							25	Annelida:25	Annelida	1.000		2	0	0			1.000
+130	Amphibalanus	in_synthesis	1042709	Balanidae	Hexanauplia	Arthropoda	col	family:Balanidae	Balanidae		0							18	Arthropoda:18	Arthropoda	1.000		2	0	0			1.000
+131	Ampithoe	in_synthesis	173413	Ampithoidae	Malacostraca	Arthropoda	col	family:Ampithoidae	Ampithoidae		0							56	Arthropoda:56	Arthropoda	1.000		2	0	0			1.000
+132	Ampullaceana	attached_at_taxon:ott49822	7498568	Lymnaeidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							5	Mollusca:5	Mollusca	1.000		2	0	0			1.000
+133	Anapagurus	in_synthesis	232334	Paguridae	Malacostraca	Arthropoda	col	family:Paguridae	Paguridae		0							18	Arthropoda:18	Arthropoda	1.000		2	0	0			1.000
+134	Anguilla	in_synthesis	854195	Anguillidae	Actinopteri	Chordata	col	family:Anguillidae	Anguillidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+135	Anodonta	in_synthesis	424566	Unionidae	Bivalvia	Mollusca	col	order:Unionida	Unionida		0							14	Mollusca:14	Mollusca	1.000		2	0	0			1.000
+136	Anteaeolidiella	in_synthesis	2876048	Aeolidiidae	Gastropoda	Mollusca	col	family:Aeolidiidae	Aeolidiidae		0							12	Mollusca:12	Mollusca	1.000		2	0	0			1.000
+137	Anthias	in_synthesis	1012252	Serranidae	Actinopteri	Chordata	col	order:Perciformes	Perciformes		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+138	Aora	in_synthesis	407280	Aoridae	Malacostraca	Arthropoda	col	family:Aoridae	Aoridae		0							5	Arthropoda:5	Arthropoda	1.000		2	0	0			1.000
+139	Aoroides	in_synthesis	4671126	Aoridae	Malacostraca	Arthropoda	col	family:Aoridae	Aoridae		0							21	Arthropoda:21	Arthropoda	1.000		2	0	0			1.000
+140	Aphelochaeta	in_synthesis	1094986	Cirratulidae	Polychaeta	Annelida	col	family:Cirratulidae	Cirratulidae		0							39	Annelida:39	Annelida	1.000		2	0	0			1.000
+141	Aplysia	in_synthesis	126322	Aplysiidae	Gastropoda	Mollusca	col	family:Aplysiidae	Aplysiidae		0							18	Mollusca:18	Mollusca	1.000		2	0	0			1.000
+142	Apogon	attached_at_mrca	823205	Apogonidae	Actinopteri	Chordata	col	family:Apogonidae	Apogonidae		0							72	Chordata:72	Chordata	1.000		2	0	0			1.000
+143	Apohyale	in_synthesis	550241	Hyalidae	Malacostraca	Arthropoda	col	family:Hyalidae	Hyalidae		0							21	Arthropoda:21	Arthropoda	1.000		2	0	0			1.000
+144	Aporrectodea	in_synthesis	1039469	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							125	Annelida:125	Annelida	1.000		2	0	0			1.000
+145	Argentina	in_synthesis	43670	Argentinidae	Actinopteri	Chordata	col	family:Argentinidae	Argentinidae		0							11	Chordata:11	Chordata	1.000		2	0	0			1.000
+146	Argyropelecus	in_synthesis	540473	Sternoptychidae	Actinopteri	Chordata	col	family:Sternoptychidae	Sternoptychidae		0							16	Chordata:16	Chordata	1.000		2	0	0			1.000
+147	Aricidea	in_synthesis	186259	Paraonidae	Polychaeta	Annelida	col	family:Paraonidae	Paraonidae		0							20	Annelida:20	Annelida	1.000		2	0	0			1.000
+148	Arion	in_synthesis	661122	Arionidae	Gastropoda	Mollusca	col	family:Arionidae	Arionidae		0							37	Mollusca:37	Mollusca	1.000		2	0	0			1.000
+149	Armadillidium	in_synthesis	261070	Armadillidiidae	Malacostraca	Arthropoda	col	family:Armadillidiidae	Armadillidiidae		0							41	Arthropoda:41	Arthropoda	1.000		2	0	0			1.000
+150	Armina	in_synthesis	1063349	Arminidae	Gastropoda	Mollusca	col	family:Arminidae	Arminidae		0							18	Mollusca:18	Mollusca	1.000		2	0	0			1.000
+151	Arnoglossus	attached_at_mrca	500	Bothidae	Actinopteri	Chordata	col	family:Bothidae	Bothidae		0							33	Chordata:33	Chordata	1.000		2	0	0			1.000
+152	Artemia	in_synthesis	59091	Artemiidae	Branchiopoda	Arthropoda	col	family:Artemiidae	Artemiidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+153	Asterina	in_synthesis	977095	Asterinidae	Asteroidea		col	family:Asterinidae	Asterinidae		0							6	Echinodermata:6	Echinodermata	1.000		2	0	0			1.000
+154	Atherina	in_synthesis	415783	Atherinidae	Actinopteri	Chordata	col	family:Atherinidae	Atherinidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+155	Atyaephyra	in_synthesis	755812	Atyidae	Malacostraca	Arthropoda	col	family:Atyidae	Atyidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+156	Aulopus	in_synthesis	264575	Aulopidae	Actinopteri	Chordata	col	family:Aulopidae	Aulopidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+157	Aurelia	in_synthesis	404483	Ulmaridae	Scyphozoa	Cnidaria	col	family:Ulmaridae	Ulmaridae		0							21	Cnidaria:21	Cnidaria	1.000		2	0	0			1.000
+158	Australoheros	in_synthesis	215152	Cichlidae	Actinopteri	Chordata	col	family:Cichlidae	Cichlidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+159	Austropotamobius	in_synthesis	335540	Astacidae	Malacostraca	Arthropoda	col	family:Astacidae	Astacidae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+160	Babakina	in_synthesis	269659	Flabellinidae	Gastropoda	Mollusca	col	order:Nudibranchia	Nudibranchia		0							5	Mollusca:5	Mollusca	1.000		2	0	0			1.000
+161	Baeolidia	in_synthesis	687025	Aeolidiidae	Gastropoda	Mollusca	col	family:Aeolidiidae	Aeolidiidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+162	Balistes	attached_at_mrca	983863	Balistidae	Actinopteri	Chordata	col	family:Balistidae	Balistidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+163	Barbatula	attached_at_mrca	577274	Nemacheilidae	Actinopteri	Chordata	col	family:Nemacheilidae	Nemacheilidae		0							15	Chordata:15	Chordata	1.000		2	0	0			1.000
+164	Barbronia	in_synthesis	256304	Salifidae	Clitellata	Annelida	col	family:Salifidae	Salifidae		0							6	Annelida:6	Annelida	1.000		2	0	0			1.000
+165	Bathypolypus	in_synthesis	780571	Bathypolypodidae	Cephalopoda	Mollusca	col	family:Bathypolypodidae	Bathypolypodidae		0							13	Mollusca:13	Mollusca	1.000		2	0	0			1.000
+166	Bathyporeia	in_synthesis	741400	Bathyporeiidae	Malacostraca	Arthropoda	col	family:Bathyporeiidae	Bathyporeiidae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+167	Bathytoshia	in_synthesis	7060604	Dasyatidae	Chondrichthyes	Chordata	col	family:Dasyatidae	Dasyatidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+168	Batracobdella	in_synthesis	903057	Glossiphoniidae	Clitellata	Annelida	col	family:Glossiphoniidae	Glossiphoniidae		0							9	Annelida:9	Annelida	1.000		2	0	0			1.000
+169	Benthodesmus	in_synthesis	258150	Trichiuridae	Actinopteri	Chordata	col	family:Trichiuridae	Trichiuridae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+170	Berghia	in_synthesis	284201	Aeolidiidae	Gastropoda	Mollusca	col	family:Aeolidiidae	Aeolidiidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+171	Berthella	in_synthesis	165262	Pleurobranchidae	Gastropoda	Mollusca	col	family:Pleurobranchidae	Pleurobranchidae		0							22	Mollusca:22	Mollusca	1.000		2	0	0			1.000
+172	Berthellina	in_synthesis	578611	Pleurobranchidae	Gastropoda	Mollusca	col	family:Pleurobranchidae	Pleurobranchidae		0							13	Mollusca:13	Mollusca	1.000		2	0	0			1.000
+173	Bimastos	in_synthesis	994134	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							30	Annelida:30	Annelida	1.000		2	0	0			1.000
+174	Biuve	attached_at_taxon:ott823226	7497726	Aglajidae	Gastropoda	Mollusca	col	family:Aglajidae	Aglajidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+175	Bolinichthys	attached_at_mrca	341500	Myctophidae	Actinopteri	Chordata	col	family:Myctophidae	Myctophidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+176	Bosmina	in_synthesis	46781	Bosminidae	Branchiopoda	Arthropoda	col	family:Bosminidae	Bosminidae		0							19	Arthropoda:19	Arthropoda	1.000		2	0	0			1.000
+177	Bragasellus	in_synthesis	3000574	Asellidae	Malacostraca	Arthropoda	col	family:Asellidae	Asellidae		0							27	Arthropoda:27	Arthropoda	1.000		2	0	0			1.000
+178	Brama	in_synthesis	679815	Bramidae	Actinopteri	Chordata	col	family:Bramidae	Bramidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+179	Branchinecta	in_synthesis	663616	Branchinectidae	Branchiopoda	Arthropoda	col	family:Branchinectidae	Branchinectidae		0							19	Arthropoda:19	Arthropoda	1.000		2	0	0			1.000
+180	Bregmaceros	in_synthesis	887840	Bregmacerotidae	Actinopteri	Chordata	col	family:Bregmacerotidae	Bregmacerotidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+181	Buchholzia	in_synthesis	1020272	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							23	Annelida:23	Annelida	1.000		2	0	0			1.000
+182	Bugula	attached_at_mrca	595315	Bugulidae	Gymnolaemata	Bryozoa	col	family:Bugulidae	Bugulidae		0							13	Bryozoa:13	Bryozoa	1.000		2	0	0			1.000
+183	Bugulina	in_synthesis	4152865	Bugulidae	Gymnolaemata	Bryozoa	col	family:Bugulidae	Bugulidae		0							7	Bryozoa:7	Bryozoa	1.000		2	0	0			1.000
+184	Bulla	in_synthesis	848006	Bullidae	Gastropoda	Mollusca	col	family:Bullidae	Bullidae		0							15	Mollusca:15	Mollusca	1.000		2	0	0			1.000
+185	Bythinella	in_synthesis	434769	Bythinellidae	Gastropoda	Mollusca	col	family:Bythinellidae	Bythinellidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+186	Caberea	in_synthesis	598510	Candidae	Gymnolaemata	Bryozoa	col	family:Candidae	Candidae		0							5	Bryozoa:5	Bryozoa	1.000		2	0	0			1.000
+187	Calanoides	in_synthesis	757626	Calanidae	Hexanauplia	Arthropoda	col	family:Calanidae	Calanidae		0							8	Arthropoda:8	Arthropoda	1.000		2	0	0			1.000
+188	Calanus	in_synthesis	580716	Calanidae	Hexanauplia	Arthropoda	col	family:Calanidae	Calanidae		0							16	Arthropoda:16	Arthropoda	1.000		2	0	0			1.000
+189	Calappa	in_synthesis	304377	Calappidae	Malacostraca	Arthropoda	col	family:Calappidae	Calappidae		0							24	Arthropoda:24	Arthropoda	1.000		2	0	0			1.000
+190	Calcinus	in_synthesis	1016529	Diogenidae	Malacostraca	Arthropoda	col	family:Diogenidae	Diogenidae		0							51	Arthropoda:51	Arthropoda	1.000		2	0	0			1.000
+191	Caliphylla	in_synthesis	231031	Caliphyllidae	Gastropoda	Mollusca	col	family:Caliphyllidae	Caliphyllidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+192	Callanthias	in_synthesis	872891	Callanthiidae	Actinopteri	Chordata	col	family:Callanthiidae	Callanthiidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+193	Callinectes	in_synthesis	1086763	Portunidae	Malacostraca	Arthropoda	col	family:Portunidae	Portunidae		0							8	Arthropoda:8	Arthropoda	1.000		2	0	0			1.000
+194	Callionymus	attached_at_mrca	368667	Callionymidae	Actinopteri	Chordata	col	family:Callionymidae	Callionymidae		0							58	Chordata:58	Chordata	1.000		2	0	0			1.000
+195	Caloria	in_synthesis	207111	Facelinidae	Gastropoda	Mollusca	col	family:Facelinidae	Facelinidae		0							13	Mollusca:13	Mollusca	1.000		2	0	0			1.000
+196	Cancer	in_synthesis	706443	Cancridae	Malacostraca	Arthropoda	col	family:Cancridae	Cancridae		0							17	Arthropoda:17	Arthropoda	1.000		2	0	0			1.000
+197	Caprella	in_synthesis	5342283	Caprellidae	Malacostraca	Arthropoda	col	family:Caprellidae	Caprellidae		0							38	Arthropoda:38	Arthropoda	1.000		2	0	0			1.000
+198	Carassius	attached_at_mrca	1005913	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+199	Carcinus	in_synthesis	706427	Carcinidae	Malacostraca	Arthropoda	col	family:Carcinidae	Carcinidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+200	Carinaria	in_synthesis	283869	Carinariidae	Gastropoda	Mollusca	col	family:Carinariidae	Carinariidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+201	Caryophyllia	attached_at_mrca	322057	Caryophylliidae	Anthozoa	Cnidaria	col	family:Caryophylliidae	Caryophylliidae		0							9	Cnidaria:9	Cnidaria	1.000		2	0	0			1.000
+202	Cassiopea	in_synthesis	811884	Cassiopeidae	Scyphozoa	Cnidaria	col	family:Cassiopeidae	Cassiopeidae		0							13	Cnidaria:13	Cnidaria	1.000		2	0	0			1.000
+203	Cavolinia	in_synthesis	1026635	Cavoliniidae	Gastropoda	Mollusca	col	family:Cavoliniidae	Cavoliniidae		0							9	Mollusca:9	Mollusca	1.000		2	0	0			1.000
+204	Centropages	in_synthesis	265975	Centropagidae	Hexanauplia	Arthropoda	col	family:Centropagidae	Centropagidae		0							15	Arthropoda:15	Arthropoda	1.000		2	0	0			1.000
+205	Centrophorus	in_synthesis	124071	Centrophoridae	Chondrichthyes	Chordata	col	family:Centrophoridae	Centrophoridae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+206	Centroscymnus	attached_at_mrca	745589	Somniosidae	Chondrichthyes	Chordata	col	family:Somniosidae	Somniosidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+207	Cepola	in_synthesis	848850	Cepolidae	Actinopteri	Chordata	col	family:Cepolidae	Cepolidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+208	Ceratoscopelus	in_synthesis	866191	Myctophidae	Actinopteri	Chordata	col	family:Myctophidae	Myctophidae		0							11	Chordata:11	Chordata	1.000		2	0	0			1.000
+209	Ceriodaphnia	in_synthesis	374387	Daphniidae	Branchiopoda	Arthropoda	col	family:Daphniidae	Daphniidae		0							55	Arthropoda:55	Arthropoda	1.000		2	0	0			1.000
+210	Cernosvitoviella	in_synthesis	407572	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							49	Annelida:49	Annelida	1.000		2	0	0			1.000
+211	Chaetopleura	in_synthesis	217887	Chaetopleuridae	Polyplacophora	Mollusca	col	family:Chaetopleuridae	Chaetopleuridae		0							14	Mollusca:14	Mollusca	1.000		2	0	0			1.000
+212	Chaetozone	in_synthesis	40429	Cirratulidae	Polychaeta	Annelida	col	family:Cirratulidae	Cirratulidae		0							21	Annelida:21	Annelida	1.000		2	0	0			1.000
+213	Chaunax	in_synthesis	887854	Chaunacidae	Actinopteri	Chordata	col	family:Chaunacidae	Chaunacidae		0							11	Chordata:11	Chordata	1.000		2	0	0			1.000
+214	Cheilopogon	attached_at_mrca	1022595	Exocoetidae	Actinopteri	Chordata	col	family:Exocoetidae	Exocoetidae		0							18	Chordata:18	Chordata	1.000		2	0	0			1.000
+215	Cheirocratus	in_synthesis	2982751	Cheirocratidae	Malacostraca	Arthropoda	col	family:Cheirocratidae	Cheirocratidae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+216	Chelidonichthys	attached_at_mrca	96041	Triglidae	Actinopteri	Chordata	col	family:Triglidae	Triglidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+217	Chelon	in_synthesis	777083	Mugilidae	Actinopteri	Chordata	col	family:Mugilidae	Mugilidae		0							17	Chordata:17	Chordata	1.000		2	0	0			1.000
+218	Chilostoma	attached_at_mrca	406742	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							37	Mollusca:37	Mollusca	1.000		2	0	0			1.000
+219	Chiroteuthis	in_synthesis	906076	Chiroteuthidae	Cephalopoda	Mollusca	col	family:Chiroteuthidae	Chiroteuthidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+220	Chlorophthalmus	in_synthesis	19308	Chlorophthalmidae	Actinopteri	Chordata	col	family:Chlorophthalmidae	Chlorophthalmidae		0							11	Chordata:11	Chordata	1.000		2	0	0			1.000
+221	Chondrina	in_synthesis	639689	Chondrinidae	Gastropoda	Mollusca	col	family:Chondrinidae	Chondrinidae		0							44	Mollusca:44	Mollusca	1.000		2	0	0			1.000
+222	Chondrocladia	in_synthesis	730155	Cladorhizidae	Demospongiae	Porifera	col	family:Cladorhizidae	Cladorhizidae		0							6	Porifera:6	Porifera	1.000		2	0	0			1.000
+223	Chromis	attached_at_mrca	674649	Pomacentridae	Actinopteri	Chordata	col	family:Pomacentridae	Pomacentridae		0							67	Chordata:67	Chordata	1.000		2	0	0			1.000
+224	Chrysopetalum	in_synthesis	151156	Chrysopetalidae	Polychaeta	Annelida	col	family:Chrysopetalidae	Chrysopetalidae		0							7	Annelida:7	Annelida	1.000		2	0	0			1.000
+225	Chthamalus	attached_at_mrca	663611	Chthamalidae	Hexanauplia	Arthropoda	col	family:Chthamalidae	Chthamalidae		0							44	Arthropoda:44	Arthropoda	1.000		2	0	0			1.000
+226	Cladorhiza	in_synthesis	730161	Cladorhizidae	Demospongiae	Porifera	col	family:Cladorhizidae	Cladorhizidae		0							6	Porifera:6	Porifera	1.000		2	0	0			1.000
+227	Clanculus	in_synthesis	787695	Trochidae	Gastropoda	Mollusca	col	family:Trochidae	Trochidae		0							14	Mollusca:14	Mollusca	1.000		2	0	0			1.000
+228	Clausocalanus	in_synthesis	757628	Clausocalanidae	Hexanauplia	Arthropoda	col	family:Clausocalanidae	Clausocalanidae		0							17	Arthropoda:17	Arthropoda	1.000		2	0	0			1.000
+229	Clibanarius	in_synthesis	706437	Diogenidae	Malacostraca	Arthropoda	col	family:Diogenidae	Diogenidae		0							51	Arthropoda:51	Arthropoda	1.000		2	0	0			1.000
+230	Clio	in_synthesis	1026630	Cliidae	Gastropoda	Mollusca	col	family:Cliidae	Cliidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+231	Cliona	attached_at_mrca	336987	Clionaidae	Demospongiae	Porifera	col	family:Clionaidae	Clionaidae		0							11	Porifera:11	Porifera	1.000		2	0	0			1.000
+232	Cobitis	attached_at_mrca	584643	Cobitidae	Actinopteri	Chordata	col	family:Cobitidae	Cobitidae		0							28	Chordata:28	Chordata	1.000		2	0	0			1.000
+233	Cochlodina	in_synthesis	190191	Clausiliidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							12	Mollusca:12	Mollusca	1.000		2	0	0			1.000
+234	Coelorinchus	attached_at_mrca	1074173	Macrouridae	Actinopteri	Chordata	col	family:Macrouridae	Macrouridae		0							39	Chordata:39	Chordata	1.000		2	0	0			1.000
+235	Conchoderma	in_synthesis	160891	Lepadidae	Hexanauplia	Arthropoda	col	family:Lepadidae	Lepadidae		0							5	Arthropoda:5	Arthropoda	1.000		2	0	0			1.000
+236	Conger	in_synthesis	479866	Congridae	Actinopteri	Chordata	col	family:Congridae	Congridae		0							14	Chordata:14	Chordata	1.000		2	0	0			1.000
+237	Coralliophila	in_synthesis	33660	Muricidae	Gastropoda	Mollusca	col	family:Muricidae	Muricidae		0		57626;134478	Muricidae		0		62	Mollusca:62	Mollusca	1.000		3	0	0			1.000
+238	Coris	attached_at_mrca	742790	Labridae	Actinopteri	Chordata	col	family:Labridae	Labridae		0							22	Chordata:22	Chordata	1.000		2	0	0			1.000
+239	Cornu	in_synthesis	5327272	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+240	Corophium	in_synthesis	852801	Corophiidae	Malacostraca	Arthropoda	col	family:Corophiidae	Corophiidae		0							5	Arthropoda:5	Arthropoda	1.000		2	0	0			1.000
+241	Cottus	attached_at_mrca	942688	Cottidae	Actinopteri	Chordata	col	family:Cottidae	Cottidae		0							41	Chordata:41	Chordata	1.000		2	0	0			1.000
+242	Cratena	in_synthesis	299491	Facelinidae	Gastropoda	Mollusca	col	family:Facelinidae	Facelinidae		0							14	Mollusca:14	Mollusca	1.000		2	0	0			1.000
+243	Crepidula	in_synthesis	24075	Calyptraeidae	Gastropoda	Mollusca	col	family:Calyptraeidae	Calyptraeidae		0							45	Mollusca:45	Mollusca	1.000		2	0	0			1.000
+244	Crepipatella	in_synthesis	687044	Calyptraeidae	Gastropoda	Mollusca	col	family:Calyptraeidae	Calyptraeidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+245	Cyerce	in_synthesis	898991	Caliphyllidae	Gastropoda	Mollusca	col	family:Caliphyllidae	Caliphyllidae		0							25	Mollusca:25	Mollusca	1.000		2	0	0			1.000
+246	Cymodoce	in_synthesis	118749	Sphaeromatidae	Malacostraca	Arthropoda	col	family:Sphaeromatidae	Sphaeromatidae		0							8	Arthropoda:8	Arthropoda	1.000		2	0	0			1.000
+247	Cynoscion	attached_at_mrca	764286	Sciaenidae	Actinopteri	Chordata	col	family:Sciaenidae	Sciaenidae		0							16	Chordata:16	Chordata	1.000		2	0	0			1.000
+248	Cypridopsis	in_synthesis	687310	Cyprididae	Ostracoda	Arthropoda	col	family:Cyprididae	Cyprididae		0							27	Arthropoda:27	Arthropoda	1.000		2	0	0			1.000
+249	Cyttopsis	in_synthesis	331283	Parazenidae	Actinopteri	Chordata	col	family:Parazenidae	Parazenidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+250	Daphnella	in_synthesis	194643	Raphitomidae	Gastropoda	Mollusca	col	family:Raphitomidae	Raphitomidae		0							9	Mollusca:9	Mollusca	1.000		2	0	0			1.000
+251	Daphnia	in_synthesis	59084	Daphniidae	Branchiopoda	Arthropoda	col	family:Daphniidae	Daphniidae		0							116	Arthropoda:116	Arthropoda	1.000		2	0	0			1.000
+252	Dasyatis	attached_at_mrca	58707	Dasyatidae	Chondrichthyes	Chordata	col	family:Dasyatidae	Dasyatidae		0							12	Chordata:12	Chordata	1.000		2	0	0			1.000
+253	Dendrobaena	in_synthesis	615729	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							97	Annelida:97	Annelida	1.000		2	0	0			1.000
+254	Dendrodoris	in_synthesis	57709	Dendrodorididae	Gastropoda	Mollusca	col	family:Dendrodorididae	Dendrodorididae		0							12	Mollusca:12	Mollusca	1.000		2	0	0			1.000
+255	Dendropoma	in_synthesis	407772	Vermetidae	Gastropoda	Mollusca	col	family:Vermetidae	Vermetidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+256	Dentex	attached_at_mrca	860308	Sparidae	Actinopteri	Chordata	col	family:Sparidae	Sparidae		0							12	Chordata:12	Chordata	1.000		2	0	0			1.000
+257	Diaphanosoma	in_synthesis	216555	Sididae	Branchiopoda	Arthropoda	col	order:Diplostraca	Diplostraca		0							35	Arthropoda:35	Arthropoda	1.000		2	0	0			1.000
+258	Diaphorodoris	in_synthesis	139798	Calycidorididae	Gastropoda	Mollusca	col	family:Calycidorididae	Calycidorididae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+259	Diapterus	in_synthesis	848862	Gerreidae	Actinopteri	Chordata	col	family:Gerreidae	Gerreidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+260	Dina	in_synthesis	227458	Erpobdellidae	Clitellata	Annelida	col	family:Erpobdellidae	Erpobdellidae		0							12	Annelida:12	Annelida	1.000		2	0	0			1.000
+261	Diodora	in_synthesis	335842	Fissurellidae	Gastropoda	Mollusca	col	family:Fissurellidae	Fissurellidae		0							20	Mollusca:20	Mollusca	1.000		2	0	0			1.000
+262	Diogenes	in_synthesis	5089719	Diogenidae	Malacostraca	Arthropoda	col	family:Diogenidae	Diogenidae		0							70	Arthropoda:70	Arthropoda	1.000		2	0	0			1.000
+263	Diopatra	in_synthesis	1042378	Onuphidae	Polychaeta	Annelida	col	family:Onuphidae	Onuphidae		0							19	Annelida:19	Annelida	1.000		2	0	0			1.000
+264	Diplodus	attached_at_mrca	239668	Sparidae	Actinopteri	Chordata	col	family:Sparidae	Sparidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+265	Dipturus	attached_at_mrca	309102	Rajidae	Chondrichthyes	Chordata	col	family:Rajidae	Rajidae		0							19	Chordata:19	Chordata	1.000		2	0	0			1.000
+266	Discodoris	in_synthesis	662110	Discodorididae	Gastropoda	Mollusca	col	family:Discodorididae	Discodorididae		0							9	Mollusca:9	Mollusca	1.000		2	0	0			1.000
+267	Dolabrifera	in_synthesis	120641	Aplysiidae	Gastropoda	Mollusca	col	family:Aplysiidae	Aplysiidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+268	Donax	in_synthesis	347163	Donacidae	Bivalvia	Mollusca	col	family:Donacidae	Donacidae		0		40129;183499	Donacidae		0		12	Mollusca:12	Mollusca	1.000		3	0	0			1.000
+269	Doriopsilla	in_synthesis	553087	Dendrodorididae	Gastropoda	Mollusca	col	family:Dendrodorididae	Dendrodorididae		0							18	Mollusca:18	Mollusca	1.000		2	0	0			1.000
+270	Doris	in_synthesis	341107	Dorididae	Gastropoda	Mollusca	col	family:Dorididae	Dorididae		0		154608;146270	Dorididae		0		57	Mollusca:57	Mollusca	1.000		3	0	0			1.000
+271	Doto	in_synthesis	536796	Dotidae	Gastropoda	Mollusca	col	family:Dotidae	Dotidae		0							54	Mollusca:54	Mollusca	1.000		2	0	0			1.000
+272	Drilonereis	in_synthesis	392629	Oenonidae	Polychaeta	Annelida	col	family:Oenonidae	Oenonidae		0							6	Annelida:6	Annelida	1.000		2	0	0			1.000
+273	Ebalia	in_synthesis	918465	Leucosiidae	Malacostraca	Arthropoda	col	family:Leucosiidae	Leucosiidae		0							12	Arthropoda:12	Arthropoda	1.000		2	0	0			1.000
+274	Echinogammarus	in_synthesis	989110	Gammaridae	Malacostraca	Arthropoda	col	family:Gammaridae	Gammaridae		0		2596862;2596868;248952					38	Arthropoda:38	Arthropoda	1.000		2	0	0			1.000
+275	Echinolittorina	in_synthesis	265762	Littorinidae	Gastropoda	Mollusca	col	family:Littorinidae	Littorinidae		0							44	Mollusca:44	Mollusca	1.000		2	0	0			1.000
+276	Ecrobia	in_synthesis	7495413	Hydrobiidae	Gastropoda	Mollusca	col	family:Hydrobiidae	Hydrobiidae		0							12	Mollusca:12	Mollusca	1.000		2	0	0			1.000
+277	Eisenia	in_synthesis	316447	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							87	Annelida:87	Annelida	1.000		2	0	0			1.000
+278	Eiseniella	in_synthesis	2845390	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							13	Annelida:13	Annelida	1.000		2	0	0			1.000
+279	Eiseniona	in_synthesis	4165390	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							5	Annelida:5	Annelida	1.000		2	0	0			1.000
+280	Elasmopus	in_synthesis	2984351	Maeridae	Malacostraca	Arthropoda	col	family:Maeridae	Maeridae		0							26	Arthropoda:26	Arthropoda	1.000		2	0	0			1.000
+281	Elysia	in_synthesis	322154	Plakobranchidae	Gastropoda	Mollusca	col	family:Plakobranchidae	Plakobranchidae		0							117	Mollusca:117	Mollusca	1.000		2	0	0			1.000
+282	Emarginula	in_synthesis	70113	Fissurellidae	Gastropoda	Mollusca	col	family:Fissurellidae	Fissurellidae		0							15	Mollusca:15	Mollusca	1.000		2	0	0			1.000
+283	Enchytraeus	in_synthesis	840753	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							164	Annelida:164	Annelida	1.000		2	0	0			1.000
+284	Enchytronia	in_synthesis	721535	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							60	Annelida:60	Annelida	1.000		2	0	0			1.000
+285	Engraulis	attached_at_mrca	690901	Engraulidae	Actinopteri	Chordata	col	family:Engraulidae	Engraulidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+286	Eobania	in_synthesis	738647	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							5	Mollusca:5	Mollusca	1.000		2	0	0			1.000
+287	Epigonus	attached_at_mrca	78408	Epigonidae	Actinopteri	Chordata	col	family:Epigonidae	Epigonidae		0							18	Chordata:18	Chordata	1.000		2	0	0			1.000
+288	Ercolania	in_synthesis	1076308	Limapontiidae	Gastropoda	Mollusca	col	family:Limapontiidae	Limapontiidae		0							26	Mollusca:26	Mollusca	1.000		2	0	0			1.000
+289	Eriocheir	in_synthesis	566716	Varunidae	Malacostraca	Arthropoda	col	family:Varunidae	Varunidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+290	Eriphia	in_synthesis	895582	Eriphiidae	Malacostraca	Arthropoda	col	family:Eriphiidae	Eriphiidae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+291	Eteone	attached_at_mrca	890243	Phyllodocidae	Polychaeta	Annelida	col	family:Phyllodocidae	Phyllodocidae		0							42	Annelida:42	Annelida	1.000		2	0	0			1.000
+292	Etmopterus	attached_at_mrca	975972	Etmopteridae	Chondrichthyes	Chordata	col	family:Etmopteridae	Etmopteridae		0							13	Chordata:13	Chordata	1.000		2	0	0			1.000
+293	Eualus	in_synthesis	176307	Thoridae	Malacostraca	Arthropoda	col	family:Thoridae	Thoridae		0		397946;576235	Hippolytidae		0		15	Arthropoda:15	Arthropoda	1.000		3	0	0			1.000
+294	Eubranchus	in_synthesis	896651	Fionidae	Gastropoda	Mollusca	col	order:Nudibranchia	Nudibranchia		0							34	Mollusca:34	Mollusca	1.000		2	0	0			1.000
+295	Euchaeta	in_synthesis	469756	Euchaetidae	Hexanauplia	Arthropoda	col	family:Euchaetidae	Euchaetidae		0							8	Arthropoda:8	Arthropoda	1.000		2	0	0			1.000
+296	Euchirella	in_synthesis	839112	Aetideidae	Hexanauplia	Arthropoda	col	family:Aetideidae	Aetideidae		0							8	Arthropoda:8	Arthropoda	1.000		2	0	0			1.000
+297	Euclymene	in_synthesis	310144	Maldanidae	Polychaeta	Annelida	col	family:Maldanidae	Maldanidae		0							18	Annelida:18	Annelida	1.000		2	0	0			1.000
+298	Eucyclops	in_synthesis	451826	Cyclopidae	Hexanauplia	Arthropoda	col	family:Cyclopidae	Cyclopidae		0							12	Arthropoda:12	Arthropoda	1.000		2	0	0			1.000
+299	Eucypris	in_synthesis	637247	Cyprididae	Ostracoda	Arthropoda	col	family:Cyprididae	Cyprididae		0							39	Arthropoda:39	Arthropoda	1.000		2	0	0			1.000
+300	Eudiaptomus	in_synthesis	341022	Diaptomidae	Hexanauplia	Arthropoda	col	family:Diaptomidae	Diaptomidae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+301	Eunice	in_synthesis	162291	Eunicidae	Polychaeta	Annelida	col	family:Eunicidae	Eunicidae		0							52	Annelida:52	Annelida	1.000		2	0	0			1.000
+302	Euomphalia	in_synthesis	262237	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+303	Euraphia	in_synthesis	312996	Chthamalidae	Hexanauplia	Arthropoda	col	family:Chthamalidae	Chthamalidae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+304	Euspira	in_synthesis	540620	Naticidae	Gastropoda	Mollusca	col	family:Naticidae	Naticidae		0		488657;453148	Naticidae		0		12	Mollusca:12	Mollusca	1.000		3	0	0			1.000
+305	Eusyllis	in_synthesis	908151	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							21	Annelida:21	Annelida	1.000		2	0	0			1.000
+306	Facciolella	in_synthesis	182979	Nettastomatidae	Actinopteri	Chordata	col	family:Nettastomatidae	Nettastomatidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+307	Facelina	in_synthesis	159949	Facelinidae	Gastropoda	Mollusca	col	family:Facelinidae	Facelinidae		0							18	Mollusca:18	Mollusca	1.000		2	0	0			1.000
+308	Favorinus	in_synthesis	779158	Facelinidae	Gastropoda	Mollusca	col	family:Facelinidae	Facelinidae		0							17	Mollusca:17	Mollusca	1.000		2	0	0			1.000
+309	Felimare	in_synthesis	644745	Chromodorididae	Gastropoda	Mollusca	col	family:Chromodorididae	Chromodorididae		0							23	Mollusca:23	Mollusca	1.000		2	0	0			1.000
+310	Felimida	in_synthesis	644744	Chromodorididae	Gastropoda	Mollusca	col	family:Chromodorididae	Chromodorididae		0							15	Mollusca:15	Mollusca	1.000		2	0	0			1.000
+311	Ferrissia	in_synthesis	499609	Planorbidae	Gastropoda	Mollusca	col	family:Planorbidae	Planorbidae		0		199952;191786	Ancylidae		0		11	Mollusca:11	Mollusca	1.000		3	0	0			1.000
+312	Fridericia	in_synthesis	650500	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							255	Annelida:255	Annelida	1.000		2	0	0			1.000
+313	Fusinus	in_synthesis	700419	Fasciolariidae	Gastropoda	Mollusca	col	family:Fasciolariidae	Fasciolariidae		0		2589388;6487	Fasciolariidae		0		15	Mollusca:15	Mollusca	1.000		3	0	0			1.000
+314	Gadella	attached_at_mrca	89178	Moridae	Actinopteri	Chordata	col	family:Moridae	Moridae		0							9	Chordata:9	Chordata	1.000		2	0	0			1.000
+315	Gadomus	in_synthesis	9625	Macrouridae	Actinopteri	Chordata	col	family:Macrouridae	Macrouridae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+316	Gadus	attached_at_mrca	114168	Gadidae	Actinopteri	Chordata	col	family:Gadidae	Gadidae		0							9	Chordata:9	Chordata	1.000		2	0	0			1.000
+317	Gaidropsarus	in_synthesis	1093744	Gaidropsaridae	Actinopteri	Chordata	col	family:Gaidropsaridae	Gaidropsaridae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+318	Galba	in_synthesis	54084	Lymnaeidae	Gastropoda	Mollusca	col	family:Lymnaeidae	Lymnaeidae		0		55888;401861;56887	Lymnaeidae		0		15	Mollusca:15	Mollusca	1.000		3	0	0			1.000
+319	Gammaropsis	in_synthesis	852795	Photidae	Malacostraca	Arthropoda	col	family:Photidae	Photidae		0							13	Arthropoda:13	Arthropoda	1.000		2	0	0			1.000
+320	Gammarus	in_synthesis	130011	Gammaridae	Malacostraca	Arthropoda	col	family:Gammaridae	Gammaridae		0		1522920;45625	Gammaridae		0		158	Arthropoda:158	Arthropoda	1.000		3	0	0			1.000
+321	Gastropteron	in_synthesis	370976	Gastropteridae	Gastropoda	Mollusca	col	family:Gastropteridae	Gastropteridae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+322	Geitodoris	in_synthesis	593566	Discodorididae	Gastropoda	Mollusca	col	family:Discodorididae	Discodorididae		0							5	Mollusca:5	Mollusca	1.000		2	0	0			1.000
+323	Gennadas	in_synthesis	588775	Benthesicymidae	Malacostraca	Arthropoda	col	family:Benthesicymidae	Benthesicymidae		0							13	Arthropoda:13	Arthropoda	1.000		2	0	0			1.000
+324	Geodia	attached_at_mrca	67823	Geodiidae	Demospongiae	Porifera	col	family:Geodiidae	Geodiidae		0							20	Porifera:20	Porifera	1.000		2	0	0			1.000
+325	Geomalacus	in_synthesis	569702	Arionidae	Gastropoda	Mollusca	col	family:Arionidae	Arionidae		0							15	Mollusca:15	Mollusca	1.000		2	0	0			1.000
+326	Gibbula	in_synthesis	20730	Trochidae	Gastropoda	Mollusca	col	family:Trochidae	Trochidae		0		2072689;710131;148341	Cantharidinae		0		29	Mollusca:29	Mollusca	1.000		3	0	0			1.000
+327	Glaucus	in_synthesis	2876432	Glaucidae	Gastropoda	Mollusca	col	family:Glaucidae	Glaucidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+328	Globulidrilus	in_synthesis	6326952	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							20	Annelida:20	Annelida	1.000		2	0	0			1.000
+329	Glycera	in_synthesis	941631	Glyceridae	Polychaeta	Annelida	col	family:Glyceridae	Glyceridae		0							22	Annelida:22	Annelida	1.000		2	0	0			1.000
+330	Glycinde	in_synthesis	849193	Goniadidae	Polychaeta	Annelida	col	family:Goniadidae	Goniadidae		0							13	Annelida:13	Annelida	1.000		2	0	0			1.000
+331	Gobius	attached_at_mrca	534053	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							22	Chordata:22	Chordata	1.000		2	0	0			1.000
+332	Goneplax	in_synthesis	611355	Goneplacidae	Malacostraca	Arthropoda	col	family:Goneplacidae	Goneplacidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+333	Goniada	in_synthesis	974922	Goniadidae	Polychaeta	Annelida	col	family:Goniadidae	Goniadidae		0							27	Annelida:27	Annelida	1.000		2	0	0			1.000
+334	Grapsus	in_synthesis	43253	Grapsidae	Malacostraca	Arthropoda	col	family:Grapsidae	Grapsidae		0							13	Arthropoda:13	Arthropoda	1.000		2	0	0			1.000
+335	Gyraulus	in_synthesis	357721	Planorbidae	Gastropoda	Mollusca	col	family:Planorbidae	Planorbidae		0		271026;65076	Planorbidae		0		36	Mollusca:36	Mollusca	1.000		3	0	0			1.000
+336	Haemopis	in_synthesis	675	Haemopidae	Clitellata	Annelida	col	family:Haemopidae	Haemopidae		0							15	Annelida:15	Annelida	1.000		2	0	0			1.000
+337	Halichondria	attached_at_mrca	119450	Halichondriidae	Demospongiae	Porifera	col	family:Halichondriidae	Halichondriidae		0							13	Porifera:13	Porifera	1.000		2	0	0			1.000
+338	Halophiloscia	in_synthesis	1088687	Halophilosciidae	Malacostraca	Arthropoda	col	family:Halophilosciidae	Halophilosciidae		0							11	Arthropoda:11	Arthropoda	1.000		2	0	0			1.000
+339	Haminoea	in_synthesis	120645	Haminoeidae	Gastropoda	Mollusca	col	family:Haminoeidae	Haminoeidae		0		2510879;114748;2510874	Haminoeidae		0		42	Mollusca:42	Mollusca	1.000		3	0	0			1.000
+340	Harmothoe	in_synthesis	1067342	Polynoidae	Polychaeta	Annelida	col	family:Polynoidae	Polynoidae		0							74	Annelida:74	Annelida	1.000		2	0	0			1.000
+341	Hediste	in_synthesis	943098	Nereididae	Polychaeta	Annelida	col	family:Nereididae	Nereididae		0							55	Annelida:55	Annelida	1.000		2	0	0			1.000
+342	Helicigona	in_synthesis	569708	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+343	Helix	in_synthesis	349698	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							64	Mollusca:64	Mollusca	1.000		2	0	0			1.000
+344	Helobdella	in_synthesis	870779	Glossiphoniidae	Clitellata	Annelida	col	family:Glossiphoniidae	Glossiphoniidae		0							5	Annelida:5	Annelida	1.000		2	0	0			1.000
+345	Hemicycla	in_synthesis	359379	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							29	Mollusca:29	Mollusca	1.000		2	0	0			1.000
+346	Henlea	in_synthesis	407582	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							57	Annelida:57	Annelida	1.000		2	0	0			1.000
+347	Heptranchias	in_synthesis	754112	Hexanchidae	Chondrichthyes	Chordata	col	family:Hexanchidae	Hexanchidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+348	Hermaea	in_synthesis	231028	Hermaeidae	Gastropoda	Mollusca	col	family:Hermaeidae	Hermaeidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+349	Heterocypris	in_synthesis	401748	Cyprididae	Ostracoda	Arthropoda	col	family:Cyprididae	Cyprididae		0							14	Arthropoda:14	Arthropoda	1.000		2	0	0			1.000
+350	Heteromastus	in_synthesis	849195	Capitellidae	Polychaeta	Annelida	col	family:Capitellidae	Capitellidae		0							9	Annelida:9	Annelida	1.000		2	0	0			1.000
+351	Heterorhabdus	in_synthesis	112225	Heterorhabdidae	Hexanauplia	Arthropoda	col	family:Heterorhabdidae	Heterorhabdidae		0							10	Arthropoda:10	Arthropoda	1.000		2	0	0			1.000
+352	Hexadella	in_synthesis	950036	Ianthellidae	Demospongiae	Porifera	col	family:Ianthellidae	Ianthellidae		0							7	Porifera:7	Porifera	1.000		2	0	0			1.000
+353	Hexaplex	in_synthesis	707518	Muricidae	Gastropoda	Mollusca	col	family:Muricidae	Muricidae		0		179647;604259	Muricidae		0		8	Mollusca:8	Mollusca	1.000		3	0	0			1.000
+354	Hippocampus	in_synthesis	1007058	Syngnathidae	Actinopteri	Chordata	col	family:Syngnathidae	Syngnathidae		0							13	Chordata:13	Chordata	1.000		2	0	0			1.000
+355	Hippolyte	in_synthesis	700841	Hippolytidae	Malacostraca	Arthropoda	col	family:Hippolytidae	Hippolytidae		0							19	Arthropoda:19	Arthropoda	1.000		2	0	0			1.000
+356	Hirtomurex	in_synthesis	663894	Muricidae	Gastropoda	Mollusca	col	family:Muricidae	Muricidae		0							18	Mollusca:18	Mollusca	1.000		2	0	0			1.000
+357	Hirudo	attached_at_mrca	954041	Hirudinidae	Clitellata	Annelida	col	family:Hirudinidae	Hirudinidae		0							10	Annelida:10	Annelida	1.000		2	0	0			1.000
+358	Homola	in_synthesis	271490	Homolidae	Malacostraca	Arthropoda	col	family:Homolidae	Homolidae		0							5	Arthropoda:5	Arthropoda	1.000		2	0	0			1.000
+359	Hoplostethus	in_synthesis	493182	Trachichthyidae	Actinopteri	Chordata	col	family:Trachichthyidae	Trachichthyidae		0							15	Chordata:15	Chordata	1.000		2	0	0			1.000
+360	Hormogaster	in_synthesis	573153	Hormogastridae	Clitellata	Annelida	col	family:Hormogastridae	Hormogastridae		0							82	Annelida:82	Annelida	1.000		2	0	0			1.000
+361	Hyale	in_synthesis	285707	Hyalidae	Malacostraca	Arthropoda	col	family:Hyalidae	Hyalidae		0							5	Arthropoda:5	Arthropoda	1.000		2	0	0			1.000
+362	Hydra	in_synthesis	767784	Hydridae	Hydrozoa	Cnidaria	col	family:Hydridae	Hydridae		0							14	Cnidaria:14	Cnidaria	1.000		2	0	0			1.000
+363	Hydrobia	attached_at_taxon:ott7495413	768009	Hydrobiidae	Gastropoda	Mollusca	col	family:Hydrobiidae	Hydrobiidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+364	Hygophum	in_synthesis	264573	Myctophidae	Actinopteri	Chordata	col	family:Myctophidae	Myctophidae		0							16	Chordata:16	Chordata	1.000		2	0	0			1.000
+365	Hygromia	in_synthesis	34608	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							19	Mollusca:19	Mollusca	1.000		2	0	0			1.000
+366	Hymeniacidon	attached_at_mrca	119447	Halichondriidae	Demospongiae	Porifera	col	family:Halichondriidae	Halichondriidae		0							7	Porifera:7	Porifera	1.000		2	0	0			1.000
+367	Hymenopenaeus	in_synthesis	83123	Solenoceridae	Malacostraca	Arthropoda	col	family:Solenoceridae	Solenoceridae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+368	Hypleurochilus	in_synthesis	219198	Blenniidae	Actinopteri	Chordata	col	family:Blenniidae	Blenniidae		0							9	Chordata:9	Chordata	1.000		2	0	0			1.000
+369	Hypselodoris	in_synthesis	32015	Chromodorididae	Gastropoda	Mollusca	col	family:Chromodorididae	Chromodorididae		0		71310;460722	Chromodorididae		0		32	Mollusca:32	Mollusca	1.000		3	0	0			1.000
+370	Iberobathynella	in_synthesis	1021337	Parabathynellidae	Malacostraca	Arthropoda	col	family:Parabathynellidae	Parabathynellidae		0							15	Arthropoda:15	Arthropoda	1.000		2	0	0			1.000
+371	Iberochondrostoma	in_synthesis	898801	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+372	Iberus	in_synthesis	418262	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							17	Mollusca:17	Mollusca	1.000		2	0	0			1.000
+373	Ictalurus	in_synthesis	701512	Ictaluridae	Actinopteri	Chordata	col	family:Ictaluridae	Ictaluridae		0							9	Chordata:9	Chordata	1.000		2	0	0			1.000
+374	Idotea	in_synthesis	788882	Idoteidae	Malacostraca	Arthropoda	col	family:Idoteidae	Idoteidae		0							23	Arthropoda:23	Arthropoda	1.000		2	0	0			1.000
+375	Inachus	in_synthesis	82533	Inachidae	Malacostraca	Arthropoda	col	family:Inachidae	Inachidae		0							10	Arthropoda:10	Arthropoda	1.000		2	0	0			1.000
+376	Ircinia	attached_at_mrca	177885	Irciniidae	Demospongiae	Porifera	col	family:Irciniidae	Irciniidae		0							6	Porifera:6	Porifera	1.000		2	0	0			1.000
+377	Islamia	in_synthesis	68883	Hydrobiidae	Gastropoda	Mollusca	col	family:Hydrobiidae	Hydrobiidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+378	Janolus	attached_at_taxon:ott5693091	799899	Proctonotidae	Gastropoda	Mollusca	col	order:Nudibranchia	Nudibranchia		0							19	Mollusca:19	Mollusca	1.000		2	0	0			1.000
+379	Jassa	in_synthesis	1011199	Ischyroceridae	Malacostraca	Arthropoda	col	family:Ischyroceridae	Ischyroceridae		0							16	Arthropoda:16	Arthropoda	1.000		2	0	0			1.000
+380	Jorunna	in_synthesis	32022	Discodorididae	Gastropoda	Mollusca	col	family:Discodorididae	Discodorididae		0							21	Mollusca:21	Mollusca	1.000		2	0	0			1.000
+381	Jujubinus	in_synthesis	916012	Trochidae	Gastropoda	Mollusca	col	family:Trochidae	Trochidae		0							31	Mollusca:31	Mollusca	1.000		2	0	0			1.000
+382	Knoutsodonta	in_synthesis	5735283	Onchidorididae	Gastropoda	Mollusca	col	family:Onchidorididae	Onchidorididae		0							9	Mollusca:9	Mollusca	1.000		2	0	0			1.000
+383	Kyphosus	in_synthesis	20450	Kyphosidae	Actinopteri	Chordata	col	family:Kyphosidae	Kyphosidae		0							9	Chordata:9	Chordata	1.000		2	0	0			1.000
+384	Laetmonice	in_synthesis	943100	Aphroditidae	Polychaeta	Annelida	col	family:Aphroditidae	Aphroditidae		0							6	Annelida:6	Annelida	1.000		2	0	0			1.000
+385	Lagocephalus	in_synthesis	986279	Tetraodontidae	Actinopteri	Chordata	col	family:Tetraodontidae	Tetraodontidae		0							18	Chordata:18	Chordata	1.000		2	0	0			1.000
+386	Lampadena	attached_at_mrca	341504	Myctophidae	Actinopteri	Chordata	col	family:Myctophidae	Myctophidae		0							13	Chordata:13	Chordata	1.000		2	0	0			1.000
+387	Lampanyctus	attached_at_mrca	92702	Myctophidae	Actinopteri	Chordata	col	family:Myctophidae	Myctophidae		0							23	Chordata:23	Chordata	1.000		2	0	0			1.000
+388	Lampetra	in_synthesis	836800	Petromyzontidae		Chordata	col	family:Petromyzontidae	Petromyzontidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+389	Laona	in_synthesis	2884589	Laonidae	Gastropoda	Mollusca	col	family:Laonidae	Laonidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+390	Laonice	in_synthesis	568402	Spionidae	Polychaeta	Annelida	col	family:Spionidae	Spionidae		0							22	Annelida:22	Annelida	1.000		2	0	0			1.000
+391	Lauria	in_synthesis	74918	Lauriidae	Gastropoda	Mollusca	col	family:Lauriidae	Lauriidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+392	Lehmannia	in_synthesis	910629	Limacidae	Gastropoda	Mollusca	col	family:Limacidae	Limacidae		0							16	Mollusca:16	Mollusca	1.000		2	0	0			1.000
+393	Leiochone	in_synthesis	4977585	Maldanidae	Polychaeta	Annelida	col	family:Maldanidae	Maldanidae		0							7	Annelida:7	Annelida	1.000		2	0	0			1.000
+394	Leodice	in_synthesis	4978726	Eunicidae	Polychaeta	Annelida	col	family:Eunicidae	Eunicidae		0							17	Annelida:17	Annelida	1.000		2	0	0			1.000
+395	Lepas	in_synthesis	1085254	Lepadidae	Hexanauplia	Arthropoda	col	family:Lepadidae	Lepadidae		0							27	Arthropoda:27	Arthropoda	1.000		2	0	0			1.000
+396	Lepidion	in_synthesis	826820	Moridae	Actinopteri	Chordata	col	family:Moridae	Moridae		0							8	Chordata:8	Chordata	1.000		2	0	0			1.000
+397	Lepidonotus	attached_at_mrca	974924	Polynoidae	Polychaeta	Annelida	col	family:Polynoidae	Polynoidae		0							30	Annelida:30	Annelida	1.000		2	0	0			1.000
+398	Lepidopleurus	in_synthesis	634281	Leptochitonidae	Polyplacophora	Mollusca	col	family:Leptochitonidae	Leptochitonidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+399	Lepidotrigla	in_synthesis	438422	Triglidae	Actinopteri	Chordata	col	family:Triglidae	Triglidae		0							36	Chordata:36	Chordata	1.000		2	0	0			1.000
+400	Lepomis	in_synthesis	836782	Centrarchidae	Actinopteri	Chordata	col	family:Centrarchidae	Centrarchidae		0							14	Chordata:14	Chordata	1.000		2	0	0			1.000
+401	Leptaxis	in_synthesis	34610	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+402	Leptochiton	in_synthesis	170574	Leptochitonidae	Polyplacophora	Mollusca	col	family:Leptochitonidae	Leptochitonidae		0							38	Mollusca:38	Mollusca	1.000		2	0	0			1.000
+403	Leuciscus	in_synthesis	458413	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+404	Leucoraja	attached_at_mrca	406375	Rajidae	Chondrichthyes	Chordata	col	family:Rajidae	Rajidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+405	Levinsenia	in_synthesis	4978167	Paraonidae	Polychaeta	Annelida	col	family:Paraonidae	Paraonidae		0							9	Annelida:9	Annelida	1.000		2	0	0			1.000
+406	Limacia	in_synthesis	32026	Polyceridae	Gastropoda	Mollusca	col	family:Polyceridae	Polyceridae		0							9	Mollusca:9	Mollusca	1.000		2	0	0			1.000
+407	Limacus	in_synthesis	2882440	Limacidae	Gastropoda	Mollusca	col	family:Limacidae	Limacidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+408	Limax	in_synthesis	777436	Limacidae	Gastropoda	Mollusca	col	family:Limacidae	Limacidae		0							36	Mollusca:36	Mollusca	1.000		2	0	0			1.000
+409	Limnodriloides	in_synthesis	42372	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							7	Annelida:7	Annelida	1.000		2	0	0			1.000
+410	Limnodrilus	in_synthesis	986498	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							51	Annelida:51	Annelida	1.000		2	0	0			1.000
+411	Liocarcinus	in_synthesis	449981	Polybiidae	Malacostraca	Arthropoda	col	family:Polybiidae	Polybiidae		0							10	Arthropoda:10	Arthropoda	1.000		2	0	0			1.000
+412	Liparis	in_synthesis	577723	Liparidae	Actinopteri	Chordata	col	family:Liparidae	Liparidae		0							18	Chordata:18	Chordata	1.000		2	0	0			1.000
+413	Littorina	in_synthesis	622240	Littorinidae	Gastropoda	Mollusca	col	family:Littorinidae	Littorinidae		0							11	Mollusca:11	Mollusca	1.000		2	0	0			1.000
+414	Lobianchia	in_synthesis	815439	Myctophidae	Actinopteri	Chordata	col	family:Myctophidae	Myctophidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+415	Loligo	attached_at_mrca	528822	Loliginidae	Cephalopoda	Mollusca	col	family:Loliginidae	Loliginidae		0							5	Mollusca:5	Mollusca	1.000		2	0	0			1.000
+416	Lophius	attached_at_mrca	583647	Lophiidae	Actinopteri	Chordata	col	family:Lophiidae	Lophiidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+417	Lophochaeta	attached_at_taxon:ott639280	2847755	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							5	Annelida:5	Annelida	1.000		2	0	0			1.000
+418	Lophozozymus	in_synthesis	953992	Xanthidae	Malacostraca	Arthropoda	col	family:Xanthidae	Xanthidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+419	Lucicutia	in_synthesis	27997	Lucicutiidae	Hexanauplia	Arthropoda	col	family:Lucicutiidae	Lucicutiidae		0							16	Arthropoda:16	Arthropoda	1.000		2	0	0			1.000
+420	Luciobarbus	attached_at_mrca	383629	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							18	Chordata:18	Chordata	1.000		2	0	0			1.000
+421	Lumbricillus	in_synthesis	407571	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							48	Annelida:48	Annelida	1.000		2	0	0			1.000
+422	Lumbriculus	in_synthesis	180476	Lumbriculidae	Clitellata	Annelida	col	family:Lumbriculidae	Lumbriculidae		0							7	Annelida:7	Annelida	1.000		2	0	0			1.000
+423	Lumbricus	in_synthesis	316461	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							42	Annelida:42	Annelida	1.000		2	0	0			1.000
+424	Lumbrineris	in_synthesis	834687	Lumbrineridae	Polychaeta	Annelida	col	family:Lumbrineridae	Lumbrineridae		0							27	Annelida:27	Annelida	1.000		2	0	0			1.000
+425	Lymnaea	in_synthesis	844831	Lymnaeidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							12	Mollusca:12	Mollusca	1.000		2	0	0			1.000
+426	Lysippe	in_synthesis	4975790	Ampharetidae	Polychaeta	Annelida	col	family:Ampharetidae	Ampharetidae		0							8	Annelida:8	Annelida	1.000		2	0	0			1.000
+427	Macrogastra	in_synthesis	713807	Clausiliidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							22	Mollusca:22	Mollusca	1.000		2	0	0			1.000
+428	Macropodia	in_synthesis	707610	Inachidae	Malacostraca	Arthropoda	col	family:Inachidae	Inachidae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+429	Macroramphosus	in_synthesis	111657	Centriscidae	Actinopteri	Chordata	col	family:Centriscidae	Centriscidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+430	Macrorhynchia	in_synthesis	719383	Aglaopheniidae	Hydrozoa	Cnidaria	col	family:Aglaopheniidae	Aglaopheniidae		0							5	Cnidaria:5	Cnidaria	1.000		2	0	0			1.000
+431	Macrothrix	in_synthesis	548975	Macrotrichidae	Branchiopoda	Arthropoda	col	order:Diplostraca	Diplostraca		0							13	Arthropoda:13	Arthropoda	1.000		2	0	0			1.000
+432	Maja	in_synthesis	941964	Majidae	Malacostraca	Arthropoda	col	family:Majidae	Majidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+433	Malacocephalus	in_synthesis	531087	Macrouridae	Actinopteri	Chordata	col	family:Macrouridae	Macrouridae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+434	Malacolimax	in_synthesis	4155974	Limacidae	Gastropoda	Mollusca	col	family:Limacidae	Limacidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+435	Margaritifera	in_synthesis	88267	Margaritiferidae	Bivalvia	Mollusca	col	family:Margaritiferidae	Margaritiferidae		0		288135;52364;47530	Margaritiferidae		0		10	Mollusca:10	Mollusca	1.000		3	0	0			1.000
+436	Marionia	in_synthesis	159951	Tritoniidae	Gastropoda	Mollusca	col	family:Tritoniidae	Tritoniidae		0							18	Mollusca:18	Mollusca	1.000		2	0	0			1.000
+437	Marphysa	in_synthesis	260032	Eunicidae	Polychaeta	Annelida	col	family:Eunicidae	Eunicidae		0							25	Annelida:25	Annelida	1.000		2	0	0			1.000
+438	Marsenina	in_synthesis	2893340	Velutinidae	Gastropoda	Mollusca	col	family:Velutinidae	Velutinidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+439	Maurolicus	in_synthesis	1061426	Sternoptychidae	Actinopteri	Chordata	col	family:Sternoptychidae	Sternoptychidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+440	Megabalanus	in_synthesis	198845	Balanidae	Hexanauplia	Arthropoda	col	family:Balanidae	Balanidae		0							18	Arthropoda:18	Arthropoda	1.000		2	0	0			1.000
+441	Melanochlamys	in_synthesis	828148	Aglajidae	Gastropoda	Mollusca	col	family:Aglajidae	Aglajidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+442	Melanoides	attached_at_taxon:ott272321	1016171	Thiaridae	Gastropoda	Mollusca	col	family:Thiaridae	Thiaridae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+443	Melita	in_synthesis	950573	Melitidae	Malacostraca	Arthropoda	col	family:Melitidae	Melitidae		0							10	Arthropoda:10	Arthropoda	1.000		2	0	0			1.000
+444	Mercuria	attached_at_taxon:ott430968	568396	Hydrobiidae	Gastropoda	Mollusca	col	family:Hydrobiidae	Hydrobiidae		0							18	Mollusca:18	Mollusca	1.000		2	0	0			1.000
+445	Merluccius	in_synthesis	62641	Merlucciidae	Actinopteri	Chordata	col	family:Merlucciidae	Merlucciidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+446	Mesenchytraeus	in_synthesis	378312	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							49	Annelida:49	Annelida	1.000		2	0	0			1.000
+447	Mesocalanus	in_synthesis	752783	Calanidae	Hexanauplia	Arthropoda	col	family:Calanidae	Calanidae		0							5	Arthropoda:5	Arthropoda	1.000		2	0	0			1.000
+448	Mesocyclops	in_synthesis	176566	Cyclopidae	Hexanauplia	Arthropoda	col	family:Cyclopidae	Cyclopidae		0							28	Arthropoda:28	Arthropoda	1.000		2	0	0			1.000
+449	Metacrangonyx	in_synthesis	1069708	Metacrangonyctidae	Malacostraca	Arthropoda	col	family:Metacrangonyctidae	Metacrangonyctidae		0							13	Arthropoda:13	Arthropoda	1.000		2	0	0			1.000
+450	Metapenaeopsis	in_synthesis	953092	Penaeidae	Malacostraca	Arthropoda	col	family:Penaeidae	Penaeidae		0							38	Arthropoda:38	Arthropoda	1.000		2	0	0			1.000
+451	Metapenaeus	in_synthesis	680009	Penaeidae	Malacostraca	Arthropoda	col	family:Penaeidae	Penaeidae		0							24	Arthropoda:24	Arthropoda	1.000		2	0	0			1.000
+452	Metridia	in_synthesis	1089886	Metridinidae	Hexanauplia	Arthropoda	col	family:Metridinidae	Metridinidae		0							9	Arthropoda:9	Arthropoda	1.000		2	0	0			1.000
+453	Microchirus	attached_at_mrca	186729	Soleidae	Actinopteri	Chordata	col	family:Soleidae	Soleidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+454	Microdeutopus	in_synthesis	4671354	Aoridae	Malacostraca	Arthropoda	col	family:Aoridae	Aoridae		0							9	Arthropoda:9	Arthropoda	1.000		2	0	0			1.000
+455	Microporella	in_synthesis	357254	Microporellidae	Gymnolaemata	Bryozoa	col	family:Microporellidae	Microporellidae		0							8	Bryozoa:8	Bryozoa	1.000		2	0	0			1.000
+456	Micropterus	in_synthesis	230486	Centrarchidae	Actinopteri	Chordata	col	family:Centrarchidae	Centrarchidae		0							9	Chordata:9	Chordata	1.000		2	0	0			1.000
+457	Mitra	in_synthesis	101519	Mitridae	Gastropoda	Mollusca	col	family:Mitridae	Mitridae		0		69650;2479646;2479664	Mitridae		0		13	Mollusca:13	Mollusca	1.000		3	0	0			1.000
+458	Mobula	in_synthesis	674436	Myliobatidae	Chondrichthyes	Chordata	col	order:Myliobatiformes	Myliobatiformes		0							8	Chordata:8	Chordata	1.000		2	0	0			1.000
+459	Moina	in_synthesis	950553	Moinidae	Branchiopoda	Arthropoda	col	family:Moinidae	Moinidae		0							41	Arthropoda:41	Arthropoda	1.000		2	0	0			1.000
+460	Moitessieria	in_synthesis	68888	Moitessieriidae	Gastropoda	Mollusca	col	family:Moitessieriidae	Moitessieriidae		0							5	Mollusca:5	Mollusca	1.000		2	0	0			1.000
+461	Monacha	in_synthesis	86390	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							28	Mollusca:28	Mollusca	1.000		2	0	0			1.000
+462	Monocorophium	in_synthesis	2984975	Corophiidae	Malacostraca	Arthropoda	col	family:Corophiidae	Corophiidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+463	Mourgona	in_synthesis	1036540	Caliphyllidae	Gastropoda	Mollusca	col	family:Caliphyllidae	Caliphyllidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+464	Mugil	attached_at_mrca	252874	Mugilidae	Actinopteri	Chordata	col	family:Mugilidae	Mugilidae		0							28	Chordata:28	Chordata	1.000		2	0	0			1.000
+465	Mullus	attached_at_mrca	229703	Mullidae	Actinopteri	Chordata	col	family:Mullidae	Mullidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+466	Munida	attached_at_mrca	810649	Munididae	Malacostraca	Arthropoda	col	family:Munididae	Munididae		0							103	Arthropoda:103	Arthropoda	1.000		2	0	0			1.000
+467	Munidopsis	attached_at_mrca	111607	Munidopsidae	Malacostraca	Arthropoda	col	family:Munidopsidae	Munidopsidae		0							42	Arthropoda:42	Arthropoda	1.000		2	0	0			1.000
+468	Muraena	attached_at_mrca	765786	Muraenidae	Actinopteri	Chordata	col	family:Muraenidae	Muraenidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+469	Mustelus	attached_at_mrca	976352	Triakidae	Chondrichthyes	Chordata	col	family:Triakidae	Triakidae		0							11	Chordata:11	Chordata	1.000		2	0	0			1.000
+470	Mycale	attached_at_mrca	1026107	Mycalidae	Demospongiae	Porifera	col	family:Mycalidae	Mycalidae		0							11	Porifera:11	Porifera	1.000		2	0	0			1.000
+471	Myliobatis	in_synthesis	234337	Myliobatidae	Chondrichthyes	Chordata	col	family:Myliobatidae	Myliobatidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+472	Myrianida	in_synthesis	181928	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							24	Annelida:24	Annelida	1.000		2	0	0			1.000
+473	Mystides	in_synthesis	523406	Phyllodocidae	Polychaeta	Annelida	col	family:Phyllodocidae	Phyllodocidae		0							8	Annelida:8	Annelida	1.000		2	0	0			1.000
+474	Myxilla	attached_at_mrca	901000	Myxillidae	Demospongiae	Porifera	col	family:Myxillidae	Myxillidae		0							5	Porifera:5	Porifera	1.000		2	0	0			1.000
+475	Myzobdella	in_synthesis	964354	Piscicolidae	Clitellata	Annelida	col	family:Piscicolidae	Piscicolidae		0							5	Annelida:5	Annelida	1.000		2	0	0			1.000
+476	Nais	in_synthesis	160972	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							34	Annelida:34	Annelida	1.000		2	0	0			1.000
+477	Neanthes	in_synthesis	563194	Nereididae	Polychaeta	Annelida	col	family:Nereididae	Nereididae		0							30	Annelida:30	Annelida	1.000		2	0	0			1.000
+478	Neomerinthe	attached_at_mrca	160661	Scorpaenidae	Actinopteri	Chordata	col	family:Scorpaenidae	Scorpaenidae		0							14	Chordata:14	Chordata	1.000		2	0	0			1.000
+479	Neoscopelus	in_synthesis	190713	Neoscopelidae	Actinopteri	Chordata	col	family:Neoscopelidae	Neoscopelidae		0							9	Chordata:9	Chordata	1.000		2	0	0			1.000
+480	Nereiphylla	in_synthesis	713588	Phyllodocidae	Polychaeta	Annelida	col	family:Phyllodocidae	Phyllodocidae		0							21	Annelida:21	Annelida	1.000		2	0	0			1.000
+481	Nereis	in_synthesis	305738	Nereididae	Polychaeta	Annelida	col	family:Nereididae	Nereididae		0							84	Annelida:84	Annelida	1.000		2	0	0			1.000
+482	Nettastoma	in_synthesis	13840	Nettastomatidae	Actinopteri	Chordata	col	family:Nettastomatidae	Nettastomatidae		0							9	Chordata:9	Chordata	1.000		2	0	0			1.000
+483	Nezumia	attached_at_mrca	550824	Macrouridae	Actinopteri	Chordata	col	family:Macrouridae	Macrouridae		0							12	Chordata:12	Chordata	1.000		2	0	0			1.000
+484	Ninoe	in_synthesis	663397	Lumbrineridae	Polychaeta	Annelida	col	family:Lumbrineridae	Lumbrineridae		0							6	Annelida:6	Annelida	1.000		2	0	0			1.000
+485	Niphargus	in_synthesis	843603	Niphargidae	Malacostraca	Arthropoda	col	family:Niphargidae	Niphargidae		0							345	Arthropoda:345	Arthropoda	1.000		2	0	0			1.000
+486	Notacanthus	in_synthesis	284971	Notacanthidae	Actinopteri	Chordata	col	family:Notacanthidae	Notacanthidae		0							9	Chordata:9	Chordata	1.000		2	0	0			1.000
+487	Notomastus	in_synthesis	783242	Capitellidae	Polychaeta	Annelida	col	family:Capitellidae	Capitellidae		0							15	Annelida:15	Annelida	1.000		2	0	0			1.000
+488	Notoplites	in_synthesis	2936266	Candidae	Gymnolaemata	Bryozoa	col	family:Candidae	Candidae		0							5	Bryozoa:5	Bryozoa	1.000		2	0	0			1.000
+489	Nucella	in_synthesis	1085942	Muricidae	Gastropoda	Mollusca	col	family:Muricidae	Muricidae		0							11	Mollusca:11	Mollusca	1.000		2	0	0			1.000
+490	Ocinebrina	in_synthesis	774382	Muricidae	Gastropoda	Mollusca	col	family:Muricidae	Muricidae		0							25	Mollusca:25	Mollusca	1.000		2	0	0			1.000
+491	Octodrilus	in_synthesis	559013	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							49	Annelida:49	Annelida	1.000		2	0	0			1.000
+492	Octolasion	in_synthesis	42146	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							17	Annelida:17	Annelida	1.000		2	0	0			1.000
+493	Octopus	attached_at_mrca	110475	Octopodidae	Cephalopoda	Mollusca	col	family:Octopodidae	Octopodidae		0							58	Mollusca:58	Mollusca	1.000		2	0	0			1.000
+494	Odontosyllis	in_synthesis	315162	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							35	Annelida:35	Annelida	1.000		2	0	0			1.000
+495	Oestophora	in_synthesis	418253	Trissexodontidae	Gastropoda	Mollusca	col	family:Trissexodontidae	Trissexodontidae		0							29	Mollusca:29	Mollusca	1.000		2	0	0			1.000
+496	Okenia	in_synthesis	605251	Goniodorididae	Gastropoda	Mollusca	col	family:Goniodorididae	Goniodorididae		0							26	Mollusca:26	Mollusca	1.000		2	0	0			1.000
+497	Ophelina	in_synthesis	216516	Opheliidae	Polychaeta	Annelida	col	family:Opheliidae	Opheliidae		0							9	Annelida:9	Annelida	1.000		2	0	0			1.000
+498	Ophichthus	attached_at_mrca	655396	Ophichthidae	Actinopteri	Chordata	col	family:Ophichthidae	Ophichthidae		0							47	Chordata:47	Chordata	1.000		2	0	0			1.000
+499	Ophryotrocha	attached_at_mrca	449186	Dorvilleidae	Polychaeta	Annelida	col	family:Dorvilleidae	Dorvilleidae		0							8	Annelida:8	Annelida	1.000		2	0	0			1.000
+500	Opisthoteuthis	attached_at_mrca	619097	Opisthoteuthidae	Cephalopoda	Mollusca	col	family:Opisthoteuthidae	Opisthoteuthidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+501	Oplophorus	in_synthesis	742233	Oplophoridae	Malacostraca	Arthropoda	col	family:Oplophoridae	Oplophoridae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+502	Orchestia	in_synthesis	63046	Talitridae	Malacostraca	Arthropoda	col	family:Talitridae	Talitridae		0							9	Arthropoda:9	Arthropoda	1.000		2	0	0			1.000
+503	Orculella	in_synthesis	541557	Orculidae	Gastropoda	Mollusca	col	family:Orculidae	Orculidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+504	Otala	in_synthesis	712691	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+505	Oxychilus	in_synthesis	518939	Oxychilidae	Gastropoda	Mollusca	col	family:Oxychilidae	Oxychilidae		0							24	Mollusca:24	Mollusca	1.000		2	0	0			1.000
+506	Oxyloma	in_synthesis	88526	Succineidae	Gastropoda	Mollusca	col	family:Succineidae	Succineidae		0							23	Mollusca:23	Mollusca	1.000		2	0	0			1.000
+507	Oxynoe	in_synthesis	588314	Oxynoidae	Gastropoda	Mollusca	col	family:Oxynoidae	Oxynoidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+508	Oxynotus	in_synthesis	277018	Oxynotidae	Chondrichthyes	Chordata	col	family:Oxynotidae	Oxynotidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+509	Pachygrapsus	in_synthesis	289310	Grapsidae	Malacostraca	Arthropoda	col	family:Grapsidae	Grapsidae		0							12	Arthropoda:12	Arthropoda	1.000		2	0	0			1.000
+510	Pagrus	attached_at_mrca	760711	Sparidae	Actinopteri	Chordata	col	family:Sparidae	Sparidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+511	Pagurus	attached_at_mrca	131914	Paguridae	Malacostraca	Arthropoda	col	family:Paguridae	Paguridae		0							95	Arthropoda:95	Arthropoda	1.000		2	0	0			1.000
+512	Palaemon	attached_at_mrca	736314	Palaemonidae	Malacostraca	Arthropoda	col	family:Palaemonidae	Palaemonidae		0							70	Arthropoda:70	Arthropoda	1.000		2	0	0			1.000
+513	Palinurus	in_synthesis	653847	Palinuridae	Malacostraca	Arthropoda	col	family:Palinuridae	Palinuridae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+514	Pandalus	in_synthesis	28239	Pandalidae	Malacostraca	Arthropoda	col	family:Pandalidae	Pandalidae		0							12	Arthropoda:12	Arthropoda	1.000		2	0	0			1.000
+515	Panopeus	in_synthesis	454977	Panopeidae	Malacostraca	Arthropoda	col	family:Panopeidae	Panopeidae		0							14	Arthropoda:14	Arthropoda	1.000		2	0	0			1.000
+516	Parablennius	attached_at_mrca	155050	Blenniidae	Actinopteri	Chordata	col	family:Blenniidae	Blenniidae		0							19	Chordata:19	Chordata	1.000		2	0	0			1.000
+517	Paracalanus	attached_at_mrca	350913	Paracalanidae	Hexanauplia	Arthropoda	col	family:Paracalanidae	Paracalanidae		0							24	Arthropoda:24	Arthropoda	1.000		2	0	0			1.000
+518	Paracyclops	in_synthesis	706142	Cyclopidae	Hexanauplia	Arthropoda	col	family:Cyclopidae	Cyclopidae		0							5	Arthropoda:5	Arthropoda	1.000		2	0	0			1.000
+519	Paradoris	in_synthesis	2876337	Discodorididae	Gastropoda	Mollusca	col	family:Discodorididae	Discodorididae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+520	Paraeuchaeta	in_synthesis	265967	Euchaetidae	Hexanauplia	Arthropoda	col	family:Euchaetidae	Euchaetidae		0							14	Arthropoda:14	Arthropoda	1.000		2	0	0			1.000
+521	Paralaoma	in_synthesis	2882273	Punctidae	Gastropoda	Mollusca	col	family:Punctidae	Punctidae		0							23	Mollusca:23	Mollusca	1.000		2	0	0			1.000
+522	Paraliparis	attached_at_mrca	1081127	Liparidae	Actinopteri	Chordata	col	family:Liparidae	Liparidae		0							18	Chordata:18	Chordata	1.000		2	0	0			1.000
+523	Parapagurus	in_synthesis	806004	Parapaguridae	Malacostraca	Arthropoda	col	family:Parapaguridae	Parapaguridae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+524	Parapenaeus	in_synthesis	675008	Penaeidae	Malacostraca	Arthropoda	col	family:Penaeidae	Penaeidae		0							15	Arthropoda:15	Arthropoda	1.000		2	0	0			1.000
+525	Parasmittina	in_synthesis	547660	Smittinidae	Gymnolaemata	Bryozoa	col	family:Smittinidae	Smittinidae		0							30	Bryozoa:30	Bryozoa	1.000		2	0	0			1.000
+526	Pectenogammarus	in_synthesis	2982774	Gammaridae	Malacostraca	Arthropoda	col	family:Gammaridae	Gammaridae		0							35	Arthropoda:35	Arthropoda	1.000		2	0	0			1.000
+527	Pegusa	attached_at_mrca	24395	Soleidae	Actinopteri	Chordata	col	family:Soleidae	Soleidae		0							9	Chordata:9	Chordata	1.000		2	0	0			1.000
+528	Pelagia	in_synthesis	985071	Pelagiidae	Scyphozoa	Cnidaria	col	family:Pelagiidae	Pelagiidae		0							7	Cnidaria:7	Cnidaria	1.000		2	0	0			1.000
+529	Peltodoris	in_synthesis	2876267	Discodorididae	Gastropoda	Mollusca	col	family:Discodorididae	Discodorididae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+530	Penaeus	attached_at_mrca	5845	Penaeidae	Malacostraca	Arthropoda	col	family:Penaeidae	Penaeidae		0							33	Arthropoda:33	Arthropoda	1.000		2	0	0			1.000
+531	Penares	attached_at_mrca	763848	Geodiidae	Demospongiae	Porifera	col	family:Geodiidae	Geodiidae		0							9	Porifera:9	Porifera	1.000		2	0	0			1.000
+532	Percnon	in_synthesis	683844	Percnidae	Malacostraca	Arthropoda	col	family:Percnidae	Percnidae		0							5	Arthropoda:5	Arthropoda	1.000		2	0	0			1.000
+533	Periclimenes	attached_at_mrca	74640	Palaemonidae	Malacostraca	Arthropoda	col	family:Palaemonidae	Palaemonidae		0							56	Arthropoda:56	Arthropoda	1.000		2	0	0			1.000
+534	Perinereis	in_synthesis	415933	Nereididae	Polychaeta	Annelida	col	family:Nereididae	Nereididae		0							62	Annelida:62	Annelida	1.000		2	0	0			1.000
+535	Peristedion	in_synthesis	589842	Peristediidae	Actinopteri	Chordata	col	family:Peristediidae	Peristediidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+536	Phidiana	in_synthesis	617585	Facelinidae	Gastropoda	Mollusca	col	family:Facelinidae	Facelinidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+537	Philine	in_synthesis	714769	Philinidae	Gastropoda	Mollusca	col	family:Philinidae	Philinidae		0							40	Mollusca:40	Mollusca	1.000		2	0	0			1.000
+538	Philinopsis	in_synthesis	621615	Aglajidae	Gastropoda	Mollusca	col	family:Aglajidae	Aglajidae		0		259619;2083257	Aglajidae		0		19	Mollusca:19	Mollusca	1.000		3	0	0			1.000
+539	Phorbas	attached_at_mrca	950041	Hymedesmiidae	Demospongiae	Porifera	col	family:Hymedesmiidae	Hymedesmiidae		0							15	Porifera:15	Porifera	1.000		2	0	0			1.000
+540	Phorcus	in_synthesis	384450	Trochidae	Gastropoda	Mollusca	col	family:Trochidae	Trochidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+541	Phoxinus	attached_at_mrca	63849	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							14	Chordata:14	Chordata	1.000		2	0	0			1.000
+542	Phyllidia	in_synthesis	83555	Phyllidiidae	Gastropoda	Mollusca	col	family:Phyllidiidae	Phyllidiidae		0		71378;190920	Phyllidiidae		0		21	Mollusca:21	Mollusca	1.000		3	0	0			1.000
+543	Phyllodoce	in_synthesis	398723	Phyllodocidae	Polychaeta	Annelida	col	family:Phyllodocidae	Phyllodocidae		0							59	Annelida:59	Annelida	1.000		2	0	0			1.000
+544	Phyllorhiza	in_synthesis	939030	Mastigiidae	Scyphozoa	Cnidaria	col	family:Mastigiidae	Mastigiidae		0							6	Cnidaria:6	Cnidaria	1.000		2	0	0			1.000
+545	Physa	in_synthesis	9041	Physidae	Gastropoda	Mollusca	col	family:Physidae	Physidae		0		175859;109670	Physidae		0		17	Mollusca:17	Mollusca	1.000		3	0	0			1.000
+546	Pilumnus	in_synthesis	284329	Pilumnidae	Malacostraca	Arthropoda	col	family:Pilumnidae	Pilumnidae		0							43	Arthropoda:43	Arthropoda	1.000		2	0	0			1.000
+547	Pinnotheres	in_synthesis	378442	Pinnotheridae	Malacostraca	Arthropoda	col	family:Pinnotheridae	Pinnotheridae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+548	Pisa	in_synthesis	4667153	Epialtidae	Malacostraca	Arthropoda	col	family:Epialtidae	Epialtidae		0							8	Arthropoda:8	Arthropoda	1.000		2	0	0			1.000
+549	Pisidia	in_synthesis	129419	Porcellanidae	Malacostraca	Arthropoda	col	family:Porcellanidae	Porcellanidae		0							19	Arthropoda:19	Arthropoda	1.000		2	0	0			1.000
+550	Pista	attached_at_mrca	834691	Terebellidae	Polychaeta	Annelida	col	family:Terebellidae	Terebellidae		0							29	Annelida:29	Annelida	1.000		2	0	0			1.000
+551	Placida	in_synthesis	322147	Limapontiidae	Gastropoda	Mollusca	col	family:Limapontiidae	Limapontiidae		0							18	Mollusca:18	Mollusca	1.000		2	0	0			1.000
+552	Placiphorella	in_synthesis	537134	Mopaliidae	Polyplacophora	Mollusca	col	family:Mopaliidae	Mopaliidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+553	Planorbella	in_synthesis	593679	Planorbidae	Gastropoda	Mollusca	col	family:Planorbidae	Planorbidae		0							9	Mollusca:9	Mollusca	1.000		2	0	0			1.000
+554	Platorchestia	in_synthesis	19785	Talitridae	Malacostraca	Arthropoda	col	family:Talitridae	Talitridae		0							25	Arthropoda:25	Arthropoda	1.000		2	0	0			1.000
+555	Platydoris	in_synthesis	649368	Discodorididae	Gastropoda	Mollusca	col	family:Discodorididae	Discodorididae		0							9	Mollusca:9	Mollusca	1.000		2	0	0			1.000
+556	Platynereis	in_synthesis	268486	Nereididae	Polychaeta	Annelida	col	family:Nereididae	Nereididae		0							54	Annelida:54	Annelida	1.000		2	0	0			1.000
+557	Plesionika	in_synthesis	816318	Pandalidae	Malacostraca	Arthropoda	col	family:Pandalidae	Pandalidae		0							58	Arthropoda:58	Arthropoda	1.000		2	0	0			1.000
+558	Pleurobranchaea	in_synthesis	256146	Pleurobranchaeidae	Gastropoda	Mollusca	col	family:Pleurobranchaeidae	Pleurobranchaeidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+559	Pleurobranchus	in_synthesis	26486	Pleurobranchidae	Gastropoda	Mollusca	col	family:Pleurobranchidae	Pleurobranchidae		0							19	Mollusca:19	Mollusca	1.000		2	0	0			1.000
+560	Pleuromamma	in_synthesis	103350	Metridinidae	Hexanauplia	Arthropoda	col	family:Metridinidae	Metridinidae		0							20	Arthropoda:20	Arthropoda	1.000		2	0	0			1.000
+561	Plocamopherus	in_synthesis	917809	Polyceridae	Gastropoda	Mollusca	col	family:Polyceridae	Polyceridae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+562	Podocerus	in_synthesis	706799	Podoceridae	Malacostraca	Arthropoda	col	family:Podoceridae	Podoceridae		0							11	Arthropoda:11	Arthropoda	1.000		2	0	0			1.000
+563	Poecilochaetus	in_synthesis	135669	Poecilochaetidae	Polychaeta	Annelida	col	family:Poecilochaetidae	Poecilochaetidae		0							14	Annelida:14	Annelida;Sipuncula	1.000		2	0	0			1.000
+564	Polybius	in_synthesis	1019207	Polybiidae	Malacostraca	Arthropoda	col	family:Polybiidae	Polybiidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+565	Polycera	in_synthesis	83562	Polyceridae	Gastropoda	Mollusca	col	family:Polyceridae	Polyceridae		0							26	Mollusca:26	Mollusca	1.000		2	0	0			1.000
+566	Polycirrus	attached_at_mrca	1004644	Terebellidae	Polychaeta	Annelida	col	family:Terebellidae	Terebellidae		0							50	Annelida:50	Annelida;Sipuncula	1.000		2	0	0			1.000
+567	Polymastia	attached_at_mrca	623031	Polymastiidae	Demospongiae	Porifera	col	family:Polymastiidae	Polymastiidae		0							14	Porifera:14	Porifera	1.000		2	0	0			1.000
+568	Pomacea	in_synthesis	843053	Ampullariidae	Gastropoda	Mollusca	col	family:Ampullariidae	Ampullariidae		0		1353424;72702	Ampullariidae		0		19	Mollusca:19	Mollusca	1.000		3	0	0			1.000
+569	Pomadasys	attached_at_mrca	794362	Haemulidae	Actinopteri	Chordata	col	family:Haemulidae	Haemulidae		0							32	Chordata:32	Chordata	1.000		2	0	0			1.000
+570	Pomatoschistus	attached_at_mrca	907500	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							19	Chordata:19	Chordata	1.000		2	0	0			1.000
+571	Pontinus	in_synthesis	309990	Scorpaenidae	Actinopteri	Chordata	col	family:Scorpaenidae	Scorpaenidae		0							12	Chordata:12	Chordata	1.000		2	0	0			1.000
+572	Pontohedyle	in_synthesis	1080140	Parhedylidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							13	Mollusca:13	Mollusca	1.000		2	0	0			1.000
+573	Porcellana	in_synthesis	925743	Porcellanidae	Malacostraca	Arthropoda	col	family:Porcellanidae	Porcellanidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+574	Porcellio	in_synthesis	84743	Porcellionidae	Malacostraca	Arthropoda	col	family:Porcellionidae	Porcellionidae		0							66	Arthropoda:66	Arthropoda	1.000		2	0	0			1.000
+575	Porcellionides	in_synthesis	588452	Porcellionidae	Malacostraca	Arthropoda	col	family:Porcellionidae	Porcellionidae		0							22	Arthropoda:22	Arthropoda	1.000		2	0	0			1.000
+576	Praxillella	in_synthesis	135651	Maldanidae	Polychaeta	Annelida	col	family:Maldanidae	Maldanidae		0							31	Annelida:31	Annelida	1.000		2	0	0			1.000
+577	Prionospio	in_synthesis	275106	Spionidae	Polychaeta	Annelida	col	family:Spionidae	Spionidae		0							7	Annelida:7	Annelida	1.000		2	0	0			1.000
+578	Pristina	in_synthesis	704414	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							31	Annelida:31	Annelida	1.000		2	0	0			1.000
+579	Proasellus	in_synthesis	83934	Asellidae	Malacostraca	Arthropoda	col	family:Asellidae	Asellidae		0							105	Arthropoda:105	Arthropoda	1.000		2	0	0			1.000
+580	Procambarus	attached_at_mrca	79859	Cambaridae	Malacostraca	Arthropoda	col	family:Cambaridae	Cambaridae		0							67	Arthropoda:67	Arthropoda	1.000		2	0	0			1.000
+581	Proceraea	in_synthesis	457824	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							26	Annelida:26	Annelida	1.000		2	0	0			1.000
+582	Processa	in_synthesis	670099	Processidae	Malacostraca	Arthropoda	col	family:Processidae	Processidae		0							14	Arthropoda:14	Arthropoda	1.000		2	0	0			1.000
+583	Protodrilus	attached_at_taxon:ott941620	745879	Protodrilidae	Polychaeta	Annelida	col	family:Protodrilidae	Protodrilidae		0							6	Annelida:6	Annelida;Sipuncula	1.000		2	0	0			1.000
+584	Protohyale	in_synthesis	2983633	Hyalidae	Malacostraca	Arthropoda	col	family:Hyalidae	Hyalidae		0							17	Arthropoda:17	Arthropoda	1.000		2	0	0			1.000
+585	Psammoryctides	in_synthesis	201084	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							7	Annelida:7	Annelida	1.000		2	0	0			1.000
+586	Pseudamnicola	attached_at_taxon:ott430968	867385	Hydrobiidae	Gastropoda	Mollusca	col	family:Hydrobiidae	Hydrobiidae		0							33	Mollusca:33	Mollusca	1.000		2	0	0			1.000
+587	Pseudocaranx	attached_at_mrca	713963	Carangidae	Actinopteri	Chordata	col	family:Carangidae	Carangidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+588	Pseudomystides	in_synthesis	897444	Phyllodocidae	Polychaeta	Annelida	col	family:Phyllodocidae	Phyllodocidae		0							13	Annelida:13	Annelida	1.000		2	0	0			1.000
+589	Pseudoniphargus	in_synthesis	287231	Pseudoniphargidae	Malacostraca	Arthropoda	col	family:Pseudoniphargidae	Pseudoniphargidae		0							36	Arthropoda:36	Arthropoda	1.000		2	0	0			1.000
+590	Pseudorasbora	in_synthesis	881583	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+591	Psolus	in_synthesis	478660	Psolidae	Holothuroidea		col	family:Psolidae	Psolidae		0							19	Echinodermata:19	Echinodermata	1.000		2	0	0			1.000
+592	Pterocirrus	in_synthesis	897440	Phyllodocidae	Polychaeta	Annelida	col	family:Phyllodocidae	Phyllodocidae		0							13	Annelida:13	Annelida	1.000		2	0	0			1.000
+593	Pterotrachea	in_synthesis	990461	Pterotracheidae	Gastropoda	Mollusca	col	family:Pterotracheidae	Pterotracheidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+594	Pupilla	in_synthesis	396289	Pupillidae	Gastropoda	Mollusca	col	family:Pupillidae	Pupillidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+595	Pyramidula	in_synthesis	648624	Pyramidulidae	Gastropoda	Mollusca	col	family:Pyramidulidae	Pyramidulidae		0							50	Mollusca:50	Mollusca	1.000		2	0	0			1.000
+596	Pyrenaearia	in_synthesis	1052866	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							23	Mollusca:23	Mollusca	1.000		2	0	0			1.000
+597	Quadrimaera	in_synthesis	204415	Maeridae	Malacostraca	Arthropoda	col	family:Maeridae	Maeridae		0							5	Arthropoda:5	Arthropoda	1.000		2	0	0			1.000
+598	Radix	in_synthesis	49822	Lymnaeidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0		2529396;55689	Lymnaeidae		0		46	Mollusca:46	Mollusca	1.000		3	0	0			1.000
+599	Raja	attached_at_mrca	493423	Rajidae	Chondrichthyes	Chordata	col	family:Rajidae	Rajidae		0							11	Chordata:11	Chordata	1.000		2	0	0			1.000
+600	Rajella	in_synthesis	406382	Rajidae	Chondrichthyes	Chordata	col	family:Rajidae	Rajidae		0							8	Chordata:8	Chordata	1.000		2	0	0			1.000
+601	Raphitoma	in_synthesis	823129	Raphitomidae	Gastropoda	Mollusca	col	family:Raphitomidae	Raphitomidae		0							14	Mollusca:14	Mollusca	1.000		2	0	0			1.000
+602	Remora	in_synthesis	383926	Echeneidae	Actinopteri	Chordata	col	family:Echeneidae	Echeneidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+603	Rhyacodrilus	in_synthesis	160976	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							32	Annelida:32	Annelida	1.000		2	0	0			1.000
+604	Rhyssoplax	in_synthesis	736806	Chitonidae	Polyplacophora	Mollusca	col	family:Chitonidae	Chitonidae		0							12	Mollusca:12	Mollusca	1.000		2	0	0			1.000
+605	Rissoa	in_synthesis	1000553	Rissoidae	Gastropoda	Mollusca	col	family:Rissoidae	Rissoidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+606	Rostanga	in_synthesis	779149	Discodorididae	Gastropoda	Mollusca	col	family:Discodorididae	Discodorididae		0							19	Mollusca:19	Mollusca	1.000		2	0	0			1.000
+607	Runcina	in_synthesis	146943	Runcinidae	Gastropoda	Mollusca	col	family:Runcinidae	Runcinidae		0							26	Mollusca:26	Mollusca	1.000		2	0	0			1.000
+608	Sabellaria	in_synthesis	638889	Sabellariidae	Polychaeta	Annelida	col	family:Sabellariidae	Sabellariidae		0							7	Annelida:7	Annelida	1.000		2	0	0			1.000
+609	Salaria	attached_at_mrca	65414	Blenniidae	Actinopteri	Chordata	col	family:Blenniidae	Blenniidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+610	Salvelinus	attached_at_mrca	688331	Salmonidae	Actinopteri	Chordata	col	family:Salmonidae	Salmonidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+611	Sarda	in_synthesis	308770	Scombridae	Actinopteri	Chordata	col	family:Scombridae	Scombridae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+612	Sardinella	in_synthesis	432705	Clupeidae	Actinopteri	Chordata	col	order:Clupeiformes	Clupeiformes		0							18	Chordata:18	Chordata	1.000		2	0	0			1.000
+613	Scaphander	in_synthesis	160363	Scaphandridae	Gastropoda	Mollusca	col	family:Scaphandridae	Scaphandridae		0							9	Mollusca:9	Mollusca	1.000		2	0	0			1.000
+614	Scapholeberis	in_synthesis	424897	Daphniidae	Branchiopoda	Arthropoda	col	family:Daphniidae	Daphniidae		0							30	Arthropoda:30	Arthropoda	1.000		2	0	0			1.000
+615	Scartella	in_synthesis	172796	Blenniidae	Actinopteri	Chordata	col	family:Blenniidae	Blenniidae		0							8	Chordata:8	Chordata	1.000		2	0	0			1.000
+616	Scherotheca	attached_at_taxon:ott696412	4165355	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							54	Annelida:54	Annelida	1.000		2	0	0			1.000
+617	Schizoporella	in_synthesis	780192	Schizoporellidae	Gymnolaemata	Bryozoa	col	family:Schizoporellidae	Schizoporellidae		0							5	Bryozoa:5	Bryozoa	1.000		2	0	0			1.000
+618	Scolelepis	in_synthesis	58639	Spionidae	Polychaeta	Annelida	col	family:Spionidae	Spionidae		0							31	Annelida:31	Annelida	1.000		2	0	0			1.000
+619	Scorpaena	attached_at_mrca	309988	Scorpaenidae	Actinopteri	Chordata	col	family:Scorpaenidae	Scorpaenidae		0							46	Chordata:46	Chordata	1.000		2	0	0			1.000
+620	Scyliorhinus	attached_at_mrca	450133	Scyliorhinidae	Chondrichthyes	Chordata	col	family:Scyliorhinidae	Scyliorhinidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+621	Scyllarides	in_synthesis	810230	Scyllaridae	Malacostraca	Arthropoda	col	family:Scyllaridae	Scyllaridae		0							14	Arthropoda:14	Arthropoda	1.000		2	0	0			1.000
+622	Scyllarus	attached_at_mrca	14032	Scyllaridae	Malacostraca	Arthropoda	col	family:Scyllaridae	Scyllaridae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+623	Sepia	attached_at_mrca	7376	Sepiidae	Cephalopoda	Mollusca	col	family:Sepiidae	Sepiidae		0		6609;349055	Sepiidae		0		37	Mollusca:37	Mollusca	1.000		3	0	0			1.000
+624	Sepiola	attached_at_mrca	513819	Sepiolidae	Cephalopoda	Mollusca	col	family:Sepiolidae	Sepiolidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+625	Sergia	in_synthesis	47833	Sergestidae	Malacostraca	Arthropoda	col	family:Sergestidae	Sergestidae		0							5	Arthropoda:5	Arthropoda	1.000		2	0	0			1.000
+626	Seriola	attached_at_mrca	186473	Carangidae	Actinopteri	Chordata	col	family:Carangidae	Carangidae		0							12	Chordata:12	Chordata	1.000		2	0	0			1.000
+627	Serranus	attached_at_mrca	662240	Serranidae	Actinopteri	Chordata	col	family:Serranidae	Serranidae		0							29	Chordata:29	Chordata	1.000		2	0	0			1.000
+628	Sicyonia	in_synthesis	163891	Sicyoniidae	Malacostraca	Arthropoda	col	family:Sicyoniidae	Sicyoniidae		0							25	Arthropoda:25	Arthropoda	1.000		2	0	0			1.000
+629	Silurus	in_synthesis	272341	Siluridae	Actinopteri	Chordata	col	family:Siluridae	Siluridae		0							14	Chordata:14	Chordata	1.000		2	0	0			1.000
+630	Simnia	in_synthesis	369418	Ovulidae	Gastropoda	Mollusca	col	family:Ovulidae	Ovulidae		0		848636;217776;305771	Ovulidae		0		7	Mollusca:7	Mollusca	1.000		3	0	0			1.000
+631	Simocephalus	in_synthesis	424899	Daphniidae	Branchiopoda	Arthropoda	col	family:Daphniidae	Daphniidae		0							65	Arthropoda:65	Arthropoda	1.000		2	0	0			1.000
+632	Siphonaria	attached_at_taxon:ott409995	255561	Siphonariidae	Gastropoda	Mollusca	col	family:Siphonariidae	Siphonariidae		0		981062;52930					50	Mollusca:50	Mollusca	1.000		2	0	0			1.000
+633	Solea	attached_at_mrca	367001	Soleidae	Actinopteri	Chordata	col	family:Soleidae	Soleidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+634	Solenocera	in_synthesis	953094	Solenoceridae	Malacostraca	Arthropoda	col	family:Solenoceridae	Solenoceridae		0							24	Arthropoda:24	Arthropoda	1.000		2	0	0			1.000
+635	Sphaerium	in_synthesis	439667	Sphaeriidae	Bivalvia	Mollusca	col	family:Sphaeriidae	Sphaeriidae		0							8	Mollusca:8	Mollusca	1.000		2	0	0			1.000
+636	Sphaeroma	in_synthesis	857782	Sphaeromatidae	Malacostraca	Arthropoda	col	family:Sphaeromatidae	Sphaeromatidae		0							7	Arthropoda:7	Arthropoda	1.000		2	0	0			1.000
+637	Sphoeroides	attached_at_mrca	889038	Tetraodontidae	Actinopteri	Chordata	col	family:Tetraodontidae	Tetraodontidae		0							13	Chordata:13	Chordata	1.000		2	0	0			1.000
+638	Sphyradium	in_synthesis	4957068	Orculidae	Gastropoda	Mollusca	col	family:Orculidae	Orculidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+639	Sphyraena	in_synthesis	1015821	Sphyraenidae	Actinopteri	Chordata	col	family:Sphyraenidae	Sphyraenidae		0							34	Chordata:34	Chordata	1.000		2	0	0			1.000
+640	Spongia	attached_at_mrca	840760	Spongiidae	Demospongiae	Porifera	col	family:Spongiidae	Spongiidae		0							5	Porifera:5	Porifera	1.000		2	0	0			1.000
+641	Spurilla	in_synthesis	687024	Aeolidiidae	Gastropoda	Mollusca	col	family:Aeolidiidae	Aeolidiidae		0							5	Mollusca:5	Mollusca	1.000		2	0	0			1.000
+642	Squalius	attached_at_mrca	382914	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							19	Chordata:19	Chordata	1.000		2	0	0			1.000
+643	Squalus	in_synthesis	1019129	Squalidae	Chondrichthyes	Chordata	col	family:Squalidae	Squalidae		0							7	Chordata:7	Chordata	1.000		2	0	0			1.000
+644	Squatina	attached_at_mrca	909559	Squatinidae	Chondrichthyes	Chordata	col	family:Squatinidae	Squatinidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+645	Stagnicola	in_synthesis	570585	Lymnaeidae	Gastropoda	Mollusca	col	family:Lymnaeidae	Lymnaeidae		0							19	Mollusca:19	Mollusca	1.000		2	0	0			1.000
+646	Stelletta	attached_at_mrca	662723	Ancorinidae	Demospongiae	Porifera	col	family:Ancorinidae	Ancorinidae		0							19	Porifera:19	Porifera	1.000		2	0	0			1.000
+647	Stenasellus	in_synthesis	1090778	Stenasellidae	Malacostraca	Arthropoda	col	family:Stenasellidae	Stenasellidae		0							16	Arthropoda:16	Arthropoda	1.000		2	0	0			1.000
+648	Sthenelais	in_synthesis	965468	Sigalionidae	Polychaeta	Annelida	col	family:Sigalionidae	Sigalionidae		0							9	Annelida:9	Annelida	1.000		2	0	0			1.000
+649	Stiliger	in_synthesis	903299	Limapontiidae	Gastropoda	Mollusca	col	family:Limapontiidae	Limapontiidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+650	Stomias	attached_at_mrca	47468	Stomiidae	Actinopteri	Chordata	col	family:Stomiidae	Stomiidae		0							12	Chordata:12	Chordata	1.000		2	0	0			1.000
+651	Streptosyllis	in_synthesis	941637	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							5	Annelida:5	Annelida	1.000		2	0	0			1.000
+652	Stylocheilus	in_synthesis	171918	Aplysiidae	Gastropoda	Mollusca	col	family:Aplysiidae	Aplysiidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+653	Stylodrilus	in_synthesis	329276	Lumbriculidae	Clitellata	Annelida	col	family:Lumbriculidae	Lumbriculidae		0							18	Annelida:18	Annelida	1.000		2	0	0			1.000
+654	Syllides	in_synthesis	941624	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							7	Annelida:7	Annelida	1.000		2	0	0			1.000
+655	Syllis	in_synthesis	608534	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							46	Annelida:46	Annelida	1.000		2	0	0			1.000
+656	Symphodus	attached_at_mrca	54419	Labridae	Actinopteri	Chordata	col	family:Labridae	Labridae		0							8	Chordata:8	Chordata	1.000		2	0	0			1.000
+657	Synaphobranchus	in_synthesis	65738	Synaphobranchidae	Actinopteri	Chordata	col	family:Synaphobranchidae	Synaphobranchidae		0							10	Chordata:10	Chordata	1.000		2	0	0			1.000
+658	Synasellus	in_synthesis	3000587	Asellidae	Malacostraca	Arthropoda	col	family:Asellidae	Asellidae		0							13	Arthropoda:13	Arthropoda	1.000		2	0	0			1.000
+659	Synchiropus	attached_at_mrca	408395	Callionymidae	Actinopteri	Chordata	col	family:Callionymidae	Callionymidae		0							32	Chordata:32	Chordata	1.000		2	0	0			1.000
+660	Syngnathus	attached_at_mrca	1068255	Syngnathidae	Actinopteri	Chordata	col	family:Syngnathidae	Syngnathidae		0							8	Chordata:8	Chordata	1.000		2	0	0			1.000
+661	Synodus	attached_at_mrca	44806	Synodontidae	Actinopteri	Chordata	col	family:Synodontidae	Synodontidae		0							55	Chordata:55	Chordata	1.000		2	0	0			1.000
+662	Systellaspis	in_synthesis	428949	Oplophoridae	Malacostraca	Arthropoda	col	family:Oplophoridae	Oplophoridae		0							11	Arthropoda:11	Arthropoda	1.000		2	0	0			1.000
+663	Talitrus	in_synthesis	1892	Talitridae	Malacostraca	Arthropoda	col	family:Talitridae	Talitridae		0							5	Arthropoda:5	Arthropoda	1.000		2	0	0			1.000
+664	Tambja	in_synthesis	256132	Polyceridae	Gastropoda	Mollusca	col	family:Polyceridae	Polyceridae		0							25	Mollusca:25	Mollusca	1.000		2	0	0			1.000
+665	Tectarius	in_synthesis	741295	Littorinidae	Gastropoda	Mollusca	col	family:Littorinidae	Littorinidae		0		980360;51167	Littorinidae		0		8	Mollusca:8	Mollusca	1.000		3	0	0			1.000
+666	Tedania	in_synthesis	304275	Tedaniidae	Demospongiae	Porifera	col	family:Tedaniidae	Tedaniidae		0							10	Porifera:10	Porifera	1.000		2	0	0			1.000
+667	Tenellia	in_synthesis	136283	Fionidae	Gastropoda	Mollusca	col	order:Nudibranchia	Nudibranchia		0		1919074;2305132;2136168	Trinchesiidae		0		57	Mollusca:57	Mollusca	1.000		3	0	0			1.000
+668	Testacella	in_synthesis	362155	Testacellidae	Gastropoda	Mollusca	col	family:Testacellidae	Testacellidae		0							12	Mollusca:12	Mollusca	1.000		2	0	0			1.000
+669	Tethya	in_synthesis	742121	Tethyidae	Demospongiae	Porifera	col	family:Tethyidae	Tethyidae		0							11	Porifera:11	Porifera	1.000		2	0	0			1.000
+670	Tethysbaena	in_synthesis	283090	Monodellidae	Malacostraca	Arthropoda	col	family:Monodellidae	Monodellidae		0							6	Arthropoda:6	Arthropoda	1.000		2	0	0			1.000
+671	Thalassoma	attached_at_mrca	907844	Labridae	Actinopteri	Chordata	col	family:Labridae	Labridae		0							12	Chordata:12	Chordata	1.000		2	0	0			1.000
+672	Tharyx	in_synthesis	317327	Cirratulidae	Polychaeta	Annelida	col	family:Cirratulidae	Cirratulidae		0							6	Annelida:6	Annelida	1.000		2	0	0			1.000
+673	Theba	in_synthesis	569710	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							46	Mollusca:46	Mollusca	1.000		2	0	0			1.000
+674	Thecacera	in_synthesis	760610	Polyceridae	Gastropoda	Mollusca	col	family:Polyceridae	Polyceridae		0							12	Mollusca:12	Mollusca	1.000		2	0	0			1.000
+675	Thermocyclops	in_synthesis	939731	Cyclopidae	Hexanauplia	Arthropoda	col	family:Cyclopidae	Cyclopidae		0							14	Arthropoda:14	Arthropoda	1.000		2	0	0			1.000
+676	Thuridilla	in_synthesis	578609	Plakobranchidae	Gastropoda	Mollusca	col	family:Plakobranchidae	Plakobranchidae		0							26	Mollusca:26	Mollusca	1.000		2	0	0			1.000
+677	Todarodes	attached_at_mrca	478555	Ommastrephidae	Cephalopoda	Mollusca	col	family:Ommastrephidae	Ommastrephidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+678	Trachinocephalus	in_synthesis	712825	Synodontidae	Actinopteri	Chordata	col	family:Synodontidae	Synodontidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+679	Trachinotus	in_synthesis	130378	Carangidae	Actinopteri	Chordata	col	family:Carangidae	Carangidae		0							18	Chordata:18	Chordata	1.000		2	0	0			1.000
+680	Trachysalambria	in_synthesis	304726	Penaeidae	Malacostraca	Arthropoda	col	family:Penaeidae	Penaeidae		0							8	Arthropoda:8	Arthropoda	1.000		2	0	0			1.000
+681	Trapania	in_synthesis	2875048	Goniodorididae	Gastropoda	Mollusca	col	family:Goniodorididae	Goniodorididae		0							43	Mollusca:43	Mollusca	1.000		2	0	0			1.000
+682	Trichoniscus	in_synthesis	763987	Trichoniscidae	Malacostraca	Arthropoda	col	family:Trichoniscidae	Trichoniscidae		0							21	Arthropoda:21	Arthropoda	1.000		2	0	0			1.000
+683	Tricolia	in_synthesis	683578	Phasianellidae	Gastropoda	Mollusca	col	family:Phasianellidae	Phasianellidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+684	Trinchesia	in_synthesis	2876248	Fionidae	Gastropoda	Mollusca	col	order:Nudibranchia	Nudibranchia		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+685	Tripterygion	in_synthesis	104337	Tripterygiidae	Actinopteri	Chordata	col	family:Tripterygiidae	Tripterygiidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+686	Tritia	attached_at_mrca	162242	Nassariidae	Gastropoda	Mollusca	col	family:Nassariidae	Nassariidae		0							26	Mollusca:26	Mollusca	1.000		2	0	0			1.000
+687	Trochulus	in_synthesis	131363	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							87	Mollusca:87	Mollusca	1.000		2	0	0			1.000
+688	Tropocyclops	in_synthesis	870189	Cyclopidae	Hexanauplia	Arthropoda	col	family:Cyclopidae	Cyclopidae		0							13	Arthropoda:13	Arthropoda	1.000		2	0	0			1.000
+689	Tubificoides	in_synthesis	767198	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							21	Annelida:21	Annelida	1.000		2	0	0			1.000
+690	Tudorella	in_synthesis	77190	Pomatiidae	Gastropoda	Mollusca	col	family:Pomatiidae	Pomatiidae		0							6	Mollusca:6	Mollusca	1.000		2	0	0			1.000
+691	Tylos	in_synthesis	857779	Tylidae	Malacostraca	Arthropoda	col	family:Tylidae	Tylidae		0							27	Arthropoda:27	Arthropoda	1.000		2	0	0			1.000
+692	Typhlatya	in_synthesis	87194	Atyidae	Malacostraca	Arthropoda	col	family:Atyidae	Atyidae		0							15	Arthropoda:15	Arthropoda	1.000		2	0	0			1.000
+693	Unio	in_synthesis	376858	Unionidae	Bivalvia	Mollusca	col	order:Unionida	Unionida		0							23	Mollusca:23	Mollusca	1.000		2	0	0			1.000
+694	Upogebia	in_synthesis	340334	Upogebiidae	Malacostraca	Arthropoda	col	family:Upogebiidae	Upogebiidae		0							26	Arthropoda:26	Arthropoda	1.000		2	0	0			1.000
+695	Uranoscopus	attached_at_mrca	76749	Uranoscopidae	Actinopteri	Chordata	col	family:Uranoscopidae	Uranoscopidae		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+696	Vallonia	in_synthesis	74920	Valloniidae	Gastropoda	Mollusca	col	family:Valloniidae	Valloniidae		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+697	Watersipora	in_synthesis	367038	Watersiporidae	Gymnolaemata	Bryozoa	col	family:Watersiporidae	Watersiporidae		0							7	Bryozoa:7	Bryozoa	1.000		2	0	0			1.000
+698	Williamia	attached_at_taxon:ott409995	993309	Siphonariidae	Gastropoda	Mollusca	col	family:Siphonariidae	Siphonariidae		0		1522359;648668	Siphonariidae		0		5	Mollusca:5	Mollusca	1.000		3	0	0			1.000
+699	Zelentia	in_synthesis	7497913	Fionidae	Gastropoda	Mollusca	col	order:Nudibranchia	Nudibranchia		0							7	Mollusca:7	Mollusca	1.000		2	0	0			1.000
+700	Zenion	in_synthesis	463427	Zenionidae	Actinopteri	Chordata	col	order:Zeiformes	Zeiformes		0							5	Chordata:5	Chordata	1.000		2	0	0			1.000
+701	Zenopsis	in_synthesis	707539	Zeidae	Actinopteri	Chordata	col	family:Zeidae	Zeidae		0							6	Chordata:6	Chordata	1.000		2	0	0			1.000
+702	Zonitoides	in_synthesis	124769	Gastrodontidae	Gastropoda	Mollusca	col	family:Gastrodontidae	Gastrodontidae		0							10	Mollusca:10	Mollusca	1.000		2	0	0			1.000
+703	Zophoscolex	in_synthesis	871812	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							15	Annelida:15	Annelida	1.000		2	0	0			1.000
+704	Zospeum	attached_at_taxon:ott409995	619325	Ellobiidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							20	Mollusca:20	Mollusca	1.000		2	0	0			1.000
+705	Aaptos	in_synthesis	1072310	Suberitidae	Demospongiae	Porifera	col	family:Suberitidae	Suberitidae		0							2	Porifera:2	Porifera			1	0	0			
+706	Abavopsis	in_synthesis	2884707	Philinoglossidae	Gastropoda	Mollusca	col	family:Philinoglossidae	Philinoglossidae		0							1	Mollusca:1	Mollusca			1	0	0			
+707	Abludomelita	in_synthesis	2984353	Melitidae	Malacostraca	Arthropoda	col	family:Melitidae	Melitidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+708	Acaeroplastes	in_synthesis	2992995	Porcellionidae	Malacostraca	Arthropoda	col	family:Porcellionidae	Porcellionidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+709	Acanthinula	in_synthesis	967659	Valloniidae	Gastropoda	Mollusca	col	family:Valloniidae	Valloniidae		0							1	Mollusca:1	Mollusca			1	0	0			
+710	Acantholabrus	in_synthesis	925380	Labridae	Actinopteri	Chordata	col	family:Labridae	Labridae		0							1	Chordata:1	Chordata			1	0	0			
+711	Achondrostoma	in_synthesis	898802	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							2	Chordata:2	Chordata			1	0	0			
+712	Actenidia	unmatched					col																0	0	0	not_evaluable		
+713	Acteon	attached_at_taxon:ott191188	191187	Acteonidae	Gastropoda	Mollusca	col	family:Acteonidae	Acteonidae		0							4	Mollusca:4	Mollusca			1	0	0			
+714	Actinia	in_synthesis	1084480	Actiniidae	Anthozoa	Cnidaria	col	family:Actiniidae	Actiniidae		0							1	Cnidaria:1	Cnidaria			1	0	0			
+715	Afruca	in_synthesis	7117914	Ocypodidae	Malacostraca	Arthropoda	col	family:Ocypodidae	Ocypodidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+716	Agabiformius	in_synthesis	2992941	Porcellionidae	Malacostraca	Arthropoda	col	family:Porcellionidae	Porcellionidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+717	Akera	in_synthesis	714774	Akeridae	Gastropoda	Mollusca	col	family:Akeridae	Akeridae		0							1	Mollusca:1	Mollusca			1	0	0			
+718	Alepisaurus	in_synthesis	587925	Alepisauridae	Actinopteri	Chordata	col	family:Alepisauridae	Alepisauridae		0							2	Chordata:2	Chordata			1	0	0			
+719	Alloteuthis	in_synthesis	418147	Loliginidae	Cephalopoda	Mollusca	col	family:Loliginidae	Loliginidae		0							3	Mollusca:3	Mollusca			1	0	0			
+720	Amphictene	in_synthesis	4975371	Pectinariidae	Polychaeta	Annelida	col	family:Pectinariidae	Pectinariidae		0							2	Annelida:2	Annelida			1	0	0			
+721	Amphiduros	in_synthesis	615603	Hesionidae	Polychaeta	Annelida	col	family:Hesionidae	Hesionidae		0							0		Annelida			1	0	0			
+722	Amphiglena	in_synthesis	702959	Sabellidae	Polychaeta	Annelida	col	family:Sabellidae	Sabellidae		0							0		Annelida			1	0	0			
+723	Amphorina	unmatched					col																0	0	0	not_evaluable		
+724	Anaecypris	in_synthesis	311117	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							3	Chordata:3	Chordata			1	0	0			
+725	Ancistrosyllis	in_synthesis	364882	Pilargidae	Polychaeta	Annelida	col	family:Pilargidae	Pilargidae		0							0		Annelida;Sipuncula			1	0	0			
+726	Ancistroteuthis	in_synthesis	942386	Onychoteuthidae	Cephalopoda	Mollusca	col	family:Onychoteuthidae	Onychoteuthidae		0							1	Mollusca:1	Mollusca			1	0	0			
+727	Ancylus	in_synthesis	457186	Planorbidae	Gastropoda	Mollusca	col	family:Planorbidae	Planorbidae		0							3	Mollusca:3	Mollusca			1	0	0			
+728	Androniscus	in_synthesis	659351	Trichoniscidae	Malacostraca	Arthropoda	col	family:Trichoniscidae	Trichoniscidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+729	Anomalocera	in_synthesis	198608	Pontellidae	Hexanauplia	Arthropoda	col	family:Pontellidae	Pontellidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+730	Antennella	attached_at_mrca	889787	Halopterididae	Hydrozoa	Cnidaria	col	family:Halopterididae	Halopterididae		0							2	Cnidaria:2	Cnidaria			1	0	0			
+731	Anthura	in_synthesis	2998302	Anthuridae	Malacostraca	Arthropoda	col	family:Anthuridae	Anthuridae		0							0		Arthropoda			1	0	0			
+732	Antiopella	unmatched					col																0	0	0	not_evaluable		
+733	Aphanopus	in_synthesis	113464	Trichiuridae	Actinopteri	Chordata	col	family:Trichiuridae	Trichiuridae		0							2	Chordata:2	Chordata			1	0	0			
+734	Apherusa	in_synthesis	751049	Calliopiidae	Malacostraca	Arthropoda	col	family:Calliopiidae	Calliopiidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+735	Aplysina	in_synthesis	619376	Aplysinidae	Demospongiae	Porifera	col	family:Aplysinidae	Aplysinidae		0							1	Porifera:1	Porifera			1	0	0			
+736	Apolochus	in_synthesis	2986494	Amphilochidae	Malacostraca	Arthropoda	col	family:Amphilochidae	Amphilochidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+737	Aporrhais	in_synthesis	512737	Aporrhaidae	Gastropoda	Mollusca	col	family:Aporrhaidae	Aporrhaidae		0							3	Mollusca:3	Mollusca			1	0	0			
+738	Apseudes	in_synthesis	806863	Apseudidae	Malacostraca	Arthropoda	col	family:Apseudidae	Apseudidae		0							0		Arthropoda			1	0	0			
+739	Archidoris	unmatched					col																0	0	0	not_evaluable		
+740	Architeuthis	in_synthesis	564394	Architeuthidae	Cephalopoda	Mollusca	col	family:Architeuthidae	Architeuthidae		0							1	Mollusca:1	Mollusca			1	0	0			
+741	Arenicola	in_synthesis	153397	Arenicolidae	Polychaeta	Annelida	col	family:Arenicolidae	Arenicolidae		0							4	Annelida:4	Annelida			1	0	0			
+742	Aristaeomorpha	in_synthesis	2971409	Aristeidae	Malacostraca	Arthropoda	col	family:Aristeidae	Aristeidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+743	Ashfordia	in_synthesis	4155456	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							3	Mollusca:3	Mollusca			1	0	0			
+744	Astrospartus	in_synthesis	450167	Gorgonocephalidae	Ophiuroidea		col	family:Gorgonocephalidae	Gorgonocephalidae		0							1	Echinodermata:1	Echinodermata			1	0	0			
+745	Atelecyclus	in_synthesis	284340	Atelecyclidae	Malacostraca	Arthropoda	col	family:Atelecyclidae	Atelecyclidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+746	Atenia	in_synthesis	726736	Helicodontidae	Gastropoda	Mollusca	col	family:Helicodontidae	Helicodontidae		0							2	Mollusca:2	Mollusca			1	0	0			
+747	Athanas	in_synthesis	579141	Alpheidae	Malacostraca	Arthropoda	col	family:Alpheidae	Alpheidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+748	Auchenoplax	in_synthesis	899034	Ampharetidae	Polychaeta	Annelida	col	family:Ampharetidae	Ampharetidae		0							3	Annelida:3	Annelida			1	0	0			
+749	Austrominius	in_synthesis	2958795	Austrobalanidae	Hexanauplia	Arthropoda	col											1	Arthropoda:1	Arthropoda			0	0	0	not_evaluable		
+750	Auxis	in_synthesis	411051	Scombridae	Actinopteri	Chordata	col	family:Scombridae	Scombridae		0							2	Chordata:2	Chordata			1	0	0			
+751	Axiothella	in_synthesis	694251	Maldanidae	Polychaeta	Annelida	col	family:Maldanidae	Maldanidae		0							3	Annelida:3	Annelida			1	0	0			
+752	Balea	in_synthesis	787905	Clausiliidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							3	Mollusca:3	Mollusca			1	0	0			
+753	Baptodoris	in_synthesis	2876282	Discodorididae	Gastropoda	Mollusca	col	family:Discodorididae	Discodorididae		0							3	Mollusca:3	Mollusca			1	0	0			
+754	Bathynectes	in_synthesis	475908	Polybiidae	Malacostraca	Arthropoda	col	family:Polybiidae	Polybiidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+755	Bathysolea	in_synthesis	654491	Soleidae	Actinopteri	Chordata	col	family:Soleidae	Soleidae		0							1	Chordata:1	Chordata			1	0	0			
+756	Belone	attached_at_mrca	6994	Belonidae	Actinopteri	Chordata	col	family:Belonidae	Belonidae		0							4	Chordata:4	Chordata			1	0	0			
+757	Bermudella	unmatched					col																0	0	0	not_evaluable		
+758	Beryx	in_synthesis	704242	Berycidae	Actinopteri	Chordata	col	family:Berycidae	Berycidae		0							3	Chordata:3	Chordata			1	0	0			
+759	Bivetiella	in_synthesis	524487	Cancellariidae	Gastropoda	Mollusca	col	family:Cancellariidae	Cancellariidae		0							2	Mollusca:2	Mollusca			1	0	0			
+760	Blackfordia	in_synthesis	766640	Blackfordiidae	Hydrozoa	Cnidaria	col	family:Blackfordiidae	Blackfordiidae		0							3	Cnidaria:3	Cnidaria			1	0	0			
+761	Blennius	attached_at_mrca	898542	Blenniidae	Actinopteri	Chordata	col	family:Blenniidae	Blenniidae		0							1	Chordata:1	Chordata			1	0	0			
+762	Boettgerilla	in_synthesis	2882824	Boettgerillidae	Gastropoda	Mollusca	col	family:Boettgerillidae	Boettgerillidae		0							2	Mollusca:2	Mollusca			1	0	0			
+763	Boops	in_synthesis	1025398	Sparidae	Actinopteri	Chordata	col	family:Sparidae	Sparidae		0							2	Chordata:2	Chordata			1	0	0			
+764	Bothrioneurum	in_synthesis	1020274	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							3	Annelida:3	Annelida			1	0	0			
+765	Botryphallus	in_synthesis	2915545	Rissoidae	Gastropoda	Mollusca	col	family:Rissoidae	Rissoidae		0							0		Mollusca			1	0	0			
+766	Boucheona	unmatched					col																0	0	0	not_evaluable		
+767	Branchiomma	in_synthesis	1015093	Sabellidae	Polychaeta	Annelida	col	family:Sabellidae	Sabellidae		0							0		Annelida			1	0	0			
+768	Branchipus	in_synthesis	468717	Branchipodidae	Branchiopoda	Arthropoda	col	family:Branchipodidae	Branchipodidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+769	Branchiura	in_synthesis	790921	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							4	Annelida:4	Annelida			1	0	0			
+770	Buenia	in_synthesis	209111	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							3	Chordata:3	Chordata			1	0	0			
+771	Buglossidium	in_synthesis	186725	Soleidae	Actinopteri	Chordata	col	family:Soleidae	Soleidae		0							1	Chordata:1	Chordata			1	0	0			
+772	Caligus	in_synthesis	827641	Caligidae	Hexanauplia	Arthropoda	col	family:Caligidae	Caligidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+773	Calliostoma	in_synthesis	841797	Calliostomatidae	Gastropoda	Mollusca	col	family:Calliostomatidae	Calliostomatidae		0							1	Mollusca:1	Mollusca			1	0	0			
+774	Callogorgia	attached_at_mrca	823470	Primnoidae	Anthozoa	Cnidaria	col	family:Primnoidae	Primnoidae		0							3	Cnidaria:3	Cnidaria			1	0	0			
+775	Calma	in_synthesis	2876444	Fionidae	Gastropoda	Mollusca	col	order:Nudibranchia	Nudibranchia		0							2	Mollusca:2	Mollusca			1	0	0			
+776	Calyptoconcha	in_synthesis	2893359	Velutinidae	Gastropoda	Mollusca	col	family:Velutinidae	Velutinidae		0							1	Mollusca:1	Mollusca			1	0	0			
+777	Camachoaglaja	attached_at_taxon:ott823227	7497727	Aglajidae	Gastropoda	Mollusca	col	family:Aglajidae	Aglajidae		0							2	Mollusca:2	Mollusca			1	0	0			
+778	Caminella	in_synthesis	733437	Geodiidae	Demospongiae	Porifera	col	family:Geodiidae	Geodiidae		0							1	Porifera:1	Porifera			1	0	0			
+779	Campecopea	in_synthesis	181704	Sphaeromatidae	Malacostraca	Arthropoda	col	family:Sphaeromatidae	Sphaeromatidae		0		96823;161560	Sphaeromatidae		0		3	Arthropoda:3	Arthropoda			2	0	0			
+780	Candiella	unmatched					col																0	0	0	not_evaluable		
+781	Capellinia	unmatched					col																0	0	0	not_evaluable		
+782	Capros	in_synthesis	358653	Caproidae	Actinopteri	Chordata	col	family:Caproidae	Caproidae		0							1	Chordata:1	Chordata			1	0	0			
+783	Catalauniscus	in_synthesis	2991532	Trichoniscidae	Malacostraca	Arthropoda	col	family:Trichoniscidae	Trichoniscidae		0							0		Arthropoda			1	0	0			
+784	Catriona	unmatched					col																0	0	0	not_evaluable		
+785	Cavernularia	in_synthesis	436763	Veretillidae	Anthozoa	Cnidaria	col	family:Veretillidae	Veretillidae		0							1	Cnidaria:1	Cnidaria			1	0	0			
+786	Celleporella	in_synthesis	820956	Hippothoidae	Gymnolaemata	Bryozoa	col	family:Hippothoidae	Hippothoidae		0							0		Bryozoa			1	0	0			
+787	Centrolophus	in_synthesis	640289	Centrolophidae	Actinopteri	Chordata	col	family:Centrolophidae	Centrolophidae		0							1	Chordata:1	Chordata			1	0	0			
+788	Cepaea	in_synthesis	891882	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							4	Mollusca:4	Mollusca			1	0	0			
+789	Cerastoderma	in_synthesis	965476	Cardiidae	Bivalvia	Mollusca	col	family:Cardiidae	Cardiidae		0							2	Mollusca:2	Mollusca			1	0	0			
+790	Cernosvitovia	in_synthesis	4165427	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							1	Annelida:1	Annelida			1	0	0			
+791	Cestopagurus	in_synthesis	496389	Paguridae	Malacostraca	Arthropoda	col	family:Paguridae	Paguridae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+792	Chamelea	in_synthesis	414117	Veneridae	Bivalvia	Mollusca	col	family:Veneridae	Veneridae		0							0		Mollusca			1	0	0			
+793	Characella	in_synthesis	984625	Pachastrellidae	Demospongiae	Porifera	col	family:Pachastrellidae	Pachastrellidae		0							2	Porifera:2	Porifera			1	0	0			
+794	Chartella	in_synthesis	2940419	Flustridae	Gymnolaemata	Bryozoa	col	family:Flustridae	Flustridae		0							1	Bryozoa:1	Bryozoa			1	0	0			
+795	Chimaera	attached_at_mrca	29488	Chimaeridae	Chondrichthyes	Chordata	col	family:Chimaeridae	Chimaeridae		0							2	Chordata:2	Chordata			1	0	0			
+796	Chlorotocus	in_synthesis	937640	Pandalidae	Malacostraca	Arthropoda	col	family:Pandalidae	Pandalidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+797	Chondrochelia	in_synthesis	7122387	Leptocheliidae	Malacostraca	Arthropoda	col	family:Leptocheliidae	Leptocheliidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+798	Chorizopora	in_synthesis	304734	Chorizoporidae	Gymnolaemata	Bryozoa	col	family:Chorizoporidae	Chorizoporidae		0							2	Bryozoa:2	Bryozoa			1	0	0			
+799	Chromogobius	in_synthesis	361426	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							4	Chordata:4	Chordata			1	0	0			
+800	Ciliella	in_synthesis	726726	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							3	Mollusca:3	Mollusca			1	0	0			
+801	Cinetorhynchus	in_synthesis	1089478	Rhynchocinetidae	Malacostraca	Arthropoda	col	family:Rhynchocinetidae	Rhynchocinetidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+802	Cingula	in_synthesis	2915180	Rissoidae	Gastropoda	Mollusca	col	family:Rissoidae	Rissoidae		0							2	Mollusca:2	Mollusca			1	0	0			
+803	Cirriformia	in_synthesis	51538	Cirratulidae	Polychaeta	Annelida	col	family:Cirratulidae	Cirratulidae		0							4	Annelida:4	Annelida			1	0	0			
+804	Citharus	in_synthesis	21783	Citharidae	Actinopteri	Chordata	col	family:Citharidae	Citharidae		0							1	Chordata:1	Chordata			1	0	0			
+805	Clelandella	in_synthesis	523641	Trochidae	Gastropoda	Mollusca	col	family:Trochidae	Trochidae		0							1	Mollusca:1	Mollusca			1	0	0			
+806	Cochlicopa	in_synthesis	442253	Cochlicopidae	Gastropoda	Mollusca	col	family:Cochlicopidae	Cochlicopidae		0							4	Mollusca:4	Mollusca			1	0	0			
+807	Cognettia	unmatched					col																0	0	0	not_evaluable		
+808	Copula	in_synthesis	172221	Tripedaliidae	Cubozoa	Cnidaria	col	family:Tripedaliidae	Tripedaliidae		0							0		Cnidaria			1	0	0			
+809	Corbicula	in_synthesis	775909	Cyrenidae	Bivalvia	Mollusca	col	family:Cyrenidae	Cyrenidae		0							0		Mollusca			1	0	0			
+810	Corneola	in_synthesis	5327279	Helicidae	Gastropoda	Mollusca	col	family:Helicidae	Helicidae		0							2	Mollusca:2	Mollusca			1	0	0			
+811	Corolla	in_synthesis	484130	Cymbuliidae	Gastropoda	Mollusca	col	family:Cymbuliidae	Cymbuliidae		0							0		Mollusca			1	0	0			
+812	Coronellina	in_synthesis	4149552	Microporidae	Gymnolaemata	Bryozoa	col	family:Microporidae	Microporidae		0							1	Bryozoa:1	Bryozoa			1	0	0			
+813	Corrosella	in_synthesis	4159091	Hydrobiidae	Gastropoda	Mollusca	col	family:Hydrobiidae	Hydrobiidae		0							1	Mollusca:1	Mollusca			1	0	0			
+814	Coryphella	unmatched					col																0	0	0	not_evaluable		
+815	Coscinasterias	in_synthesis	987829	Asteriidae	Asteroidea		col	family:Asteriidae	Asteriidae		0							3	Echinodermata:3	Echinodermata			1	0	0			
+816	Craspedacusta	in_synthesis	997626	Olindiidae	Hydrozoa	Cnidaria	col	family:Olindiidae	Olindiidae		0							0		Cnidaria			1	0	0			
+817	Creseis	in_synthesis	671266	Creseidae	Gastropoda	Mollusca	col	family:Creseidae	Creseidae		0							1	Mollusca:1	Mollusca			1	0	0			
+818	Crimora	in_synthesis	527240	Polyceridae	Gastropoda	Mollusca	col	family:Polyceridae	Polyceridae		0							4	Mollusca:4	Mollusca			1	0	0			
+819	Crisilla	in_synthesis	2917575	Rissoidae	Gastropoda	Mollusca	col	family:Rissoidae	Rissoidae		0							3	Mollusca:3	Mollusca			1	0	0			
+820	Cryptosaccus	in_synthesis	5327244	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							2	Mollusca:2	Mollusca			1	0	0			
+821	Ctenolabrus	in_synthesis	553196	Labridae	Actinopteri	Chordata	col	family:Labridae	Labridae		0							1	Chordata:1	Chordata			1	0	0			
+822	Cuvierina	in_synthesis	1026637	Cuvierinidae	Gastropoda	Mollusca	col	family:Cuvierinidae	Cuvierinidae		0							3	Mollusca:3	Mollusca			1	0	0			
+823	Cyathura	in_synthesis	134318	Anthuridae	Malacostraca	Arthropoda	col	family:Anthuridae	Anthuridae		0							0		Arthropoda			1	0	0			
+824	Cyclopterus	in_synthesis	316605	Cyclopteridae	Actinopteri	Chordata	col	family:Cyclopteridae	Cyclopteridae		0							1	Chordata:1	Chordata			1	0	0			
+825	Cymbula	in_synthesis	259391	Patellidae	Gastropoda	Mollusca	col	family:Patellidae	Patellidae		0							0		Mollusca			1	0	0			
+826	Dactylopterus	in_synthesis	183858	Dactylopteridae	Actinopteri	Chordata	col	family:Dactylopteridae	Dactylopteridae		0							2	Chordata:2	Chordata			1	0	0			
+827	Deania	in_synthesis	1027217	Centrophoridae	Chondrichthyes	Chordata	col	family:Centrophoridae	Centrophoridae		0							4	Chordata:4	Chordata			1	0	0			
+828	Dendrophyllia	in_synthesis	322054	Dendrophylliidae	Anthozoa	Cnidaria	col	family:Dendrophylliidae	Dendrophylliidae		0							4	Cnidaria:4	Cnidaria			1	0	0			
+829	Deosergestes	in_synthesis	400774	Sergestidae	Malacostraca	Arthropoda	col	family:Sergestidae	Sergestidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+830	Derilambrus	in_synthesis	2979456	Parthenopidae	Malacostraca	Arthropoda	col	family:Parthenopidae	Parthenopidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+831	Desmodema	in_synthesis	47474	Trachipteridae	Actinopteri	Chordata	col	family:Trachipteridae	Trachipteridae		0							2	Chordata:2	Chordata			1	0	0			
+832	Dexamine	in_synthesis	4674244	Dexaminidae	Malacostraca	Arthropoda	col	family:Dexaminidae	Dexaminidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+833	Diaixis	in_synthesis	32420	Diaixidae	Hexanauplia	Arthropoda	col	family:Diaixidae	Diaixidae		0							0		Arthropoda			1	0	0			
+834	Dicata	in_synthesis	863493	Facelinidae	Gastropoda	Mollusca	col	family:Facelinidae	Facelinidae		0							1	Mollusca:1	Mollusca			1	0	0			
+835	Dicentrarchus	in_synthesis	21246	Moronidae	Actinopteri	Chordata	col	family:Moronidae	Moronidae		0							3	Chordata:3	Chordata			1	0	0			
+836	Dicologlossa	attached_at_mrca	805164	Soleidae	Actinopteri	Chordata	col	family:Soleidae	Soleidae		0							4	Chordata:4	Chordata			1	0	0			
+837	Didogobius	in_synthesis	3638022	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							3	Chordata:3	Chordata			1	0	0			
+838	Dodecaceria	in_synthesis	1067345	Cirratulidae	Polychaeta	Annelida	col	family:Cirratulidae	Cirratulidae		0							0		Annelida			1	0	0			
+839	Dosidicus	in_synthesis	125338	Ommastrephidae	Cephalopoda	Mollusca	col	family:Ommastrephidae	Ommastrephidae		0							1	Mollusca:1	Mollusca			1	0	0			
+840	Dosima	in_synthesis	2957943	Lepadidae	Hexanauplia	Arthropoda	col	family:Lepadidae	Lepadidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+841	Dromia	in_synthesis	32429	Dromiidae	Malacostraca	Arthropoda	col	family:Dromiidae	Dromiidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+842	Dugastella	in_synthesis	184013	Atyidae	Malacostraca	Arthropoda	col	family:Atyidae	Atyidae		0							0		Arthropoda			1	0	0			
+843	Dynamene	in_synthesis	2996011	Sphaeromatidae	Malacostraca	Arthropoda	col	family:Sphaeromatidae	Sphaeromatidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+844	Dysponetus	in_synthesis	151155	Chrysopetalidae	Polychaeta	Annelida	col	family:Chrysopetalidae	Chrysopetalidae		0							0		Annelida			1	0	0			
+845	Ebala	attached_at_taxon:ott409995	582310	Murchisonellidae	Gastropoda	Mollusca	col	family:Murchisonellidae	Murchisonellidae		0							0		Mollusca			1	0	0			
+846	Echiichthys	in_synthesis	435191	Trachinidae	Actinopteri	Chordata	col	family:Trachinidae	Trachinidae		0							1	Chordata:1	Chordata			1	0	0			
+847	Edmundsella	attached_at_taxon:ott896650	7497940	Flabellinidae	Gastropoda	Mollusca	col	family:Flabellinidae	Flabellinidae		0							3	Mollusca:3	Mollusca			1	0	0			
+848	Ellisina	in_synthesis	2935849	Calloporidae	Gymnolaemata	Bryozoa	col	order:Cheilostomatida	Cheilostomatida		0							0		Bryozoa			1	0	0			
+849	Elona	in_synthesis	205101	Elonidae	Gastropoda	Mollusca	col	family:Elonidae	Elonidae		0							2	Mollusca:2	Mollusca			1	0	0			
+850	Eluma	in_synthesis	755781	Armadillidiidae	Malacostraca	Arthropoda	col	family:Armadillidiidae	Armadillidiidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+851	Embletonia	attached_at_taxon:ott5693091	2876359	Embletoniidae	Gastropoda	Mollusca	col	family:Embletoniidae	Embletoniidae		0							0		Mollusca			1	0	0			
+852	Enchylea	in_synthesis	2847649	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							1	Annelida:1	Annelida			1	0	0			
+853	Ensis	in_synthesis	721804	Pharidae	Bivalvia	Mollusca	col	family:Pharidae	Pharidae		0							1	Mollusca:1	Mollusca			1	0	0			
+854	Ephippion	in_synthesis	764250	Tetraodontidae	Actinopteri	Chordata	col	family:Tetraodontidae	Tetraodontidae		0							1	Chordata:1	Chordata			1	0	0			
+855	Ephydatia	attached_at_mrca	588766	Spongillidae	Demospongiae	Porifera	col	family:Spongillidae	Spongillidae		0							1	Porifera:1	Porifera			1	0	0			
+856	Ergasticus	in_synthesis	476333	Oregoniidae	Malacostraca	Arthropoda	col	family:Oregoniidae	Oregoniidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+857	Espinosina	attached_at_taxon:ott830518	7959363	Aplustridae	Gastropoda	Mollusca	col	family:Aplustridae	Aplustridae		0							1	Mollusca:1	Mollusca			1	0	0			
+858	Euchone	in_synthesis	438509	Sabellidae	Polychaeta	Annelida	col	family:Sabellidae	Sabellidae		0							0		Annelida			1	0	0			
+859	Eupaludestrina	unmatched					col																0	0	0	not_evaluable		
+860	Eurydice	in_synthesis	755779	Cirolanidae	Malacostraca	Arthropoda	col	family:Cirolanidae	Cirolanidae		0							0		Arthropoda			1	0	0			
+861	Eurynome	in_synthesis	4667672	Majidae	Malacostraca	Arthropoda	col	order:Decapoda	Decapoda		0							3	Arthropoda:3	Arthropoda			1	0	0			
+862	Eurysyllis	in_synthesis	1043268	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							1	Annelida:1	Annelida			1	0	0			
+863	Eusergestes	in_synthesis	2971018	Sergestidae	Malacostraca	Arthropoda	col	family:Sergestidae	Sergestidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+864	Eutrigla	in_synthesis	881282	Triglidae	Actinopteri	Chordata	col	family:Triglidae	Triglidae		0							1	Chordata:1	Chordata			1	0	0			
+865	Facelinopsis	in_synthesis	2876488	Facelinidae	Gastropoda	Mollusca	col	family:Facelinidae	Facelinidae		0							1	Mollusca:1	Mollusca			1	0	0			
+866	Ferussacia	in_synthesis	298009	Ferussaciidae	Gastropoda	Mollusca	col	family:Ferussaciidae	Ferussaciidae		0							4	Mollusca:4	Mollusca			1	0	0			
+867	Figularia	attached_at_mrca	12600	Cribrilinidae	Gymnolaemata	Bryozoa	col	family:Cribrilinidae	Cribrilinidae		0							2	Bryozoa:2	Bryozoa			1	0	0			
+868	Fiona	in_synthesis	2876517	Fionidae	Gastropoda	Mollusca	col	family:Fionidae	Fionidae		0							2	Mollusca:2	Mollusca			1	0	0			
+869	Firoloida	in_synthesis	484142	Pterotracheidae	Gastropoda	Mollusca	col	family:Pterotracheidae	Pterotracheidae		0							3	Mollusca:3	Mollusca			1	0	0			
+870	Funchalia	in_synthesis	285757	Penaeidae	Malacostraca	Arthropoda	col	family:Penaeidae	Penaeidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+871	Gadiculus	in_synthesis	1014043	Gadidae	Actinopteri	Chordata	col	family:Gadidae	Gadidae		0							1	Chordata:1	Chordata			1	0	0			
+872	Galathowenia	in_synthesis	250707	Oweniidae	Polychaeta	Annelida	col	family:Oweniidae	Oweniidae		0							0		Annelida			1	0	0			
+873	Galeorhinus	in_synthesis	29487	Triakidae	Chondrichthyes	Chordata	col	family:Triakidae	Triakidae		0							1	Chordata:1	Chordata			1	0	0			
+874	Gallardoneris	in_synthesis	4979104	Lumbrineridae	Polychaeta	Annelida	col	family:Lumbrineridae	Lumbrineridae		0							3	Annelida:3	Annelida			1	0	0			
+875	Gambusia	attached_at_mrca	617459	Poeciliidae	Actinopteri	Chordata	col	family:Poeciliidae	Poeciliidae		0							4	Chordata:4	Chordata			1	0	0			
+876	Gammarella	in_synthesis	204417	Nuuanuidae	Malacostraca	Arthropoda	col	family:Nuuanuidae	Nuuanuidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+877	Ganula	in_synthesis	2882938	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							4	Mollusca:4	Mollusca			1	0	0			
+878	Gargamella	in_synthesis	2876397	Discodorididae	Gastropoda	Mollusca	col	family:Discodorididae	Discodorididae		0							2	Mollusca:2	Mollusca			1	0	0			
+879	Gasterosteus	in_synthesis	401070	Gasterosteidae	Actinopteri	Chordata	col	family:Gasterosteidae	Gasterosteidae		0							4	Chordata:4	Chordata			1	0	0			
+880	Gasulliella	in_synthesis	254481	Trissexodontidae	Gastropoda	Mollusca	col	family:Trissexodontidae	Trissexodontidae		0							1	Mollusca:1	Mollusca			1	0	0			
+881	Gecarcoidea	in_synthesis	386609	Gecarcinidae	Malacostraca	Arthropoda	col	family:Gecarcinidae	Gecarcinidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+882	Geryon	in_synthesis	757099	Geryonidae	Malacostraca	Arthropoda	col	family:Geryonidae	Geryonidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+883	Gesiella	in_synthesis	4984617	Polynoidae	Polychaeta	Annelida	col	family:Polynoidae	Polynoidae		0							1	Annelida:1	Annelida			1	0	0			
+884	Gibbomodiola	in_synthesis	2854286	Mytilidae	Bivalvia	Mollusca	col	order:Mytilida	Mytilida		0							0		Mollusca			1	0	0			
+885	Gibbulinella	in_synthesis	359662	Streptaxidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							2	Mollusca:2	Mollusca			1	0	0			
+886	Glycymeris	attached_at_mrca	255554	Glycymerididae	Bivalvia	Mollusca	col	family:Glycymerididae	Glycymerididae		0							0		Mollusca			1	0	0			
+887	Gobiusculus	in_synthesis	1060326	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							1	Chordata:1	Chordata			1	0	0			
+888	Goniodoris	in_synthesis	553085	Goniodorididae	Gastropoda	Mollusca	col	family:Goniodorididae	Goniodorididae		0							1	Mollusca:1	Mollusca			1	0	0			
+889	Goniopsyllus	in_synthesis	5092709	Peltidiidae	Hexanauplia	Arthropoda	col	family:Peltidiidae	Peltidiidae		0							0		Arthropoda			1	0	0			
+890	Gonyodiscus	unmatched					col																0	0	0	not_evaluable		
+891	Grammicolepis	in_synthesis	589835	Grammicolepididae	Actinopteri	Chordata	col	family:Grammicolepididae	Grammicolepididae		0							3	Chordata:3	Chordata			1	0	0			
+892	Graniberia	in_synthesis	7964386	Chondrinidae	Gastropoda	Mollusca	col	family:Chondrinidae	Chondrinidae		0							3	Mollusca:3	Mollusca			1	0	0			
+893	Granopupa	in_synthesis	759168	Chondrinidae	Gastropoda	Mollusca	col	family:Chondrinidae	Chondrinidae		0							3	Mollusca:3	Mollusca			1	0	0			
+894	Gymnammodytes	in_synthesis	3639830	Ammodytidae	Actinopteri	Chordata	col	family:Ammodytidae	Ammodytidae		0							1	Chordata:1	Chordata			1	0	0			
+895	Gymnesigobius	in_synthesis	7062808	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							1	Chordata:1	Chordata			1	0	0			
+896	Gyrophyllum	in_synthesis	1062984	Pennatulidae	Anthozoa	Cnidaria	col											1	Cnidaria:1	Cnidaria			0	0	0	not_evaluable		
+897	Halicoides	in_synthesis	4674973	Pardaliscidae	Malacostraca	Arthropoda	col	family:Pardaliscidae	Pardaliscidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+898	Haliotis	in_synthesis	228119	Haliotidae	Gastropoda	Mollusca	col	family:Haliotidae	Haliotidae		0							0		Mollusca			1	0	0			
+899	Haliphron	in_synthesis	752586	Alloposidae	Cephalopoda	Mollusca	col	family:Alloposidae	Alloposidae		0							2	Mollusca:2	Mollusca			1	0	0			
+900	Haloa	unmatched					col																0	0	0	not_evaluable		
+901	Halobatrachus	in_synthesis	706478	Batrachoididae	Actinopteri	Chordata	col	family:Batrachoididae	Batrachoididae		0							0		Chordata			1	0	0			
+902	Haploginglymus	in_synthesis	5091688	Niphargidae	Malacostraca	Arthropoda	col	family:Niphargidae	Niphargidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+903	Haplostylus	in_synthesis	795726	Mysidae	Malacostraca	Arthropoda	col	family:Mysidae	Mysidae		0							0		Arthropoda			1	0	0			
+904	Harpinia	in_synthesis	4673144	Phoxocephalidae	Malacostraca	Arthropoda	col	family:Phoxocephalidae	Phoxocephalidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+905	Hatumia	in_synthesis	254487	Trissexodontidae	Gastropoda	Mollusca	col	family:Trissexodontidae	Trissexodontidae		0							4	Mollusca:4	Mollusca			1	0	0			
+906	Haustorius	in_synthesis	217699	Haustoriidae	Malacostraca	Arthropoda	col	family:Haustoriidae	Haustoriidae		0							0		Arthropoda			1	0	0			
+907	Helicodonta	in_synthesis	1011326	Helicodontidae	Gastropoda	Mollusca	col	family:Helicodontidae	Helicodontidae		0							4	Mollusca:4	Mollusca			1	0	0			
+908	Helicolenus	in_synthesis	191015	Sebastidae	Actinopteri	Chordata	col	family:Sebastidae	Sebastidae		0							1	Chordata:1	Chordata			1	0	0			
+909	Hemimysis	in_synthesis	159969	Mysidae	Malacostraca	Arthropoda	col	family:Mysidae	Mysidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+910	Herbstia	attached_at_mrca	586087	Epialtidae	Malacostraca	Arthropoda	col	family:Epialtidae	Epialtidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+911	Hermania	in_synthesis	7497754	Philinidae	Gastropoda	Mollusca	col	family:Philinidae	Philinidae		0							3	Mollusca:3	Mollusca			1	0	0			
+912	Heteralepas	in_synthesis	465805	Heteralepadidae	Hexanauplia	Arthropoda	col	family:Heteralepadidae	Heteralepadidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+913	Heteroclymene	attached_at_taxon:ott310144	4977661	Maldanidae	Polychaeta	Annelida	col	family:Maldanidae	Maldanidae		0							4	Annelida:4	Annelida			1	0	0			
+914	Hipponoe	in_synthesis	631826	Amphinomidae	Polychaeta	Annelida	col	family:Amphinomidae	Amphinomidae		0							0		Sipuncula			1	0	0			
+915	Hyala	in_synthesis	4960127	Iravadiidae	Gastropoda	Mollusca	col	family:Iravadiidae	Iravadiidae		0							0		Mollusca			1	0	0			
+916	Hyalocylis	in_synthesis	823291	Creseidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							0		Mollusca			1	0	0			
+917	Hydatina	in_synthesis	674163	Aplustridae	Gastropoda	Mollusca	col	family:Aplustridae	Aplustridae		0							4	Mollusca:4	Mollusca			1	0	0			
+918	Hymenogadus	in_synthesis	5859480	Macrouridae	Actinopteri	Chordata	col	family:Macrouridae	Macrouridae		0							1	Chordata:1	Chordata			1	0	0			
+919	Hyperoplus	in_synthesis	613261	Ammodytidae	Actinopteri	Chordata	col	family:Ammodytidae	Ammodytidae		0							2	Chordata:2	Chordata			1	0	0			
+920	Iberogammarus	in_synthesis	7120106	Gammaridae	Malacostraca	Arthropoda	col	family:Gammaridae	Gammaridae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+921	Idaliadoris	unmatched					col																0	0	0	not_evaluable		
+922	Idas	in_synthesis	393553	Mytilidae	Bivalvia	Mollusca	col	order:Mytilida	Mytilida		0							0		Mollusca			1	0	0			
+923	Illex	attached_at_mrca	1054844	Ommastrephidae	Cephalopoda	Mollusca	col	family:Ommastrephidae	Ommastrephidae		0							3	Mollusca:3	Mollusca			1	0	0			
+924	Iphimedia	in_synthesis	2982329	Iphimediidae	Malacostraca	Arthropoda	col	family:Iphimediidae	Iphimediidae		0							0		Arthropoda			1	0	0			
+925	Iphinoe	in_synthesis	647842	Bodotriidae	Malacostraca	Arthropoda	col	family:Bodotriidae	Bodotriidae		0							0		Arthropoda			1	0	0			
+926	Iphitime	in_synthesis	824620	Dorvilleidae	Polychaeta	Annelida	col	family:Dorvilleidae	Dorvilleidae		0							4	Annelida:4	Annelida			1	0	0			
+927	Isarachnanthus	in_synthesis	606129	Arachnactidae	Anthozoa	Cnidaria	col	family:Arachnactidae	Arachnactidae		0							0		Cnidaria			1	0	0			
+928	Ischyromene	in_synthesis	1035064	Sphaeromatidae	Malacostraca	Arthropoda	col	family:Sphaeromatidae	Sphaeromatidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+929	Jaminia	unmatched					col																0	0	0	not_evaluable		
+930	Janira	in_synthesis	907483	Janiridae	Malacostraca	Arthropoda	col	family:Janiridae	Janiridae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+931	Jaxea	in_synthesis	389504	Laomediidae	Malacostraca	Arthropoda	col	family:Laomediidae	Laomediidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+932	Joeropsis	in_synthesis	405261	Joeropsididae	Malacostraca	Arthropoda	col	family:Joeropsididae	Joeropsididae		0							0		Arthropoda			1	0	0			
+933	Labioleanira	in_synthesis	4982193	Sigalionidae	Polychaeta	Annelida	col	family:Sigalionidae	Sigalionidae		0							1	Annelida:1	Annelida			1	0	0			
+934	Labrus	in_synthesis	607772	Labridae	Actinopteri	Chordata	col	family:Labridae	Labridae		0							3	Chordata:3	Chordata			1	0	0			
+935	Laevicardium	in_synthesis	592229	Cardiidae	Bivalvia	Mollusca	col	family:Cardiidae	Cardiidae		0							0		Mollusca			1	0	0			
+936	Lagis	in_synthesis	4975358	Pectinariidae	Polychaeta	Annelida	col	family:Pectinariidae	Pectinariidae		0							1	Annelida:1	Annelida			1	0	0			
+937	Lamprohaminoea	unmatched					col																0	0	0	not_evaluable		
+938	Lasaea	in_synthesis	1006155	Lasaeidae	Bivalvia	Mollusca	col	family:Lasaeidae	Lasaeidae		0							0		Mollusca			1	0	0			
+939	Laticorophium	in_synthesis	2985020	Corophiidae	Malacostraca	Arthropoda	col	family:Corophiidae	Corophiidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+940	Latreillia	in_synthesis	397755	Latreilliidae	Malacostraca	Arthropoda	col	family:Latreilliidae	Latreilliidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+941	Learchis	in_synthesis	2876567	Facelinidae	Gastropoda	Mollusca	col	family:Facelinidae	Facelinidae		0							2	Mollusca:2	Mollusca			1	0	0			
+942	Lekanesphaera	in_synthesis	619350	Sphaeromatidae	Malacostraca	Arthropoda	col	family:Sphaeromatidae	Sphaeromatidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+943	Leonia	in_synthesis	598686	Pomatiidae	Gastropoda	Mollusca	col	family:Pomatiidae	Pomatiidae		0							1	Mollusca:1	Mollusca			1	0	0			
+944	Lepadogaster	in_synthesis	719417	Gobiesocidae	Actinopteri	Chordata	col	family:Gobiesocidae	Gobiesocidae		0							4	Chordata:4	Chordata			1	0	0			
+945	Lepidocybium	in_synthesis	24769	Gempylidae	Actinopteri	Chordata	col	order:Scombriformes	Scombriformes		0							2	Chordata:2	Chordata			1	0	0			
+946	Lepidopus	attached_at_mrca	1068320	Trichiuridae	Actinopteri	Chordata	col	family:Trichiuridae	Trichiuridae		0							2	Chordata:2	Chordata			1	0	0			
+947	Lepidorhombus	in_synthesis	1036256	Scophthalmidae	Actinopteri	Chordata	col	family:Scophthalmidae	Scophthalmidae		0							3	Chordata:3	Chordata			1	0	0			
+948	Leptogorgia	in_synthesis	49917	Gorgoniidae	Anthozoa	Cnidaria	col	family:Gorgoniidae	Gorgoniidae		0		37507;308451	Gorgoniidae		0		1	Cnidaria:1	Cnidaria			2	0	0			
+949	Leptotrichus	in_synthesis	2992947	Porcellionidae	Malacostraca	Arthropoda	col	family:Porcellionidae	Porcellionidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+950	Lernaea	in_synthesis	1087114	Lernaeidae	Hexanauplia	Arthropoda	col	family:Lernaeidae	Lernaeidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+951	Lesueurigobius	in_synthesis	209100	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							2	Chordata:2	Chordata			1	0	0			
+952	Leucothoe	in_synthesis	278243	Leucothoidae	Malacostraca	Arthropoda	col	family:Leucothoidae	Leucothoidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+953	Lichia	in_synthesis	1020298	Carangidae	Actinopteri	Chordata	col	family:Carangidae	Carangidae		0							1	Chordata:1	Chordata			1	0	0			
+954	Limapontia	in_synthesis	492223	Limapontiidae	Gastropoda	Mollusca	col	family:Limapontiidae	Limapontiidae		0							4	Mollusca:4	Mollusca			1	0	0			
+955	Limnoria	in_synthesis	97962	Limnoriidae	Malacostraca	Arthropoda	col	family:Limnoriidae	Limnoriidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+956	Lipkea	in_synthesis	3680332	Lipkeidae		Cnidaria	col	family:Lipkeidae	Lipkeidae		0							0		Cnidaria			1	0	0			
+957	Lipogenys	in_synthesis	3643890	Notacanthidae	Actinopteri	Chordata	col	family:Notacanthidae	Notacanthidae		0							2	Chordata:2	Chordata			1	0	0			
+958	Lipophrys	in_synthesis	867526	Blenniidae	Actinopteri	Chordata	col	family:Blenniidae	Blenniidae		0							1	Chordata:1	Chordata			1	0	0			
+959	Litophyton	in_synthesis	418998	Nephtheidae	Anthozoa	Cnidaria	col	family:Nephtheidae	Nephtheidae		0		361000;360998					1	Cnidaria:1	Cnidaria			1	0	0			
+960	Lucasius	in_synthesis	2992950	Porcellionidae	Malacostraca	Arthropoda	col	family:Porcellionidae	Porcellionidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+961	Luisella	in_synthesis	7497965	Samlidae	Gastropoda	Mollusca	col	family:Samlidae	Samlidae		0							1	Mollusca:1	Mollusca			1	0	0			
+962	Lyconus	in_synthesis	746599	Merlucciidae	Actinopteri	Chordata	col	family:Merlucciidae	Merlucciidae		0							2	Chordata:2	Chordata			1	0	0			
+963	Lysidice	in_synthesis	438827	Eunicidae	Polychaeta	Annelida	col	family:Eunicidae	Eunicidae		0							2	Annelida:2	Annelida			1	0	0			
+964	Macrochaeta	in_synthesis	642427	Acrocirridae	Polychaeta	Annelida	col	family:Acrocirridae	Acrocirridae		0							2	Annelida:2	Annelida			1	0	0			
+965	Macropipus	in_synthesis	80001	Polybiidae	Malacostraca	Arthropoda	col	family:Polybiidae	Polybiidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+966	Macrotritopus	in_synthesis	5498694	Octopodidae	Cephalopoda	Mollusca	col	family:Octopodidae	Octopodidae		0							4	Mollusca:4	Mollusca			1	0	0			
+967	Magallana	in_synthesis	7493911	Ostreidae	Bivalvia	Mollusca	col	family:Ostreidae	Ostreidae		0							0		Mollusca			1	0	0			
+968	Maldane	in_synthesis	216522	Maldanidae	Polychaeta	Annelida	col	family:Maldanidae	Maldanidae		0							4	Porifera:4	Annelida			1	0	0			
+969	Margaretta	in_synthesis	777570	Margarettidae	Gymnolaemata	Bryozoa	col	family:Margarettidae	Margarettidae		0							0		Bryozoa			1	0	0			
+970	Marinogammarus	in_synthesis	2982776	Gammaridae	Malacostraca	Arthropoda	col	family:Gammaridae	Gammaridae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+971	Marthasterias	in_synthesis	721251	Asteriidae	Asteroidea		col	family:Asteriidae	Asteriidae		0							2	Echinodermata:2	Echinodermata			1	0	0			
+972	Mastigophallus	in_synthesis	777530	Trissexodontidae	Gastropoda	Mollusca	col	family:Trissexodontidae	Trissexodontidae		0							1	Mollusca:1	Mollusca			1	0	0			
+973	Mauligobius	in_synthesis	3637956	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							1	Chordata:1	Chordata			1	0	0			
+974	Megadrilus	attached_at_taxon:ott941620	5673525	Protodrilidae	Polychaeta	Annelida	col	family:Protodrilidae	Protodrilidae		0							1	Annelida:1	Annelida;Sipuncula			1	0	0			
+975	Megasyllis	in_synthesis	738286	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							0		Annelida			1	0	0			
+976	Megatrema	in_synthesis	588441	Pyrgomatidae	Hexanauplia	Arthropoda	col	family:Pyrgomatidae	Pyrgomatidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+977	Melanonus	in_synthesis	363194	Melanonidae	Actinopteri	Chordata	col	family:Melanonidae	Melanonidae		0							2	Chordata:2	Chordata			1	0	0			
+978	Melanopsis	attached_at_taxon:ott272321	722373	Melanopsidae	Gastropoda	Mollusca	col	family:Melanopsidae	Melanopsidae		0							4	Mollusca:4	Mollusca			1	0	0			
+979	Melarhaphe	in_synthesis	489963	Littorinidae	Gastropoda	Mollusca	col	family:Littorinidae	Littorinidae		0							1	Mollusca:1	Mollusca			1	0	0			
+980	Membranipora	in_synthesis	394410	Membraniporidae	Gymnolaemata	Bryozoa	col	family:Membraniporidae	Membraniporidae		0							2	Bryozoa:2	Bryozoa			1	0	0			
+981	Menetus	in_synthesis	454554	Planorbidae	Gastropoda	Mollusca	col	family:Planorbidae	Planorbidae		0							2	Mollusca:2	Mollusca			1	0	0			
+982	Mengoana	in_synthesis	2882486	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							4	Mollusca:4	Mollusca			1	0	0			
+983	Merdigera	in_synthesis	4155665	Enidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							1	Mollusca:1	Mollusca			1	0	0			
+984	Mesochaetopterus	in_synthesis	884668	Chaetopteridae	Polychaeta	Annelida	col	family:Chaetopteridae	Chaetopteridae		0							2	Annelida:2	Annelida			1	0	0			
+985	Mesonerilla	in_synthesis	911578	Nerillidae	Polychaeta	Annelida	col	family:Nerillidae	Nerillidae		0							1	Chordata:1	Annelida			1	0	0			
+986	Microhedyle	in_synthesis	142138	Parhedylidae	Gastropoda	Mollusca	col	family:Parhedylidae	Parhedylidae		0							3	Mollusca:3	Mollusca			1	0	0			
+987	Micromelo	in_synthesis	830516	Aplustridae	Gastropoda	Mollusca	col	family:Aplustridae	Aplustridae		0							4	Mollusca:4	Mollusca			1	0	0			
+988	Micromesistius	in_synthesis	905143	Gadidae	Actinopteri	Chordata	col	family:Gadidae	Gadidae		0							1	Chordata:1	Chordata			1	0	0			
+989	Micropogonias	in_synthesis	423874	Sciaenidae	Actinopteri	Chordata	col	family:Sciaenidae	Sciaenidae		0							4	Chordata:4	Chordata			1	0	0			
+990	Microstomus	attached_at_mrca	167008	Pleuronectidae	Actinopteri	Chordata	col	family:Pleuronectidae	Pleuronectidae		0							3	Chordata:3	Chordata			1	0	0			
+991	Miktoniscus	in_synthesis	843807	Trichoniscidae	Malacostraca	Arthropoda	col	family:Trichoniscidae	Trichoniscidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+992	Milax	in_synthesis	518942	Milacidae	Gastropoda	Mollusca	col	family:Milacidae	Milacidae		0							4	Mollusca:4	Mollusca			1	0	0			
+993	Mimachlamys	in_synthesis	827429	Pectinidae	Bivalvia	Mollusca	col	family:Pectinidae	Pectinidae		0							0		Mollusca			1	0	0			
+994	Mitsukurina	in_synthesis	73663	Mitsukurinidae	Chondrichthyes	Chordata	col	family:Mitsukurinidae	Mitsukurinidae		0							1	Chordata:1	Chordata			1	0	0			
+995	Mola	in_synthesis	457789	Molidae	Actinopteri	Chordata	col	family:Molidae	Molidae		0							3	Chordata:3	Chordata			1	0	0			
+996	Mollia	attached_at_mrca	2935601	Microporidae	Gymnolaemata	Bryozoa	col	family:Microporidae	Microporidae		0							1	Bryozoa:1	Bryozoa			1	0	0			
+997	Molva	in_synthesis	659848	Lotidae	Actinopteri	Chordata	col	family:Lotidae	Lotidae		0							3	Chordata:3	Chordata			1	0	0			
+998	Monodaeus	in_synthesis	547905	Xanthidae	Malacostraca	Arthropoda	col	family:Xanthidae	Xanthidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+999	Monostaechas	in_synthesis	719393	Halopterididae	Hydrozoa	Cnidaria	col	family:Halopterididae	Halopterididae		0							0		Cnidaria			1	0	0			
+1000	Morlina	unmatched					col																0	0	0	not_evaluable		
+1001	Mytilus	in_synthesis	1025560	Mytilidae	Bivalvia	Mollusca	col	family:Mytilidae	Mytilidae		0							0		Mollusca			1	0	0			
+1002	Myxicola	in_synthesis	1015788	Sabellidae	Polychaeta	Annelida	col	family:Sabellidae	Sabellidae		0							0		Annelida			1	0	0			
+1003	Namanereis	in_synthesis	4981789	Nereididae	Polychaeta	Annelida	col	family:Nereididae	Nereididae		0							2	Annelida:2	Annelida			1	0	0			
+1004	Nannocalanus	in_synthesis	561272	Calanidae	Hexanauplia	Arthropoda	col	family:Calanidae	Calanidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+1005	Natatolana	in_synthesis	415390	Cirolanidae	Malacostraca	Arthropoda	col	family:Cirolanidae	Cirolanidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1006	Naucrates	in_synthesis	282856	Carangidae	Actinopteri	Chordata	col	family:Carangidae	Carangidae		0							2	Chordata:2	Chordata			1	0	0			
+1007	Necallianassa	in_synthesis	2981896	Callianassidae	Malacostraca	Arthropoda	col	family:Callianassidae	Callianassidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1008	Necora	in_synthesis	92505	Polybiidae	Malacostraca	Arthropoda	col	family:Polybiidae	Polybiidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1009	Neoergasilus	in_synthesis	2945864	Ergasilidae	Hexanauplia	Arthropoda	col	family:Ergasilidae	Ergasilidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+1010	Neogammarus	in_synthesis	2982761	Gammaridae	Malacostraca	Arthropoda	col	family:Gammaridae	Gammaridae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1011	Neomaja	in_synthesis	6186878	Majidae	Malacostraca	Arthropoda	col	family:Majidae	Majidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1012	Neoraja	in_synthesis	406373	Rajidae	Chondrichthyes	Chordata	col	family:Rajidae	Rajidae		0							1	Chordata:1	Chordata			1	0	0			
+1013	Nephrops	in_synthesis	737046	Nephropidae	Malacostraca	Arthropoda	col	family:Nephropidae	Nephropidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1014	Nepinnotheres	in_synthesis	533275	Pinnotheridae	Malacostraca	Arthropoda	col	family:Pinnotheridae	Pinnotheridae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1015	Notarchus	in_synthesis	694790	Aplysiidae	Gastropoda	Mollusca	col	family:Aplysiidae	Aplysiidae		0							1	Mollusca:1	Mollusca			1	0	0			
+1016	Nudisyllis	in_synthesis	124081	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							2	Annelida:2	Annelida			1	0	0			
+1017	Obscurella	in_synthesis	4162497	Cochlostomatidae	Gastropoda	Mollusca	col	family:Cochlostomatidae	Cochlostomatidae		0							4	Mollusca:4	Mollusca			1	0	0			
+1018	Oceania	in_synthesis	4712635	Oceaniidae	Hydrozoa	Cnidaria	col	family:Oceaniidae	Oceaniidae		0							1	Cnidaria:1	Cnidaria			1	0	0			
+1019	Ocenebra	in_synthesis	872945	Muricidae	Gastropoda	Mollusca	col	family:Muricidae	Muricidae		0							4	Mollusca:4	Mollusca			1	0	0			
+1020	Oconnorella	in_synthesis	328392	Enchytraeidae	Clitellata	Annelida	col	family:Enchytraeidae	Enchytraeidae		0							2	Annelida:2	Annelida			1	0	0			
+1021	Oculina	attached_at_mrca	272122	Oculinidae	Anthozoa	Cnidaria	col	family:Oculinidae	Oculinidae		0							2	Cnidaria:2	Cnidaria			1	0	0			
+1022	Odessia	in_synthesis	75954	Moerisiidae	Hydrozoa	Cnidaria	col	family:Moerisiidae	Moerisiidae		0							1	Cnidaria:1	Cnidaria			1	0	0			
+1023	Odostomia	attached_at_taxon:ott409995	165112	Pyramidellidae	Gastropoda	Mollusca	col	family:Pyramidellidae	Pyramidellidae		0							2	Mollusca:2	Mollusca			1	0	0			
+1024	Oestophorella	in_synthesis	777527	Trissexodontidae	Gastropoda	Mollusca	col	family:Trissexodontidae	Trissexodontidae		0							1	Mollusca:1	Mollusca			1	0	0			
+1025	Omalogyra	attached_at_taxon:ott409995	1056986	Omalogyridae	Gastropoda	Mollusca	col	family:Omalogyridae	Omalogyridae		0							2	Mollusca:2	Mollusca			1	0	0			
+1026	Oncaea	attached_at_mrca	87789	Oncaeidae	Hexanauplia	Arthropoda	col	family:Oncaeidae	Oncaeidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1027	Onychocella	in_synthesis	168106	Onychocellidae	Gymnolaemata	Bryozoa	col	family:Onychocellidae	Onychocellidae		0							1	Bryozoa:1	Bryozoa			1	0	0			
+1028	Ophiothrix	in_synthesis	768174	Ophiotrichidae	Ophiuroidea		col	family:Ophiotrichidae	Ophiotrichidae		0							3	Echinodermata:2;Cnidaria:1	Echinodermata			1	0	0			
+1029	Ophisurus	in_synthesis	65746	Ophichthidae	Actinopteri	Chordata	col	family:Ophichthidae	Ophichthidae		0							3	Chordata:3	Chordata			1	0	0			
+1030	Orientogalba	in_synthesis	2879283	Lymnaeidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							3	Mollusca:3	Mollusca			1	0	0			
+1031	Osilinus	unmatched					col																0	0	0	not_evaluable		
+1032	Ostrea	in_synthesis	969369	Ostreidae	Bivalvia	Mollusca	col	family:Ostreidae	Ostreidae		0							0		Mollusca			1	0	0			
+1033	Owenia	in_synthesis	941629	Oweniidae	Polychaeta	Annelida	col	family:Oweniidae	Oweniidae		0							3	Mollusca:2;Arthropoda:1	Annelida			1	0	0			
+1034	Pagellus	attached_at_mrca	271162	Sparidae	Actinopteri	Chordata	col	family:Sparidae	Sparidae		0							4	Chordata:4	Chordata			1	0	0			
+1035	Pagodula	in_synthesis	345176	Muricidae	Gastropoda	Mollusca	col	family:Muricidae	Muricidae		0							4	Mollusca:4	Mollusca			1	0	0			
+1036	Palicus	in_synthesis	683848	Palicidae	Malacostraca	Arthropoda	col	family:Palicidae	Palicidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1037	Palio	in_synthesis	83558	Polyceridae	Gastropoda	Mollusca	col	family:Polyceridae	Polyceridae		0							3	Mollusca:3	Mollusca			1	0	0			
+1038	Paludicella	in_synthesis	26739	Paludicellidae	Gymnolaemata	Bryozoa	col	family:Paludicellidae	Paludicellidae		0							0		Bryozoa			1	0	0			
+1039	Pangasianodon	attached_at_mrca	967328	Pangasiidae	Actinopteri	Chordata	col	family:Pangasiidae	Pangasiidae		0							4	Chordata:4	Chordata			1	0	0			
+1040	Panthalis	in_synthesis	313858	Acoetidae	Polychaeta	Annelida	col	family:Acoetidae	Acoetidae		0							0		Annelida;Sipuncula			1	0	0			
+1041	Paracaprella	in_synthesis	4670725	Caprellidae	Malacostraca	Arthropoda	col	family:Caprellidae	Caprellidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1042	Parachondrostoma	in_synthesis	373539	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							2	Chordata:2	Chordata			1	0	0			
+1043	Paradoneis	in_synthesis	69165	Paraonidae	Polychaeta	Annelida	col	family:Paraonidae	Paraonidae		0							3	Annelida:3	Annelida			1	0	0			
+1044	Paraiberobathynella	in_synthesis	4675444	Parabathynellidae	Malacostraca	Arthropoda	col	family:Parabathynellidae	Parabathynellidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1045	Parajassa	in_synthesis	2988033	Ischyroceridae	Malacostraca	Arthropoda	col	family:Ischyroceridae	Ischyroceridae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1046	Paramysis	in_synthesis	373482	Mysidae	Malacostraca	Arthropoda	col	family:Mysidae	Mysidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1047	Parapleustes	in_synthesis	2985895	Pleustidae	Malacostraca	Arthropoda	col	family:Pleustidae	Pleustidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+1048	Parthenopoides	in_synthesis	2979478	Parthenopidae	Malacostraca	Arthropoda	col	family:Parthenopidae	Parthenopidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+1049	Parvicardium	in_synthesis	112609	Cardiidae	Bivalvia	Mollusca	col	family:Cardiidae	Cardiidae		0							3	Mollusca:3	Mollusca			1	0	0			
+1050	Pasiphaea	in_synthesis	45086	Pasiphaeidae	Malacostraca	Arthropoda	col	family:Pasiphaeidae	Pasiphaeidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1051	Pedipes	attached_at_taxon:ott409995	645951	Ellobiidae	Gastropoda	Mollusca	col	class:Gastropoda	Gastropoda		0							0		Mollusca			1	0	0			
+1052	Pelagella	unmatched					col																0	0	0	not_evaluable		
+1053	Penaeopsis	in_synthesis	400880	Penaeidae	Malacostraca	Arthropoda	col	family:Penaeidae	Penaeidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1054	Pennella	in_synthesis	2944845	Pennellidae	Hexanauplia	Arthropoda	col	family:Pennellidae	Pennellidae		0							0		Arthropoda			1	0	0			
+1055	Pentapora	in_synthesis	1060068	Bitectiporidae	Gymnolaemata	Bryozoa	col	family:Bitectiporidae	Bitectiporidae		0							0		Bryozoa			1	0	0			
+1056	Peracle	in_synthesis	858530	Peraclidae	Gastropoda	Mollusca	col	family:Peraclidae	Peraclidae		0							0		Mollusca			1	0	0			
+1057	Perforatus	in_synthesis	2958756	Balanidae	Hexanauplia	Arthropoda	col	family:Balanidae	Balanidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1058	Peringia	attached_at_taxon:ott430968	987626	Hydrobiidae	Gastropoda	Mollusca	col	family:Hydrobiidae	Hydrobiidae		0							1	Mollusca:1	Mollusca			1	0	0			
+1059	Pestarella	in_synthesis	217156	Callianassidae	Malacostraca	Arthropoda	col	family:Callianassidae	Callianassidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1060	Petalifera	in_synthesis	694786	Aplysiidae	Gastropoda	Mollusca	col	family:Aplysiidae	Aplysiidae		0							4	Mollusca:4	Mollusca			1	0	0			
+1061	Petromyzon	in_synthesis	321787	Petromyzontidae		Chordata	col	family:Petromyzontidae	Petromyzontidae		0							1	Chordata:1	Chordata			1	0	0			
+1062	Phallocryptus	in_synthesis	2960152	Thamnocephalidae	Branchiopoda	Arthropoda	col	family:Thamnocephalidae	Thamnocephalidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+1063	Philinoglossa	in_synthesis	151170	Philinoglossidae	Gastropoda	Mollusca	col	family:Philinoglossidae	Philinoglossidae		0							3	Mollusca:3	Mollusca			1	0	0			
+1064	Phtisica	in_synthesis	104268	Caprellidae	Malacostraca	Arthropoda	col	family:Caprellidae	Caprellidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1065	Phycis	attached_at_mrca	659842	Phycidae	Actinopteri	Chordata	col	family:Phycidae	Phycidae		0							3	Chordata:3	Chordata			1	0	0			
+1066	Phyllaplysia	in_synthesis	694792	Aplysiidae	Gastropoda	Mollusca	col	family:Aplysiidae	Aplysiidae		0							4	Mollusca:4	Mollusca			1	0	0			
+1067	Phylliroe	in_synthesis	2876254	Phylliroidae	Gastropoda	Mollusca	col	family:Phylliroidae	Phylliroidae		0							0		Mollusca			1	0	0			
+1068	Physella	unmatched					col																0	0	0	not_evaluable		
+1069	Pilumnopeus	in_synthesis	94753	Pilumnidae	Malacostraca	Arthropoda	col	family:Pilumnidae	Pilumnidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1070	Piseinotecus	in_synthesis	369344	Piseinotecidae	Gastropoda	Mollusca	col	family:Piseinotecidae	Piseinotecidae		0							3	Mollusca:3	Mollusca			1	0	0			
+1071	Pisinna	in_synthesis	291993	Anabathridae	Gastropoda	Mollusca	col	family:Anabathridae	Anabathridae		0							3	Mollusca:3	Mollusca			1	0	0			
+1072	Plagusia	in_synthesis	43263	Plagusiidae	Malacostraca	Arthropoda	col	family:Plagusiidae	Plagusiidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1073	Plagyrona	in_synthesis	2882105	Valloniidae	Gastropoda	Mollusca	col	family:Valloniidae	Valloniidae		0							1	Mollusca:1	Mollusca			1	0	0			
+1074	Planes	in_synthesis	669248	Grapsidae	Malacostraca	Arthropoda	col	family:Grapsidae	Grapsidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+1075	Platichthys	in_synthesis	883417	Pleuronectidae	Actinopteri	Chordata	col	family:Pleuronectidae	Pleuronectidae		0							3	Chordata:3	Chordata			1	0	0			
+1076	Pleonexes	attached_at_taxon:ott173413	7697109	Ampithoidae	Malacostraca	Arthropoda	col	family:Ampithoidae	Ampithoidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+1077	Pleoticus	in_synthesis	733132	Solenoceridae	Malacostraca	Arthropoda	col	family:Solenoceridae	Solenoceridae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+1078	Plicopurpura	in_synthesis	935651	Muricidae	Gastropoda	Mollusca	col	family:Muricidae	Muricidae		0							2	Mollusca:2	Mollusca			1	0	0			
+1079	Plumulojassa	unmatched					col																0	0	0	not_evaluable		
+1080	Pneumodermopsis	in_synthesis	823287	Pneumodermatidae	Gastropoda	Mollusca	col	family:Pneumodermatidae	Pneumodermatidae		0							0		Mollusca			1	0	0			
+1081	Podarkeopsis	in_synthesis	64300	Hesionidae	Polychaeta	Annelida	col	family:Hesionidae	Hesionidae		0							0		Annelida			1	0	0			
+1082	Polititapes	in_synthesis	4160916	Veneridae	Bivalvia	Mollusca	col	family:Veneridae	Veneridae		0							3	Mollusca:3	Mollusca			1	0	0			
+1083	Pollicipes	in_synthesis	473037	Pollicipedidae	Hexanauplia	Arthropoda	col	family:Pollicipedidae	Pollicipedidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+1084	Polycerella	in_synthesis	83556	Polyceridae	Gastropoda	Mollusca	col	family:Polyceridae	Polyceridae		0							3	Mollusca:3	Mollusca			1	0	0			
+1085	Polycheles	in_synthesis	488332	Polychelidae	Malacostraca	Arthropoda	col	family:Polychelidae	Polychelidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1086	Polygordius	attached_at_taxon:ott941620	914158	Polygordiidae	Polychaeta	Annelida	col	family:Polygordiidae	Polygordiidae		0							1	Annelida:1	Annelida;Sipuncula			1	0	0			
+1087	Polymetme	in_synthesis	246899	Phosichthyidae	Actinopteri	Chordata	col	order:Stomiiformes	Stomiiformes		0							4	Chordata:4	Chordata			1	0	0			
+1088	Polyprion	in_synthesis	614518	Polyprionidae	Actinopteri	Chordata	col	family:Polyprionidae	Polyprionidae		0							3	Chordata:3	Chordata			1	0	0			
+1089	Pomatias	in_synthesis	1096318	Pomatiidae	Gastropoda	Mollusca	col	family:Pomatiidae	Pomatiidae		0							4	Mollusca:4	Mollusca			1	0	0			
+1090	Pomatomus	in_synthesis	773230	Pomatomidae	Actinopteri	Chordata	col	family:Pomatomidae	Pomatomidae		0							1	Chordata:1	Chordata			1	0	0			
+1091	Pontophilus	in_synthesis	889072	Crangonidae	Malacostraca	Arthropoda	col	family:Crangonidae	Crangonidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1092	Portugala	in_synthesis	4155440	Hygromiidae	Gastropoda	Mollusca	col	family:Hygromiidae	Hygromiidae		0							4	Mollusca:4	Mollusca			1	0	0			
+1093	Postandrilus	in_synthesis	643646	Lumbricidae	Clitellata	Annelida	col	family:Lumbricidae	Lumbricidae		0							3	Annelida:3	Annelida			1	0	0			
+1094	Potamocypris	in_synthesis	2961758	Cyprididae	Ostracoda	Arthropoda	col	family:Cyprididae	Cyprididae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+1095	Potamopyrgus	in_synthesis	1096311	Tateidae	Gastropoda	Mollusca	col	family:Tateidae	Tateidae		0							3	Mollusca:3	Mollusca			1	0	0			
+1096	Potomida	in_synthesis	622476	Unionidae	Bivalvia	Mollusca	col	order:Unionida	Unionida		0							4	Mollusca:4	Mollusca			1	0	0			
+1097	Prionace	in_synthesis	976341	Carcharhinidae	Chondrichthyes	Chordata	col	family:Carcharhinidae	Carcharhinidae		0							1	Chordata:1	Chordata			1	0	0			
+1098	Proporcellio	in_synthesis	2992943	Porcellionidae	Malacostraca	Arthropoda	col	family:Porcellionidae	Porcellionidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1099	Prosphaerosyllis	in_synthesis	1093861	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							0		Annelida			1	0	0			
+1100	Protodorvillea	in_synthesis	914166	Dorvilleidae	Polychaeta	Annelida	col	family:Dorvilleidae	Dorvilleidae		0							0		Annelida			1	0	0			
+1101	Protuberodrilus	in_synthesis	4165465	Naididae	Clitellata	Annelida	col	family:Naididae	Naididae		0							1	Annelida:1	Annelida			1	0	0			
+1102	Pseudochondrostoma	in_synthesis	898799	Cyprinidae	Actinopteri	Chordata	col	family:Cyprinidae	Cyprinidae		0							3	Chordata:3	Chordata			1	0	0			
+1103	Pseudoprotella	in_synthesis	152664	Caprellidae	Malacostraca	Arthropoda	col	family:Caprellidae	Caprellidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1104	Pseudosuccinea	in_synthesis	182102	Lymnaeidae	Gastropoda	Mollusca	col	family:Lymnaeidae	Lymnaeidae		0							4	Mollusca:4	Mollusca			1	0	0			
+1105	Pseudosyllis	in_synthesis	7489316	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							2	Annelida:2	Annelida			1	0	0			
+1106	Pteroeides	in_synthesis	364264	Pennatulidae	Anthozoa	Cnidaria	col	family:Pennatulidae	Pennatulidae		0							2	Cnidaria:2	Cnidaria			1	0	0			
+1107	Pyromaia	in_synthesis	4667730	Inachoididae	Malacostraca	Arthropoda	col	family:Inachoididae	Inachoididae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+1108	Raniceps	in_synthesis	659844	Gadidae	Actinopteri	Chordata	col	order:Gadiformes	Gadiformes		0							1	Chordata:1	Chordata			1	0	0			
+1109	Ranzania	in_synthesis	85893	Molidae	Actinopteri	Chordata	col	family:Molidae	Molidae		0							1	Chordata:1	Chordata			1	0	0			
+1110	Rhipidogammarus	in_synthesis	181820	Gammaridae	Malacostraca	Arthropoda	col	family:Gammaridae	Gammaridae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1111	Rhizostoma	in_synthesis	914110	Rhizostomatidae	Scyphozoa	Cnidaria	col	family:Rhizostomatidae	Rhizostomatidae		0							4	Cnidaria:4	Cnidaria			1	0	0			
+1112	Rhodope	attached_at_taxon:ott409995	2915353	Rhodopidae	Gastropoda	Mollusca	col	family:Rhodopidae	Rhodopidae		0							0		Mollusca			1	0	0			
+1113	Rhombosepion	unmatched					col																0	0	0	not_evaluable		
+1114	Ringicula	attached_at_taxon:ott409995	2915359	Ringiculidae	Gastropoda	Mollusca	col	family:Ringiculidae	Ringiculidae		0							4	Mollusca:4	Mollusca			1	0	0			
+1115	Rissoella	attached_at_taxon:ott409995	554616	Rissoellidae	Gastropoda	Mollusca	col	family:Rissoellidae	Rissoellidae		0							2	Mollusca:2	Mollusca			1	0	0			
+1116	Rondeletiola	in_synthesis	997304	Sepiolidae	Cephalopoda	Mollusca	col	family:Sepiolidae	Sepiolidae		0							1	Mollusca:1	Mollusca			1	0	0			
+1117	Rostroraja	in_synthesis	249506	Rajidae	Chondrichthyes	Chordata	col	family:Rajidae	Rajidae		0							2	Chordata:2	Chordata			1	0	0			
+1118	Roxaniella	unmatched					col																0	0	0	not_evaluable		
+1119	Ruditapes	in_synthesis	244017	Veneridae	Bivalvia	Mollusca	col	family:Veneridae	Veneridae		0							2	Mollusca:2	Mollusca			1	0	0			
+1120	Salmo	in_synthesis	982359	Salmonidae	Actinopteri	Chordata	col	family:Salmonidae	Salmonidae		0							3	Chordata:3	Chordata			1	0	0			
+1121	Sarcotragus	attached_at_mrca	765137	Irciniidae	Demospongiae	Porifera	col	family:Irciniidae	Irciniidae		0							1	Porifera:1	Porifera			1	0	0			
+1122	Sardina	in_synthesis	1027733	Clupeidae	Actinopteri	Chordata	col	order:Clupeiformes	Clupeiformes		0							1	Chordata:1	Chordata			1	0	0			
+1123	Sarpa	in_synthesis	675234	Sparidae	Actinopteri	Chordata	col	family:Sparidae	Sparidae		0							1	Chordata:1	Chordata			1	0	0			
+1124	Savalia	in_synthesis	818830	Parazoanthidae	Anthozoa	Cnidaria	col	family:Parazoanthidae	Parazoanthidae		0							1	Cnidaria:1	Cnidaria			1	0	0			
+1125	Scalibregma	in_synthesis	840102	Scalibregmatidae	Polychaeta	Annelida	col	family:Scalibregmatidae	Scalibregmatidae		0							0		Annelida			1	0	0			
+1126	Schistomysis	in_synthesis	159967	Mysidae	Malacostraca	Arthropoda	col	family:Mysidae	Mysidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+1127	Scolaricia	in_synthesis	4977298	Orbiniidae	Polychaeta	Annelida	col	class:Polychaeta	Polychaeta		0							0		Annelida			1	0	0			
+1128	Scolecithricella	in_synthesis	966230	Scolecitrichidae	Hexanauplia	Arthropoda	col	family:Scolecitrichidae	Scolecitrichidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1129	Scomber	in_synthesis	70568	Scombridae	Actinopteri	Chordata	col	family:Scombridae	Scombridae		0							2	Chordata:2	Chordata			1	0	0			
+1130	Scomberesox	in_synthesis	478057	Belonidae	Actinopteri	Chordata	col	order:Beloniformes	Beloniformes		0							2	Chordata:2	Chordata			1	0	0			
+1131	Scombrolabrax	in_synthesis	1060216	Scombrolabracidae	Actinopteri	Chordata	col	family:Scombrolabracidae	Scombrolabracidae		0							1	Chordata:1	Chordata			1	0	0			
+1132	Scophthalmus	attached_at_mrca	778684	Scophthalmidae	Actinopteri	Chordata	col	family:Scophthalmidae	Scophthalmidae		0							3	Chordata:3	Chordata			1	0	0			
+1133	Scrobicularia	in_synthesis	911780	Semelidae	Bivalvia	Mollusca	col	family:Semelidae	Semelidae		0							1	Mollusca:1	Mollusca			1	0	0			
+1134	Scyllaea	in_synthesis	204542	Scyllaeidae	Gastropoda	Mollusca	col	family:Scyllaeidae	Scyllaeidae		0							3	Mollusca:3	Mollusca			1	0	0			
+1135	Semilimax	unmatched					col																0	0	0	not_evaluable		
+1136	Sepietta	attached_at_mrca	513821	Sepiolidae	Cephalopoda	Mollusca	col	family:Sepiolidae	Sepiolidae		0							3	Mollusca:3	Mollusca			1	0	0			
+1137	Serejohyale	in_synthesis	2983619	Hyalidae	Malacostraca	Arthropoda	col	family:Hyalidae	Hyalidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+1138	Setia	in_synthesis	53779	Rissoidae	Gastropoda	Mollusca	col	family:Rissoidae	Rissoidae		0							3	Mollusca:3	Mollusca			1	0	0			
+1139	Similiparma	in_synthesis	356948	Pomacentridae	Actinopteri	Chordata	col	family:Pomacentridae	Pomacentridae		0							1	Chordata:1	Chordata			1	0	0			
+1140	Sipunculus	in_synthesis	802122	Sipunculidae	Polychaeta	Annelida	col	family:Sipunculidae	Sipunculidae		0							0		Annelida			1	0	0			
+1141	Skeneopsis	in_synthesis	164351	Skeneopsidae	Gastropoda	Mollusca	col	family:Skeneopsidae	Skeneopsidae		0							3	Mollusca:3	Mollusca			1	0	0			
+1142	Solatopupa	in_synthesis	169255	Chondrinidae	Gastropoda	Mollusca	col	family:Chondrinidae	Chondrinidae		0							4	Mollusca:4	Mollusca			1	0	0			
+1143	Solen	in_synthesis	932183	Solenidae	Bivalvia	Mollusca	col	family:Solenidae	Solenidae		0							1	Mollusca:1	Mollusca			1	0	0			
+1144	Somniosus	in_synthesis	442056	Somniosidae	Chondrichthyes	Chordata	col	family:Somniosidae	Somniosidae		0							2	Chordata:2	Chordata			1	0	0			
+1145	Soteriscus	in_synthesis	2992938	Porcellionidae	Malacostraca	Arthropoda	col	family:Porcellionidae	Porcellionidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+1146	Sparisoma	in_synthesis	214107	Labridae	Actinopteri	Chordata	col	family:Labridae	Labridae		0							4	Chordata:4	Chordata			1	0	0			
+1147	Sparus	in_synthesis	760719	Sparidae	Actinopteri	Chordata	col	family:Sparidae	Sparidae		0							1	Chordata:1	Chordata			1	0	0			
+1148	Speleogobius	in_synthesis	3638153	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							2	Chordata:2	Chordata			1	0	0			
+1149	Sphaerechinus	in_synthesis	118149	Toxopneustidae	Echinoidea		col	family:Toxopneustidae	Toxopneustidae		0							1	Echinodermata:1	Echinodermata			1	0	0			
+1150	Sphaerocoryne	in_synthesis	75945	Sphaerocorynidae	Hydrozoa	Cnidaria	col	family:Sphaerocorynidae	Sphaerocorynidae		0							4	Cnidaria:4	Cnidaria			1	0	0			
+1151	Sphaerosyllis	in_synthesis	315166	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							0		Annelida			1	0	0			
+1152	Spinoaglaja	unmatched					col																0	0	0	not_evaluable		
+1153	Spinolambrus	in_synthesis	2979499	Parthenopidae	Malacostraca	Arthropoda	col	family:Parthenopidae	Parthenopidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+1154	Spiochaetopterus	in_synthesis	639872	Chaetopteridae	Polychaeta	Annelida	col	family:Chaetopteridae	Chaetopteridae		0							3	Annelida:3	Annelida			1	0	0			
+1155	Spisula	in_synthesis	721794	Mactridae	Bivalvia	Mollusca	col	family:Mactridae	Mactridae		0							0		Mollusca			1	0	0			
+1156	Spondyliosoma	in_synthesis	271155	Sparidae	Actinopteri	Chordata	col	family:Sparidae	Sparidae		0							3	Chordata:3	Chordata			1	0	0			
+1157	Spondylus	in_synthesis	441503	Spondylidae	Bivalvia	Mollusca	col	family:Spondylidae	Spondylidae		0		102399;106319	Spondylidae		0		0		Mollusca			2	0	0			
+1158	Stenula	in_synthesis	2986323	Stenothoidae	Malacostraca	Arthropoda	col	family:Stenothoidae	Stenothoidae		0							0		Arthropoda			1	0	0			
+1159	Stephanocyathus	attached_at_mrca	557712	Caryophylliidae	Anthozoa	Cnidaria	col	order:Scleractinia	Scleractinia		0							4	Cnidaria:3;Arthropoda:1	Cnidaria			1	0	0			
+1160	Sternaspis	in_synthesis	740617	Sternaspidae	Polychaeta	Annelida	col	family:Sternaspidae	Sternaspidae		0							0		Annelida;Sipuncula			1	0	0			
+1161	Steromphala	unmatched					col																0	0	0	not_evaluable		
+1162	Stramonita	in_synthesis	663890	Muricidae	Gastropoda	Mollusca	col	family:Muricidae	Muricidae		0							3	Mollusca:3	Mollusca			1	0	0			
+1163	Striarca	in_synthesis	686856	Noetiidae	Bivalvia	Mollusca	col	family:Noetiidae	Noetiidae		0							0		Mollusca			1	0	0			
+1164	Stromateus	attached_at_mrca	37458	Stromateidae	Actinopteri	Chordata	col	family:Stromateidae	Stromateidae		0							2	Chordata:2	Chordata			1	0	0			
+1165	Suboestophora	in_synthesis	254477	Trissexodontidae	Gastropoda	Mollusca	col	family:Trissexodontidae	Trissexodontidae		0							3	Mollusca:3	Mollusca			1	0	0			
+1166	Syllidia	in_synthesis	64306	Hesionidae	Polychaeta	Annelida	col	family:Hesionidae	Hesionidae		0							1	Annelida:1	Annelida			1	0	0			
+1167	Symphurus	in_synthesis	932835	Cynoglossidae	Actinopteri	Chordata	col	family:Cynoglossidae	Cynoglossidae		0							1	Chordata:1	Chordata			1	0	0			
+1168	Taeniurops	unmatched					col																0	0	0	not_evaluable		
+1169	Tanais	in_synthesis	472131	Tanaididae	Malacostraca	Arthropoda	col	family:Tanaididae	Tanaididae		0							0		Arthropoda			1	0	0			
+1170	Taractichthys	in_synthesis	443821	Bramidae	Actinopteri	Chordata	col	family:Bramidae	Bramidae		0							2	Chordata:2	Chordata			1	0	0			
+1171	Taringa	in_synthesis	278444	Discodorididae	Gastropoda	Mollusca	col	family:Discodorididae	Discodorididae		0							4	Mollusca:4	Mollusca			1	0	0			
+1172	Tayuva	in_synthesis	5735284	Discodorididae	Gastropoda	Mollusca	col	family:Discodorididae	Discodorididae		0							1	Mollusca:1	Mollusca			1	0	0			
+1173	Tectura	in_synthesis	838788	Lottiidae	Gastropoda	Mollusca	col	family:Lottiidae	Lottiidae		0							0		Mollusca			1	0	0			
+1174	Temora	in_synthesis	1000632	Temoridae	Hexanauplia	Arthropoda	col	family:Temoridae	Temoridae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1175	Thenea	in_synthesis	446089	Theneidae	Demospongiae	Porifera	col	family:Theneidae	Theneidae		0							2	Porifera:2	Porifera			1	0	0			
+1176	Thoralus	unmatched					col																0	0	0	not_evaluable		
+1177	Thorogobius	in_synthesis	918416	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							2	Chordata:2	Chordata			1	0	0			
+1178	Thracia	in_synthesis	53607	Thraciidae	Bivalvia	Mollusca	col	family:Thraciidae	Thraciidae		0							0		Mollusca			1	0	0			
+1179	Thunnus	in_synthesis	833200	Scombridae	Actinopteri	Chordata	col	family:Scombridae	Scombridae		0							2	Chordata:2	Chordata			1	0	0			
+1180	Thysanoteuthis	in_synthesis	526074	Thysanoteuthidae	Cephalopoda	Mollusca	col	family:Thysanoteuthidae	Thysanoteuthidae		0							3	Mollusca:3	Mollusca			1	0	0			
+1181	Todaropsis	in_synthesis	686455	Ommastrephidae	Cephalopoda	Mollusca	col	family:Ommastrephidae	Ommastrephidae		0							2	Mollusca:2	Mollusca			1	0	0			
+1182	Torpedo	in_synthesis	493411	Torpedinidae	Chondrichthyes	Chordata	col	family:Torpedinidae	Torpedinidae		0							1	Chordata:1	Chordata			1	0	0			
+1183	Trachelobdella	in_synthesis	2847150	Piscicolidae	Clitellata	Annelida	col	family:Piscicolidae	Piscicolidae		0							1	Annelida:1	Annelida			1	0	0			
+1184	Trachinus	in_synthesis	816887	Trachinidae	Actinopteri	Chordata	col	family:Trachinidae	Trachinidae		0							4	Chordata:4	Chordata			1	0	0			
+1185	Trachurus	attached_at_mrca	659884	Carangidae	Actinopteri	Chordata	col	family:Carangidae	Carangidae		0							3	Chordata:3	Chordata			1	0	0			
+1186	Trachyrincus	in_synthesis	148516	Macrouridae	Actinopteri	Chordata	col	family:Macrouridae	Macrouridae		0							3	Chordata:3	Chordata			1	0	0			
+1187	Trachyscorpia	in_synthesis	1003117	Sebastidae	Actinopteri	Chordata	col	family:Sebastidae	Sebastidae		0							4	Chordata:4	Chordata			1	0	0			
+1188	Trichoniscoides	in_synthesis	990662	Trichoniscidae	Malacostraca	Arthropoda	col	family:Trichoniscidae	Trichoniscidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1189	Trigla	in_synthesis	804453	Triglidae	Actinopteri	Chordata	col	family:Triglidae	Triglidae		0							1	Chordata:1	Chordata			1	0	0			
+1190	Triops	in_synthesis	570422	Triopsidae	Branchiopoda	Arthropoda	col	family:Triopsidae	Triopsidae		0							2	Arthropoda:2	Arthropoda			1	0	0			
+1191	Trisopterus	in_synthesis	179347	Gadidae	Actinopteri	Chordata	col	family:Gadidae	Gadidae		0							4	Chordata:4	Chordata			1	0	0			
+1192	Trissexodon	in_synthesis	777518	Trissexodontidae	Gastropoda	Mollusca	col	family:Trissexodontidae	Trissexodontidae		0							2	Mollusca:2	Mollusca			1	0	0			
+1193	Trophonopsis	in_synthesis	2910244	Muricidae	Gastropoda	Mollusca	col	family:Muricidae	Muricidae		0							2	Mollusca:2	Mollusca			1	0	0			
+1194	Trypanosyllis	in_synthesis	723708	Syllidae	Polychaeta	Annelida	col	family:Syllidae	Syllidae		0							4	Annelida:4	Annelida			1	0	0			
+1195	Turbicellepora	in_synthesis	2939200	Celleporidae	Gymnolaemata	Bryozoa	col	family:Celleporidae	Celleporidae		0							2	Bryozoa:2	Bryozoa			1	0	0			
+1196	Tylodina	in_synthesis	527237	Tylodinidae	Gastropoda	Mollusca	col	family:Tylodinidae	Tylodinidae		0							4	Mollusca:4	Mollusca			1	0	0			
+1197	Umbonula	attached_at_mrca	760241	Umbonulidae	Gymnolaemata	Bryozoa	col	family:Umbonulidae	Umbonulidae		0							2	Bryozoa:2	Bryozoa			1	0	0			
+1198	Unciolella	in_synthesis	2984983	Unciolidae	Malacostraca	Arthropoda	col	family:Unciolidae	Unciolidae		0							1	Arthropoda:1	Arthropoda			1	0	0			
+1199	Valencia	in_synthesis	771625	Valenciidae	Actinopteri	Chordata	col	family:Valenciidae	Valenciidae		0							4	Chordata:4	Chordata			1	0	0			
+1200	Vanneaugobius	in_synthesis	721198	Gobiidae	Actinopteri	Chordata	col	family:Gobiidae	Gobiidae		0							4	Chordata:4	Chordata			1	0	0			
+1201	Vejdovskybathynella	in_synthesis	368728	Bathynellidae	Malacostraca	Arthropoda	col	family:Bathynellidae	Bathynellidae		0							4	Arthropoda:4	Arthropoda			1	0	0			
+1202	Vemakylindrus	in_synthesis	3004388	Diastylidae	Malacostraca	Arthropoda	col	family:Diastylidae	Diastylidae		0							0		Arthropoda			1	0	0			
+1203	Venerupis	in_synthesis	73960	Veneridae	Bivalvia	Mollusca	col	family:Veneridae	Veneridae		0							2	Mollusca:2	Mollusca			1	0	0			
+1204	Veretillum	in_synthesis	3680058	Veretillidae	Anthozoa	Cnidaria	col	family:Veretillidae	Veretillidae		0							1	Cnidaria:1	Cnidaria			1	0	0			
+1205	Vermetus	in_synthesis	348005	Vermetidae	Gastropoda	Mollusca	col	family:Vermetidae	Vermetidae		0							0		Mollusca			1	0	0			
+1206	Verruca	in_synthesis	739237	Verrucidae	Hexanauplia	Arthropoda	col	family:Verrucidae	Verrucidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1207	Weinkauffia	in_synthesis	2884221	Haminoeidae	Gastropoda	Mollusca	col	family:Haminoeidae	Haminoeidae		0							2	Mollusca:2	Mollusca			1	0	0			
+1208	Wollastonaria	unmatched					col																0	0	0	not_evaluable		
+1209	Xana	in_synthesis	272860	Hormogastridae	Clitellata	Annelida	col	family:Hormogastridae	Hormogastridae		0							1	Annelida:1	Annelida			1	0	0			
+1210	Xantho	in_synthesis	211906	Xanthidae	Malacostraca	Arthropoda	col	family:Xanthidae	Xanthidae		0							3	Arthropoda:3	Arthropoda			1	0	0			
+1211	Xenodermichthys	in_synthesis	410271	Alepocephalidae	Actinopteri	Chordata	col	family:Alepocephalidae	Alepocephalidae		0							3	Chordata:3	Chordata			1	0	0			
+1212	Xenostrobus	in_synthesis	5973226	Mytilidae	Bivalvia	Mollusca	col	order:Mytilida	Mytilida		0							0		Mollusca			1	0	0			
+1213	Xiphias	in_synthesis	358620	Xiphiidae	Actinopteri	Chordata	col	family:Xiphiidae	Xiphiidae		0							1	Chordata:1	Chordata			1	0	0			
+1214	Zebrina	unmatched					col																0	0	0	not_evaluable		
+1215	Zenobiellina	unmatched					col																0	0	0	not_evaluable		
+1216	Zeus	in_synthesis	432552	Zeidae	Actinopteri	Chordata	col	family:Zeidae	Zeidae		0							3	Chordata:3	Chordata			1	0	0			
+1217	Zeuxo	in_synthesis	1055260	Tanaididae	Malacostraca	Arthropoda	col	family:Tanaididae	Tanaididae		0							0		Arthropoda			1	0	0			
+1218	Zu	in_synthesis	342731	Trachipteridae	Actinopteri	Chordata	col	family:Trachipteridae	Trachipteridae		0							3	Chordata:3	Chordata			1	0	0			

@@ -41,11 +41,14 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.col.join` | `col` | `col`: send a genus to TimeTree with COL's NCBI id where it is one of the ids OTT holds for it, or OTT has none; `ott`: always OTT's |
 | `backbone_build.col.species` | `false` | Also resolve every species name of the records (`backbone/col_species.tsv`) |
 | `backbone_build.col.workers` | 4 | Concurrent requests to ChecklistBank |
-| `backbone_build.concordance.enabled` | `true` | Placement concordance, report only: `backbone/concordance.tsv` ([provenance](provenance.md#placement-concordance), #49) |
+| `backbone_build.concordance.enabled` | `true` | Placement concordance: `backbone/concordance.tsv`; needed for re-anchoring ([provenance](provenance.md#placement-concordance), #49) |
 | `backbone_build.concordance.flag_level` | `class` | A lineage or merged-id check fails when the lineages part at this rank or higher: `family`, `superfamily`, `order`, `class`, `phylum`, `kingdom` |
 | `backbone_build.concordance.max_share` | 0.0 | The barcode-neighbour check fails when at most this share of the cross-genus hits is in a phylum of the backbone sisters |
 | `backbone_build.concordance.min_hits` | 5 | Hits needed for the barcode-neighbour check |
 | `backbone_build.concordance.min_flags` | 2 | Failed checks needed to flag a genus |
+| `backbone_build.reanchor.mode` | `apply` | Move genera that placement concordance flags, before dating: `apply`; `report` (decide and record only); `off` ([provenance](provenance.md#re-anchoring-flagged-genera), #50) |
+| `backbone_build.reanchor.min_severity` | `class` | Only move genera whose lineages part at this rank or higher |
+| `backbone_build.reanchor.overrides` | | Curated table (`genus`, `action` `reanchor` or `keep`, `target`, `source`, `note`), e.g. `config/placement_overrides.tsv` |
 | `backbone_build.cache` | `resources/api_cache.json` | Cache of TimeTree answers; keep it between runs |
 
 ## General settings
