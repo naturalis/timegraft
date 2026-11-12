@@ -15,6 +15,8 @@ import math
 
 import dendropy
 
+from .col import GENUS_COLUMNS as COL_GENUS_COLUMNS
+from .col import compare_ids
 from .timetree import EVIDENCE_COLUMNS, TimeTree
 
 REPORT_COLUMNS = (
@@ -360,8 +362,9 @@ def date_topology(
 # consistency layer (#46) and does not change how a genus is matched or placed.
 GENERA_COLUMNS = (
     "genus", "status", "ott_id", "ncbi_id",
-    # how the name was matched in OTT (static source only)
-    "ott_candidates", "ott_candidates_in_context", "ott_candidate_ids", "ott_flags", "ott_sourceinfo",
+    # how the name was matched in OTT (static source only); ott_resolution is "col" where COL chose
+    # between OTT homonyms (#48)
+    "ott_resolution", "ott_candidates", "ott_candidates_in_context", "ott_candidate_ids", "ott_flags", "ott_sourceinfo",
     "ott_ncbi_ids", "ott_worms_ids", "ott_gbif_ids",
     # OTT lineage of the matched genus
     "ott_family", "ott_order", "ott_class", "ott_phylum",
@@ -370,12 +373,15 @@ GENERA_COLUMNS = (
     # lineage from the reference records: the most common name per rank, and its share
     "records_n", "records_family", "records_family_share", "records_order", "records_order_share",
     "records_class", "records_class_share", "records_phylum", "records_phylum_share",
-    # filled by later issues of #46: CoL XR as identifier hub (#48), placement concordance (#49, #50)
-    "col_id", "col_release", "col_match_type", "lineage_distance", "merged_id_distance", "neighbour_concordance",
-    "concordance_flag", "placement_action",
+    # COL XR as identifier hub (#48): the COL usage, its lineage, and the NCBI and OTT ids derived from it
+    *COL_GENUS_COLUMNS,
+    # the NCBI id the genus is sent to TimeTree with, and where it came from (#48)
+    "join_ncbi_id", "join_ncbi_source",
+    # filled by later issues of #46: placement concordance (#49, #50)
+    "lineage_distance", "merged_id_distance", "neighbour_concordance", "concordance_flag", "placement_action",
 )
-GENERA_RESERVED = ("col_id", "col_release", "col_match_type", "lineage_distance", "merged_id_distance",
-                   "neighbour_concordance", "concordance_flag", "placement_action")
+GENERA_RESERVED = ("lineage_distance", "merged_id_distance", "neighbour_concordance", "concordance_flag",
+                   "placement_action")
 LINEAGE_RANKS = ("family", "order", "class", "phylum")
 
 
@@ -436,3 +442,44 @@ def timetree_summary(report: list[dict], crowns: list[dict] | None = None) -> di
             if row.get("timetree_api_version"):
                 versions[row["timetree_api_version"]] += 1
     return {"queries_by_evidence": dict(evidence), "api_versions": dict(versions)}
+
+
+JOIN_MODES = ("ott", "col")
+JOIN_CONFIDENCE = ("high", "medium")
+
+
+def join_ncbi(ncbi: dict[str, object], matches: dict[str, dict], col_rows: dict[str, dict],
+              info: dict[str, dict] | None = None, mode: str = "col") -> dict[str, dict[str, str]]:
+    """Choose the NCBI id each genus is sent to TimeTree with; changes ``ncbi`` in place (#48).
+
+    With ``mode`` ``ott`` the id is OTT's, as before. With ``col`` a COL-derived
+    id of ``high`` or ``medium`` confidence replaces it where OTT has none, or
+    where it is another of the ids OTT merged into the genus (OTT lists them in
+    no particular order, and the first is not always right: for Onchidella it
+    is the sand dollar Peronella). A COL id that OTT does not hold at all is
+    not used, only reported (``col_ncbi_vs_ott`` = ``different``), since that
+    is a disagreement for placement concordance (#49) to weigh, not a join.
+    Species ids are left alone. Returns the ``join_ncbi_*`` and
+    ``col_ncbi_vs_ott`` columns per genus.
+    """
+    if mode not in JOIN_MODES:
+        raise ValueError(f"unknown col.join {mode!r}; use one of {', '.join(JOIN_MODES)}")
+    out = {}
+    for genus, match in matches.items():
+        ott_first = "" if match.get("ncbi_id") in (None, "") else str(match["ncbi_id"])
+        ott_ids = (info or {}).get(genus, {}).get("ott_ncbi_ids", "")
+        col = col_rows.get(genus) or {}
+        relation = compare_ids(col.get("col_ncbi_id", ""), ott_ids, ott_first)
+        row = {"join_ncbi_id": ott_first, "join_ncbi_source": "ott" if ott_first else "", "col_ncbi_vs_ott": relation}
+        usable = (mode == "col" and col.get("col_confidence") in JOIN_CONFIDENCE and col.get("col_ncbi_id")
+                  and match.get("ott_id") not in (None, ""))
+        if usable and (relation == "merged" or not ott_first):
+            new = int(col["col_ncbi_id"])
+            value = ncbi.get(genus)
+            if isinstance(value, (list, tuple)):
+                ncbi[genus] = [new] + list(value[1:])
+            else:
+                ncbi[genus] = new
+            row.update(join_ncbi_id=str(new), join_ncbi_source="col")
+        out[genus] = row
+    return out

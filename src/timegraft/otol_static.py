@@ -52,7 +52,10 @@ def _source_ids(sourceinfo: str, prefix: str) -> list[str]:
 class Taxonomy:
     """The parts of OTT needed to match genera and find their species."""
 
-    def __init__(self, path: str | Path, genera: set[str], context: str | None = None):
+    def __init__(self, path: str | Path, genera: set[str], context: str | None = None,
+                 prefer: dict[str, int] | None = None):
+        """``prefer`` maps a genus name to the OTT id to take when the name is otherwise ambiguous
+        (for example from COL, #48); it is used only if that id is one of the candidates."""
         uids, parents, genus_uids = [], [], []
         self.ncbi_of: dict[int, int] = {}
         self.rank_name: dict[int, tuple[str, str]] = {}  # rank and name of taxa at LINEAGE_RANKS
@@ -92,12 +95,21 @@ class Taxonomy:
             preferred = [c for c in options if not any(f in c[1] for f in DISFAVOURED_FLAGS)] or options
             if not preferred:
                 self.genus[name] = {"ott_id": None, "ncbi_id": None, "status": "unmatched"}
-            elif len(preferred) > 1:
+            resolution = ""
+            if len(preferred) > 1 and prefer and prefer.get(name) in {c[0] for c in preferred}:
+                chosen = [c for c in preferred if c[0] == prefer[name]]
+                resolution = "col"
+            else:
+                chosen = preferred
+            if not chosen:
+                self.genus[name] = {"ott_id": None, "ncbi_id": None, "status": "unmatched"}
+            elif len(chosen) > 1:
                 self.genus[name] = {"ott_id": None, "ncbi_id": None, "status": "ambiguous"}
             else:
-                uid, _, ncbi = preferred[0]
+                uid, _, ncbi = chosen[0]
                 self.genus[name] = {"ott_id": uid, "ncbi_id": ncbi, "status": "matched"}
             info = {
+                "ott_resolution": resolution,
                 "ott_candidates": len(candidates.get(name, [])),
                 "ott_candidates_in_context": len(options),
                 "ott_candidate_ids": ";".join(str(c[0]) for c in preferred) if len(preferred) > 1 else "",
@@ -117,12 +129,14 @@ class Taxonomy:
         # species (and lower) below each matched genus, with NCBI ids where known
         wanted = {m["ott_id"]: g for g, m in self.genus.items() if m["ott_id"] is not None}
         self.species: dict[str, list[tuple[int, int | None]]] = defaultdict(list)
+        self.species_ncbi: dict[str, int | None] = {}  # species name to its NCBI id, for comparison with COL
         for uid, _parent, _name, rank, sourceinfo, _uniq, flags, *_ in _rows(path):
             if rank != "species" or "extinct" in flags:
                 continue
             genus = self._ancestor_in(int(uid), wanted)
             if genus is not None:
                 self.species[genus].append((int(uid), _ncbi(sourceinfo)))
+                self.species_ncbi.setdefault(_name, _ncbi(sourceinfo))
 
     def _within_context(self, uid: int) -> bool:
         if self.context_uid is None:

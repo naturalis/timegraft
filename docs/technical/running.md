@@ -122,6 +122,7 @@ All under `outdir`.
 | `backbone/genera.tsv` | How each genus was matched in OTT and placed in the synthesis; the ids OTT holds for it, its OTT lineage and that of its reference records, and the clade it is anchored at ([provenance](provenance.md)) |
 | `backbone/node_ages.tsv` | Per backbone node: age, its source, TimeTree's raw answer, the NCBI ids queried, and a conflict ratio; the evidence behind TimeTree's age (estimates, studies, interval, the node it dated) and the support of the node in the synthesis ([provenance](provenance.md)) |
 | `backbone/crown_ages.tsv` | TimeTree crown age estimates, with the species queried and TimeTree's evidence ([provenance](provenance.md)) |
+| `backbone/col_species.tsv` | With `backbone_build.col.species`: each species name of the records resolved in the Catalogue of Life, with its NCBI id ([provenance](provenance.md#catalogue-of-life-as-identifier-hub)) |
 | `backbone/metadata.json` | Releases the backbone was built from, the format version of each output and of the TimeTree cache, and a summary of the TimeTree evidence |
 | `units/rejected.tsv` | Records rejected by the filter, with the reason |
 | `units/representatives.tsv`, `units/unassigned.tsv` | One representative per unit; units without a usable genus |
