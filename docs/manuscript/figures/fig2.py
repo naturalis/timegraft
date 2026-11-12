@@ -183,12 +183,13 @@ panel(x0, PY, PW, PH, "(iii) Dated subtree per genus")
 text(x0 + 12, PY + 40, "barcode tree, rooted on related genera", 10.5, fill="#444")
 xt = x0 + 182
 S, MIN, MAX = 30, 10, 27
+C = (MIN * MAX) ** 0.5  # no TimeTree age for this genus: the midpoint of the range (#42)
 xg = lambda a: xt - a * 5.0  # noqa: E731  30 Ma -> 150 px
 gy = [PY + 108 + i * 22 for i in range(4)]
 ry = [PY + 70, PY + 88]
-crown = (xg(MIN), (gy[0] + gy[3]) / 2)
-inner1 = (xg(6), (gy[0] + gy[1]) / 2)
-inner2 = (xg(4), (gy[2] + gy[3]) / 2)
+crown = (xg(C), (gy[0] + gy[3]) / 2)
+inner1 = (xg(0.6 * C), (gy[0] + gy[1]) / 2)  # nodes below the crown at fixed fractions of it
+inner2 = (xg(0.4 * C), (gy[2] + gy[3]) / 2)
 elbow(*crown, *inner1, ORANGE, 2.2)
 elbow(*crown, *inner2, ORANGE, 2.2)
 for i in (0, 1):
@@ -211,10 +212,11 @@ by = gy[3] + 32
 line(xg(MAX), by, xg(MIN), by, "#444", 5, cap="butt")
 line(xg(MAX), by - 6, xg(MAX), by + 6, "#444", 1.4)
 line(xg(MIN), by - 6, xg(MIN), by + 6, "#444", 1.4)
-line(xg(MIN), crown[1] + 6, xg(MIN), by - 6, ORANGE, 1, "2 3")
-text(xg(MIN) + 6, by + 4, "C", 11, weight="bold", fill=ORANGE)
+line(xg(C), crown[1] + 6, xg(C), by - 8, ORANGE, 1, "2 3")
+dot(xg(C), by, 3.5, ORANGE)
 text((xg(MAX) + xg(MIN)) / 2, by - 9, "crown age range", 10, "middle", fill="#444")
-text((xg(MAX) + xg(MIN)) / 2, by + 20, "C = minimum by default", 10, "middle", fill="#444")
+text((xg(MAX) + xg(MIN)) / 2, by + 18, "C: TimeTree crown if any,", 10, "middle", fill="#444")
+text((xg(MAX) + xg(MIN)) / 2, by + 31, "else midpoint of range", 10, "middle", fill="#444")
 yax = PY + 262
 axis(xg, [30, 20, 10, 0], yax)
 line(xg(S), stem[1] + 6, xg(S), yax, BLUE, 1, "2 3")
@@ -228,16 +230,15 @@ panel(x0, PY, PW, PH, "(iv) Grafting")
 text(x0 + 12, PY + 40, "genus tip replaced by its subtree", 10.5, fill="#444")
 xt = x0 + 200
 xf = lambda a: xt - a * 5.0  # noqa: E731
-C = MIN
-gy = [PY + 120 + i * 22 for i in range(4)]
+gy = [PY + 120 + i * 22 for i in range(4)]  # the subtree of (iii), crown at C
 sis_y = PY + 78
 crown = (xf(C), (gy[0] + gy[3]) / 2)
 node = (xf(S), (sis_y + crown[1]) / 2)
 line(node[0] - 14, node[1], node[0], node[1], BLUE, 2.2)
 elbow(*node, xt, sis_y, BLUE, 2.2)
 elbow(*node, *crown, BLUE, 2.2)
-inner1 = (xf(6), (gy[0] + gy[1]) / 2)
-inner2 = (xf(4), (gy[2] + gy[3]) / 2)
+inner1 = (xf(0.6 * C), (gy[0] + gy[1]) / 2)
+inner2 = (xf(0.4 * C), (gy[2] + gy[3]) / 2)
 elbow(*crown, *inner1, ORANGE, 2.2)
 elbow(*crown, *inner2, ORANGE, 2.2)
 for i in (0, 1):
