@@ -63,6 +63,7 @@ rule build_backbone:
         nodes=f"{OUT}/backbone/node_ages.tsv",
         crowns=f"{OUT}/backbone/crown_ages.tsv",
         metadata=f"{OUT}/backbone/metadata.json",
+        col_species=f"{OUT}/backbone/col_species.tsv",
     params:
         src=SRC,
         settings=BB,

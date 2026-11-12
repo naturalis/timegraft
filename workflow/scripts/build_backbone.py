@@ -2,6 +2,7 @@
 
 import json
 import logging
+from collections import Counter
 import sys
 from pathlib import Path
 
@@ -11,8 +12,9 @@ logging.basicConfig(filename=snakemake.log[0], level=logging.INFO, format="%(mes
 import dendropy
 
 from timegraft import __version__
-from timegraft.backbone_build import (GENERA_COLUMNS, REPORT_COLUMNS, date_topology, genera_rows, records_lineage,
-                                      timetree_summary)
+from timegraft.backbone_build import (GENERA_COLUMNS, REPORT_COLUMNS, date_topology, genera_rows, join_ncbi,
+                                      records_lineage, timetree_summary)
+from timegraft.col import SPECIES_COLUMNS, compare_ids
 from timegraft.otol_static import CROWN_COLUMNS
 from timegraft.seqio import read_tsv, write_tsv
 from timegraft.timetree import CACHE_VERSION, TimeTree, is_legacy
@@ -24,8 +26,23 @@ cache = JsonCache(settings.get("cache"))
 timetree = TimeTree(cache, upgrade_legacy=bool(settings.get("upgrade_cache", True)))
 genera = sorted({r["genus"] for r in read_tsv(snakemake.input.reps)})
 crowns = []
-extra = [records_lineage(read_tsv(snakemake.input.records))] if snakemake.input.records else []
+lineage_of = records_lineage(read_tsv(snakemake.input.records)) if snakemake.input.records else {}
+extra = [lineage_of]
 synth_nodes, support = None, None
+
+# COL XR as identifier hub (#48): genera (and optionally species) resolved with the lineage of their records
+col_cfg = settings.get("col") or {}
+col_rows, col_species, clb = {}, [], None
+if col_cfg.get("enabled", True):
+    from timegraft.col import KINGDOMS, ChecklistBank, resolve_genera
+
+    clb = ChecklistBank(col_cfg.get("release", "3LXR"), cache)
+    kingdom = KINGDOMS.get(settings.get("context") or "", settings.get("context"))
+    try:
+        col_rows = resolve_genera(clb, genera, lineage_of, kingdom, workers=int(col_cfg.get("workers", 4)))
+    finally:
+        cache.save()
+    extra.append(col_rows)
 
 try:
     if settings.get("source", "static") == "static":
@@ -34,11 +51,29 @@ try:
                                            lineage_names, lookup_ids, synth_nodes as synth_node_index,
                                            synthesis_support)
 
-        taxonomy = Taxonomy(snakemake.input.taxonomy, set(genera), context=settings.get("context"))
+        # COL breaks ties between OTT homonyms, and only those (#48)
+        prefer = {g: int(r["col_ott_id"]) for g, r in col_rows.items()
+                  if r.get("col_ott_id") and r.get("col_confidence") in ("high", "medium")}
+        taxonomy = Taxonomy(snakemake.input.taxonomy, set(genera), context=settings.get("context"), prefer=prefer)
         synth = SynthTree(snakemake.input.synth)
         newick, placed = genus_topology_newick(synth, taxonomy, genera)
         matches = {g: {**taxonomy.genus[g], "status": placed.get(g, taxonomy.genus[g]["status"])} for g in genera}
         ncbi = {g: lookup_ids(taxonomy, g) for g in genera}
+        extra.append(join_ncbi(ncbi, matches, col_rows, taxonomy.match_info, col_cfg.get("join", "col")))
+        extra.append({g: {"col_ott_vs_ott": compare_ids(r.get("col_ott_id", ""), "", str(matches[g]["ott_id"] or ""))}
+                      for g, r in col_rows.items()})
+        if col_cfg.get("species", False) and clb is not None:
+            from timegraft.col import resolve_species
+
+            names = {}
+            for r in read_tsv(snakemake.input.records):
+                if r.get("species") and r.get("genus") in matches:
+                    names.setdefault(r["species"].strip(), r["genus"])
+            try:
+                col_species = resolve_species(clb, names, lineage_of, kingdom, taxonomy.species_ncbi,
+                                              workers=int(col_cfg.get("workers", 4)))
+            finally:
+                cache.save()
         higher = {g: lineage(taxonomy, g) for g in genera}
         tree = dendropy.Tree.get(data=newick, schema="newick", rooting="force-rooted", preserve_underscores=True)
         # genera in the full clade of every node, for the pure-birth interpolation (#16)
@@ -68,6 +103,7 @@ try:
             matches[ott_to_genus[ott]]["status"] = "attached_at_mrca"
         tree = genus_topology(newick, ott_to_genus, broken)
         ncbi = {g: m["ncbi_id"] for g, m in matches.items()}
+        extra.append(join_ncbi(ncbi, matches, col_rows, None, col_cfg.get("join", "col")))
         higher = None
         richness = None
 
@@ -83,17 +119,26 @@ Path(snakemake.output.tree).write_text(tree.as_string(schema="newick", suppress_
 write_tsv(snakemake.output.genera, genera_rows(matches, *extra), GENERA_COLUMNS)
 write_tsv(snakemake.output.nodes, report, REPORT_COLUMNS)
 write_tsv(snakemake.output.crowns, crowns, CROWN_COLUMNS)
+write_tsv(snakemake.output.col_species, col_species, SPECIES_COLUMNS)
 
 # what the backbone was built from, and in what format the outputs are (#47)
 entries = [v for k, v in cache.data.items() if k.startswith("mrca:") and isinstance(v, dict)]
 metadata = {
-    "output_format": {"genera.tsv": 2, "node_ages.tsv": 2, "crown_ages.tsv": 2, "timetree_cache": CACHE_VERSION},
+    "output_format": {"genera.tsv": 3, "node_ages.tsv": 2, "crown_ages.tsv": 2, "timetree_cache": CACHE_VERSION},
     "timegraft_version": __version__,
     "source": settings.get("source", "static"),
     "taxonomy": settings.get("taxonomy", "ott3.7.3") if settings.get("source", "static") == "static" else "api",
     "synthesis": settings.get("synthesis", "opentree16.1") if settings.get("source", "static") == "static" else "api",
     "context": settings.get("context"),
     "synthesis_support": support is not None,
+    "col": None if clb is None else {
+        **clb.info,
+        "join": col_cfg.get("join", "col"),
+        "genera_by_confidence": dict(Counter(r.get("col_confidence") or "unresolved" for r in col_rows.values())),
+        "genera_by_ncbi_path": dict(Counter(r.get("col_ncbi_path") or "none" for r in col_rows.values())),
+        "genera_joined_with_col_ncbi": sum(1 for r in genera_rows(matches, *extra) if r["join_ncbi_source"] == "col"),
+        "species": len(col_species),
+    },
     "timetree": {
         **timetree_summary(report, crowns),
         "cache_entries": len(entries),
