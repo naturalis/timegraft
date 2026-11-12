@@ -96,7 +96,7 @@ text(lx + 36, ly + 40, "related genera, for rooting only", 10.5)
 dot(lx + 230, ly, 4, BLUE)
 text(lx + 240, ly + 4, "age from TimeTree", 10.5)
 dot(lx + 230, ly + 18, 4, "#fff", BLUE)
-text(lx + 240, ly + 22, "age interpolated", 10.5)
+text(lx + 240, ly + 22, "age interpolated (pure birth)", 10.5)
 
 PY, PH = 108, 318
 PX = [15, 260, 505, 750]
@@ -215,8 +215,8 @@ line(xg(MIN), by - 6, xg(MIN), by + 6, "#444", 1.4)
 line(xg(C), crown[1] + 6, xg(C), by - 8, ORANGE, 1, "2 3")
 dot(xg(C), by, 3.5, ORANGE)
 text((xg(MAX) + xg(MIN)) / 2, by - 9, "crown age range", 10, "middle", fill="#444")
-text((xg(MAX) + xg(MIN)) / 2, by + 18, "C: TimeTree crown if any,", 10, "middle", fill="#444")
-text((xg(MAX) + xg(MIN)) / 2, by + 31, "else midpoint of range", 10, "middle", fill="#444")
+text((xg(MAX) + xg(MIN)) / 2 + 8, by + 18, "C: TimeTree crown if any,", 10, "middle", fill="#444")
+text((xg(MAX) + xg(MIN)) / 2 + 8, by + 31, "else log-midpoint of range", 10, "middle", fill="#444")
 yax = PY + 262
 axis(xg, [30, 20, 10, 0], yax)
 line(xg(S), stem[1] + 6, xg(S), yax, BLUE, 1, "2 3")
