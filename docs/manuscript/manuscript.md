@@ -137,7 +137,9 @@ timegraft is available at <https://github.com/naturalis/timegraft> [@timegraft] 
 
 **Figure 1.** Saturation of COI. Patristic distance in a tree built from barcode embeddings against Kimura two-parameter distance for 1,000 pairs of BINs; K2P distance plateaus around 0.13 beyond a tree distance of about 0.15 to 0.2. [TODO: regenerate against an independent reference tree with timegraft's validation step.]
 
-**Figure 2.** Overview of timegraft: topology and ages above genus level from published syntheses, a dated subtree per genus from barcodes, grafting, and placement of metabarcoding sequences. [TODO: draw from the flowcharts in docs/science/how-it-works.md.]
+![](figures/fig2.pdf){width=100%}
+
+**Figure 2.** Overview of timegraft: topology and ages above genus level from published syntheses, a dated subtree per genus from barcodes, grafting, and placement of metabarcoding sequences.
 
 **Figure 3.** Sources of ages in the Iberian tree, by depth. [TODO]
 

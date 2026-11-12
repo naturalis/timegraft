@@ -27,3 +27,14 @@ A journal style can be added with `--csl` and a CSL file from the [Zotero style 
 - **Numbers** in the results come from the first run on real data ([docs/science/results/2026-11-iberia.md](../science/results/2026-11-iberia.md)) and will change as the method is calibrated (see the [roadmap](../technical/roadmap.md)).
 
 Open points are marked `[TODO]` in the text.
+
+## Figures
+
+Each figure in `figures/` is drawn by a script next to it. For Figure 2:
+
+```
+cd figures
+python fig2.py                                    # writes fig2.svg
+rsvg-convert -f pdf -o fig2.pdf fig2.svg
+rsvg-convert -d 300 -p 300 -o fig2.png fig2.svg
+```
