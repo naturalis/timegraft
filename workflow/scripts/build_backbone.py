@@ -22,8 +22,8 @@ crowns = []
 
 try:
     if settings.get("source", "static") == "static":
-        from timegraft.otol_static import (SynthTree, Taxonomy, crown_ages, genus_topology_newick, lineage,
-                                           lookup_ids)
+        from timegraft.otol_static import (SynthTree, Taxonomy, clade_richness, crown_ages, genus_anchors,
+                                           genus_topology_newick, lineage, lookup_ids)
 
         taxonomy = Taxonomy(snakemake.input.taxonomy, set(genera), context=settings.get("context"))
         synth = SynthTree(snakemake.input.synth)
@@ -32,6 +32,8 @@ try:
         ncbi = {g: lookup_ids(taxonomy, g) for g in genera}
         higher = {g: lineage(taxonomy, g) for g in genera}
         tree = dendropy.Tree.get(data=newick, schema="newick", rooting="force-rooted", preserve_underscores=True)
+        # genera in the full clade of every node, for the pure-birth interpolation (#16)
+        richness = clade_richness(synth, genus_anchors(synth, taxonomy, genera)[0], tree, taxonomy)
         if settings.get("crown_ages_from_timetree", True):
             crowns = crown_ages(taxonomy, timetree, [g for g in genera if g in placed and placed[g] != "unmatched"])
     else:
@@ -49,10 +51,12 @@ try:
         tree = genus_topology(newick, ott_to_genus, broken)
         ncbi = {g: m["ncbi_id"] for g, m in matches.items()}
         higher = None
+        richness = None
 
     tree, report = date_topology(tree, ncbi, timetree, per_side=int(settings.get("per_side", 2)),
                                  root_age=settings.get("root_age"),
-                                 per_genus=int(settings.get("species_per_genus", 3)), higher=higher)
+                                 per_genus=int(settings.get("species_per_genus", 3)), higher=higher,
+                                 interpolation=settings.get("interpolation", "pure_birth"), richness=richness)
 finally:
     cache.save()
 
@@ -64,5 +68,5 @@ write_tsv(snakemake.output.crowns, crowns, ["genus", "crown_age", "n_species"])
 sources = {}
 for row in report:
     sources[row["source"]] = sources.get(row["source"], 0) + 1
-logging.info("%d genera in backbone; node ages by source: %s; %d crown ages from TimeTree",
-             len(tree.leaf_nodes()), sources, len(crowns))
+logging.info("%d genera in backbone; node ages by source: %s (interpolation: %s); %d crown ages from TimeTree",
+             len(tree.leaf_nodes()), sources, settings.get("interpolation", "pure_birth"), len(crowns))

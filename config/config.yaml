@@ -39,6 +39,8 @@ backbone_build:
   species_per_genus: 3       # species ids sent along with each genus, as TimeTree misses many genera
   crown_ages_from_timetree: true  # static only: genus crown ages from TimeTree species
   root_age:                  # Ma; only needed if TimeTree has no age for the root
+  interpolation: pure_birth  # nodes TimeTree does not date: pure_birth (by the number of genera in the
+                             # full clade; static source only, otherwise even) or even (as BLADJ); #16
   cache: resources/api_cache.json
 
 # Validation of the informative window: barcode distances against a trusted

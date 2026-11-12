@@ -6,7 +6,8 @@ import dendropy
 import pytest
 
 from timegraft.backbone_build import _higher_sides, date_topology
-from timegraft.otol_static import SynthTree, Taxonomy, genus_topology_newick, lineage, lookup_ids
+from timegraft.otol_static import (SynthTree, Taxonomy, clade_richness, genus_anchors, genus_topology_newick, lineage,
+                                   lookup_ids)
 from timegraft.timetree import TimeTree
 
 DATA = Path(__file__).parent / "data" / "otol"
@@ -62,3 +63,19 @@ def test_higher_taxa_stand_in_only_when_they_stay_on_one_side(taxonomy):
     tree, report = date_topology(tree, ncbi, TimeTree(fetch=fetch), higher=higher, root_age=None)
     root = next(r for r in report if r["n_genera"] == 3)
     assert root["source"] == "timetree_higher_taxa" and float(root["age"]) == pytest.approx(600.0)
+
+
+def test_clade_richness_counts_genera_missing_from_the_data():
+    genera = ["Mytilus", "Ostrea", "Asterias"]
+    taxonomy = Taxonomy(DATA / "taxonomy.tsv", set(genera), context="Metazoa")
+    synth = SynthTree(DATA / "labelled_supertree.tre")
+    newick, _ = genus_topology_newick(synth, taxonomy, genera)
+    tree = dendropy.Tree.get(data=newick, schema="newick", rooting="force-rooted", preserve_underscores=True)
+    anchor, _ = genus_anchors(synth, taxonomy, genera)
+    bivalves = tree.find_node_with_taxon_label("Mytilus").parent_node
+    # Magallana is not in the data but is in the bivalve clade of the synthesis
+    assert clade_richness(synth, anchor, tree, taxonomy) == {bivalves: 3, tree.seed_node: 4}
+    assert clade_richness(synth, anchor, tree) == {bivalves: 4, tree.seed_node: 5}
+    # subtree ranges follow from the preorder numbering
+    sizes = synth.subtree_sizes()
+    assert sizes[0] == len(synth.parent)

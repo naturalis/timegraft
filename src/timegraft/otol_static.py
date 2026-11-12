@@ -42,7 +42,7 @@ class Taxonomy:
     """The parts of OTT needed to match genera and find their species."""
 
     def __init__(self, path: str | Path, genera: set[str], context: str | None = None):
-        uids, parents = [], []
+        uids, parents, genus_uids = [], [], []
         self.ncbi_of: dict[int, int] = {}
         candidates: dict[str, list[tuple[int, str, int | None]]] = defaultdict(list)
         context_uid = None
@@ -54,14 +54,18 @@ class Taxonomy:
                 ncbi_id = _ncbi(sourceinfo)
                 if ncbi_id:
                     self.ncbi_of[uid_i] = ncbi_id
-            if rank == "genus" and name in genera:
-                candidates[name].append((uid_i, flags, _ncbi(sourceinfo)))
+            if rank == "genus":
+                genus_uids.append(uid_i)
+                if name in genera:
+                    candidates[name].append((uid_i, flags, _ncbi(sourceinfo)))
             if context and name == context and context_uid is None:
                 context_uid = uid_i
         if context and context_uid is None:
             raise ValueError(f"context taxon {context!r} not found in the taxonomy")
         self.parent = np.full(max(uids) + 1, -1, dtype=np.int64)
         self.parent[np.array(uids)] = np.array(parents)
+        self.is_genus = np.zeros(len(self.parent), dtype=bool)
+        self.is_genus[np.array(genus_uids, dtype=np.int64)] = True
         self.context_uid = context_uid
 
         self.genus: dict[str, dict] = {}
@@ -166,6 +170,51 @@ class SynthTree:
         self.label = label
         self.index = {name: i for i, name in enumerate(label) if name}
 
+    def _accumulate(self, values: list[int]) -> np.ndarray:
+        # a parent is always read before its children, so one pass from the end suffices
+        parent = self.parent.tolist()
+        for i in range(len(parent) - 1, 0, -1):
+            if parent[i] >= 0:
+                values[parent[i]] += values[i]
+        return np.array(values, dtype=np.int64)
+
+    def tip_counts(self) -> np.ndarray:
+        """Number of tips below every node (1 for a tip), in the order of ``parent``."""
+        if getattr(self, "_tips", None) is None:
+            self._tips = self._accumulate((~self.has_children()).astype(np.int64).tolist())
+        return self._tips
+
+    def has_children(self) -> np.ndarray:
+        out = np.zeros(len(self.parent), dtype=bool)
+        out[self.parent[self.parent >= 0]] = True
+        return out
+
+    def subtree_sizes(self) -> np.ndarray:
+        """Number of nodes in the subtree of every node; nodes are numbered in preorder,
+        so the subtree of ``n`` is ``range(n, n + size[n])``."""
+        if getattr(self, "_sizes", None) is None:
+            self._sizes = self._accumulate([1] * len(self.parent))
+        return self._sizes
+
+    def tip_genera(self, taxonomy: "Taxonomy", max_steps: int = 8) -> np.ndarray:
+        """OTT id of the genus of every tip (itself if it is a genus), -1 where there is none."""
+        out = np.full(len(self.parent), -1, dtype=np.int64)
+        leaf = ~self.has_children()
+        parent, is_genus = taxonomy.parent, taxonomy.is_genus
+        for i in np.flatnonzero(leaf):
+            name = self.label[i]
+            if not name.startswith("ott"):
+                continue
+            uid = int(name[3:])
+            for _ in range(max_steps):
+                if uid < 0 or uid >= len(is_genus):
+                    break
+                if is_genus[uid]:
+                    out[i] = uid
+                    break
+                uid = int(parent[uid])
+        return out
+
     def path_to_root(self, node: int) -> list[int]:
         out = []
         while node >= 0:
@@ -179,17 +228,10 @@ class SynthTree:
         return next(n for n in paths[0] if n in common)
 
 
-def genus_topology_newick(
-    synth: SynthTree, taxonomy: Taxonomy, genera: list[str]
-) -> tuple[str, dict[str, str]]:
-    """Newick topology with one tip per genus, induced from the synthetic tree.
+def genus_anchors(synth: SynthTree, taxonomy: Taxonomy, genera: list[str]) -> tuple[dict[str, int], dict[str, str]]:
+    """The node of the synthetic tree that stands for each genus, and how it was found.
 
-    A genus that is a node in the synthesis becomes a tip at that node. A
-    genus that is not (not monophyletic, or only present through its
-    species) is attached at the MRCA of its species in the synthesis, and
-    failing that at its nearest taxonomic ancestor in the synthesis. Returns
-    the Newick string and a status per genus: ``in_synthesis``,
-    ``attached_at_mrca``, ``attached_at_taxon:<ott id>``, or why it is missing.
+    See :func:`genus_topology_newick` for the rules and the status values.
     """
     anchor: dict[str, int] = {}
     status: dict[str, str] = {}
@@ -215,7 +257,22 @@ def genus_topology_newick(
             anchor[genus], status[genus] = synth.index[f"ott{uid}"], f"attached_at_taxon:ott{uid}"
         else:
             status[genus] = "not_in_synthesis"
+    return anchor, status
 
+
+def genus_topology_newick(
+    synth: SynthTree, taxonomy: Taxonomy, genera: list[str]
+) -> tuple[str, dict[str, str]]:
+    """Newick topology with one tip per genus, induced from the synthetic tree.
+
+    A genus that is a node in the synthesis becomes a tip at that node. A
+    genus that is not (not monophyletic, or only present through its
+    species) is attached at the MRCA of its species in the synthesis, and
+    failing that at its nearest taxonomic ancestor in the synthesis. Returns
+    the Newick string and a status per genus: ``in_synthesis``,
+    ``attached_at_mrca``, ``attached_at_taxon:<ott id>``, or why it is missing.
+    """
+    anchor, status = genus_anchors(synth, taxonomy, genera)
     if len(anchor) < 2:
         raise ValueError("fewer than two genera could be placed in the synthetic tree")
 
@@ -262,6 +319,60 @@ def genus_topology_newick(
     finally:
         sys.setrecursionlimit(limit)
     return newick, status
+
+
+def clade_richness(synth: SynthTree, anchor: dict[str, int], tree, taxonomy: "Taxonomy | None" = None) -> dict:
+    """Size of the full clade in the synthetic tree for each internal node of ``tree``.
+
+    ``tree`` is the genus topology built from the same ``anchor`` (genus to
+    synthesis node), so each of its internal nodes is the MRCA of the anchors
+    of its genera. With ``taxonomy`` the result is the number of genera in
+    that clade (the genera of its tips), otherwise the number of tips, which
+    are mostly species. Both include taxa that are not in the data, which is
+    what a pure-birth model of the clade needs (#16).
+    """
+    if taxonomy is not None:
+        genus_of = synth.tip_genera(taxonomy)
+        sizes = synth.subtree_sizes()
+
+        def size(m: int) -> int:
+            values = genus_of[m : m + int(sizes[m])]
+            return int(np.unique(values[values >= 0]).size)
+    else:
+        tips = synth.tip_counts()
+
+        def size(m: int) -> int:
+            return int(tips[m])
+
+    paths: dict[int, list[int]] = {}
+
+    def path(n: int) -> list[int]:
+        if n not in paths:
+            paths[n] = synth.path_to_root(n)
+        return paths[n]
+
+    def mrca(a: int, b: int) -> int:
+        on_b = set(path(b))
+        return next(n for n in path(a) if n in on_b)
+
+    synth_node: dict = {}
+    out: dict = {}
+    for node in tree.postorder_node_iter():
+        if node.is_leaf():
+            synth_node[node] = anchor.get(node.taxon.label)
+            continue
+        found = [synth_node[c] for c in node.child_node_iter() if synth_node.get(c) is not None]
+        if not found:
+            synth_node[node] = None
+            continue
+        m = found[0]
+        for other in found[1:]:
+            m = mrca(m, other)
+        synth_node[node] = m
+        n = size(m)
+        if n:
+            out[node] = n
+    return out
 
 
 def crown_ages(taxonomy: Taxonomy, timetree, genera: list[str], max_species: int = 12) -> list[dict]:
