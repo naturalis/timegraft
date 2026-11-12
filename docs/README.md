@@ -9,6 +9,7 @@ The documentation has three parts.
 | [Installation](technical/installation.md) | Python package, Snakemake, external tools, conda |
 | [Configuration](technical/configuration.md) | The configuration file: inputs, marker plug-ins, every setting |
 | [Running and outputs](technical/running.md) | Running the workflow, the Snakemake DAG, output files, run times |
+| [Evidence and provenance](technical/provenance.md) | The evidence kept with the backbone, the TimeTree cache format, and a migration note for code that reads the outputs |
 | [Development](technical/development.md) | Code layout, modules, plug-in points, extending, testing, conventions |
 | [Roadmap](technical/roadmap.md) | Where the project is going, linked to the open issues |
 

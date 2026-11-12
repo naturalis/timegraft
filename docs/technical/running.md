@@ -119,9 +119,10 @@ All under `outdir`.
 | `timegraft.tre` | The dated tree; tips are unit ids |
 | `grafted.tre` | The same, before units without a genus were placed |
 | `provenance.tsv` | Per backbone genus: subtree, single unit or pruned; stem and crown age; where the crown age came from (`crown_source`), the bounds it lies between (`crown_lower`, `crown_upper`, `crown_upper_source`), the age from the barcodes before any bound (`barcode_age`), the TimeTree value (`timetree_crown`), the mean root-to-tip distance of the rooted genus tree (`root_to_tip`) and the substitution rate with its source (`rate`, `rate_source`); rooting method, number of units on the wrong side of the root and the genus's units among the outgroup (`violations`, `misplaced`); how uncertain the root is and what that does to the ages (see below); dating method; outgroup |
-| `backbone/genera.tsv` | How each genus was matched in OTT and placed in the synthesis |
-| `backbone/node_ages.tsv` | Per backbone node: age, its source, TimeTree's raw answer, the NCBI ids queried, and a conflict ratio |
-| `backbone/crown_ages.tsv` | TimeTree crown age estimates, used as upper bounds on the genus crown ages |
+| `backbone/genera.tsv` | How each genus was matched in OTT and placed in the synthesis; the ids OTT holds for it, its OTT lineage and that of its reference records, and the clade it is anchored at ([provenance](provenance.md)) |
+| `backbone/node_ages.tsv` | Per backbone node: age, its source, TimeTree's raw answer, the NCBI ids queried, and a conflict ratio; the evidence behind TimeTree's age (estimates, studies, interval, the node it dated) and the support of the node in the synthesis ([provenance](provenance.md)) |
+| `backbone/crown_ages.tsv` | TimeTree crown age estimates, with the species queried and TimeTree's evidence ([provenance](provenance.md)) |
+| `backbone/metadata.json` | Releases the backbone was built from, the format version of each output and of the TimeTree cache, and a summary of the TimeTree evidence |
 | `units/rejected.tsv` | Records rejected by the filter, with the reason |
 | `units/representatives.tsv`, `units/unassigned.tsv` | One representative per unit; units without a usable genus |
 | `units/screened.tsv` | Per unit: the screening decision (`keep`, `other_genus`, `isolated`, `kept_whole_genus`, or `not_screened` with screening off), its nearest unit of the same genus and of another genus, and their identities ([#38](https://github.com/naturalis/timegraft/issues/38)) |

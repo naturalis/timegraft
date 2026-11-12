@@ -41,6 +41,10 @@ backbone_build:
   root_age:                  # Ma; only needed if TimeTree has no age for the root
   interpolation: pure_birth  # nodes TimeTree does not date: pure_birth (by the number of genera in the
                              # full clade; static source only, otherwise even) or even (as BLADJ); #16
+  synthesis_support: true    # static only: record per backbone node how many source trees of the synthesis
+                             # support or conflict with it (downloads annotations.json, 61 MB); #47
+  upgrade_cache: true        # ask TimeTree again for the evidence behind ages cached by older versions;
+                             # the cached ages are kept, so the backbone does not change (#47)
   cache: resources/api_cache.json
 
 # Validation of the informative window: barcode distances against a trusted

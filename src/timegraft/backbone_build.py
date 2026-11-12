@@ -15,12 +15,21 @@ import math
 
 import dendropy
 
-from .timetree import TimeTree
+from .timetree import EVIDENCE_COLUMNS, TimeTree
 
 REPORT_COLUMNS = (
     "node", "parent", "n_genera", "clade_genera", "age", "source", "timetree_age", "conflict_ratio", "query_ids",
     "example_genera",
+    # evidence and provenance for the consistency layer (#46, #47); none of these changes an age
+    "timetree_attempt", "conflict_with",
+    *(f"timetree_{c}" for c in EVIDENCE_COLUMNS),
+    "synth_node", *(f"synth_{k}" for k in ("supported_by", "conflicts_with", "resolves", "partial_path_of",
+                                           "terminal")),
+    # filled by later issues of #46: weighted fit (#52) and re-query of conflicts (#53)
+    "calibration_weight", "fitted_age", "calibration_residual", "conflict_class", "requery_age",
 )
+# columns reserved for later issues, written empty until those land
+RESERVED_COLUMNS = ("calibration_weight", "fitted_age", "calibration_residual", "conflict_class", "requery_age")
 
 
 def _ids(value) -> list[int]:
@@ -184,6 +193,8 @@ def date_topology(
     higher: dict[str, list[tuple[int, int | None]]] | None = None,
     interpolation: str = "pure_birth",
     richness: dict[dendropy.Node, int] | None = None,
+    synth_nodes: dict[dendropy.Node, str] | None = None,
+    support: dict[str, dict[str, int]] | None = None,
 ) -> tuple[dendropy.Tree, list[dict]]:
     """Set branch lengths in Ma on a genus-level topology, in place.
 
@@ -200,11 +211,21 @@ def date_topology(
     used: each side is represented by the enclosing taxa of its genera that
     contain no genus of the other sides, so the MRCA stays the same node.
     Such ages are marked ``timetree_higher_taxa``.
+
+    The report has one row per internal node (see ``REPORT_COLUMNS``). Besides
+    the age and its source it records the evidence behind it, none of which
+    changes an age (#47): which attempt gave TimeTree's answer, the node it
+    conflicted with, what TimeTree said (see :meth:`TimeTree.evidence`), and,
+    given ``synth_nodes`` (the label of the synthesis node behind each node)
+    and ``support`` (per label, the number of source trees per kind of
+    annotation, see :func:`timegraft.otol_static.synthesis_support`), how
+    well the synthetic tree supports the node.
     """
     age: dict[dendropy.Node, float] = {}
     source: dict[dendropy.Node, str] = {}
     raw: dict[dendropy.Node, float] = {}  # TimeTree's answer, kept even when it is later dropped
     used: dict[dendropy.Node, list[int]] = {}
+    attempt_of: dict[dendropy.Node, str] = {}  # which picks gave the age: 0, 1, ... or "higher_taxa"
     # first picks for every node, fetched concurrently; later attempts are fetched as needed
     if hasattr(timetree, "prefetch"):
         timetree.prefetch(
@@ -225,6 +246,7 @@ def date_topology(
             if value is not None:
                 age[node], source[node] = value, "timetree"
                 raw[node], used[node] = value, sorted({i for side in sides for i in side})
+                attempt_of[node] = str(attempt)
                 break
         if node not in age and higher:
             sides = _higher_sides(node, higher, per_side * per_genus)
@@ -232,6 +254,7 @@ def date_topology(
             if value is not None:
                 age[node], source[node] = value, "timetree_higher_taxa"
                 raw[node], used[node] = value, sorted({i for side in sides for i in side})
+                attempt_of[node] = "higher_taxa"
 
     root = tree.seed_node
     if root not in age:
@@ -250,6 +273,7 @@ def date_topology(
         return up
 
     conflict: dict[dendropy.Node, float] = {}
+    conflict_with: dict[dendropy.Node, dendropy.Node] = {}  # the other node of the conflict
     changed = True
     while changed:
         changed = False
@@ -264,10 +288,12 @@ def date_topology(
                 source[node] = "timetree_same_as_ancestor"
             elif source[anc] == "timetree_higher_taxa" and source[node] == "timetree" and anc is not root:
                 conflict[anc] = age[node] / age[anc]
+                conflict_with[anc] = node
                 del age[anc]
                 source[anc] = "dropped_inconsistent"
             else:
                 conflict[node] = age[node] / age[anc]
+                conflict_with[node] = anc
                 del age[node]
                 source[node] = "dropped_inconsistent"
             changed = True
@@ -313,6 +339,100 @@ def date_topology(
                 "conflict_ratio": f"{conflict[node]:.3f}" if node in conflict else "",
                 "query_ids": "+".join(map(str, used.get(node, []))),
                 "example_genera": ";".join(genera[:3]),
+                "timetree_attempt": attempt_of.get(node, ""),
+                "conflict_with": names[conflict_with[node]] if node in conflict_with else "",
             }
         )
+        row = report[-1]
+        evidence = timetree.evidence(used[node]) if node in used else {c: "" for c in EVIDENCE_COLUMNS}
+        row.update({f"timetree_{c}": v for c, v in evidence.items()})
+        label = (synth_nodes or {}).get(node, "")
+        row["synth_node"] = label
+        # a node without annotations rests on the taxonomy alone: no source tree either way
+        counts = support.get(label, {}) if label and support is not None else None
+        for kind in ("supported_by", "conflicts_with", "resolves", "partial_path_of", "terminal"):
+            row[f"synth_{kind}"] = "" if counts is None else str(counts.get(kind, 0))
+        row.update({c: "" for c in RESERVED_COLUMNS})
     return tree, report
+
+
+# genera.tsv (#47). The first four columns are as before; the rest is evidence for the
+# consistency layer (#46) and does not change how a genus is matched or placed.
+GENERA_COLUMNS = (
+    "genus", "status", "ott_id", "ncbi_id",
+    # how the name was matched in OTT (static source only)
+    "ott_candidates", "ott_candidates_in_context", "ott_candidate_ids", "ott_flags", "ott_sourceinfo",
+    "ott_ncbi_ids", "ott_worms_ids", "ott_gbif_ids",
+    # OTT lineage of the matched genus
+    "ott_family", "ott_order", "ott_class", "ott_phylum",
+    # where it sits in the synthetic tree
+    "anchor_node", "anchor_clade_genera", "n_species_ott", "n_species_in_synthesis",
+    # lineage from the reference records: the most common name per rank, and its share
+    "records_n", "records_family", "records_family_share", "records_order", "records_order_share",
+    "records_class", "records_class_share", "records_phylum", "records_phylum_share",
+    # filled by later issues of #46: CoL XR as identifier hub (#48), placement concordance (#49, #50)
+    "col_id", "col_release", "col_match_type", "lineage_distance", "merged_id_distance", "neighbour_concordance",
+    "concordance_flag", "placement_action",
+)
+GENERA_RESERVED = ("col_id", "col_release", "col_match_type", "lineage_distance", "merged_id_distance",
+                   "neighbour_concordance", "concordance_flag", "placement_action")
+LINEAGE_RANKS = ("family", "order", "class", "phylum")
+
+
+def records_lineage(records) -> dict[str, dict[str, str]]:
+    """Per genus, the most common family, order, class and phylum among its records, with its share.
+
+    The share is over the records of the genus that name that rank. This is
+    the reference lineage that placement concordance compares OTT with (#49).
+    """
+    from collections import Counter, defaultdict
+
+    counts: dict[str, dict[str, Counter]] = defaultdict(lambda: defaultdict(Counter))
+    n: Counter = Counter()
+    for record in records:
+        genus = (record.get("genus") or "").strip()
+        if not genus:
+            continue
+        n[genus] += 1
+        for rank in LINEAGE_RANKS:
+            name = (record.get(rank) or "").strip()
+            if name:
+                counts[genus][rank][name] += 1
+    out = {}
+    for genus in n:
+        row = {"records_n": str(n[genus])}
+        for rank in LINEAGE_RANKS:
+            c = counts[genus][rank]
+            if c:
+                name, votes = c.most_common(1)[0]
+                row[f"records_{rank}"], row[f"records_{rank}_share"] = name, f"{votes / sum(c.values()):.3f}"
+            else:
+                row[f"records_{rank}"], row[f"records_{rank}_share"] = "", ""
+        out[genus] = row
+    return out
+
+
+def genera_rows(matches: dict[str, dict], *extra: dict[str, dict]) -> list[dict]:
+    """Rows of genera.tsv: the match of each genus, plus any per-genus columns in ``extra``."""
+    rows = []
+    for genus, match in sorted(matches.items()):
+        row = {c: "" for c in GENERA_COLUMNS}
+        row.update({k: ("" if v is None else v) for k, v in match.items() if k in GENERA_COLUMNS})
+        for table in extra:
+            row.update({k: v for k, v in (table.get(genus) or {}).items() if k in GENERA_COLUMNS})
+        row["genus"] = genus
+        rows.append(row)
+    return rows
+
+
+def timetree_summary(report: list[dict], crowns: list[dict] | None = None) -> dict:
+    """How much TimeTree evidence the outputs carry, for metadata.json."""
+    from collections import Counter
+
+    evidence, versions = Counter(), Counter()
+    for row in list(report) + list(crowns or []):
+        if row.get("query_ids"):
+            evidence[row.get("timetree_evidence") or "none"] += 1
+            if row.get("timetree_api_version"):
+                versions[row["timetree_api_version"]] += 1
+    return {"queries_by_evidence": dict(evidence), "api_versions": dict(versions)}

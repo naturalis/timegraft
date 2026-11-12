@@ -34,6 +34,8 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.crown_ages_from_timetree` | `true` | Estimate genus crown ages from TimeTree species |
 | `backbone_build.root_age` | | Root age in Ma, only needed if TimeTree cannot date the root |
 | `backbone_build.interpolation` | `pure_birth` | Ages for nodes TimeTree does not date: `pure_birth`, by the number of genera in the full clade in the synthetic tree (static source only; otherwise `even`), or `even`, spaced evenly as in BLADJ ([results](../science/results/2026-11-interpolation.md)) |
+| `backbone_build.synthesis_support` | `true` | Static source only: record per backbone node how many source trees of the synthesis support or conflict with it; downloads the synthesis `annotations.json` ([provenance](provenance.md)) |
+| `backbone_build.upgrade_cache` | `true` | Ask TimeTree again for the evidence behind answers cached by versions before #47, keeping the cached ages ([provenance](provenance.md)) |
 | `backbone_build.cache` | `resources/api_cache.json` | Cache of TimeTree answers; keep it between runs |
 
 ## General settings

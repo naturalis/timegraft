@@ -8,14 +8,20 @@ held as flat parent and label arrays rather than as tree objects.
 
 from __future__ import annotations
 
+import json
 import re
 from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
 
+from .timetree import EVIDENCE_COLUMNS
+
 # Taxa with these flags are passed over when an unflagged candidate exists.
 DISFAVOURED_FLAGS = ("extinct", "barren", "hidden", "not_otu", "environmental", "incertae_sedis_inherited")
+
+# Ranks whose names are kept for the lineage of each genus (genera.tsv, #47).
+LINEAGE_RANKS = ("family", "order", "class", "phylum")
 
 
 def _rows(path: str | Path):
@@ -38,13 +44,20 @@ def _ncbi(sourceinfo: str) -> int | None:
     return None
 
 
+def _source_ids(sourceinfo: str, prefix: str) -> list[str]:
+    """All ids of one source in an OTT ``sourceinfo`` (more than one where OTT merged records)."""
+    return [s[len(prefix) + 1:] for s in sourceinfo.split(",") if s.startswith(prefix + ":")]
+
+
 class Taxonomy:
     """The parts of OTT needed to match genera and find their species."""
 
     def __init__(self, path: str | Path, genera: set[str], context: str | None = None):
         uids, parents, genus_uids = [], [], []
         self.ncbi_of: dict[int, int] = {}
+        self.rank_name: dict[int, tuple[str, str]] = {}  # rank and name of taxa at LINEAGE_RANKS
         candidates: dict[str, list[tuple[int, str, int | None]]] = defaultdict(list)
+        sourceinfo_of: dict[int, str] = {}
         context_uid = None
         for uid, parent, name, rank, sourceinfo, _uniq, flags, *_ in _rows(path):
             uid_i = int(uid)
@@ -54,10 +67,13 @@ class Taxonomy:
                 ncbi_id = _ncbi(sourceinfo)
                 if ncbi_id:
                     self.ncbi_of[uid_i] = ncbi_id
+            if rank in LINEAGE_RANKS:
+                self.rank_name[uid_i] = (rank, name)
             if rank == "genus":
                 genus_uids.append(uid_i)
                 if name in genera:
                     candidates[name].append((uid_i, flags, _ncbi(sourceinfo)))
+                    sourceinfo_of[uid_i] = sourceinfo
             if context and name == context and context_uid is None:
                 context_uid = uid_i
         if context and context_uid is None:
@@ -69,6 +85,8 @@ class Taxonomy:
         self.context_uid = context_uid
 
         self.genus: dict[str, dict] = {}
+        # how each genus was matched, for genera.tsv; does not affect the match (#47)
+        self.match_info: dict[str, dict] = {}
         for name in genera:
             options = [c for c in candidates.get(name, []) if self._within_context(c[0])]
             preferred = [c for c in options if not any(f in c[1] for f in DISFAVOURED_FLAGS)] or options
@@ -79,6 +97,22 @@ class Taxonomy:
             else:
                 uid, _, ncbi = preferred[0]
                 self.genus[name] = {"ott_id": uid, "ncbi_id": ncbi, "status": "matched"}
+            info = {
+                "ott_candidates": len(candidates.get(name, [])),
+                "ott_candidates_in_context": len(options),
+                "ott_candidate_ids": ";".join(str(c[0]) for c in preferred) if len(preferred) > 1 else "",
+            }
+            uid = self.genus[name]["ott_id"]
+            if uid is not None:
+                sourceinfo = sourceinfo_of.get(uid, "")
+                info.update(
+                    ott_flags=next(c[1] for c in preferred if c[0] == uid),
+                    ott_sourceinfo=sourceinfo,
+                    ott_ncbi_ids=";".join(_source_ids(sourceinfo, "ncbi")),
+                    ott_worms_ids=";".join(_source_ids(sourceinfo, "worms")),
+                    ott_gbif_ids=";".join(_source_ids(sourceinfo, "gbif")),
+                )
+            self.match_info[name] = info
 
         # species (and lower) below each matched genus, with NCBI ids where known
         wanted = {m["ott_id"]: g for g, m in self.genus.items() if m["ott_id"] is not None}
@@ -131,6 +165,16 @@ def lineage(taxonomy: "Taxonomy", genus: str) -> list[tuple[int, int | None]]:
     while node >= 0 and len(out) < 100:
         out.append((node, taxonomy.ncbi_of.get(node)))
         node = int(taxonomy.parent[node])
+    return out
+
+
+def lineage_names(taxonomy: "Taxonomy", genus: str) -> dict[str, str]:
+    """Name of the nearest enclosing taxon at each of ``LINEAGE_RANKS`` in OTT, as ``ott_<rank>``."""
+    out = {f"ott_{rank}": "" for rank in LINEAGE_RANKS}
+    for uid, _ in lineage(taxonomy, genus):
+        rank_name = taxonomy.rank_name.get(uid)
+        if rank_name and not out[f"ott_{rank_name[0]}"]:
+            out[f"ott_{rank_name[0]}"] = rank_name[1]
     return out
 
 
@@ -344,6 +388,22 @@ def clade_richness(synth: SynthTree, anchor: dict[str, int], tree, taxonomy: "Ta
         def size(m: int) -> int:
             return int(tips[m])
 
+    out: dict = {}
+    for node, m in synth_nodes(synth, anchor, tree).items():
+        if node.is_leaf():
+            continue
+        n = size(m)
+        if n:
+            out[node] = n
+    return out
+
+
+def synth_nodes(synth: SynthTree, anchor: dict[str, int], tree) -> dict:
+    """The node of the synthetic tree behind every node of ``tree`` (its index in ``synth``).
+
+    A tip maps to the anchor of its genus, an internal node to the MRCA of
+    the anchors of its genera. Nodes whose genera have no anchor are left out.
+    """
     paths: dict[int, list[int]] = {}
 
     def path(n: int) -> list[int]:
@@ -355,31 +415,82 @@ def clade_richness(synth: SynthTree, anchor: dict[str, int], tree, taxonomy: "Ta
         on_b = set(path(b))
         return next(n for n in path(a) if n in on_b)
 
-    synth_node: dict = {}
     out: dict = {}
     for node in tree.postorder_node_iter():
         if node.is_leaf():
-            synth_node[node] = anchor.get(node.taxon.label)
-            continue
-        found = [synth_node[c] for c in node.child_node_iter() if synth_node.get(c) is not None]
-        if not found:
-            synth_node[node] = None
-            continue
-        m = found[0]
-        for other in found[1:]:
-            m = mrca(m, other)
-        synth_node[node] = m
-        n = size(m)
-        if n:
-            out[node] = n
+            m = anchor.get(node.taxon.label)
+        else:
+            found = [out[c] for c in node.child_node_iter() if c in out]
+            if not found:
+                continue
+            m = found[0]
+            for other in found[1:]:
+                m = mrca(m, other)
+        if m is not None:
+            out[node] = m
     return out
+
+
+SUPPORT_KINDS = ("supported_by", "conflicts_with", "resolves", "partial_path_of", "terminal")
+
+
+def synthesis_support(path: str | Path, labels: set[str] | None = None) -> dict[str, dict[str, int]]:
+    """Number of source trees per kind of annotation, per node of the synthetic tree.
+
+    Read from the synthesis ``annotations.json``. The taxonomy is not a source
+    tree there, so a node that is absent, or has no ``supported_by``, rests on
+    the taxonomy alone. With ``labels`` only those nodes are kept.
+    """
+    with open(path, encoding="utf-8") as handle:
+        nodes = json.load(handle).get("nodes", {})
+    out = {}
+    for label, annotation in nodes.items():
+        if labels is not None and label not in labels:
+            continue
+        if not isinstance(annotation, dict):
+            continue
+        out[label] = {k: len(annotation[k]) for k in SUPPORT_KINDS if isinstance(annotation.get(k), dict)}
+    return out
+
+
+def genus_anchor_info(synth: SynthTree, taxonomy: Taxonomy, anchor: dict[str, int]) -> dict[str, dict[str, str]]:
+    """Per genus: the synthesis node it is anchored at, and how much that clade holds (genera.tsv, #47).
+
+    ``anchor_clade_genera`` is the number of genera in the clade of the anchor;
+    for a genus attached at the MRCA of its species, a large value means one
+    stray species pulled it deep (#51). ``n_species_ott`` and
+    ``n_species_in_synthesis`` count its species in OTT and those of them that
+    are tips or nodes of the synthetic tree.
+    """
+    genus_of = synth.tip_genera(taxonomy)
+    sizes = synth.subtree_sizes()
+    out = {}
+    for genus, species in ((g, taxonomy.species.get(g, [])) for g in taxonomy.genus):
+        row = {
+            "anchor_node": "",
+            "anchor_clade_genera": "",
+            "n_species_ott": str(len(species)),
+            "n_species_in_synthesis": str(sum(1 for uid, _ in species if f"ott{uid}" in synth.index)),
+        }
+        node = anchor.get(genus)
+        if node is not None:
+            values = genus_of[node : node + int(sizes[node])]
+            row["anchor_node"] = synth.label[node]
+            row["anchor_clade_genera"] = str(int(np.unique(values[values >= 0]).size))
+        out[genus] = row
+    return out
+
+
+CROWN_COLUMNS = ("genus", "crown_age", "n_species", "query_ids", *(f"timetree_{c}" for c in EVIDENCE_COLUMNS))
 
 
 def crown_ages(taxonomy: Taxonomy, timetree, genera: list[str], max_species: int = 12) -> list[dict]:
     """Crown age per genus: the TimeTree MRCA of up to ``max_species`` of its species.
 
     This is a lower bound: the sampled species need not span the crown.
-    Genera with fewer than two species known to TimeTree get no age.
+    Genera with fewer than two species known to TimeTree get no age. Each
+    row also holds the species queried and TimeTree's evidence for the age
+    (``CROWN_COLUMNS``, #47).
     """
     picks_by_genus = {}
     for genus in genera:
@@ -394,5 +505,9 @@ def crown_ages(taxonomy: Taxonomy, timetree, genera: list[str], max_species: int
     for genus, picks in picks_by_genus.items():
         result = timetree._query(picks)
         if result["age"] is not None and len(result["found"]) >= 2:
-            rows.append({"genus": genus, "crown_age": f"{result['age']:.4f}", "n_species": len(result["found"])})
+            row = {"genus": genus, "crown_age": f"{result['age']:.4f}", "n_species": len(result["found"]),
+                   "query_ids": "+".join(map(str, picks))}
+            if hasattr(timetree, "evidence"):
+                row.update({f"timetree_{c}": v for c, v in timetree.evidence(picks).items()})
+            rows.append(row)
     return rows
