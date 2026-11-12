@@ -2,7 +2,7 @@
 
 import json
 import logging
-from collections import Counter
+from collections import Counter, defaultdict
 import sys
 from pathlib import Path
 
@@ -29,6 +29,7 @@ crowns = []
 lineage_of = records_lineage(read_tsv(snakemake.input.records)) if snakemake.input.records else {}
 extra = [lineage_of]
 synth_nodes, support = None, None
+concordance = []
 
 # COL XR as identifier hub (#48): genera (and optionally species) resolved with the lineage of their records
 col_cfg = settings.get("col") or {}
@@ -87,6 +88,56 @@ try:
                        if not n.is_leaf() and synth.label[m]}
         if snakemake.input.annotations:
             support = synthesis_support(snakemake.input.annotations, set(synth_nodes.values()))
+        # placement concordance, report only (#49)
+        conc_cfg = settings.get("concordance") or {}
+        if conc_cfg.get("enabled", True):
+            from timegraft import concordance as cc
+            from timegraft.col import NCBI_DATASET, ChecklistBank
+
+            info = taxonomy.match_info
+            reference, phylum = {}, {}
+            for g in set(genera) | set(lineage_of):
+                col = col_rows.get(g) or {}
+                rec = lineage_of.get(g) or {}
+                if col.get("col_id"):
+                    reference[g] = ("col", {r: col.get(f"col_{r}", "") for r in ("family", "order", "class")})
+                elif rec:
+                    reference[g] = ("records", {r: rec.get(f"records_{r}", "") for r in ("family", "order", "class")})
+                phylum[g] = col.get("col_phylum") or rec.get("records_phylum") or ""
+            names = cc.name_index(taxonomy)
+            client = clb or ChecklistBank(col_cfg.get("release", 316691), cache)
+            merged = {g: [i for i in (info.get(g, {}).get("ott_ncbi_ids") or "").split(";") if i] for g in genera}
+            try:
+                classifications = {i: client.classification(NCBI_DATASET, i)
+                                   for ids in merged.values() if len(ids) > 1 for i in ids}
+            finally:
+                cache.save()
+            hits = defaultdict(list)
+            for r in read_tsv(snakemake.input.screened) if snakemake.input.screened else []:
+                if r.get("best_other_genus"):
+                    hits[r["genus"]].append(r["best_other_genus"])
+            sisters = cc.backbone_sisters(tree)
+            flag_level = cc.LEVELS[conc_cfg.get("flag_level", "class")]
+            for g in genera:
+                match = matches[g]
+                row = {c: "" for c in cc.COLUMNS}
+                row.update({"genus": g, "status": match["status"], "ott_id": match.get("ott_id") or "",
+                            **{k: v for k, v in lineage_names(taxonomy, g).items() if k in cc.COLUMNS}})
+                source, ref = reference.get(g, ("", {}))
+                row["reference_source"] = source
+                if match.get("ott_id"):
+                    row.update(cc.lineage_distance(taxonomy, names, match["ott_id"], ref))
+                    row["merged_ncbi_ids"] = ";".join(merged[g]) if len(merged[g]) > 1 else ""
+                    row.update(cc.merged_id_distance(classifications, merged[g]))
+                if g in sisters:
+                    row.update(cc.neighbour_concordance(g, hits.get(g, []), sisters[g], phylum,
+                                                        min_hits=int(conc_cfg.get("min_hits", 5))))
+                concordance.append(cc.aggregate(row, flag_level, float(conc_cfg.get("max_share", 0.0)),
+                                                int(conc_cfg.get("min_flags", 2))))
+            concordance = cc.rank_rows(concordance)
+            extra.append({r["genus"]: {k: r[k] for k in ("lineage_distance", "merged_id_distance",
+                                                         "neighbour_concordance", "concordance_flag")}
+                          for r in concordance})
         if settings.get("crown_ages_from_timetree", True):
             crowns = crown_ages(taxonomy, timetree, [g for g in genera if g in placed and placed[g] != "unmatched"])
     else:
@@ -120,17 +171,23 @@ write_tsv(snakemake.output.genera, genera_rows(matches, *extra), GENERA_COLUMNS)
 write_tsv(snakemake.output.nodes, report, REPORT_COLUMNS)
 write_tsv(snakemake.output.crowns, crowns, CROWN_COLUMNS)
 write_tsv(snakemake.output.col_species, col_species, SPECIES_COLUMNS)
+from timegraft.concordance import COLUMNS as CONCORDANCE_COLUMNS
+write_tsv(snakemake.output.concordance, concordance, CONCORDANCE_COLUMNS)
 
 # what the backbone was built from, and in what format the outputs are (#47)
 entries = [v for k, v in cache.data.items() if k.startswith("mrca:") and isinstance(v, dict)]
 metadata = {
-    "output_format": {"genera.tsv": 3, "node_ages.tsv": 2, "crown_ages.tsv": 2, "timetree_cache": CACHE_VERSION},
+    "output_format": {"genera.tsv": 4, "concordance.tsv": 1, "node_ages.tsv": 2, "crown_ages.tsv": 2, "timetree_cache": CACHE_VERSION},
     "timegraft_version": __version__,
     "source": settings.get("source", "static"),
     "taxonomy": settings.get("taxonomy", "ott3.7.3") if settings.get("source", "static") == "static" else "api",
     "synthesis": settings.get("synthesis", "opentree16.1") if settings.get("source", "static") == "static" else "api",
     "context": settings.get("context"),
     "synthesis_support": support is not None,
+    "concordance": {
+        "settings": settings.get("concordance") or {},
+        "genera_by_flag": dict(Counter(r["concordance_flag"] or "concordant" for r in concordance)),
+    },
     "col": None if clb is None else {
         **clb.info,
         "join": col_cfg.get("join", "col"),

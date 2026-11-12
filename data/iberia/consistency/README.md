@@ -31,3 +31,21 @@ What that changed:
 - **48 genera sent to TimeTree with COL's NCBI id.** For 21 it was another of OTT's merged ids. These include *Onchidella*: 36932, the gastropod, instead of 262330, the sand dollar *Peronella*. For 27, OTT had no NCBI id. This changes 30 node ages, and no crown ages. The largest changes are among bryozoans, which gained NCBI ids: *Caberea* + *Notoplites* is now dated by TimeTree at 108.8 Ma instead of interpolated at 214.2 Ma, and the nodes above it move by up to 90 Ma. The others are a few crustacean nodes: one moves from 482 to 601 Ma and another from 465 to 535 Ma. The node joining *Onchidella* to the echinoderms is no longer dated through higher taxa at 515 Ma and is left to interpolation (495 Ma): with the right id, TimeTree is now asked about a gastropod, while the genus still sits among the sea urchins in OTT (#49, #50).
 
 Whether these moves are improvements is for the benchmark of #56 to judge; `col.join: ott` gives the identifiers as before.
+
+## `concordance/` (#49)
+
+Placement concordance ([#49](https://github.com/naturalis/timegraft/issues/49)) on the backbone of `backbone-col/`, at the default settings (`flag_level: class`, `max_share: 0`, `min_hits: 5`, `min_flags: 2`): `concordance.tsv`, and `genera.tsv` and `metadata.json` with the concordance columns filled. The backbone itself is unchanged: `backbone.tre`, `node_ages.tsv`, `crown_ages.tsv` and every other column of `genera.tsv` are identical to those in `backbone-col/`. The barcode hits are those of `units/screened.tsv` in `iberia-run-tolerant.tar.gz`; the NCBI lineages of merged ids were read from ChecklistBank and are now in `timetree_cache.json`.
+
+**Result.** One genus flagged, *Onchidella*, which fails all three checks. Two genera for review: *Arbacia* and *Magelona*. 34 genera cannot be checked, mostly because they are not in OTT. The other 1,181 pass.
+
+**Each check on its own**, and why the genera it fails on are not misplacements, apart from *Onchidella*:
+
+| Check | Evaluable | Fails at default | Distribution and false positives |
+| --- | --- | --- | --- |
+| Reference lineage (COL, else records) | 1,184 | *Onchidella* (Onchidiidae against Laganidae: they meet only at Bilateria) | 1,115 agree, 59 part at family level, 2 at superfamily level and 7 at order level. All 68 are classification differences: COL splits Gobionidae and Tincidae from Cyprinidae, places Andvakiidae differently, and uses other sponge orders (*Achaeta*, *Antigonia*, *Gobio*, *Phakellia*, *Paratimea*, *Telmatactis*, *Tinca*). With the records' own lineage as the reference instead of COL, the picture is the same (63 at family level, 6 at order level), plus *Trachysalambria*, a penaeid shrimp that BOLD files under Pilumnidae. With COL as the reference that BOLD error disappears |
+| Merged ids | 35 of the 38 genera with more than one NCBI id | *Onchidella* (36932, a gastropod, and 262330, the sand dollar *Peronella*) | 29 of the merged pairs are the same taxon, 3 part at family level, *Patella* at superfamily level and *Myosotella* at order level. These are synonyms and lumped genera. 3 ids have no lineage in ChecklistBank |
+| Barcode neighbours | 676 genera with at least 5 cross-genus hits | *Onchidella* (16 hits, all pulmonates; sisters are echinoderms), *Arbacia* (its sister in the backbone is *Onchidella*), *Magelona* (11 hits in molluscs; its COI looks molluscan, probably a marker artefact) | *Plumularia* has the lowest share above zero, 0.25: 24 of its hits are the brittle star *Ophiothrix*, the epibiont contamination noted in the analysis. Its other 8 hits are hydroids, so it passes |
+
+The false positives of the three checks do not overlap. That is why two failures are required, as the holistic analysis proposed.
+
+**Sensitivity.** *Onchidella* is still the only flagged genus whether `flag_level` is `superfamily`, `order`, `class` or `phylum`, and whether `max_share` is 0 or 0.25. Only the number of genera for review changes: 13 or 14 at superfamily level, 10 or 11 at order level, and 2 or 3 at class or phylum level. The run has a single real misplacement, so it cannot tell how many misplacements the checks miss. The error injection of #56 is meant for that.

@@ -22,6 +22,9 @@ DISFAVOURED_FLAGS = ("extinct", "barren", "hidden", "not_otu", "environmental", 
 
 # Ranks whose names are kept for the lineage of each genus (genera.tsv, #47).
 LINEAGE_RANKS = ("family", "order", "class", "phylum")
+# Taxa at or below these ranks are not kept by name (rank_name); everything above is, for lineages (#49).
+LOW_RANKS = ("genus", "subgenus", "section", "subsection", "series", "species", "species group", "species subgroup",
+             "subspecies", "variety", "varietas", "forma", "form", "subvariety", "no rank - terminal")
 
 
 def _rows(path: str | Path):
@@ -58,7 +61,7 @@ class Taxonomy:
         (for example from COL, #48); it is used only if that id is one of the candidates."""
         uids, parents, genus_uids = [], [], []
         self.ncbi_of: dict[int, int] = {}
-        self.rank_name: dict[int, tuple[str, str]] = {}  # rank and name of taxa at LINEAGE_RANKS
+        self.rank_name: dict[int, tuple[str, str]] = {}  # rank and name of taxa above genus
         candidates: dict[str, list[tuple[int, str, int | None]]] = defaultdict(list)
         sourceinfo_of: dict[int, str] = {}
         context_uid = None
@@ -70,7 +73,7 @@ class Taxonomy:
                 ncbi_id = _ncbi(sourceinfo)
                 if ncbi_id:
                     self.ncbi_of[uid_i] = ncbi_id
-            if rank in LINEAGE_RANKS:
+            if rank not in LOW_RANKS:
                 self.rank_name[uid_i] = (rank, name)
             if rank == "genus":
                 genus_uids.append(uid_i)
@@ -187,7 +190,7 @@ def lineage_names(taxonomy: "Taxonomy", genus: str) -> dict[str, str]:
     out = {f"ott_{rank}": "" for rank in LINEAGE_RANKS}
     for uid, _ in lineage(taxonomy, genus):
         rank_name = taxonomy.rank_name.get(uid)
-        if rank_name and not out[f"ott_{rank_name[0]}"]:
+        if rank_name and rank_name[0] in LINEAGE_RANKS and not out[f"ott_{rank_name[0]}"]:
             out[f"ott_{rank_name[0]}"] = rank_name[1]
     return out
 

@@ -54,6 +54,7 @@ rule build_backbone:
     input:
         reps=rules.representatives.output.reps,
         records=rules.filter_records.output.kept,
+        screened=rules.screen_units.output.screened,
         synth=SYNTH if STATIC else [],
         taxonomy=TAXONOMY if STATIC else [],
         annotations=ANNOTATIONS if SUPPORT else [],
@@ -64,6 +65,7 @@ rule build_backbone:
         crowns=f"{OUT}/backbone/crown_ages.tsv",
         metadata=f"{OUT}/backbone/metadata.json",
         col_species=f"{OUT}/backbone/col_species.tsv",
+        concordance=f"{OUT}/backbone/concordance.tsv",
     params:
         src=SRC,
         settings=BB,

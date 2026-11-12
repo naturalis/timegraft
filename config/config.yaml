@@ -53,6 +53,14 @@ backbone_build:
                              # holds for it, or OTT has none; ott: always OTT's (as before #48)
     species: false           # also resolve every species name of the records (slow: one query per name)
     workers: 4
+  concordance:               # placement concordance, report only (#49): backbone/concordance.tsv
+    enabled: true
+    flag_level: class        # a lineage or merged-id check fails when the two lineages are in different
+                             # classes or further apart (family, superfamily, order, class, phylum, kingdom)
+    max_share: 0.0           # the barcode-neighbour check fails when at most this share of a genus's
+                             # cross-genus hits is in a phylum of its backbone sisters
+    min_hits: 5              # ... and is only made with at least this many hits
+    min_flags: 2             # a genus is flagged when this many checks fail
   cache: resources/api_cache.json
 
 # Validation of the informative window: barcode distances against a trusted

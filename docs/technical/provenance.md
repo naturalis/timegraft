@@ -75,7 +75,7 @@ The first four columns (`genus`, `status`, `ott_id`, `ncbi_id`) are as before. A
 | `records_n` | Reference records of the genus |
 | `records_family`, `records_order`, `records_class`, `records_phylum` and their `_share` | The most common name per rank among those records, and the share of records naming that rank that agree. This is the reference lineage that placement concordance compares with OTT ([#49](https://github.com/naturalis/timegraft/issues/49)) |
 | `col_*`, `join_ncbi_id`, `join_ncbi_source` | Catalogue of Life as identifier hub; see [below](#catalogue-of-life-as-identifier-hub) |
-| `lineage_distance`, `merged_id_distance`, `neighbour_concordance`, `concordance_flag` | Reserved for placement concordance ([#49](https://github.com/naturalis/timegraft/issues/49)); empty |
+| `lineage_distance`, `merged_id_distance`, `neighbour_concordance`, `concordance_flag` | Placement concordance ([#49](https://github.com/naturalis/timegraft/issues/49)); see [below](#placement-concordance), with the details in `backbone/concordance.tsv` |
 | `placement_action` | Reserved for re-anchoring flagged genera ([#50](https://github.com/naturalis/timegraft/issues/50)); empty |
 
 ## `backbone/crown_ages.tsv`
@@ -114,9 +114,38 @@ With `backbone_build.col.species: true`, every species name of the records is re
 
 **Reproducibility.** `col.release` is a ChecklistBank dataset key, by default 316691 (COL26.10 XR, 16 October 2026). An alias such as `3LXR` also works but follows the latest release; the key it resolved to is in `metadata.json` and the log warns. Every ChecklistBank answer is cached in `backbone_build.cache` under keys starting with `col:` and the release key, so a run with the same release and cache gives the same result without network access.
 
+## Placement concordance
+
+Is each genus where OToL puts it? Three checks, each independent of OToL's placement and of the others, test that before any age is derived from the placement ([#49](https://github.com/naturalis/timegraft/issues/49)). They only report; nothing in the backbone changes. Correcting flagged genera is [#50](https://github.com/naturalis/timegraft/issues/50).
+
+| Check | Question | Distance |
+| --- | --- | --- |
+| Reference lineage | Where in OTT is the family that a reference classification gives the genus? The reference is COL's classification where COL resolved the genus, otherwise the most common family among its records (`reference_source`); without a family in OTT, the order, then the class | Rank level at which the genus's OTT lineage and that taxon's part |
+| Merged ids | Where OTT merged more than one NCBI id into the genus (`ott_ncbi_ids`), how far apart are they in NCBI Taxonomy (read from ChecklistBank)? | Rank level at which the widest pair parts |
+| Barcode neighbours | Do the genera the genus's units come closest to outside the genus (`best_other_genus` in `units/screened.tsv`) share a phylum with its sisters in the backbone? Phyla from COL, else from the records | Share of those hits in a phylum of the sisters, with at least `min_hits` hits |
+
+A rank level is 0 where the lineages agree (the genus lies within the reference family, or the ids are of one taxon), then 1 family, 2 superfamily, 3 order, 4 class, 5 phylum and 6 kingdom: the highest rank among the taxa below the last shared one, so two phyla that meet at an unranked node such as Bilateria still part at phylum level. Where a reference name is held by more than one OTT taxon, the closest is used, so a homonym never makes a genus look misplaced.
+
+A lineage or merged-id check fails when the level is at least `concordance.flag_level` (default `class`); the neighbour check fails when the share is at most `max_share` (default 0, no hit at all in a sister phylum). Each check alone fails for reasons other than misplacement (classification differences, slow mitochondrial evolution in sponges, contaminated units), and those reasons do not coincide; a genus is therefore flagged when `min_flags` (default 2) checks fail.
+
+`backbone/concordance.tsv` has one row per genus, sorted for review (most failed checks first, then the widest split):
+
+| Column | Meaning |
+| --- | --- |
+| `rank` | Position in the review order |
+| `genus`, `status`, `ott_id`, `ott_family`, `ott_class`, `ott_phylum` | The genus and its OTT placement |
+| `reference_source`, `reference_taxon` | `col` or `records`, and the reference taxon used, as `rank:name` |
+| `lineage_mrca`, `lineage_split`, `lineage_distance`, `lineage_flag` | Last OTT taxon the placement and the reference taxon share, the rank they part at, its level, and whether the check failed (`yes`) |
+| `merged_ncbi_ids`, `merged_mrca`, `merged_split`, `merged_id_distance`, `merged_flag` | The same for the NCBI ids OTT merged into the genus; empty where it has one |
+| `neighbour_hits`, `neighbour_phyla`, `sister_phyla`, `neighbour_concordance`, `neighbour_flag` | Units with a nearest unit in another genus, the phyla of those genera with counts, the phyla of the backbone sisters, the share in a sister phylum, and whether the check failed |
+| `n_evaluable`, `n_flags`, `severity` | Checks that could be made and that failed; the widest split level found |
+| `concordance_flag` | `flag` (at least `min_flags` checks failed), `review` (one failed), empty (none failed) or `not_evaluable` (no check could be made, e.g. the genus is not in OTT) |
+
+The four columns in `genera.tsv` are `lineage_distance`, `merged_id_distance`, `neighbour_concordance` and `concordance_flag`. How these settings behave on the Iberian run, with every genus each check fails on, is in `data/iberia/consistency/README.md`.
+
 ## `backbone/metadata.json`
 
-New. What the backbone was built from: the format version of each output and of the cache, the timegraft version, the source, OTT and synthesis releases, the matching context, whether synthesis support was read, the COL release (key, alias, version) with counts of genera by confidence and crosswalk path and of genera joined with COL's NCBI id, and a summary of the TimeTree evidence (queries per evidence level, TimeTree database versions, and how many cache entries are at version 1, were upgraded, or now get a different answer from TimeTree).
+New. What the backbone was built from: the format version of each output and of the cache, the timegraft version, the source, OTT and synthesis releases, the matching context, whether synthesis support was read, the concordance settings with the number of genera per `concordance_flag`, the COL release (key, alias, version) with counts of genera by confidence and crosswalk path and of genera joined with COL's NCBI id, and a summary of the TimeTree evidence (queries per evidence level, TimeTree database versions, and how many cache entries are at version 1, were upgraded, or now get a different answer from TimeTree).
 
 ## Migration note for downstream consumers
 
@@ -126,4 +155,5 @@ New. What the backbone was built from: the format version of each output and of 
 - **Synthesis support needs one more download**, `annotations.json` of the synthesis release (61 MB for opentree16.1), placed next to `labelled_supertree.tre`. Set `synthesis_support: false` to do without; the `synth_*` support columns are then empty.
 - **COL needs ChecklistBank** on the first run with a release (for 1,200 genera, about six requests each), and changes which NCBI id some genera are sent to TimeTree with, so some backbone ages change ([#48](https://github.com/naturalis/timegraft/issues/48)). `col.join: ott` keeps the identifiers as before while still recording COL's; `col.enabled: false` skips COL altogether.
 - **`genera.tsv` format 3** (#48) replaces the three reserved `col_*` columns of format 2 with the filled ones above, adds `ott_resolution` and the `join_*` columns, and keeps the earlier columns and their order.
+- **`genera.tsv` format 4** (#49) fills `lineage_distance`, `merged_id_distance`, `neighbour_concordance` and `concordance_flag`; `backbone/concordance.tsv` is new. The build now also reads `units/screened.tsv`, so it runs after screening.
 - **The build reads the filtered records** (`units/filtered.tsv`) for the reference lineage, besides the representatives, so it runs again when the records change.
