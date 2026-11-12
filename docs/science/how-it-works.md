@@ -43,7 +43,7 @@ The backbone is a tree of genera with known ages:
 
 1. All genera in the data are looked up in the Open Tree of Life, which gives how they are related.
 2. For each branching point, TimeTree is asked when the lineages on either side split. TimeTree does not know every genus, so it is also asked about species within the genera and, as a last resort, about the families or orders they belong to.
-3. Branching points that TimeTree cannot date are given ages evenly spread between the nearest dated points above and below.
+3. Branching points that TimeTree cannot date are placed between the nearest dated points above and below by a pure-birth model: the more genera a clade holds in the Open Tree of Life, the older its expected age. The count includes genera that are not in the data, so the age of a clade does not depend on which other genera happen to be sampled ([results](results/2026-11-interpolation.md)). When those counts are not available, the points are spread evenly instead.
 
 Each genus in the backbone then has a **stem age**: when it split from its closest relatives.
 

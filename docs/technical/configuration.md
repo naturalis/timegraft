@@ -33,6 +33,7 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.species_per_genus` | 3 | Species ids sent along with each genus |
 | `backbone_build.crown_ages_from_timetree` | `true` | Estimate genus crown ages from TimeTree species |
 | `backbone_build.root_age` | | Root age in Ma, only needed if TimeTree cannot date the root |
+| `backbone_build.interpolation` | `pure_birth` | Ages for nodes TimeTree does not date: `pure_birth`, by the number of genera in the full clade in the synthetic tree (static source only; otherwise `even`), or `even`, spaced evenly as in BLADJ ([results](../science/results/2026-11-interpolation.md)) |
 | `backbone_build.cache` | `resources/api_cache.json` | Cache of TimeTree answers; keep it between runs |
 
 ## General settings
