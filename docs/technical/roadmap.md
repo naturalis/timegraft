@@ -12,6 +12,7 @@ Where timegraft stands and what comes next. Each item links to its issue, where 
 - Validation of barcode distances against a reference tree
 - A first run on real data: 25,000 BINs in 1,232 genera ([results](../science/results/2026-11-iberia.md))
 - Crown ages as a range, from a barcode minimum to TimeTree and the stem age, with the bounds recorded and diversity reported at both ([#36](https://github.com/naturalis/timegraft/issues/36); [results](../science/results/2026-11-dating.md)); penalised likelihood and rates fitted to TimeTree tested and not adopted
+- Screening of reference units that do not fit their genus, before genus subtrees are built ([#38](https://github.com/naturalis/timegraft/issues/38); [results](../science/results/2026-11-screening.md))
 
 ## Next: getting the ages right
 

@@ -3,18 +3,23 @@
 For every internal node, a few genera from each child clade are sent to
 TimeTree, and the age of the node that joins them is taken as a calibration.
 Ages that would make a node older than a dated ancestor are discarded. Nodes
-without an age are spaced evenly between their nearest dated ancestor and
-their oldest dated descendant, as in BLADJ.
+without an age are placed between their nearest dated ancestor and their
+oldest dated descendant, by default by their expected height under a
+pure-birth model, or evenly as in BLADJ (#16).
 """
 
 from __future__ import annotations
+
+import logging
+import math
 
 import dendropy
 
 from .timetree import TimeTree
 
 REPORT_COLUMNS = (
-    "node", "parent", "n_genera", "age", "source", "timetree_age", "conflict_ratio", "query_ids", "example_genera",
+    "node", "parent", "n_genera", "clade_genera", "age", "source", "timetree_age", "conflict_ratio", "query_ids",
+    "example_genera",
 )
 
 
@@ -77,6 +82,97 @@ def _higher_sides(node: dendropy.Node, higher: dict, limit: int) -> list[list[in
     return sides
 
 
+INTERPOLATION_METHODS = ("pure_birth", "even")
+
+
+def yule_height(n: int) -> float:
+    """Expected crown age of a pure-birth (Yule) clade of ``n`` tips, in units of 1/lambda.
+
+    With k lineages the waiting time to the next split has mean 1/(k lambda),
+    so the crown of n tips is expected sum_{k=2}^{n} 1/k = H_n - 1 time
+    units before the present; a single tip has height 0.
+    """
+    if n <= 1:
+        return 0.0
+    if n <= 1000:
+        return sum(1.0 / k for k in range(2, n + 1))
+    # asymptotic expansion of the harmonic number, exact to well below 1e-12 here
+    return math.log(n) + 0.5772156649015329 + 1 / (2 * n) - 1 / (12 * n * n) - 1.0
+
+
+def interpolate(
+    tree: dendropy.Tree,
+    age: dict[dendropy.Node, float],
+    method: str = "pure_birth",
+    richness: dict[dendropy.Node, int] | None = None,
+) -> dict[dendropy.Node, float]:
+    """Ages for the internal nodes missing from ``age``; the root must be dated.
+
+    Each undated node is placed, from the root down, between the age of its
+    parent and that of its oldest dated descendant (a tip, at 0, if there is
+    none), so that ages decrease strictly towards the tips and every dated
+    age is kept.
+
+    ``even`` spaces the nodes of an undated chain evenly, as BLADJ does.
+    ``pure_birth`` places them by their expected height under a pure-birth
+    model (:func:`yule_height`): a node of richness ``n`` under a parent of
+    richness ``n_p`` and above a dated floor of richness ``n_f`` is put at the
+    fraction (h(n) - h(n_f)) / (h(n_p) - h(n_f)) of the way from the floor to
+    the parent, with h = 0 for a tip. This amounts to a constant speciation
+    rate between each pair of dated nodes, fitted to that pair.
+
+    ``richness`` is the number of species (or other terminal taxa) in the
+    full clade of each internal node, for example from the synthetic tree.
+    Without it the genera in ``tree`` are counted, which with sparse sampling
+    makes shallow nodes far too young (see ``data/iberia/backbone-interpolation``).
+    Where the heights do not increase strictly towards the root, the node is
+    spaced evenly instead.
+    """
+    if method not in INTERPOLATION_METHODS:
+        raise ValueError(f"unknown interpolation method {method!r}; use one of {', '.join(INTERPOLATION_METHODS)}")
+    root = tree.seed_node
+    if root not in age:
+        raise ValueError("the root needs an age before the other nodes can be interpolated")
+    tips: dict[dendropy.Node, int] = {}
+    for node in tree.postorder_node_iter():
+        tips[node] = 1 if node.is_leaf() else sum(tips[c] for c in node.child_node_iter())
+
+    def height(node: dendropy.Node) -> float:
+        if node.is_leaf():
+            return 0.0
+        n = richness.get(node) if richness else None
+        return yule_height(n if n else tips[node])
+
+    heights = {node: height(node) for node in tree.preorder_node_iter()} if method == "pure_birth" else {}
+    # oldest dated descendant: its age, the length of the undated chain to it, the node itself
+    below: dict[dendropy.Node, tuple[float, int, dendropy.Node]] = {}
+    for node in tree.postorder_node_iter():
+        if node.is_leaf():
+            below[node] = (0.0, 0, node)
+            continue
+        best = None
+        for child in node.child_node_iter():
+            candidate = (age[child], 0, child) if child in age else below[child]
+            if best is None or candidate[0] > best[0] or (candidate[0] == best[0] and candidate[1] > best[1]):
+                best = candidate
+        below[node] = (best[0], best[1] + 1, best[2])
+
+    out: dict[dendropy.Node, float] = {}
+    for node in tree.preorder_node_iter():
+        if node is root or node.is_leaf() or node in age:
+            continue
+        parent = node.parent_node
+        parent_age = age[parent] if parent in age else out[parent]
+        floor, steps, floor_node = below[node]
+        fraction = 1.0 / (steps + 1)
+        if method == "pure_birth":
+            h_parent, h_node, h_floor = heights[parent], heights[node], heights[floor_node]
+            if h_parent > h_node > h_floor:
+                fraction = (h_parent - h_node) / (h_parent - h_floor)
+        out[node] = parent_age - (parent_age - floor) * fraction
+    return out
+
+
 def date_topology(
     tree: dendropy.Tree,
     ncbi: dict[str, object],
@@ -86,8 +182,17 @@ def date_topology(
     attempts: int = 4,
     per_genus: int = 3,
     higher: dict[str, list[tuple[int, int | None]]] | None = None,
+    interpolation: str = "pure_birth",
+    richness: dict[dendropy.Node, int] | None = None,
 ) -> tuple[dendropy.Tree, list[dict]]:
     """Set branch lengths in Ma on a genus-level topology, in place.
+
+    Nodes left without an age are filled in by :func:`interpolate`, with
+    ``interpolation`` as its method. ``pure_birth`` needs ``richness``, the
+    number of genera in the full clade of each internal node (see
+    :func:`timegraft.otol_static.clade_richness`); without it the nodes are
+    spaced evenly, since a pure-birth model of the sampled genera alone makes
+    shallow nodes far too young (#16).
 
     When TimeTree knows none of the picked taxa on one side of a node, up to
     ``attempts`` different picks are tried. As a last resort, ``higher`` (per
@@ -168,28 +273,14 @@ def date_topology(
             changed = True
             break
 
-    # oldest dated descendant and the length of the undated chain leading to it
-    below: dict[dendropy.Node, tuple[float, int]] = {}
-    for node in tree.postorder_node_iter():
-        if node.is_leaf():
-            below[node] = (0.0, 0)
-            continue
-        best = (0.0, 0)
-        for child in node.child_node_iter():
-            if child in age:
-                candidate = (age[child], 0)
-            else:
-                candidate = below[child]
-            if candidate[0] > best[0] or (candidate[0] == best[0] and candidate[1] > best[1]):
-                best = candidate
-        below[node] = (best[0], best[1] + 1)
-
-    for node in tree.preorder_node_iter():
-        if node is root or node.is_leaf() or node in age:
-            continue
-        parent_age = age[node.parent_node]
-        floor, steps = below[node]
-        age[node] = parent_age - (parent_age - floor) / (steps + 1)
+    if interpolation == "pure_birth" and not richness:
+        logging.getLogger(__name__).warning(
+            "no clade richness for a pure-birth interpolation (it needs the static Open Tree files); "
+            "spacing undated nodes evenly instead"
+        )
+        interpolation = "even"
+    for node, value in interpolate(tree, age, method=interpolation, richness=richness).items():
+        age[node] = value
         previous = source.get(node)
         source[node] = {
             "dropped_inconsistent": "interpolated_after_drop",
@@ -213,6 +304,7 @@ def date_topology(
                 "node": names[node],
                 "parent": names.get(node.parent_node, ""),
                 "n_genera": len(genera),
+                "clade_genera": richness.get(node, "") if richness else "",
                 "age": f"{age[node]:.4f}",
                 "source": source[node],
                 "timetree_age": f"{raw[node]:.4f}" if node in raw else "",

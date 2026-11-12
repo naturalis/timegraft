@@ -33,6 +33,7 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.species_per_genus` | 3 | Species ids sent along with each genus |
 | `backbone_build.crown_ages_from_timetree` | `true` | Estimate genus crown ages from TimeTree species |
 | `backbone_build.root_age` | | Root age in Ma, only needed if TimeTree cannot date the root |
+| `backbone_build.interpolation` | `pure_birth` | Ages for nodes TimeTree does not date: `pure_birth`, by the number of genera in the full clade in the synthetic tree (static source only; otherwise `even`), or `even`, spaced evenly as in BLADJ ([results](../science/results/2026-11-interpolation.md)) |
 | `backbone_build.cache` | `resources/api_cache.json` | Cache of TimeTree answers; keep it between runs |
 
 ## General settings
@@ -68,6 +69,10 @@ Everything that differs between markers sits in `markers.<name>`:
 | `filter.genetic_code_table` | | | Your own name-to-code mapping instead of the shipped one |
 | `align` | `none` | `none` | `none` (input already aligned) or `mafft` |
 | `distance.method` | `k2p` | `kmer` | `k2p` needs aligned sequences; `kmer` takes `k` |
+| `screening.enabled` | `true` | `false` | Set aside units that do not fit their genus before subtrees are built; see [screening units](#screening-units) |
+| `screening.margin` | 0.02 | | A unit at least this much more similar (identity) to another genus than to any congener is set aside |
+| `screening.min_identity` | 0.80 | | A unit with no congener at this identity is set aside, if the genus has units that do |
+| `screening.query_cov` | 0.7 | | Share of a representative that must align in the search |
 | `crown_age.method` | `rate` | `fraction` | How to set a genus crown age when no better source exists |
 | `crown_age.rate` | 0.0115 | | Default substitution rate, per site per Myr, per lineage; sets the lower bound of the crown age, see [crown ages and rates](#crown-ages-and-rates) |
 | `crown_age.rates` | `{}` | | Rate per taxon, `rank: {name: rate}` |
@@ -75,7 +80,7 @@ Everything that differs between markers sits in `markers.<name>`:
 | `crown_age.fraction` | | 0.5 | Crown age as a fraction of the stem age |
 | `crown_age.cap_fraction` | 0.9 | 0.9 | A crown age never exceeds this fraction of the stem age |
 | `crown_age.timetree_bound` | `max` | `max` | `max`: a TimeTree crown age is an upper bound on the crown age; `none`: TimeTree crown ages are not used |
-| `crown_age.estimate` | `minimum` | `minimum` | The age between the bounds: `minimum` or `midpoint` (COI only; see [crown ages and rates](#crown-ages-and-rates)) |
+| `crown_age.estimate` | `timetree_midpoint` | `timetree_midpoint` | The age between the bounds: `timetree_midpoint` (TimeTree where available, otherwise the midpoint, or for ITS the fraction of the stem age), `minimum` or `midpoint` (COI only); see [crown ages and rates](#crown-ages-and-rates) |
 | `dating.method` | `mpl` | `mpl` | `mpl` (mean path length), `lsd2`, or `chronos` (penalised likelihood; see [dating within a genus](#dating-within-a-genus)) |
 | `dating.seq_length` | 658 | 500 | Barcode length, for LSD2's variance model |
 | `dating.model`, `dating.lambda` | | | `chronos` only: `correlated` (default), `relaxed`, `discrete` or `clock`, and the smoothing parameter (default 1) |
@@ -83,6 +88,18 @@ Everything that differs between markers sits in `markers.<name>`:
 | `placement.place_identity` | 0.80 | 0.80 | At or above: attached near its nearest unit; below: unplaced |
 | `placement.query_cov` | 0.9 | 0.8 | Share of the query that must align |
 | `placement.height` | `rate` | `terminal` | How to set the attachment age |
+| `placement.stem_fraction` | 0.5 | | Units set aside by screening that match nothing: joined to the stem of their own genus, this fraction of the way from crown to stem node |
+
+### Screening units
+
+Within-genus barcode distances set the lower bound of a genus's crown age, so a unit that does not belong in its genus (a misidentification, a contaminant, or a genus that is not a natural group) can make the genus look much older. Before genus subtrees are built, `screen_units` searches all representatives against each other with VSEARCH and sets a unit aside when:
+
+- **`other_genus`**: it is at least `margin` more similar to a unit of another genus than to any unit of its own genus; or
+- **`isolated`**: no unit of its own genus reaches `min_identity`, while other units of the genus do.
+
+Genera with one unit are not screened, and a genus never loses all its units: if every unit would be set aside, all are kept (`kept_whole_genus`). Set-aside units are not discarded. They are placed like units without a usable genus: next to their nearest unit, at the age implied by their distance to it, or, if nothing reaches `placement.place_identity`, on the stem of their own genus (`stem_fraction` of the way from its crown to its stem node). They stay in the tree and in diversity, but do not shape the genus subtree or its crown age. `units/screened.tsv` gives every decision with its evidence.
+
+The thresholds are judgements. On the Iberian data the search takes two minutes for 25,000 units, and these settings set aside about 5% of units ([results](../science/results/2026-11-screening.md)). Screening is off for ITS until the thresholds are tested on fungal data: identities across fungal genera are lower and less comparable.
 
 ### Crown ages and rates
 
@@ -91,11 +108,11 @@ The crown age of a genus lies between two bounds, and both are recorded ([#36](h
 1. A point age for the genus in the `crown_ages` table is used as it is (if it is not below the stem age, it is cut to `cap_fraction` of it).
 2. Otherwise the **upper bound** is the smallest of `cap_fraction` of the stem age, the TimeTree crown age of the genus (`timetree_bound: max`), and `crown_age_max` of the table, which replaces TimeTree for that genus.
 3. The **lower bound** (`method: rate`) is the age from the barcodes: the mean root-to-tip distance of the rooted genus tree divided by the substitution rate. Barcode distances saturate, also within genera, so with a rate from young calibrations this is a minimum, not an estimate. `crown_age_min` of the table raises it. With `method: fraction` there is no rate and no lower bound.
-4. `estimate` picks the age between the bounds. `minimum` (the default) takes the age from the barcodes, or `fraction` of the stem age, moved to the nearest bound it violates. `midpoint` (with `method: rate`) takes the geometric mean of the two bounds: the middle of the range on a log scale, and the age with the smallest worst-case relative error. On the Iberian genera the midpoint was within a factor of two of TimeTree's crown age for three quarters of genera, the minimum for a quarter ([results](../science/results/2026-11-dating.md)).
+4. `estimate` picks the age between the bounds. `timetree_midpoint` (the default, [#42](https://github.com/naturalis/timegraft/issues/42)) takes the TimeTree crown age wherever it is the upper bound, that is, below `cap_fraction` of the stem age and with no table bounds for the genus, even when the barcode minimum is older; for the other genera it takes the midpoint, the geometric mean of the two bounds (or, with `method: fraction`, which has no lower bound, the fraction of the stem age). TimeTree aggregates published timetrees and is the best estimate there is where it covers a genus. The midpoint is the best estimate without it: it has the smallest worst-case relative error when only the bounds are known, and on the Iberian genera it was within a factor of two of TimeTree's crown age for three quarters of genera, the minimum for a quarter ([results](../science/results/2026-11-dating.md)). `minimum` takes the age from the barcodes, or `fraction` of the stem age, moved to the nearest bound it violates; `midpoint` uses the midpoint for every genus.
 
 A TimeTree crown age is the MRCA of the species TimeTree knows under the genus name. It is far too old when the genus is not a natural group, which is why it only ever lowers an age. Earlier versions accepted it outright unless it exceeded `timetree_max_ratio` times the barcode age; that threshold made ages jump and is gone (the key is ignored, with a warning in the log).
 
-`provenance.tsv` records the result. `crown_source` is `table`, `rate`, `fraction` or `midpoint`; `rate` and `fraction` carry a suffix when a bound was applied (`_capped` for the stem age, `_timetree_max`, `_table_max`, `_table_min`). `crown_lower` and `crown_upper` are the bounds, `crown_upper_source` says which source set the upper one (`stem`, `timetree` or `table`), and `barcode_age` is the age from the barcodes before any bound. The diversity step reports Faith's PD and MPD with every crown at its lower and at its upper bound next to the values for the tree itself, so the part of a result that rests on crown ages is visible ([outputs](running.md#outputs)).
+`provenance.tsv` records the result. `crown_source` is `table`, `timetree`, `rate`, `fraction` or `midpoint`; `rate` and `fraction` carry a suffix when a bound was applied (`_capped` for the stem age, `_timetree_max`, `_table_max`, `_table_min`). `crown_lower` and `crown_upper` are the bounds, `crown_upper_source` says which source set the upper one (`stem`, `timetree` or `table`), and `barcode_age` is the age from the barcodes before any bound. The diversity step reports Faith's PD and MPD with every crown at its lower and at its upper bound next to the values for the tree itself, so the part of a result that rests on crown ages is visible ([outputs](running.md#outputs)).
 
 The rate is resolved per genus from its taxonomy, from genus up to phylum (the most common family, order, class and phylum among the genus's records, written to `genera/taxonomy.tsv`): the first name found in `crown_age.rates` or, failing that, in `crown_age.rate_table` decides; otherwise `crown_age.rate`. `provenance.tsv` records the rate and where it came from (`rate`, `rate_source`). Use this for rates from the literature, for example a slower rate for elasmobranchs.
 

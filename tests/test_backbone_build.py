@@ -5,7 +5,9 @@ import json
 import dendropy
 import pytest
 
-from timegraft.backbone_build import date_topology
+import math
+
+from timegraft.backbone_build import date_topology, interpolate, yule_height
 from timegraft.dating import is_ultrametric, root_age
 from timegraft.opentree import OpenTree, genus_topology
 from timegraft.timetree import TimeTree
@@ -40,6 +42,7 @@ def test_date_topology_calibrates_and_interpolates():
         frozenset({1, 2, 4, 5}): 100.0,
         frozenset({1, 2, 3}): 60.0,
     }
+    # without clade richness, pure birth falls back to even spacing
     tree, report = date_topology(tree, ncbi, fake_timetree(ages))
     assert is_ultrametric(tree)
     assert root_age(tree) == pytest.approx(100.0)
@@ -136,3 +139,78 @@ def test_direct_age_outranks_higher_taxa_ancestor():
     assert by["A;B;C"]["source"] == "interpolated_after_drop"
     assert float(by["A;B;C"]["conflict_ratio"]) == pytest.approx(1.5)
     assert is_ultrametric(tree)
+
+
+def test_yule_height():
+    assert yule_height(1) == 0.0
+    assert yule_height(2) == pytest.approx(0.5)
+    assert yule_height(3) == pytest.approx(0.5 + 1 / 3)
+    # the asymptotic form joins the exact sum
+    exact = sum(1 / k for k in range(2, 1002))
+    assert yule_height(1001) == pytest.approx(exact, abs=1e-12)
+    assert yule_height(10**6) == pytest.approx(math.log(10**6) + 0.5772156649 - 1, abs=1e-6)
+
+
+def _chain():
+    # root dated at 100; ((A,B),C) and (A,B) undated; D outside
+    tree = dendropy.Tree.get(data="(((A,B),C),D);", schema="newick", rooting="force-rooted")
+    abc = tree.find_node_with_taxon_label("C").parent_node
+    ab = tree.find_node_with_taxon_label("A").parent_node
+    return tree, abc, ab
+
+
+def test_even_spacing_matches_bladj():
+    tree, abc, ab = _chain()
+    ages = interpolate(tree, {tree.seed_node: 90.0}, method="even")
+    assert ages[abc] == pytest.approx(60.0)
+    assert ages[ab] == pytest.approx(30.0)
+
+
+def test_pure_birth_places_nodes_by_clade_richness():
+    tree, abc, ab = _chain()
+    richness = {tree.seed_node: 1000, abc: 100, ab: 10}
+    ages = interpolate(tree, {tree.seed_node: 90.0}, method="pure_birth", richness=richness)
+    assert ages[abc] == pytest.approx(90.0 * yule_height(100) / yule_height(1000))
+    assert ages[ab] == pytest.approx(90.0 * yule_height(10) / yule_height(1000))
+    # the same clade sizes give the same ages whatever else is sampled: drop C
+    tree2 = dendropy.Tree.get(data="((A,B),D);", schema="newick", rooting="force-rooted")
+    ab2 = tree2.find_node_with_taxon_label("A").parent_node
+    again = interpolate(tree2, {tree2.seed_node: 90.0}, method="pure_birth", richness={tree2.seed_node: 1000, ab2: 10})
+    assert again[ab2] == pytest.approx(ages[ab])
+
+
+def test_pure_birth_between_dated_nodes():
+    tree, abc, ab = _chain()
+    richness = {tree.seed_node: 1000, abc: 100, ab: 10}
+    ages = interpolate(tree, {tree.seed_node: 90.0, ab: 20.0}, method="pure_birth", richness=richness)
+    h = yule_height
+    assert ages[abc] == pytest.approx(20.0 + 70.0 * (h(100) - h(10)) / (h(1000) - h(10)))
+
+
+def test_pure_birth_falls_back_to_even_where_richness_is_not_ordered():
+    tree, abc, ab = _chain()
+    ages = interpolate(tree, {tree.seed_node: 90.0}, method="pure_birth", richness={tree.seed_node: 50, abc: 80, ab: 10})
+    assert ages[abc] == pytest.approx(60.0)
+    assert 0 < ages[ab] < ages[abc]
+
+
+def test_date_topology_uses_richness_and_reports_it():
+    tree = dendropy.Tree.get(data="(((A,B),C),(D,E));", schema="newick", rooting="force-rooted")
+    ncbi = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5}
+    ages = {frozenset({1, 3, 4, 5}): 100.0, frozenset({1, 2, 4, 5}): 100.0, frozenset({1, 2, 3}): 60.0}
+    ab = tree.find_node_with_taxon_label("A").parent_node
+    de = tree.find_node_with_taxon_label("D").parent_node
+    abc = ab.parent_node
+    richness = {tree.seed_node: 500, abc: 50, ab: 5, de: 20}
+    tree, report = date_topology(tree, ncbi, fake_timetree(ages), richness=richness)
+    by_genera = {r["example_genera"]: r for r in report}
+    assert float(by_genera["A;B"]["age"]) == pytest.approx(60.0 * yule_height(5) / yule_height(50), abs=1e-3)
+    assert float(by_genera["D;E"]["age"]) == pytest.approx(100.0 * yule_height(20) / yule_height(500), abs=1e-3)
+    assert by_genera["A;B"]["clade_genera"] == 5
+    assert is_ultrametric(tree)
+
+
+def test_unknown_interpolation_method():
+    tree, _, _ = _chain()
+    with pytest.raises(ValueError):
+        interpolate(tree, {tree.seed_node: 1.0}, method="bladj")

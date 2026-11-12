@@ -53,3 +53,23 @@ rule representatives:
         "../envs/timegraft.yaml"
     script:
         "../scripts/representatives.py"
+
+
+rule screen_units:
+    input:
+        reps=rules.representatives.output.reps,
+        unassigned=rules.representatives.output.unassigned,
+    output:
+        screened=f"{OUT}/units/screened.tsv",
+        reps=f"{OUT}/units/screened_representatives.tsv",
+        unassigned=f"{OUT}/units/screened_unassigned.tsv",
+    params:
+        src=SRC,
+        settings=config["markers"][config["marker"]].get("screening", {}),
+    threads: 4
+    log:
+        f"{OUT}/logs/screen_units.log",
+    conda:
+        "../envs/timegraft.yaml"
+    script:
+        "../scripts/screen_units.py"

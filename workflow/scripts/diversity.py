@@ -32,12 +32,17 @@ for path in snakemake.input.subtrees:
         sub = dendropy.Tree.get(data=row["newick"], schema="newick", preserve_underscores=True)
         genus_units[row["genus"]] = [leaf.taxon.label for leaf in sub.leaf_node_iter()]
 provenance = [r for r in read_tsv(snakemake.input.provenance) if r["status"] == "subtree"]
+# tips added by placement (units without a usable genus or set aside by screening, and ASVs):
+# where they hang on a genus stem they move with the crown
+placed = {r["unit_id"] for r in read_tsv(snakemake.input.units_placed) if r["status"] in ("placed", "genus_stem")}
+for path in snakemake.input.asv_placements:
+    placed |= {r["tip"] for r in read_tsv(path) if r["tip"] and r["status"] != "matched"}
 for bound, column in (("min", "crown_lower"), ("max", "crown_upper")):
     # no lower bound (markers without a rate): the genus collapses to its stem
     ages = {r["genus"]: float(r[column] or 0) for r in provenance}
     moved = dendropy.Tree.get(path=snakemake.input.tree, schema="newick", preserve_underscores=True,
                               rooting="force-rooted")
-    rescale_crowns(moved, genus_units, ages)
+    rescale_crowns(moved, genus_units, ages, placed)
     rows = {r["sample"]: r for r in alpha(edge_table(moved, samples)[0])}
     for row in alpha_rows:
         row[f"faith_pd_crown_{bound}"] = rows[row["sample"]]["faith_pd"]

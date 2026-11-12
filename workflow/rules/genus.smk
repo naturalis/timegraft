@@ -3,7 +3,7 @@
 
 rule shard_genera:
     input:
-        reps=rules.representatives.output.reps,
+        reps=rules.screen_units.output.reps,
         records=rules.filter_records.output.kept,
         backbone=BACKBONE,
     output:

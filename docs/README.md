@@ -21,7 +21,9 @@ The documentation has three parts.
 | [How it works](science/how-it-works.md) | The method explained without code, with flowcharts |
 | [Assumptions and limitations](science/limitations.md) | What the method takes for granted, and where it is weak |
 | [First results](science/results/2026-11-iberia.md) | The first run on real data: genera of western Iberia |
+| [Screening reference units](science/results/2026-11-screening.md) | How many units do not fit their genus, what screening does about it, and what it changes |
 | [Crown ages: rates, bounds and penalised likelihood](science/results/2026-11-dating.md) | Why crown ages are handled as a range between bounds, and why penalised likelihood and fitted rates are not used |
+| [Ages for undated backbone nodes](science/results/2026-11-interpolation.md) | Pure birth on clade sizes against even spacing, tested on held-out TimeTree ages and on subsampled genera |
 
 ## Manuscript
 
