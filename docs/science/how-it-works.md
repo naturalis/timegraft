@@ -68,13 +68,14 @@ flowchart LR
     q{"Crown age in the<br/>literature table?"} -->|"yes"| use1["use it"]
     q -->|"no"| low["at least: how much the BINs<br/>differ, at the rate of change<br/>measured on young splits"]
     q -->|"no"| up["at most: 90% of the stem age,<br/>and TimeTree's age for the genus"]
-    low --> pick["choose within the range:<br/>the minimum, or the midpoint"]
+    low --> pick["choose within the range:<br/>TimeTree's age if it has one,<br/>otherwise the midpoint"]
     up --> pick
 ```
 
 - **The barcodes give a minimum.** Dividing the difference between BINs by the rate at which COI changes over a few million years gives the age the genus must at least have. Saturation hides older change, so the true age can be much higher but not lower.
-- **TimeTree's age for a genus is a maximum, not the answer.** It is the age of the common ancestor of all species TimeTree knows under the genus name. For a natural group that is about right. For a genus that is not a natural group it spans a much older split, and gave crown ages of hundreds of millions of years. Used as an upper limit, a good TimeTree age keeps the estimate in check and an inflated one does no harm.
-- **The crown age is chosen within the range, and the range is kept.** By default the minimum is used. The alternative is the midpoint of the range on a logarithmic scale, which agrees better with TimeTree's crown ages. Both limits are recorded, and diversity is also computed with every genus at its minimum and at its maximum, so that the effect of this uncertainty on a result can be read off.
+- **TimeTree's age for a genus is a maximum, and where it is below the stem, the answer.** TimeTree combines the dated trees published for a group, which is the best information there is. Its age for a genus is the age of the common ancestor of all species it knows under the genus name. For a natural group that is about right; for a genus that is not a natural group it spans a much older split, and can be hundreds of millions of years. It is therefore never allowed to raise a crown age above the stem age, but below that it is used as the crown age.
+- **Where TimeTree has no age, the crown age is the middle of the range.** For about three quarters of genera TimeTree has no usable age. Their crown age is then the midpoint of the range on a logarithmic scale, between the barcode minimum and 90% of the stem age. Tested against the genera TimeTree does date, this midpoint was within a factor of two for three quarters of them; the barcode minimum for only a quarter.
+- **The range is kept.** Both limits are recorded for every genus, and diversity is also computed with every genus at its minimum and at its maximum, so that the effect of this uncertainty on a result can be read off.
 - **No thresholds.** An earlier version used TimeTree's age outright unless it was more than three times the barcode estimate. A small change in the data could then move a crown age by a factor of three. With limits, a small change in the data gives a small change in the age.
 
 Below the crown, the tree is stretched so that its root sits at the crown age and all tips at the present, assuming that the BINs of a genus change at about the same rate (mean path length, or LSD2). Methods that let the rate vary over the tree (penalised likelihood) were tested and are available, but are not the default: within a genus they gave nearly the same branch lengths, and they cannot estimate the crown age itself. The [dating results](results/2026-11-dating.md) give the evidence.

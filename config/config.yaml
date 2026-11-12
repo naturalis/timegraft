@@ -115,9 +115,10 @@ markers:
       cap_fraction: 0.9      # crown age never exceeds this fraction of the stem age
       timetree_bound: max    # max: a TimeTree crown age is an upper bound on the age from the
                              # barcodes; none: TimeTree crown ages are not used
-      estimate: minimum      # the age between the bounds: minimum (the age from the barcodes, which
-                             # saturation makes a lower bound) or midpoint (geometric mean of the
-                             # lower and upper bound)
+      estimate: timetree_midpoint  # the age between the bounds: timetree_midpoint (the TimeTree crown
+                             # age where it is below 0.9 of the stem, the midpoint otherwise; #42),
+                             # minimum (the age from the barcodes, which saturation makes a lower
+                             # bound) or midpoint (geometric mean of the lower and upper bound)
     dating:
       method: mpl            # mpl (mean path length, built in), lsd2 (least squares, built from source)
                              # or chronos (penalised likelihood, needs R with ape; not the default, as
@@ -149,6 +150,7 @@ markers:
       fraction: 0.5
       cap_fraction: 0.9
       timetree_bound: max
+      estimate: timetree_midpoint  # TimeTree where available, otherwise fraction of the stem age
     dating:
       method: mpl
       seq_length: 500

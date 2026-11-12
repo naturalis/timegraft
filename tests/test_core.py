@@ -345,3 +345,27 @@ def test_rescale_crowns_keeps_the_tree_ultrametric():
     tree.calc_node_ages(ultrametricity_precision=1e-6)
     assert crown(tree, ["G1", "G3"]).age == pytest.approx(0.0) and is_ultrametric(tree)
 
+
+def test_crown_age_timetree_where_available_midpoint_otherwise():
+    tree = dendropy.Tree.get(data="(A:0.05,B:0.05);", schema="newick", rooting="force-rooted")
+    kw = dict(method="rate", rate=0.01, estimate="timetree_midpoint")  # barcode minimum 5 Ma
+    with_tt = crown_age("G", 50, tree, {}, suggested={"G": 20.0}, **kw)
+    assert (with_tt.source, with_tt.age, with_tt.lower, with_tt.upper) == ("timetree", 20.0, 5.0, 20.0)
+    below_minimum = crown_age("G", 50, tree, {}, suggested={"G": 3.0}, **kw)  # TimeTree wins over the barcodes
+    assert (below_minimum.source, below_minimum.age) == ("timetree", 3.0)
+    without = crown_age("G", 50, tree, {}, **kw)
+    assert (without.source, without.age) == ("midpoint", pytest.approx(15.0))  # sqrt(5 * 45)
+    above_cap = crown_age("G", 50, tree, {}, suggested={"G": 47.0}, **kw)  # not below 0.9 of the stem
+    assert (above_cap.source, above_cap.age) == ("midpoint", pytest.approx(15.0))
+    ignored = crown_age("G", 50, tree, {}, suggested={"G": 20.0}, timetree_bound="none", **kw)
+    assert ignored.source == "midpoint"
+    table = crown_age("G", 50, tree, {"G": {"max": 30.0}}, suggested={"G": 20.0}, **kw)  # table replaces TimeTree
+    assert (table.source, table.age) == ("midpoint", pytest.approx((5 * 30) ** 0.5))
+    point = crown_age("G", 50, tree, {"G": 7.0}, suggested={"G": 20.0}, **kw)
+    assert (point.source, point.age) == ("table", 7.0)
+    fraction = crown_age("G", 50, tree, {}, method="fraction", fraction=0.5, estimate="timetree_midpoint")
+    assert (fraction.source, fraction.age) == ("fraction", 25.0)
+    fraction_tt = crown_age("G", 50, tree, {}, method="fraction", fraction=0.5, estimate="timetree_midpoint",
+                            suggested={"G": 12.0})
+    assert (fraction_tt.source, fraction_tt.age) == ("timetree", 12.0)
+
