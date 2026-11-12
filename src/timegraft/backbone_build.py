@@ -377,11 +377,14 @@ GENERA_COLUMNS = (
     *COL_GENUS_COLUMNS,
     # the NCBI id the genus is sent to TimeTree with, and where it came from (#48)
     "join_ncbi_id", "join_ncbi_source",
-    # filled by later issues of #46: placement concordance (#49, #50)
-    "lineage_distance", "merged_id_distance", "neighbour_concordance", "concordance_flag", "placement_action",
+    # placement concordance (#49; details in concordance.tsv): rank level at which the OTT placement and the
+    # reference family part, and the merged NCBI ids part; share of barcode neighbours in the phyla of the
+    # backbone sisters; flag, review, empty or not_evaluable
+    "lineage_distance", "merged_id_distance", "neighbour_concordance", "concordance_flag",
+    # filled by a later issue of #46: re-anchoring (#50)
+    "placement_action",
 )
-GENERA_RESERVED = ("lineage_distance", "merged_id_distance", "neighbour_concordance", "concordance_flag",
-                   "placement_action")
+GENERA_RESERVED = ("placement_action",)
 LINEAGE_RANKS = ("family", "order", "class", "phylum")
 
 

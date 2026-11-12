@@ -39,6 +39,7 @@ Rule scripts import the package from `src/` through the `src` parameter that eve
 | `otol_static` | OTT taxonomy and synthetic tree from release files; genus topology; species and lineages; match, anchor and synthesis-support evidence |
 | `opentree` | the same via the OToL web API |
 | `col` | Catalogue of Life on ChecklistBank: matching with classification context, crosswalk to NCBI and OTT ids through the names index |
+| `concordance` | placement concordance: rank-level distances between lineages, barcode neighbours against backbone sisters, flags |
 | `timetree` | TimeTree MRCA queries with caching and concurrency; cache format version 2 with the evidence behind each age ([provenance](provenance.md)) |
 | `backbone_build` | dating a genus topology with TimeTree; conflicts; interpolation; the columns of `node_ages.tsv` and `genera.tsv` |
 | `graft` | grafting subtrees onto the backbone |
