@@ -117,6 +117,8 @@ try:
 
             # re-anchoring of flagged genera, before anything is derived from the placement (#50)
             mode = re_cfg.get("mode", "apply")
+            if mode is False:
+                mode = "off"
             if mode != "off":
                 from timegraft import reanchor as ra
 
