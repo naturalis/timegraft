@@ -276,37 +276,59 @@ def search_units(
     threads: int = 1,
     external: list[tuple[str, str]] | None = None,
     genus_of: Mapping[str, str] | None = None,
+    alignments: bool | None = None,
+    deep: int = 100,
 ) -> dict[str, list[tuple[str, float]]] | tuple[dict, dict]:
     """All representatives against each other (and the external reference) with VSEARCH.
 
-    Self hits are removed. With ``genus_of`` (genus per unit and per external
-    sequence), the alignment of each query with its best hit in its own genus
-    and in another genus is also kept, and ``(hits, alignments)`` is returned;
-    ``alignments`` maps (query, target) to (query start, query row, target row).
+    Self hits are removed. VSEARCH keeps the first ``maxaccepts`` hits of a
+    query, so in a large genus its congeners can crowd out every unit of
+    another genus, or the reverse, and the evidence from that side is lost.
+    With ``genus_of`` (genus per unit and per external sequence), queries
+    whose hits fill ``maxaccepts`` while one side (own genus or other genera)
+    is empty are searched again with ``deep`` accepts; the extra hits are
+    added. With ``alignments`` (by default, whenever ``genus_of`` is given),
+    the alignment of each query with its best hit on each side is kept too,
+    and ``(hits, alignments)`` is returned; ``alignments`` maps (query,
+    target) to (query start, query row, target row).
     """
+    if alignments is None:
+        alignments = genus_of is not None
+    if alignments and genus_of is None:
+        raise ValueError("alignments need genus_of")
     refs = list(reps) + list(external or [])
-    hits: dict[str, list[tuple[str, float]]] = defaultdict(list)
-    alignments: dict[tuple[str, str], tuple[int, str, str]] = {}
+    hits: dict[str, dict[str, float]] = defaultdict(dict)
+    rows: dict[tuple[str, str], tuple[int, str, str]] = {}
     best: dict[tuple[str, bool], tuple[str, float]] = {}
-    fields = ("qilo", "qrow", "trow") if genus_of is not None else ()
-    for query, target, ident, *extra in vsearch_search(reps, refs, min_identity, query_cov, maxaccepts + 1,
-                                                       threads, fields):
-        if target == query:
-            continue
-        hits[query].append((target, ident))
-        if genus_of is not None:
-            key = (query, genus_of.get(target) == genus_of.get(query))
-            if ident > best.get(key, ("", -1.0))[1]:
-                old = best.get(key)
-                if old:
-                    alignments.pop((query, old[0]), None)
-                best[key] = (target, ident)
-                alignments[(query, target)] = (int(extra[0]), extra[1], extra[2])
-    for key in hits:
-        hits[key].sort(key=lambda h: -h[1])
-    if genus_of is None:
-        return dict(hits)
-    return dict(hits), alignments
+    fields = ("qilo", "qrow", "trow") if alignments else ()
+
+    def collect(queries, accepts):
+        for query, target, ident, *extra in vsearch_search(queries, refs, min_identity, query_cov, accepts,
+                                                           threads, fields):
+            if target == query:
+                continue
+            hits[query][target] = max(ident, hits[query].get(target, 0.0))
+            if alignments:
+                key = (query, genus_of.get(target) == genus_of.get(query))
+                if ident > best.get(key, ("", -1.0))[1]:
+                    old = best.get(key)
+                    if old:
+                        rows.pop((query, old[0]), None)
+                    best[key] = (target, ident)
+                    rows[(query, target)] = (int(extra[0]), extra[1], extra[2])
+
+    collect(reps, maxaccepts + 1)
+    if genus_of is not None and deep > maxaccepts:
+        def one_sided(query):
+            sides = {genus_of.get(t) == genus_of.get(query) for t in hits.get(query, {})}
+            return len(hits.get(query, {})) >= maxaccepts and len(sides) == 1
+        again = [(q, seq) for q, seq in reps if one_sided(q)]
+        if again:
+            collect(again, deep + 1)
+    out = {q: sorted(h.items(), key=lambda kv: -kv[1]) for q, h in hits.items()}
+    if not alignments:
+        return out
+    return out, rows
 
 
 def in_scope(
@@ -437,8 +459,9 @@ def assess_translation(
     """Fill the codon columns of ``rows`` in place, against the best congener or else the best other hit.
 
     The alignment of a pair may have been kept from either side; from the
-    target's side, the rows are swapped and the start is not known, so the
-    comparison runs in the target's frame instead. Units without an alignment
+    relative's side, the comparison runs in the relative's frame and genetic
+    code (the unit's code if the relative has none, as for an external
+    sequence). Units without an alignment
     are ``not_assessed``.
     """
     for row in rows:
@@ -453,8 +476,9 @@ def assess_translation(
             qilo, qrow, trow = alignments[(unit, ref)]
             stats = compare_codons(qilo, qrow, trow, sequences[unit], code_of.get(unit, 5))
         elif (ref, unit) in alignments and ref in sequences:
+            # the alignment as seen from the relative: read in its frame and its genetic code
             qilo, qrow, trow = alignments[(ref, unit)]
-            stats = compare_codons(qilo, qrow, trow, sequences[ref], code_of.get(unit, 5))
+            stats = compare_codons(qilo, qrow, trow, sequences[ref], code_of.get(ref, code_of.get(unit, 5)))
         else:
             continue
         verdict, why = judge_codons(stats, settings)

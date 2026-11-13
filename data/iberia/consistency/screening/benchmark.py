@@ -83,7 +83,8 @@ pairs = [(r["unit_id"], r["sequence"]) for r in reps]
 
 # 1. The screening at the defaults --------------------------------------------
 hits = timed("search, all against all", search_units, pairs, 0.80, 0.7, 10, threads)
-hits, alignments = timed("search, all against all, with alignments", search_units, pairs, 0.80, 0.7, 10, threads,
+hits, alignments = timed("search, all against all, with alignments and a second pass for one-sided hits",
+                         search_units, pairs, 0.80, 0.7, 10, threads,
                          genus_of=genus_of)
 rows = timed("decisions", screen, genus_of, hits)
 timed("codon comparison", assess_translation, rows, alignments, seqs, code_of)
@@ -227,9 +228,11 @@ ext_in_scope = [u for u in ext_units if taxon[u].get("family") in run_families]
 run_pairs = [(u, seqs[u]) for u in run_units]
 run_genus = {u: genus_of[u] for u in run_units}
 ext_ids = {f"external:{u}": genus_of[u] for u in ext_in_scope}
-hits_run = timed("search, run half only", search_units, run_pairs, 0.80, 0.7, 10, threads)
+hits_run = timed("search, run half only", search_units, run_pairs, 0.80, 0.7, 10, threads,
+                 genus_of=run_genus, alignments=False)
 hits_ext = timed("search, run half against run and external reference", search_units, run_pairs, 0.80, 0.7, 10,
-                 threads, external=[(f"external:{u}", seqs[u]) for u in ext_in_scope])
+                 threads, external=[(f"external:{u}", seqs[u]) for u in ext_in_scope],
+                 genus_of={**run_genus, **ext_ids}, alignments=False)
 alone = {r["unit_id"]: r for r in screen(run_genus, hits_run)}
 wider = {r["unit_id"]: r for r in screen(run_genus, hits_ext, external=ext_ids, reference_scope="run+external:family")}
 full = {u: base_decision[u] for u in run_units}

@@ -59,7 +59,8 @@ if cfg.get("enabled", False) and reps:
     found = search_units([(r["unit_id"], r["sequence"]) for r in reps], min_identity=cfg.get("min_identity", 0.80),
                          query_cov=cfg.get("query_cov", 0.7), maxaccepts=cfg.get("maxaccepts", 10),
                          threads=snakemake.threads, external=[(k, sequences[k]) for k in external],
-                         genus_of={**external, **genus_of} if coding else None)
+                         genus_of={**external, **genus_of}, alignments=coding,
+                         deep=cfg.get("deep_maxaccepts", 100))
     hits, alignments = found if coding else (found, {})
     logging.info("search: %.1f s on %d threads", time.time() - started, snakemake.threads)
     floor = min([cfg.get("min_identity", 0.80)] + [t.get("min_identity", 1.0) for t in thresholds.values()])

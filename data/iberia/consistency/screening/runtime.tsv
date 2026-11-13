@@ -1,9 +1,9 @@
 step	seconds	threads
-search, all against all	96.3	2
-search, all against all, with alignments	98.9	2
-decisions	0.5	2
-codon comparison	9.6	2
+search, all against all	94.6	2
+search, all against all, with alignments and a second pass for one-sided hits	269.0	2
+decisions	0.9	2
+codon comparison	9.3	2
 calibration	0.1	2
-injection grid (400 screenings of injected labels)	166.6	1
-search, run half only	67.3	2
-search, run half against run and external reference	68.2	2
+injection grid (400 screenings of injected labels)	409.1	1
+search, run half only	185.0	2
+search, run half against run and external reference	181.9	2

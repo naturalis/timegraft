@@ -284,3 +284,41 @@ def test_mutual_pairs_further_keeps_the_unit_closer_to_its_genus():
     assert rows["G1"]["decision"] == "keep" and "closer of the two" in rows["G1"]["reason"]  # 0.03 above
     with pytest.raises(ValueError):
         screen(genus, hits, mutual_pairs="one")
+
+
+@pytest.mark.skipif(shutil.which("vsearch") is None, reason="needs vsearch")
+def test_crowded_out_side_is_searched_again():
+    import random
+
+    rng = random.Random(11)
+    base = CODING * 2
+
+    def mutate(seq, n):
+        seq = list(seq)
+        for i in rng.sample(range(len(seq)), n):
+            seq[i] = rng.choice([b for b in "ACGT" if b != seq[i]])
+        return "".join(seq)
+
+    # many congeners close to a0, and one unit of another genus a little further away
+    reps = [("a0", base)] + [(f"a{i}", mutate(base, 4)) for i in range(1, 9)] + [("b1", mutate(base, 30))]
+    genus = {u: ("B" if u == "b1" else "A") for u, _ in reps}
+    shallow = search_units(reps, 0.8, maxaccepts=2, genus_of=genus, alignments=False, deep=0)
+    assert "b1" not in [t for t, _ in shallow["a0"]]  # crowded out by congeners
+    hits, rows = search_units(reps, 0.8, maxaccepts=2, genus_of=genus, deep=20)
+    assert "b1" in [t for t, _ in hits["a0"]]
+    assert any(q == "a0" and t == "b1" for q, t in rows)  # its alignment is kept for the other side
+    assert hits["a0"] == sorted(hits["a0"], key=lambda h: -h[1])
+    with pytest.raises(ValueError):
+        search_units(reps, 0.8, alignments=True)
+
+
+def test_reverse_alignment_uses_the_relatives_genetic_code():
+    # ATA is Met in the invertebrate code (5) and Ile in the echinoderm code (9): ATA to ATT is silent only in 9
+    relative = CODING.replace("ATAGTACCTAAC", "ATTGTACCTAAC")
+    genus = {"A1": "A", "A2": "A"}
+    rows = screen(genus, {"A1": [("A2", 0.95)]})
+    # only A2's view of the pair is kept: A1 is read through it, in A2's frame and code
+    assess_translation(rows, {("A2", "A1"): (1, relative, CODING)}, {"A1": CODING, "A2": relative},
+                       {"A1": 5, "A2": 9})
+    by = {r["unit_id"]: r for r in rows}
+    assert by["A1"]["codons_changed"] == "4" and by["A1"]["aa_changes"] == "0"

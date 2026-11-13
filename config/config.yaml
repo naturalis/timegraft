@@ -159,6 +159,7 @@ markers:
       margin: 0.02           # ... at least this much more similar to another genus than to any congener
       min_identity: 0.80     # ... or no congener at this identity (while the genus has units that do)
       query_cov: 0.7         # all-against-all search of the representatives with VSEARCH
+      deep_maxaccepts: 100   # search again with this many hits where the first ten are all of one side
       mutual_pairs: both     # two units each nearest to the other's genus: set aside both, or only the further
       classes: class         # rank for thresholds per taxon and for units/screening_calibration.tsv
       thresholds: {}         # per taxon at that rank: {Copepoda: {margin: 0.03, min_identity: 0.82}}
