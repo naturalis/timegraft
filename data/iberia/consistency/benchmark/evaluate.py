@@ -200,7 +200,7 @@ gate("1g", "other genera whose stem age moves by more than 10%, five replicates 
 
 # The two variants added after the first results (not part of the gate): see run_posthoc.sh
 variants = [{"injection": "merge (the gate)", **injection_summary(rows, collateral)}]
-for name, label in (("inject_own", "merge, host's own species left out (as Onchidella)"),
+for name, label in (("inject_own", "merge, the host's own species left out of the merged taxon"),
                     ("inject_name", "name only: no merged NCBI ids, no species moved")):
     if (EXP / name / "s5/default/metadata.json").exists():
         v_rows, v_collateral = injection(name)

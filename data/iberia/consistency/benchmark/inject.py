@@ -11,8 +11,8 @@ another name. Half the genera go to another phylum, half to another class of the
 Two variants are not part of the gate; they were added after its first results, to explain them.
 With ``name``, only the name moves: the host keeps its own NCBI ids and children, so the merged-id
 check has nothing to compare. With ``own``, the merge is as above, but the host's own species are
-moved out of it (to the host's parent), so that the merged taxon holds the species of the genus only,
-as the OTT entry of *Onchidella* does.
+moved out of it (to the host's parent), so that the merged taxon holds the species of the genus only.
+(The OTT entry of *Onchidella* holds the species of both, as the injection of the gate does.)
 
 ``GENERA_TSV`` is ``backbone/genera.tsv`` of the unperturbed default run: genera are drawn from those
 with a place in the backbone and a single candidate in OTT. The pipeline itself is not touched.
