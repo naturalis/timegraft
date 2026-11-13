@@ -128,11 +128,12 @@ def test_report_carries_evidence_without_changing_ages():
     ncbi = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5}
     ages = {frozenset({1, 2, 4, 5}): 100.0, frozenset({1, 2, 3}): 120.0, frozenset({1, 2}): 30.0}
     plain = dendropy.Tree.get(data=newick, schema="newick", rooting="force-rooted")
-    _, before = date_topology(plain, ncbi, TimeTree(fetch=_fake(ages)))
+    _, before = date_topology(plain, ncbi, TimeTree(fetch=_fake(ages)), method="precedence")
     tree = dendropy.Tree.get(data=newick, schema="newick", rooting="force-rooted")
     labels = {n: f"mrcaott{i}" for i, n in enumerate(tree.preorder_node_iter()) if not n.is_leaf()}
     support = {labels[tree.seed_node]: {"supported_by": 3, "conflicts_with": 1}}
-    _, report = date_topology(tree, ncbi, TimeTree(fetch=_fake(ages)), synth_nodes=labels, support=support)
+    _, report = date_topology(tree, ncbi, TimeTree(fetch=_fake(ages)), synth_nodes=labels, support=support,
+                                method="precedence")
     assert [(r["age"], r["source"]) for r in report] == [(r["age"], r["source"]) for r in before]
     assert all(set(r) == set(REPORT_COLUMNS) for r in report)
     by = {r["example_genera"]: r for r in report}

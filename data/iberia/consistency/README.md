@@ -100,3 +100,48 @@ Taking each part on its own:
 - The majority rule on all species moves 16 genera and changes 8 stems.
 
 **What it does not fix.** The worst cases in the analysis keep their anchors, because their species are scattered over the synthetic tree rather than drawn out by a few strays: *Mycale* (465 genera, all 8 sampled species spread out), *Munidopsis* (238), *Trachurus* and *Pseudocaranx* (190), *Periclimenes* (170) and *Phakellia* (136). They are marked `no_smaller_majority`. They need either weighting of the conflicting TimeTree ages around them (#52) or a curated decision.
+
+## `agefit/` (#52)
+
+Backbone ages from a weighted fit of all TimeTree calibrations ([#52](https://github.com/naturalis/timegraft/issues/52)), at the defaults, on top of `anchoring/`. The folder holds `backbone.tre`, `node_ages.tsv` and `metadata.json`. `genera.tsv`, `concordance.tsv` and `crown_ages.tsv` are identical to those in `anchoring/`, because the topology does not change. `ages.method: precedence` reproduces `anchoring/` exactly.
+
+**Conflict metrics over the 385 TimeTree calibrations** (from `metadata.json`; a factor is the final age over TimeTree's, or the reverse):
+
+| | Median factor | 90% | Largest | Off by more than 1.5 | RMS of residual / sigma |
+| --- | --- | --- | --- | --- | --- |
+| Precedence rule | 1.00 | 1.32 | 6.49 | 26 | 1.33 |
+| Weighted fit | 1.00 | 1.11 | 3.07 | 5 | 0.38 |
+
+This is what the fit optimises, so it shows that the fit honours the evidence it is given. It does not show that the ages are better.
+
+**Held-out TimeTree ages** (`holdout.py`, 50 random halves of the calibrations hidden; each hidden age is compared with the age the visible half gives after interpolation):
+
+| | Median factor | 90% | Off by more than 1.5 | Off by more than 2 |
+| --- | --- | --- | --- | --- |
+| Precedence, all hidden | 1.319 | 2.52 | 35.6% | 17.3% |
+| Fit, all hidden | 1.318 | 2.49 | 35.0% | 16.9% |
+| Precedence, 4+ estimates | 1.210 | 1.88 | 22.5% | 7.2% |
+| Fit, 4+ estimates | 1.212 | 1.85 | 21.9% | 6.7% |
+
+Where a node has no calibration of its own, the fit predicts about as well as the precedence rule, and a little better in the tail. Its gain is at the calibrated nodes: it no longer throws away well-supported ages.
+
+**The conflicts listed in the analysis** (TimeTree age and number of estimates; precedence age; fitted age):
+
+| Node | TimeTree | Precedence | Fit |
+| --- | --- | --- | --- |
+| 27-genus crab clade (ancestor) | 54.9 Ma (4) | 54.9 | 168.6, reported as the one outlier (3.6 sigma) |
+| Eubrachyura | 156.8 Ma (6) | 54.8 (dropped) | 166.9 |
+| Heterotreme nodes | 195.5 Ma (2) | 30 to 44 (dropped) | 164 to 167 |
+| Lymnaeoidea | 136.8 Ma (2) under Hygrophila 50.0 Ma (1) | 39 to 44 (dropped) | 106.8 |
+| Soleid node | 63.6 Ma (2) under Soleidae 14.9 Ma (2) | 17.2 (dropped) | 44.3 |
+| Sparid node | 62.2 Ma (1) under Sparidae 29.2 Ma (1) | 25.8 (dropped) | 42.2 |
+| Hydrobiid node | 33.9 Ma (1) under Hydrobiidae 16.6 Ma (1) | 8.3 (dropped) | 23.6 |
+
+For the crab clade, the fit comes out as the analysis argued: it trusts the descendants. Where both sides rest on one or two estimates, the fit settles between them, which is as much as the evidence allows. Re-querying with disjoint picks (#53) is meant to settle those cases.
+
+**Overall:**
+
+- 118 of the 784 node ages move by more than 10% and 40 by more than a factor 1.5, almost all upwards.
+- 136 genus stems move by more than 10%: 130 older and 6 younger.
+- The total backbone length grows by 2.8%. The root stays at 750.1 Ma.
+- TimeTree crown ages, which are capped at 0.9 of the stem, will therefore be capped less often in the genus trees.

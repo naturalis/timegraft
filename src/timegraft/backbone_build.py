@@ -2,7 +2,10 @@
 
 For every internal node, a few genera from each child clade are sent to
 TimeTree, and the age of the node that joins them is taken as a calibration.
-Ages that would make a node older than a dated ancestor are discarded. Nodes
+Conflicting calibrations are resolved by a weighted fit of all of them under
+the constraint that ages decrease towards the tips (#52, :mod:`timegraft.agefit`),
+or, with the precedence rule used before, by discarding ages that would make
+a node older than a dated ancestor. Nodes
 without an age are placed between their nearest dated ancestor and their
 oldest dated descendant, by default by their expected height under a
 pure-birth model, or evenly as in BLADJ (#16).
@@ -17,6 +20,7 @@ import dendropy
 
 from .col import GENUS_COLUMNS as COL_GENUS_COLUMNS
 from .col import compare_ids
+from . import agefit
 from .timetree import EVIDENCE_COLUMNS, TimeTree
 
 REPORT_COLUMNS = (
@@ -27,11 +31,17 @@ REPORT_COLUMNS = (
     *(f"timetree_{c}" for c in EVIDENCE_COLUMNS),
     "synth_node", *(f"synth_{k}" for k in ("supported_by", "conflicts_with", "resolves", "partial_path_of",
                                            "terminal")),
-    # filled by later issues of #46: weighted fit (#52) and re-query of conflicts (#53)
-    "calibration_weight", "fitted_age", "calibration_residual", "conflict_class", "requery_age",
+    # weighted fit of all calibrations (#52): the calibration's uncertainty and weight, the fitted age, the
+    # residual log(fitted / TimeTree) and over sigma, whether it is an outlier; and, for comparison, the age
+    # and source the precedence rule before #52 gives the node
+    "calibration_sigma", "calibration_weight", "fitted_age", "calibration_residual", "calibration_z",
+    "calibration_outlier", "precedence_age", "precedence_source",
+    # filled by a later issue of #46: re-query of conflicts (#53)
+    "conflict_class", "requery_age",
 )
 # columns reserved for later issues, written empty until those land
-RESERVED_COLUMNS = ("calibration_weight", "fitted_age", "calibration_residual", "conflict_class", "requery_age")
+RESERVED_COLUMNS = ("conflict_class", "requery_age")
+AGE_METHODS = ("fit", "precedence")
 
 
 def _ids(value) -> list[int]:
@@ -197,6 +207,8 @@ def date_topology(
     richness: dict[dendropy.Node, int] | None = None,
     synth_nodes: dict[dendropy.Node, str] | None = None,
     support: dict[str, dict[str, int]] | None = None,
+    method: str = "fit",
+    fit: dict | None = None,
 ) -> tuple[dendropy.Tree, list[dict]]:
     """Set branch lengths in Ma on a genus-level topology, in place.
 
@@ -222,7 +234,20 @@ def date_topology(
     and ``support`` (per label, the number of source trees per kind of
     annotation, see :func:`timegraft.otol_static.synthesis_support`), how
     well the synthetic tree supports the node.
+
+    How conflicting calibrations are resolved depends on ``method``. With
+    ``fit`` (#52) all TimeTree ages are fitted together as soft constraints,
+    weighted by their evidence, under the hard constraint that ages decrease
+    towards the tips (:mod:`timegraft.agefit`; ``fit`` holds its settings:
+    ``sigma_floor``, ``sigma_single``, ``higher_taxa_factor``,
+    ``taxonomy_only_factor``, ``huber_k``, ``outlier_z``, ``min_gap``). With
+    ``precedence`` an age that is not younger than its nearest dated
+    ancestor is dropped, as before #52. Either way the report also gives the
+    ages and sources of the precedence rule, for comparison.
     """
+    if method not in AGE_METHODS:
+        raise ValueError(f"unknown age method {method!r}; use one of {', '.join(AGE_METHODS)}")
+    fit = dict(fit or {})
     age: dict[dendropy.Node, float] = {}
     source: dict[dendropy.Node, str] = {}
     raw: dict[dendropy.Node, float] = {}  # TimeTree's answer, kept even when it is later dropped
@@ -263,57 +288,31 @@ def date_topology(
         if root_age is None:
             raise ValueError("TimeTree has no age for the root; set backbone_build.root_age")
         age[root], source[root] = root_age, "configured"
-
-    # Resolve calibrations that are not younger than their nearest dated
-    # ancestor. Equal ages mean TimeTree does not resolve the node: the node
-    # is left to interpolation. Otherwise a direct TimeTree age outranks one
-    # from enclosing taxa; between equals, the ancestor is kept.
-    def dated_ancestor(node: dendropy.Node) -> dendropy.Node | None:
-        up = node.parent_node
-        while up is not None and up not in age:
-            up = up.parent_node
-        return up
-
-    conflict: dict[dendropy.Node, float] = {}
-    conflict_with: dict[dendropy.Node, dendropy.Node] = {}  # the other node of the conflict
-    changed = True
-    while changed:
-        changed = False
-        for node in tree.preorder_node_iter():
-            if node.is_leaf() or node is root or node not in age:
-                continue
-            anc = dated_ancestor(node)
-            if anc is None or age[node] < age[anc]:
-                continue
-            if abs(age[node] - age[anc]) <= 1e-9 * max(1.0, age[anc]):
-                del age[node]
-                source[node] = "timetree_same_as_ancestor"
-            elif source[anc] == "timetree_higher_taxa" and source[node] == "timetree" and anc is not root:
-                conflict[anc] = age[node] / age[anc]
-                conflict_with[anc] = node
-                del age[anc]
-                source[anc] = "dropped_inconsistent"
-            else:
-                conflict[node] = age[node] / age[anc]
-                conflict_with[node] = anc
-                del age[node]
-                source[node] = "dropped_inconsistent"
-            changed = True
-            break
-
     if interpolation == "pure_birth" and not richness:
         logging.getLogger(__name__).warning(
             "no clade richness for a pure-birth interpolation (it needs the static Open Tree files); "
             "spacing undated nodes evenly instead"
         )
         interpolation = "even"
-    for node, value in interpolate(tree, age, method=interpolation, richness=richness).items():
-        age[node] = value
-        previous = source.get(node)
-        source[node] = {
+
+    # the precedence rule (before #52), kept for comparison and as a fallback
+    p_age, p_source, conflict, conflict_with = _precedence(tree, dict(age), dict(source))
+    for node, value in interpolate(tree, p_age, method=interpolation, richness=richness).items():
+        p_age[node] = value
+        p_source[node] = {
             "dropped_inconsistent": "interpolated_after_drop",
             "timetree_same_as_ancestor": "interpolated_unresolved_in_timetree",
-        }.get(previous, "interpolated")
+        }.get(p_source.get(node), "interpolated")
+
+    calibration_rows: dict[dendropy.Node, dict[str, str]] = {}
+    if method == "precedence":
+        age, source = p_age, p_source
+    else:
+        age, source, calibration_rows = _fit(tree, age, source, raw, used, timetree, synth_nodes, support, fit)
+        for node, value in interpolate(tree, age, method=interpolation, richness=richness).items():
+            age[node] = value
+            source[node] = ("interpolated_unresolved_in_timetree" if source.get(node) == "timetree_same_as_ancestor"
+                            else "interpolated")
 
     for node in tree.preorder_node_iter():
         if node is root:
@@ -354,8 +353,141 @@ def date_topology(
         counts = support.get(label, {}) if label and support is not None else None
         for kind in ("supported_by", "conflicts_with", "resolves", "partial_path_of", "terminal"):
             row[f"synth_{kind}"] = "" if counts is None else str(counts.get(kind, 0))
+        row.update({c: "" for c in ("calibration_sigma", "calibration_weight", "fitted_age", "calibration_residual",
+                                    "calibration_z", "calibration_outlier")})
+        row.update(calibration_rows.get(node, {}))
+        row.update(precedence_age=f"{p_age[node]:.4f}", precedence_source=p_source[node])
         row.update({c: "" for c in RESERVED_COLUMNS})
     return tree, report
+
+
+def _precedence(tree, age, source):
+    """The conflict rule before #52, on copies of ``age`` and ``source``: drops calibrations in place.
+
+    A calibration that is not younger than its nearest dated ancestor is
+    dropped; equal ages mean TimeTree does not resolve the node. A direct
+    TimeTree age outranks one from enclosing taxa; between equals, the
+    ancestor is kept.
+    """
+    root = tree.seed_node
+
+    def dated_ancestor(node):
+        up = node.parent_node
+        while up is not None and up not in age:
+            up = up.parent_node
+        return up
+
+    conflict, conflict_with = {}, {}
+    changed = True
+    while changed:
+        changed = False
+        for node in tree.preorder_node_iter():
+            if node.is_leaf() or node is root or node not in age:
+                continue
+            anc = dated_ancestor(node)
+            if anc is None or age[node] < age[anc]:
+                continue
+            if abs(age[node] - age[anc]) <= 1e-9 * max(1.0, age[anc]):
+                del age[node]
+                source[node] = "timetree_same_as_ancestor"
+            elif source[anc] == "timetree_higher_taxa" and source[node] == "timetree" and anc is not root:
+                conflict[anc] = age[node] / age[anc]
+                conflict_with[anc] = node
+                del age[anc]
+                source[anc] = "dropped_inconsistent"
+            else:
+                conflict[node] = age[node] / age[anc]
+                conflict_with[node] = anc
+                del age[node]
+                source[node] = "dropped_inconsistent"
+            changed = True
+            break
+    return age, source, conflict, conflict_with
+
+
+def _fit(tree, age, source, raw, used, timetree, synth_nodes, support, settings):
+    """Ages of the calibrated nodes from a weighted fit of all calibrations (#52); the rest is left undated.
+
+    A calibration equal to that of its nearest calibrated ancestor means
+    TimeTree does not resolve the node; it is not used, as before.
+    """
+    root = tree.seed_node
+    calibrations: dict[dendropy.Node, agefit.Calibration] = {}
+    parent: dict[dendropy.Node, dendropy.Node | None] = {}
+    depth: dict[dendropy.Node, int] = {}
+    new_source = {n: s for n, s in source.items() if n.is_leaf()}
+    nearest: dict[dendropy.Node, dendropy.Node | None] = {}
+    for node in tree.preorder_node_iter():
+        up = node.parent_node
+        depth[node] = 0 if up is None else depth[up] + 1
+        if node.is_leaf():
+            continue
+        anc = None
+        if up is not None:
+            anc = up if up in calibrations else nearest.get(up)
+        nearest[node] = anc
+        if node not in age:
+            continue
+        if node is not root and anc is not None and abs(age[node] - calibrations[anc].age) <= 1e-9 * max(
+                1.0, calibrations[anc].age):
+            new_source[node] = "timetree_same_as_ancestor"
+            continue
+        if source[node] == "configured":
+            calibrations[node] = agefit.Calibration(age[node], 1.0, "configured", fixed=True)
+        else:
+            entry = timetree.cache.get(timetree._key(used[node])) if hasattr(timetree, "cache") else None
+            entry = entry if isinstance(entry, dict) else {}
+            label = (synth_nodes or {}).get(node, "")
+            taxonomy_only = bool(label) and support is not None and not (support.get(label) or {}).get("supported_by")
+            sigma = agefit.calibration_sigma(
+                entry.get("estimates") or (), entry.get("ci_low"), entry.get("ci_high"),
+                higher_taxa=source[node] == "timetree_higher_taxa", taxonomy_only=taxonomy_only,
+                floor=float(settings.get("sigma_floor", agefit.SIGMA_FLOOR)),
+                single=float(settings.get("sigma_single", agefit.SIGMA_SINGLE)),
+                higher_factor=float(settings.get("higher_taxa_factor", agefit.HIGHER_TAXA_FACTOR)),
+                taxonomy_factor=float(settings.get("taxonomy_only_factor", agefit.TAXONOMY_ONLY_FACTOR)))
+            calibrations[node] = agefit.Calibration(age[node], sigma, source[node])
+        parent[node] = anc
+    result = agefit.fit_ages(parent, depth, calibrations, min_gap=float(settings.get("min_gap", agefit.MIN_GAP)),
+                             huber_k=float(settings.get("huber_k", agefit.HUBER_K)),
+                             outlier_z=float(settings.get("outlier_z", agefit.OUTLIER_Z)))
+    fitted = {n: 0.0 for n in tree.leaf_node_iter()}
+    rows = {}
+    for node, c in calibrations.items():
+        fitted[node] = result.age[node]
+        if c.fixed:
+            new_source[node] = "configured"
+            continue
+        suffix = "_outlier" if node in result.outlier else ""
+        new_source[node] = f"{c.source}_fit{suffix}"
+        rows[node] = {
+            "calibration_sigma": f"{c.sigma:.4f}",
+            "calibration_weight": f"{result.weight[node]:.4f}",
+            "fitted_age": f"{result.age[node]:.4f}",
+            "calibration_residual": f"{result.residual[node]:.4f}",
+            "calibration_z": f"{result.z[node]:.3f}",
+            "calibration_outlier": "yes" if node in result.outlier else "",
+        }
+    return fitted, new_source, rows
+
+
+def age_fit_summary(report: list[dict], severe: float = 1.5) -> dict:
+    """Conflict metrics over all calibrations, for the final ages and for the precedence rule (#52)."""
+    calibrations, final, precedence = {}, {}, {}
+    for row in report:
+        if not row.get("timetree_age") or row.get("source") in ("interpolated_unresolved_in_timetree",):
+            continue
+        if row.get("precedence_source") == "interpolated_unresolved_in_timetree":
+            continue
+        sigma = float(row["calibration_sigma"]) if row.get("calibration_sigma") else agefit.SIGMA_SINGLE
+        calibrations[row["node"]] = agefit.Calibration(float(row["timetree_age"]), sigma)
+        final[row["node"]] = float(row["age"])
+        precedence[row["node"]] = float(row["precedence_age"])
+    return {
+        "final": agefit.misfit(final, calibrations, severe),
+        "precedence": agefit.misfit(precedence, calibrations, severe),
+        "outliers": sum(1 for r in report if r.get("calibration_outlier") == "yes"),
+    }
 
 
 # genera.tsv (#47). The first four columns are as before; the rest is evidence for the
