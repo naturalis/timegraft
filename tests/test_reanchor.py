@@ -43,13 +43,40 @@ def test_find_target(taxonomy):
     names = cc.name_index(taxonomy)
     assert ra.find_target(taxonomy, names, {"family": "Ostreidae", "class": "Bivalvia"}) == (
         8, "family:Ostreidae", "reference_lineage")
-    # a family OTT does not hold: the class instead
-    assert ra.find_target(taxonomy, names, {"family": "Nowhereidae", "class": "Asteroidea"})[:2] == (
-        13, "class:Asteroidea")
+    # a family OTT does not hold: the class instead, if its lineage agrees with the reference phylum
+    assert ra.find_target(taxonomy, names, {"family": "Nowhereidae", "class": "Asteroidea",
+                                            "phylum": "Metazoa"})[:2] == (13, "class:Asteroidea")
     assert ra.find_target(taxonomy, names, {}) == (None, "", "no_target")
+    # a unique name whose lineage disagrees with the reference is not taken (it may be a homonym elsewhere)
+    # (the last name tried is reported)
+    assert ra.find_target(taxonomy, names, {"family": "Ostreidae", "class": "Asteroidea"}) == (
+        None, "class:Asteroidea", "no_agreeing_target")
+    assert ra.find_target(taxonomy, names, {"class": "Asteroidea"}) == (None, "class:Asteroidea",
+                                                                        "no_agreeing_target")
     assert ra.find_target(taxonomy, names, {}, "class:Asteroidea") == (13, "class:Asteroidea", "override")
     assert ra.find_target(taxonomy, names, {}, "ott:8") == (8, "family:Ostreidae", "override")
     assert ra.find_target(taxonomy, names, {}, "family:Nope")[2] == "override_not_found"
+    # override ids that the loaded taxonomy does not hold are refused, not looked up
+    for bad in ("ott:-1", "ott:999999", "ott:abc", f"ott:{len(taxonomy.parent) - 1 + 1000}"):
+        assert ra.find_target(taxonomy, names, {}, bad) == (None, bad, "override_not_found")
+
+
+def test_find_target_passes_over_an_unresolvable_rank(taxonomy):
+    # pretend OTT also holds an Ostreidae among the starfish (a homonym)
+    names = dict(cc.name_index(taxonomy))
+    names[("family", "Ostreidae")] = [8, 13]
+    # the reference class tells the two apart
+    assert ra.find_target(taxonomy, names, {"family": "Ostreidae", "class": "Bivalvia"}) == (
+        8, "family:Ostreidae", "reference_lineage")
+    # only the shared kingdom to go on: neither Ostreidae agrees uniquely, so the class is used instead
+    assert ra.find_target(taxonomy, names, {"family": "Ostreidae", "class": "Asteroidea", "phylum": "Metazoa"}) == (
+        13, "class:Asteroidea", "reference_lineage")
+
+
+@pytest.mark.parametrize("value, expected", [(False, "off"), (True, "apply"), ("report", "report"),
+                                             ("off", "off")])
+def test_yaml_off_is_off(value, expected):
+    assert ra.normalise_mode(value) == expected
 
 
 def test_synthesis_node(taxonomy, synth):
@@ -168,3 +195,4 @@ def test_override_keeps_a_flagged_genus(tmp_path):
     assert moved == {} and provenance["Mytilus"]["placement_action"] == "kept_override"
     assert provenance["Mytilus"]["reanchor_source"] == "override:RV"
     assert ra.plan(synth, taxonomy, names, matches, anchors, rows, {}, {}, "off", 4) == ({}, {})
+    assert ra.plan(synth, taxonomy, names, matches, anchors, rows, {}, {}, False, 4) == ({}, {})

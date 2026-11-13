@@ -116,11 +116,10 @@ try:
                                     cc.backbone_sisters(tree), phylum, lineage_names, **conc_settings)
 
             # re-anchoring of flagged genera, before anything is derived from the placement (#50)
-            mode = re_cfg.get("mode", "apply")
-            if mode is False:
-                mode = "off"
+            from timegraft import reanchor as ra
+
+            mode = ra.normalise_mode(re_cfg.get("mode", "apply"))  # an unquoted YAML `off` arrives as False
             if mode != "off":
-                from timegraft import reanchor as ra
 
                 overrides = ra.read_overrides(snakemake.input.overrides if snakemake.input.overrides else None)
                 provenance, moved = ra.plan(synth, taxonomy, names, matches, anchors, concordance,

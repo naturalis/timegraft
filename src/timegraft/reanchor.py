@@ -72,35 +72,42 @@ def find_target(taxonomy, names: Mapping[tuple[str, str], list[int]], reference:
                 target: str = "") -> tuple[int | None, str, str]:
     """The OTT taxon to move a genus to: its id, ``rank:name``, and how it was chosen.
 
-    With ``target`` (from the curated table) that taxon. Otherwise the
-    reference family, else order, else class, if OTT holds exactly one taxon
-    of that name whose lineage contains another name of the reference
-    lineage (so a homonym family elsewhere is not taken), or exactly one at
-    all where none does.
+    With ``target`` (from the curated table) that taxon, if the loaded
+    taxonomy holds it (else ``override_not_found``). Otherwise the reference
+    family, else order, else class: the first of these for which OTT holds
+    exactly one taxon of that name whose own lineage contains a higher name
+    of the reference lineage. A name OTT holds only elsewhere, or more than
+    once without one agreeing, is passed over for the next rank, so a
+    homonym is never taken (``no_agreeing_target``, with the last name tried,
+    if none qualifies; ``no_target`` if OTT holds none of them).
     """
     if target:
         if target.startswith("ott:"):
-            uid = int(target[4:])
+            try:
+                uid = int(target[4:])
+            except ValueError:
+                return None, target, "override_not_found"
             rank_name = taxonomy.rank_name.get(uid)
-            if (uid < 0 or uid >= len(taxonomy.parent)
-                    or (taxonomy.parent[uid] < 0 and rank_name is None)):
+            # an id beyond the taxonomy, or a slot that no taxon fills (no parent, no name), does not exist
+            if uid < 0 or uid >= len(taxonomy.parent) or (taxonomy.parent[uid] < 0 and rank_name is None):
                 return None, target, "override_not_found"
             return uid, f"{rank_name[0]}:{rank_name[1]}" if rank_name else target, "override"
         rank, _, name = target.partition(":")
         found = names.get((rank, name), [])
         return (found[0], target, "override") if len(found) == 1 else (None, target, "override_not_found")
     ranks = ("family", "order", "class")
+    tried = ""
     for i, rank in enumerate(ranks):
         name = (reference.get(rank) or "").strip()
         candidates = names.get((rank, name), []) if name else []
         if not candidates:
             continue
+        tried = f"{rank}:{name}"
         higher = {(reference.get(r) or "").strip() for r in ranks[i + 1:] + ("phylum",)} - {""}
         agreeing = [uid for uid in candidates if higher & _lineage_names(taxonomy, uid)]
         if len(agreeing) == 1:
-            return agreeing[0], f"{rank}:{name}", "reference_lineage"
-        continue
-    return None, "", "no_target"
+            return agreeing[0], tried, "reference_lineage"
+    return (None, tried, "no_agreeing_target") if tried else (None, "", "no_target")
 
 
 def synthesis_node(synth, taxonomy, uid: int, exclude: int | None = None, max_steps: int = 15) -> tuple[int | None, str]:
@@ -175,6 +182,15 @@ def lineage_from(taxonomy, uid: int) -> list[tuple[int, int | None]]:
     return out
 
 
+def normalise_mode(mode) -> str:
+    """YAML 1.1 reads an unquoted ``off`` as ``False`` (and ``on`` as ``True``); take those as meant."""
+    if mode is False:
+        return "off"
+    if mode is True:
+        return "apply"
+    return mode
+
+
 def plan(synth, taxonomy, names, matches: Mapping[str, dict], anchors: Mapping[str, int], concordance: list[dict],
          reference: Mapping[str, Mapping[str, str]], overrides: Mapping[str, dict], mode: str,
          min_severity: int) -> tuple[dict[str, dict], dict[str, tuple[int, int]]]:
@@ -186,6 +202,7 @@ def plan(synth, taxonomy, names, matches: Mapping[str, dict], anchors: Mapping[s
     ``would_reanchor`` (mode ``report``), ``kept_override`` or
     ``flagged_no_target`` (no taxon of the reference lineage could be found).
     """
+    mode = normalise_mode(mode)
     if mode not in MODES:
         raise ValueError(f"reanchor.mode must be one of {MODES}, not {mode!r}")
     if mode == "off":
