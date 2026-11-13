@@ -91,3 +91,31 @@ def test_uncertainty_can_be_switched_off(genus):
     # the subtree itself does not change
     assert on["crown_age"] == off["crown_age"]
     assert tree_length(tree_on) == pytest.approx(tree_length(tree_off))
+
+
+@pytest.fixture
+def long_branch():
+    """Eight close units and one with many more substitutions of its own (#55)."""
+    rng = np.random.default_rng(3)
+    root = BASES[rng.integers(0, 4, 600)]
+    out = [(f"O{i}", "".join(mutate(rng, mutate(rng, root, 80), 5))) for i in range(3)]
+    ingroup = [(f"G{i}", "".join(mutate(rng, root, 8))) for i in range(8)]
+    ingroup.append(("G_long", "".join(mutate(rng, root, 70))))
+    return ingroup, out
+
+
+def test_rate_outliers_are_listed_or_set_aside(long_branch):
+    ingroup, outgroup = long_branch
+    marker = {**MARKER, "screening": {"rate_outlier_z": 3.5}}
+    _, flagged = build_genus("Genus", ingroup, outgroup, 40.0, marker, {})
+    assert flagged["rate_outliers"] == "G_long" and flagged["rate_outlier_action"] == "flag"
+    assert flagged["n_units"] == 9
+
+    marker["screening"]["rate_outlier_action"] = "set_aside"
+    tree, aside = build_genus("Genus", ingroup, outgroup, 40.0, marker, {})
+    assert aside["rate_outliers"] == "G_long" and aside["rate_outlier_action"] == "set_aside"
+    assert aside["n_units"] == 8 and "G_long" not in {l.taxon.label for l in tree.leaf_node_iter()}
+    assert float(aside["crown_age"]) < float(flagged["crown_age"])  # the long branch stretched the genus
+
+    with pytest.raises(ValueError):
+        build_genus("Genus", ingroup, outgroup, 40.0, {**MARKER, "screening": {"rate_outlier_action": "drop"}}, {})

@@ -59,13 +59,17 @@ rule screen_units:
     input:
         reps=rules.representatives.output.reps,
         unassigned=rules.representatives.output.unassigned,
+        records=rules.filter_records.output.kept,
     output:
         screened=f"{OUT}/units/screened.tsv",
         reps=f"{OUT}/units/screened_representatives.tsv",
         unassigned=f"{OUT}/units/screened_unassigned.tsv",
+        calibration=f"{OUT}/units/screening_calibration.tsv",
     params:
         src=SRC,
+        marker=config["marker"],
         settings=config["markers"][config["marker"]].get("screening", {}),
+        filter=config["markers"][config["marker"]]["filter"],
     threads: 4
     log:
         f"{OUT}/logs/screen_units.log",
