@@ -24,6 +24,7 @@ PROVENANCE_COLUMNS = (
     "root_to_tip",
     "rate_outliers",
     "rate_outlier_z",
+    "rate_outlier_action",
     "rate",
     "rate_source",
     "rooting",

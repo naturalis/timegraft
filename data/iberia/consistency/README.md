@@ -198,14 +198,14 @@ The sampled crowns on their own let a few more extreme values in: more genera ge
 
 ## `screening/` (#55)
 
-Screening of the reference units with the extensions of [#55](https://github.com/naturalis/timegraft/issues/55): a wider reference, thresholds per class, a codon comparison with the nearest relative, a choice for mutual pairs, a relative-rate check in the genus subtrees, and a reason for every decision. `benchmark.py` makes every table here except `rate_outliers.tsv`, from `units/representatives.tsv` of `iberia-run-tolerant.tar.gz` and the records of `records.tsv.gz` without those in its `units/rejected.tsv`, with VSEARCH 2.29.1 on two cores. Run on 13 November 2026.
+Screening of the reference units with the extensions of [#55](https://github.com/naturalis/timegraft/issues/55): a wider reference, thresholds per class, a codon comparison with the nearest relative, a choice for mutual pairs, a relative-rate check in the genus subtrees, and a reason for every decision. `benchmark.py` makes every table here except the two `rate_outliers` tables, from `units/representatives.tsv` of `iberia-run-tolerant.tar.gz` and the records of `records.tsv.gz` without those in its `units/rejected.tsv`, with VSEARCH 2.29.1 on two cores. Run on 13 November 2026.
 
 - `screened.tsv.gz` and `calibration.tsv`: `units/screened.tsv` and `units/screening_calibration.tsv` as `screen_units` writes them at the defaults.
 - `injection.tsv`, `injection_classes.tsv`: mislabelled units, over a grid of thresholds and per class.
 - `numt_simulation.tsv`: simulated nuclear copies against real pairs of nearest relatives.
 - `external.tsv`: the wider reference.
 - `runtime.tsv`: time per step.
-- `rate_outliers.tsv`: the new provenance columns from a genus-stage run, made as for `crowns/` (same backbone, crown table and literature ages, `units/screened.tsv` of the archive).
+- `rate_outliers.tsv`: the new provenance columns from a genus-stage run, made as for `crowns/` (same backbone, crown table and literature ages, `units/screened.tsv` of the archive). `rate_outliers_set_aside.tsv`: the same with `rate_outlier_action: set_aside`.
 
 **Nothing changes at the defaults.** The decisions are those of the archive for all 24,882 units (23,528 `keep`, 850 `other_genus`, 444 `isolated`, 60 `kept_whole_genus`), and the 1,039 crown ages of the genus-stage run are those of `crowns/`. What is new is in the columns: every row of `screened.tsv.gz` has the thresholds that applied, where its nearest hits came from and its reason in words, so no unit leaves its genus without a stated cause.
 
@@ -232,7 +232,7 @@ A first version took the reading frame of the frame with fewest stops and, among
 
 245 pairs are out of frame over a stretch (`frameshift`), mostly by a single base in either sequence; the pair cannot tell which. They are reported, not acted on.
 
-**Relative rates.** In 820 genera with at least four units, 412 units in 235 genera lie more than 3.5 robust standard deviations above the median root-to-tip distance of their genus, 116 genera above 5 and 33 above 10. The largest scores come from small genera whose units are otherwise very close (*Malacolimax*, *Baeolidia*, *Hypleurochilus*). 46 of the 412 units (11%) are also `numt_like`, against 1.1% of all units: the two diagnostics point at the same sequences far more often than by chance. The list is a diagnostic; nothing is removed.
+**Relative rates.** In 820 genera with at least four units, 412 units in 235 genera lie more than 3.5 robust standard deviations above the median root-to-tip distance of their genus, 116 genera above 5 and 33 above 10. The largest scores come from small genera whose units are otherwise very close (*Malacolimax*, *Baeolidia*, *Hypleurochilus*). 46 of the 412 units (11%) are also `numt_like`, against 1.1% of all units: the two diagnostics point at the same sequences far more often than by chance. By default the list is a diagnostic only. With `rate_outlier_action: set_aside` (genus stage rerun as above), the 412 units leave their subtrees and are placed like other set-aside units: mean root-to-tip distance in the 235 genera falls by a median of 4%, and 173 crown ages change, by a median of 2% (8 older, 165 younger) and by more than a quarter in 10 (*Pelagia* 47 to 18 Ma, *Bathytoshia* 16 to 8 Ma, *Myzobdella* 32 to 19 Ma). The other 62 genera take their crown from TimeTree or the literature. The sum of all crown ages falls by 1.1%. Whether that is better is for #56 to judge; `rate_outliers_set_aside.tsv` has the provenance columns of that run.
 
 **A wider reference.** The genera of each family were split at random between the run (16,011 units) and an external reference (8,870 sequences, all within families of the run). Screening the run half alone sets aside 760 units, of the 900 that the screening with all genera sets aside among them: 148 are missed, because the genus they are closest to is not in the run, and 8 are extra. With the reference, 898 of the 900 are found and none is extra; 219 decisions rest on an external hit, as `best_other_scope` records.
 

@@ -42,15 +42,24 @@ taxonomy = {r["genus"]: r for r in read_tsv(snakemake.input.taxonomy)}
 if snakemake.input.lsd2:
     marker_cfg["dating"] = {**marker_cfg.get("dating", {}), "executable": str(Path(snakemake.input.lsd2).resolve())}
 
-out = []
+out, set_aside = [], []
 for genus in sorted(groups):
     group = groups[genus]
     tree, provenance = build_genus(genus, group["in"], group["out"], group["stem"],
                                    marker_cfg, known, timetree_crowns, rooting=snakemake.params.rooting,
                                    rate=rates.resolve(taxonomy.get(genus)), crown_basis=crown_basis)
     out.append({**provenance, "newick": tree_to_newick(tree)})
+    if provenance.get("rate_outlier_action") == "set_aside":
+        # units with a long branch, left out of the subtree (#55): placed later like units set aside by screening
+        names = set(provenance["rate_outliers"].split(";"))
+        set_aside.extend({"unit_id": unit, "reason": "screen_rate_outlier", "genera": f"{genus}:",
+                          "n_records": "", "record_id": "", "sequence": seq}
+                         for unit, seq in group["in"] if unit in names)
     logging.info("%s: %d units, crown %s Ma (%s), rooting %s (%s misplaced)", genus, provenance["n_units"],
                  provenance["crown_age"], provenance["crown_source"], provenance["rooting"],
                  provenance["violations"] or 0)
 
 write_tsv(snakemake.output[0], out, list(PROVENANCE_COLUMNS) + ["newick"])
+write_tsv(snakemake.output.set_aside, set_aside, ["unit_id", "reason", "genera", "n_records", "record_id", "sequence"])
+if set_aside:
+    logging.info("%d units with long branches set aside from their genus subtrees", len(set_aside))

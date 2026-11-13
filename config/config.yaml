@@ -172,6 +172,7 @@ markers:
         max_nonsynonymous_share: 0.5   # ... and more than this share of them change the amino acid
         action: flag         # flag (report only) or set_aside
       rate_outlier_z: 3.5    # genus subtrees: list units this far (robust z) beyond the median root-to-tip distance
+      rate_outlier_action: flag  # flag (list only) or set_aside (leave out of the subtree, place like set-aside units)
     crown_age:
       method: rate           # used when crown_ages has no entry for a genus
       rate: 0.0115           # default rate: substitutions per site per Myr, per lineage (about 2.3%

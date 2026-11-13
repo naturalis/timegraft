@@ -120,6 +120,7 @@ Everything that differs between markers sits in `markers.<name>`:
 | `screening.translation.max_nonsynonymous_share` | 0.5 | | ... of which more than this share change the amino acid |
 | `screening.translation.action` | `flag` | | `flag`: report only; `set_aside`: set `numt_like` units aside like the others |
 | `screening.rate_outlier_z` | 3.5 | | Genus subtrees: list units whose root-to-tip distance lies this many robust standard deviations above the median (`rate_outliers` in `provenance.tsv`); 0 turns it off |
+| `screening.rate_outlier_action` | `flag` | | `flag`: list only; `set_aside`: leave them out of the genus subtree and place them like units set aside by screening; see [relative rates](#relative-rates-within-a-genus) |
 | `crown_age.method` | `rate` | `fraction` | How to set a genus crown age when no better source exists |
 | `crown_age.rate` | 0.0115 | | Default substitution rate, per site per Myr, per lineage; sets the lower bound of the crown age, see [crown ages and rates](#crown-ages-and-rates) |
 | `crown_age.rates` | `{}` | | Rate per taxon, `rank: {name: rate}` |
@@ -142,6 +143,21 @@ Everything that differs between markers sits in `markers.<name>`:
 | `placement.stem_fraction` | 0.5 | | Units set aside by screening that match nothing: joined to the stem of their own genus, this fraction of the way from crown to stem node |
 
 ### Screening units
+
+**What acts and what only reports.** "Set aside" means taken out of the genus subtree: the unit no longer shapes the subtree or the crown age of its genus, but it is still placed on the tree (next to its nearest unit, or on the stem of its genus) and still counts in diversity. Nothing in screening deletes a unit from the output. At the defaults, two checks set units aside and the others only report:
+
+| Check | Default | To make it act, or act more | Iberian run (24,882 units) |
+| --- | --- | --- | --- |
+| Nearer to another genus (`other_genus`) | Sets aside | Lower `margin` | 850 set aside; 1,060 at `margin: 0.01`, 1,530 at `margin: 0` |
+| No congener at `min_identity` (`isolated`) | Sets aside | Raise `min_identity`, for all or per class (`thresholds`) | 444 set aside; 2,879 at `min_identity: 0.85` (with the first check, 3,719 units or 15%, against 1,294 or 5.2%) |
+| Wider reference (`reference.path`) | Off | Give a table of sequences | More evidence, so more units set aside where the run lacks close relatives |
+| Mutual pairs (`mutual_pairs`) | Both set aside | `further` sets aside fewer, not more | 83 fewer units set aside |
+| Codon comparison, `numt_like` | Reports | `translation.action: set_aside` | 266 units flagged |
+| Codon comparison, `frameshift` | Reports | Cannot act: the pair does not tell which sequence has the indel | 245 units flagged |
+| Long branches in the genus subtree (`rate_outliers`) | Reports | `rate_outlier_action: set_aside` | 412 units in 235 genera flagged; set aside, 173 crown ages change, 10 by more than a quarter |
+| Thresholds suggested per class (`screening_calibration.tsv`) | Reports | Copy them into `thresholds` | |
+
+Whatever acts, a genus never loses all its units, and every decision and flag is written with its reason ([provenance](provenance.md#screening-units)). The settings and their evidence are below; the effect of each on mislabelled units is in the [Iberian record](../../data/iberia/consistency/README.md#screening-55).
 
 Within-genus barcode distances set the lower bound of a genus's crown age, so a unit that does not belong in its genus (a misidentification, a contaminant, or a genus that is not a natural group) can make the genus look much older. Before genus subtrees are built, `screen_units` searches all representatives against each other with VSEARCH and sets a unit aside when:
 
@@ -180,7 +196,7 @@ By default this only reports (`action: flag`). With `action: set_aside`, `numt_l
 
 #### Relative rates within a genus
 
-When the genus subtrees are built, the root-to-tip distance of each unit in the rooted tree, before dating, is compared with those of its congeners: units more than `rate_outlier_z` robust standard deviations (1.4826 times the median absolute deviation) above the median are listed in `rate_outliers` in `provenance.tsv`, with the largest score in `rate_outlier_z`. A long branch in a genus stretches its crown age; it may be a fast lineage, a poor sequence, a nuclear copy or a misidentification that screening did not catch. Nothing is removed: the list says where to look. Genera with fewer than four units are not assessed.
+When the genus subtrees are built, the root-to-tip distance of each unit in the rooted tree, before dating, is compared with those of its congeners: units more than `rate_outlier_z` robust standard deviations (1.4826 times the median absolute deviation) above the median are listed in `rate_outliers` in `provenance.tsv`, with the largest score in `rate_outlier_z`. A long branch in a genus stretches its crown age; it may be a fast lineage, a poor sequence, a nuclear copy or a misidentification that screening did not catch. By default nothing is done with them: the list says where to look. With `rate_outlier_action: set_aside`, the subtree is built again without them, and they are placed on the finished tree like units set aside by screening (reason `screen_rate_outlier` in `units_placed.tsv`); `rate_outlier_action` in `provenance.tsv` says which happened. At least two units are always kept. Genera with fewer than four units are not assessed. On the Iberian run, setting them aside takes 412 units out of 235 subtrees; mean root-to-tip distance in those genera falls by a median of 4%, and 173 crown ages change (the others come from TimeTree or the literature), by a median of 2% and by more than a quarter in 10 genera (*Pelagia* 47 to 18 Ma, *Bathytoshia* 16 to 8 Ma). The sum of all crown ages falls by 1.1%.
 
 #### Screening ITS
 

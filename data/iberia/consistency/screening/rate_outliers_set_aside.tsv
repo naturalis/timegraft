@@ -1,0 +1,1040 @@
+genus	n_units	root_to_tip	rate_outliers	rate_outlier_z	rate_outlier_action	crown_age	crown_source
+Aaptos	2	0.027395				25.7531	timetree
+Abida	89	0.118668		3.10		25.6619	midpoint
+Abludomelita	2	0.037221				20.0760	midpoint
+Acaeroplastes	2	0.099643				19.6445	midpoint
+Acanthephyra	21	0.098744	BOLD:AHV6628	5.23	set_aside	28.0317	midpoint
+Acanthochitona	42	0.099011		2.61		38.4987	midpoint
+Acanthocyclops	13	0.119794	BOLD:AEE4194	5.39	set_aside	27.0458	midpoint
+Acanthonyx	5	0.081669		1.37		21.5412	midpoint
+Acartia	64	0.145033	BOLD:ACL9285	4.24	set_aside	49.2581	midpoint
+Achaeta	45	0.110921	BOLD:AAU0086	6.27	set_aside	41.5277	midpoint
+Achondrostoma	2	0.016597				1.8325	timetree
+Acteon	3	0.059903				14.8651	midpoint
+Actinella	6	0.093032		1.33		45.6591	midpoint
+Aegaeon	2	0.021167				13.2042	midpoint
+Aegires	9	0.128245	BOLD:AHL3998	3.65	set_aside	21.1205	midpoint
+Aegopinella	7	0.061802		1.54		26.4006	midpoint
+Aeolidia	5	0.091208		2.10		13.6417	midpoint
+Aeolidiella	4	0.071780	BOLD:AAJ1872;BOLD:AHV6280	7.67	set_aside	12.1019	midpoint
+Aetideus	5	0.121939		1.80		33.5087	midpoint
+Aglaja	2	0.091449				11.1608	midpoint
+Aglaophamus	19	0.143623		2.08		35.3900	midpoint
+Alburnus	18	0.042473		2.15		11.6134	timetree
+Aldisa	16	0.079160		2.69		18.2072	midpoint
+Alepisaurus	2	0.031537				28.7914	timetree
+Alepocephalus	17	0.071556	BOLD:ADC7231	4.41	set_aside	19.2104	timetree
+Allognathus	25	0.070379		2.86		6.9864	timetree
+Allolobophora	108	0.117952		3.11		34.9552	midpoint
+Alloteuthis	3	0.034517				14.3737	midpoint
+Alona	32	0.108894	BOLD:ADC3702;BOLD:ADZ5305;BOLD:AEE9547	5.02	set_aside	39.2059	midpoint
+Alosa	4	0.024188	BOLD:AAW1771	4.55	set_aside	7.5830	timetree
+Alpheus	305	0.143378		3.43		40.2020	midpoint
+Alpioniscus	53	0.131390		2.19		39.4074	midpoint
+Alvania	18	0.099382		1.65		29.2597	midpoint
+Amathia	25	0.128940	BOLD:ABU6948;BOLD:ACO2769	6.31	set_aside	50.2159	midpoint
+Ambigolimax	8	0.042418	BOLD:AHN0678	5.65	set_aside	20.2324	midpoint
+Amblyosyllis	12	0.114148		1.81		53.6788	midpoint
+Ameiurus	9	0.051915		1.14		16.9120	timetree
+Ampelisca	92	0.119176		2.35		14.6109	midpoint
+Ampharete	45	0.112121		2.22		18.7278	midpoint
+Amphibalanus	17	0.086374	BOLD:ADX0511	7.91	set_aside	16.4425	midpoint
+Amphiduros	2	0.105545				46.4393	midpoint
+Amphiglena	18	0.177836	BOLD:AGE9253	4.07	set_aside	59.9305	midpoint
+Ampithoe	65	0.106958		2.27		21.7361	midpoint
+Ampullaceana	12	0.072712		2.53		12.9776	midpoint
+Anaecypris	3	0.078078				10.8900	timetree
+Anapagurus	18	0.087053		1.42		33.9150	midpoint
+Ancistrosyllis	5	0.126363		0.76		74.6859	midpoint
+Ancylus	13	0.045819		1.60		13.6681	midpoint
+Androniscus	5	0.118358	BOLD:AHN0566	5.39	set_aside	37.4020	midpoint
+Anguilla	14	0.043614	BOLD:AAE4923;BOLD:ACE0046;BOLD:ADC8854	9.08	set_aside	16.9246	timetree
+Anodonta	13	0.088299		1.24		14.1397	midpoint
+Anomalocera	2	0.026278				13.6566	midpoint
+Anteaeolidiella	10	0.103434	BOLD:ACI1276;BOLD:AHR9776	3.94	set_aside	14.5272	midpoint
+Antennella	2	0.089152				21.4517	midpoint
+Anthias	5	0.077298		2.47		11.6636	timetree
+Anthopleura	5	0.061813	BOLD:ACS2937	4.26	set_aside	32.8932	midpoint
+Anthura	2	0.180319				39.7144	midpoint
+Antigonia	13	0.046685		1.95		10.8834	timetree
+Aora	5	0.115190		2.99		29.4466	midpoint
+Aoroides	19	0.105280	BOLD:AEC8749;BOLD:AED8968	31.09	set_aside	28.1514	midpoint
+Aphanius	38	0.102217		2.08		23.9810	timetree
+Aphanopus	2	0.019153				0.9468	timetree
+Aphelochaeta	59	0.145987	BOLD:AEV1384	3.60	set_aside	46.2581	midpoint
+Apherusa	14	0.165453		0.91		46.2506	midpoint
+Aplysia	27	0.075855	BOLD:AAJ8417;BOLD:ABX1852;BOLD:AHJ6160	8.67	set_aside	23.8761	midpoint
+Apogon	87	0.106061	BOLD:AAN3296	4.47	set_aside	38.8177	timetree
+Apohyale	25	0.141831		1.43		25.0216	midpoint
+Apolochus	2	0.113849				14.2806	midpoint
+Aporrectodea	130	0.109757	BOLD:AFD0999;BOLD:AFD3145	16.77	set_aside	33.7189	midpoint
+Aporrhais	3	0.035654				24.7125	midpoint
+Apristurus	29	0.085229		3.45		15.0112	midpoint
+Apseudes	2	0.020650				19.8735	midpoint
+Arbacia	8	0.062216		1.39		8.8900	timetree
+Arenicola	4	0.112720		0.68		58.9931	midpoint
+Argentina	13	0.095987		1.49		16.7556	timetree
+Argyropelecus	16	0.105968		1.03		11.7445	midpoint
+Aricidea	69	0.151059	BOLD:ADF8908	3.55	set_aside	39.8526	midpoint
+Arion	143	0.116215		2.70		32.8932	midpoint
+Aristaeomorpha	3	0.065920				29.8881	midpoint
+Armadillidium	48	0.101804	BOLD:AHV4315	3.50	set_aside	37.6037	timetree
+Armina	17	0.115206		1.33		23.6661	midpoint
+Arnoglossus	33	0.133805		1.94		17.4121	timetree
+Artemia	20	0.124356		2.13		35.0091	timetree
+Ashfordia	3	0.125091				43.6250	midpoint
+Asterina	6	0.054639	BOLD:AAD8544;BOLD:ABA3458	23.64	set_aside	39.5868	midpoint
+Atelecyclus	2	0.080948				17.1260	midpoint
+Atenia	2	0.075523				22.3458	midpoint
+Athanas	2	0.087653				31.4333	midpoint
+Atherina	10	0.094624		3.24		19.5992	timetree
+Atyaephyra	18	0.095670	BOLD:ADM8110	4.22	set_aside	33.9197	midpoint
+Auchenoplax	3	0.071824				14.9892	midpoint
+Aulopus	4	0.025001		1.66		10.7341	midpoint_timetree_demoted
+Aurelia	37	0.127477		2.70		35.3916	midpoint
+Australoheros	14	0.102344		1.02		27.0836	midpoint
+Austropotamobius	26	0.062375		2.67		15.2611	timetree
+Auxis	2	0.017461				5.2711	timetree
+Axiothella	2	0.057249				34.9841	midpoint
+Babakina	4	0.072223		0.84		11.5576	midpoint
+Backeljaia	18	0.088717	BOLD:AHE2356	5.37	set_aside	25.9783	midpoint
+Baeolidia	3	0.114404	BOLD:AHV3652	96.13	set_aside	15.2782	midpoint
+Balanus	14	0.091020		2.77		20.1501	midpoint
+Balea	3	0.086164				21.1440	midpoint
+Balistes	5	0.085040		0.91		13.7488	timetree
+Barbatula	36	0.117314		2.84		27.2132	timetree
+Barbronia	7	0.088222		0.67		28.8136	midpoint
+Barbus	75	0.087677		2.96		9.1390	midpoint
+Bathynectes	3	0.015655				5.4781	midpoint
+Bathypolypus	13	0.084955		2.11		12.7600	timetree
+Bathyporeia	8	0.116094	BOLD:AHA4068	5.30	set_aside	33.2641	midpoint
+Bathytoshia	3	0.021614	BOLD:AAA5610;BOLD:AAF0735	10.25	set_aside	7.9112	midpoint
+Batracobdella	8	0.072773	BOLD:AEB2554	8.86	set_aside	27.3361	midpoint
+Belone	5	0.072883		1.17		7.4499	timetree
+Benthodesmus	11	0.074205		1.89		4.3951	timetree
+Berghia	7	0.102840		1.28		14.4855	midpoint
+Berthella	21	0.111126		1.29		20.3100	timetree
+Berthellina	14	0.082021		3.01		7.4200	timetree
+Beryx	3	0.037268				12.4152	timetree
+Bimastos	28	0.098227	BOLD:AED2501	8.42	set_aside	23.8961	timetree
+Biuve	6	0.071784		3.15		15.0442	midpoint
+Bivetiella	2	0.073087				25.4707	midpoint
+Blackfordia	3	0.068479				44.0322	midpoint
+Boettgerilla	2	0.039698				23.5155	midpoint
+Bolinichthys	9	0.050807		2.79		16.6245	midpoint
+Boops	2	0.012848				5.5310	midpoint
+Bosellia	3	0.093450				22.5682	midpoint
+Bosmina	40	0.134146		2.46		46.6740	midpoint
+Bothrioneurum	3	0.029242				14.7601	midpoint
+Bragasellus	27	0.116585		2.01		37.8721	midpoint
+Brama	6	0.071068		1.71		9.3497	midpoint
+Branchinecta	44	0.082770		3.04		42.1697	midpoint
+Branchiomma	13	0.124916		1.62		50.2280	midpoint
+Branchipus	16	0.108427		1.91		48.2651	midpoint
+Branchiura	4	0.087567		1.80		36.6092	midpoint
+Bregmaceros	33	0.122207		2.66		19.0839	timetree
+Buchholzia	20	0.113876		1.19		35.9803	midpoint
+Buenia	3	0.079419				10.2401	midpoint
+Bugula	12	0.124726		0.95		27.9773	midpoint
+Bugulina	9	0.123751		0.89		27.8677	midpoint
+Bulinus	58	0.077951	BOLD:AHV2603	3.67	set_aside	20.2298	timetree
+Bulla	16	0.105864		2.72		46.1000	timetree
+Bythinella	90	0.071254		3.17		27.8903	midpoint
+Caberea	9	0.166153		1.88		37.6081	midpoint
+Calanoides	3	0.051068				18.7865	midpoint
+Calanus	15	0.128054	BOLD:AAM9477	4.23	set_aside	17.8360	midpoint
+Calappa	24	0.110606		3.14		39.6993	midpoint
+Calcinus	63	0.116698		3.17		27.0924	midpoint
+Caligus	42	0.132191		1.29		41.6673	midpoint
+Caliphylla	5	0.077313		2.09		18.4253	midpoint
+Callanthias	6	0.073241		1.65		18.8339	midpoint
+Callinectes	17	0.112483		1.57		14.0154	timetree
+Callionymus	58	0.138318		3.10		16.8705	midpoint
+Calliostoma	48	0.110791	BOLD:AHF8048	4.57	set_aside	37.9489	midpoint
+Callogorgia	3	0.019814				19.4627	midpoint
+Calma	2	0.072461				14.0982	midpoint
+Calocalanus	12	0.090253		3.39		37.7632	midpoint
+Caloria	11	0.101568	BOLD:AHV2298	3.89	set_aside	18.0472	midpoint
+Camachoaglaja	2	0.045247				7.8506	midpoint
+Campecopea	2	0.113722				38.2896	midpoint
+Canariella	2	0.039224				24.4288	midpoint
+Cancer	17	0.093839		2.38		19.5000	timetree
+Candidula	15	0.114039		0.67		29.4534	midpoint
+Caprella	77	0.131469	BOLD:ACH7637;BOLD:ACN0029;BOLD:ACQ5179;BOLD:ACQ7125;BOLD:ACQ7126;BOLD:ADM1595	4.93	set_aside	31.8531	timetree
+Carassius	7	0.039539		1.39		13.0704	timetree
+Carcinus	5	0.059411	BOLD:ACL8382	10.63	set_aside	8.4480	timetree
+Carinaria	7	0.079899		0.73		18.7870	midpoint
+Carychium	37	0.061315	BOLD:ACB2904	3.70	set_aside	15.8673	timetree
+Caryophyllia	9	0.062194		0.99		14.4958	midpoint
+Caseolus	2	0.037314				23.8263	midpoint
+Cassiopea	26	0.109551		1.19		36.6414	midpoint
+Cavolinia	11	0.118509		1.00		18.3000	timetree
+Celleporaria	19	0.114929		2.26		41.6325	midpoint
+Celleporella	49	0.122964	BOLD:AHV0441;BOLD:AHV0447	5.71	set_aside	43.9915	midpoint
+Centracanthus	2	0.119558				16.8723	midpoint
+Centropages	17	0.129643		1.62		34.3811	midpoint
+Centrophorus	10	0.027910		1.81		24.1125	timetree
+Centroscymnus	5	0.054027		2.34		15.5828	midpoint
+Cepaea	62	0.162656	BOLD:ADC6178	4.86	set_aside	18.0289	timetree
+Cepola	6	0.106806		0.69		21.3175	timetree
+Cerastoderma	3	0.122627				12.3620	timetree
+Ceratoscopelus	9	0.052662	BOLD:AAG2569	7.10	set_aside	26.0733	timetree
+Ceriodaphnia	50	0.109579	BOLD:ACA2073;BOLD:ACJ1465;BOLD:ACJ1843;BOLD:ACZ9862	4.81	set_aside	23.0072	midpoint
+Cernosvitoviella	49	0.121435	BOLD:AAT8946;BOLD:ACM5010;BOLD:ACM5012;BOLD:ADW2351;BOLD:AEF1227;BOLD:AEF1817;BOLD:AEF1818;BOLD:AEF1819;BOLD:AEF2279;BOLD:AEF3585;BOLD:AEF3586;BOLD:AEF4620;BOLD:AEF4621;BOLD:AEF5699;BOLD:AEN5644	5.18	set_aside	37.1553	midpoint
+Cernuella	25	0.088480	BOLD:AEY1253	5.61	set_aside	36.6897	midpoint
+Cestopagurus	3	0.057276				27.5097	midpoint
+Chaetopleura	13	0.099723		1.27		33.7307	midpoint
+Chaetozone	42	0.146653	BOLD:AEW3205;BOLD:AFK0750	4.41	set_aside	46.3635	midpoint
+Chamelea	2	0.072351				37.1317	midpoint
+Characella	2	0.043022				19.6043	midpoint
+Chaunax	17	0.039167	BOLD:AAW3636	4.48	set_aside	25.9927	timetree
+Cheilopogon	18	0.032220	BOLD:AAE2803	6.76	set_aside	9.8608	timetree
+Cheirocratus	6	0.106789	BOLD:ACP8468	4.62	set_aside	37.1573	midpoint
+Chelidonichthys	9	0.039618		1.82		5.8274	midpoint
+Chelon	16	0.089674		2.01		19.2582	timetree
+Chilostoma	34	0.120032		2.81		29.3869	midpoint
+Chimaera	20	0.079201		2.26		27.1795	midpoint_timetree_demoted
+Chiroteuthis	10	0.088358		0.88		35.2400	timetree
+Chlorophthalmus	12	0.081460	BOLD:AAB2600;BOLD:AAJ0059;BOLD:ACN1321	5.78	set_aside	30.6812	timetree
+Chlorotocus	2	0.039226				18.1040	midpoint
+Chondrina	156	0.099693		2.39		23.5209	midpoint
+Chondrochelia	12	0.136618		0.73		48.5989	midpoint
+Chondrocladia	5	0.050248		2.92		24.7451	midpoint
+Chorizopora	2	0.096034				39.2122	midpoint
+Chromis	84	0.096125	BOLD:AAC3642;BOLD:AAR9811	4.93	set_aside	21.2688	timetree
+Chromogobius	2	0.066992				6.2395	midpoint
+Chrysopetalum	15	0.131472		1.56		45.2002	midpoint
+Chthamalus	42	0.098423		2.66		14.1669	midpoint
+Chydorus	34	0.130645		2.08		42.9432	midpoint
+Ciliella	3	0.051925				28.1068	midpoint
+Cinetorhynchus	8	0.198464		0.68		57.6538	midpoint
+Cingula	2	0.023798				14.3180	midpoint
+Cirriformia	25	0.135364	BOLD:ACH1035	3.97	set_aside	44.5434	midpoint
+Cladorhiza	6	0.019877		0.68		17.4597	timetree
+Clanculus	12	0.108470	BOLD:AAO6972;BOLD:ACB7592;BOLD:ACB7593	6.01	set_aside	30.7553	midpoint
+Clausilia	70	0.132550		2.61		26.2249	midpoint
+Clausocalanus	23	0.086898	BOLD:AAR9478	4.18	set_aside	32.5209	midpoint
+Clibanarius	63	0.113508	BOLD:ADV7717;BOLD:ADW2739;BOLD:ADW2740;BOLD:AEH8117;BOLD:AHV8995	4.52	set_aside	50.7700	timetree
+Clio	10	0.078650	BOLD:AAR9393	4.53	set_aside	22.6000	timetree
+Cliona	20	0.055197		1.90		26.1353	midpoint_timetree_demoted
+Cobitis	80	0.096824		3.11		20.0968	timetree
+Cochlicella	8	0.049542	BOLD:ABW4670;BOLD:AEA7931	21.76	set_aside	33.3195	midpoint
+Cochlicopa	4	0.036029		0.69		26.2704	midpoint
+Cochlodina	12	0.122761		1.81		17.5033	timetree
+Cochlostoma	48	0.072128		1.74		7.1400	timetree
+Coelorinchus	66	0.093046		2.95		22.7686	timetree
+Columbella	15	0.081097		1.18		21.3811	midpoint
+Conchoderma	5	0.107133		2.49		26.7069	midpoint
+Conger	21	0.106230		3.40		47.8841	timetree
+Conopea	15	0.084154		0.78		16.2298	midpoint
+Copula	6	0.122337		1.98		69.3161	midpoint
+Coralliophila	76	0.136448		2.44		20.1192	midpoint
+Corbicula	19	0.099914		1.07		45.2560	midpoint
+Coris	22	0.093726		3.31		14.7114	midpoint
+Corneola	2	0.029835				14.6510	midpoint
+Cornu	8	0.073427	BOLD:AHU7387	4.53	set_aside	10.0903	midpoint
+Corolla	3	0.052377				16.0508	midpoint
+Corophium	5	0.122519		2.22		26.5406	midpoint
+Coscinasterias	3	0.085875				49.6283	midpoint
+Cottus	55	0.060835		1.84		11.1764	timetree
+Craspedacusta	3	0.090744				60.3072	midpoint
+Cratena	9	0.118792	BOLD:ACH7436	3.75	set_aside	19.5175	midpoint
+Crepidula	46	0.100330	BOLD:AAI8318;BOLD:AHU7168;BOLD:AHU7181	5.66	set_aside	24.1019	midpoint
+Crepipatella	5	0.085315		1.14		22.2253	midpoint
+Creseis	24	0.126914	BOLD:AGE2348;BOLD:AGE2351	4.39	set_aside	18.9412	midpoint
+Crimora	4	0.077703		0.89		13.0752	midpoint
+Crisilla	3	0.141715				34.9400	midpoint
+Cryptosaccus	2	0.116283				28.6103	midpoint
+Ctenocalanus	2	0.075570				30.9260	midpoint
+Cuthona	7	0.106416		2.58		17.0851	midpoint
+Cuvierina	3	0.025923				13.0241	midpoint
+Cyathura	2	0.089827				28.0306	midpoint
+Cyerce	22	0.120237		2.10		22.9777	midpoint
+Cymbula	5	0.072870		1.88		30.0854	midpoint
+Cymodoce	10	0.121560		2.38		39.5873	midpoint
+Cynoscion	19	0.077251		2.61		11.4915	midpoint
+Cypridopsis	35	0.109457	BOLD:ABA0354;BOLD:ACJ9892;BOLD:ADX3106	4.90	set_aside	45.8804	midpoint
+Cyttopsis	6	0.054943		2.91		16.2205	timetree
+Dactylopterus	2	0.015189				9.6293	midpoint
+Daphnella	6	0.091189	BOLD:AAI9573;BOLD:AHU6558	8.69	set_aside	21.2792	midpoint
+Daphnia	153	0.130424		1.54		152.8381	midpoint
+Dardanus	41	0.117094		1.44		37.4400	timetree
+Dasyatis	11	0.087021		1.44		15.8739	midpoint
+Deania	4	0.027877		1.52		17.9282	timetree
+Dendrobaena	94	0.121992	BOLD:AEZ3646	5.01	set_aside	35.5488	midpoint
+Dendrodoris	27	0.306873		2.53		26.8954	midpoint
+Dendrophyllia	4	0.013764		2.16		7.3167	midpoint
+Dendropoma	100	0.146453	BOLD:ACB6930;BOLD:ADM1689;BOLD:ADM2200;BOLD:ADM2376;BOLD:ADM2377	5.62	set_aside	29.5475	midpoint
+Dentex	10	0.067143	BOLD:AED5839	8.81	set_aside	10.7980	midpoint
+Deosergestes	4	0.078466		0.88		6.8776	midpoint
+Dero	14	0.069987	BOLD:AHX6248	8.88	set_aside	24.4284	midpoint
+Deroceras	122	0.095544	BOLD:AHJ3675	10.08	set_aside	30.3653	midpoint
+Desmodema	2	0.087278				15.7825	midpoint
+Dexamine	6	0.098407		1.14		13.2769	midpoint
+Diaixis	2	0.096234				31.5933	midpoint
+Diaphanosoma	57	0.153756		2.50		50.2184	midpoint
+Diaphorodoris	8	0.076413		1.68		15.7272	midpoint
+Diapterus	6	0.092352		0.96		26.3853	timetree
+Dicentrarchus	4	0.059735		1.26		22.2386	timetree
+Dicologlossa	2	0.058227				6.8017	midpoint
+Didogobius	2	0.072044				6.4705	midpoint
+Dina	31	0.093093		3.32		29.5983	midpoint
+Diodora	39	0.119568		3.35		67.8239	timetree
+Diogenes	65	0.114207		1.94		28.4888	midpoint
+Diopatra	23	0.112075	BOLD:AHU6018	4.08	set_aside	18.3579	midpoint
+Diplodus	9	0.058434	BOLD:AAC2260	3.94	set_aside	9.3671	midpoint
+Dipturus	27	0.031840		3.38		13.2334	midpoint
+Discodoris	8	0.113414		1.18		19.7056	midpoint
+Discula	10	0.067085		2.54		26.4284	midpoint
+Dodecaceria	10	0.132610		0.70		44.0879	midpoint
+Dolabrifera	8	0.074675		1.47		23.6897	midpoint
+Donax	33	0.128891		1.90		58.1296	midpoint
+Doriopsilla	17	0.098481		1.48		15.2362	midpoint
+Doris	65	0.108145	BOLD:AAA4062;BOLD:AAA4079;BOLD:ACQ0479;BOLD:AGB7738;BOLD:AGD9403	3.93	set_aside	21.2810	midpoint
+Dosima	2	0.021777				13.4146	midpoint
+Doto	58	0.094299		2.70		17.1736	midpoint
+Drilonereis	15	0.131061		1.49		45.2500	midpoint
+Dromia	3	0.043250	BOLD:AEE6550	4.39	set_aside	22.6605	midpoint
+Dugastella	2	0.109979				43.8094	timetree
+Dynamene	10	0.135568	BOLD:ADB0390	3.75	set_aside	41.8060	midpoint
+Dysponetus	10	0.135713		1.49		45.9233	midpoint
+Ebalia	11	0.088743	BOLD:AAF6221	5.73	set_aside	33.7140	midpoint
+Echinogammarus	48	0.149854		1.85		24.9528	midpoint
+Echinolittorina	62	0.082956		1.96		28.7980	midpoint
+Ecrobia	11	0.031913	BOLD:ADK6234	3.83	set_aside	7.6783	midpoint
+Edmundsella	2	0.091893				9.2184	midpoint
+Eisenia	168	0.120047	BOLD:ACV8810	4.00	set_aside	72.6283	timetree
+Eiseniella	20	0.105784	BOLD:AFT6208	4.03	set_aside	33.1030	midpoint
+Eiseniona	4	0.026055	BOLD:ACQ7235	3.78	set_aside	20.5063	timetree
+Elasmopus	34	0.124803	BOLD:AGP7486	3.56	set_aside	39.7168	midpoint
+Ellisina	2	0.138237				46.6650	midpoint
+Elona	2	0.008562				13.8519	midpoint
+Eluma	3	0.022030				12.1185	midpoint
+Elysia	138	0.111120		2.76		17.8001	midpoint
+Emarginula	17	0.127638		2.07		80.7179	timetree
+Embletonia	4	0.124923	BOLD:AEF0028	5.58	set_aside	24.6439	midpoint
+Enchytraeus	182	0.109613	BOLD:AEF3045	8.09	set_aside	35.3004	midpoint
+Enchytronia	66	0.108756		2.74		35.1622	midpoint
+Engraulis	10	0.118979		1.99		22.9521	timetree
+Ensis	15	0.095874		2.19		35.7922	timetree
+Eobania	5	0.028597		0.67		7.8144	midpoint
+Ephydatia	2	0.254672				29.2666	timetree
+Epigonus	18	0.083273		1.99		27.6582	timetree
+Epinephelus	107	0.101452	BOLD:ACC0356	10.35	set_aside	23.8928	timetree
+Ercolania	24	0.121410		1.37		28.9673	midpoint
+Eriocheir	6	0.070366		0.70		5.8310	timetree
+Eriphia	6	0.086414		1.81		25.9828	timetree
+Escharoides	7	0.124598		1.34		98.5728	timetree
+Eteone	53	0.104539		3.12		43.8508	midpoint
+Etmopterus	28	0.066881		1.81		65.3948	timetree
+Eualus	14	0.114734	BOLD:AAP2658	3.85	set_aside	39.4087	midpoint
+Eubranchus	30	0.108047		1.40		17.2155	midpoint
+Euchaeta	7	0.131230		1.23		13.9860	midpoint
+Euchirella	7	0.080274		1.92		27.1878	midpoint
+Euchone	5	0.169675	BOLD:AHM3834;BOLD:AHM3835	6.89	set_aside	58.5391	midpoint
+Euclymene	16	0.116482		2.12		35.2860	midpoint
+Euconulus	10	0.031452	BOLD:ACA7324	3.98	set_aside	33.8805	midpoint
+Eucyclops	33	0.148640		3.49		21.9115	midpoint
+Eucypris	51	0.129098		2.32		49.8272	midpoint
+Eudiaptomus	7	0.119902		1.01		38.4025	midpoint
+Euglesa	41	0.070277		3.07		22.5977	midpoint
+Eulalia	40	0.109008		2.86		44.7783	midpoint
+Eumida	34	0.099331	BOLD:AAY3570;BOLD:AAY3574	4.67	set_aside	29.4314	midpoint
+Eunice	63	0.152897		0.98		52.7602	midpoint
+Euomphalia	6	0.108930		1.44		40.7096	midpoint
+Euraphia	3	0.055031	BOLD:AAC0075;BOLD:AAY3000	7.90	set_aside	10.5932	midpoint
+Eurydice	4	0.125997		3.40		38.1746	midpoint
+Eurynome	3	0.089297				24.1925	midpoint
+Eurysyllis	10	0.189338		0.96		69.1332	midpoint
+Eusergestes	2	0.030013				4.2535	midpoint
+Euspira	12	0.086116		2.07		38.4066	midpoint
+Eusyllis	20	0.134593		3.41		58.2880	midpoint
+Euterpina	2	0.066512				34.1066	midpoint
+Facciolella	6	0.077939	BOLD:AEA5065	14.17	set_aside	11.7892	timetree
+Facelina	12	0.111110		1.56		18.8759	midpoint
+Favorinus	12	0.105421		1.03		18.3863	midpoint
+Felimare	25	0.086685		2.39		15.5484	midpoint
+Felimida	14	0.106121		2.61		17.2034	midpoint
+Ferrissia	10	0.059041	BOLD:ADR3550	3.51	set_aside	15.5154	midpoint
+Ferussacia	4	0.021139		2.09		19.6231	midpoint
+Figularia	2	0.099855				28.2907	midpoint
+Fiona	3	0.060685				12.9019	midpoint
+Firoloida	3	0.024680				5.6331	midpoint
+Flabellina	4	0.117006		2.72		10.4020	midpoint
+Fridericia	280	0.117128	BOLD:ACG1712	3.71	set_aside	36.4905	midpoint
+Funchalia	2	0.052343				30.7235	midpoint
+Fusinus	18	0.076152		2.11		20.7190	midpoint
+Gadella	9	0.090222		1.92		17.6953	midpoint
+Gadomus	6	0.041914		3.07		12.4510	midpoint
+Gadus	9	0.064957		3.02		4.1541	timetree
+Gaidropsarus	10	0.106337		0.88		15.2554	midpoint
+Galathea	166	0.116391	BOLD:ADW2846;BOLD:AHP1522	3.70	set_aside	35.1092	midpoint
+Galathowenia	6	0.141964		0.85		60.8248	midpoint
+Galba	19	0.059045		1.30		18.3734	midpoint
+Galeus	7	0.058343	BOLD:AAI7055	8.38	set_aside	12.4199	midpoint
+Gallardoneris	2	0.097895				47.9260	midpoint
+Gambusia	26	0.105964	BOLD:AAM2153	3.88	set_aside	11.7041	timetree
+Gammarella	3	0.089216				38.3171	midpoint
+Gammaropsis	4	0.112477	BOLD:ADR4145;BOLD:ADR7378	5.64	set_aside	33.9597	midpoint
+Gammarus	885	0.158170	BOLD:AFT7410	3.51	set_aside	47.7827	table_capped
+Ganula	4	0.051434		1.56		27.9736	midpoint
+Gargamella	2	0.102561				18.7391	midpoint
+Gasterosteus	4	0.082973		1.04		12.1558	timetree
+Gastropteron	7	0.108448		1.04		18.9221	midpoint
+Geitodoris	4	0.089151		0.89		17.4711	midpoint
+Gennadas	14	0.101894		1.67		37.1589	midpoint
+Geodia	30	0.040496		1.42		32.1666	timetree
+Geomalacus	40	0.109801		1.38		31.9726	midpoint
+Gibbula	24	0.114465		1.21		18.2644	midpoint
+Gibbulinella	2	0.025984				30.7952	midpoint
+Gittenbergeria	2	0.014070				17.7563	midpoint
+Glaucus	8	0.115009		1.41		20.3279	midpoint
+Globulidrilus	19	0.094561		1.01		32.7873	midpoint
+Glycera	73	0.134765	BOLD:AHR3231	5.24	set_aside	51.3512	midpoint
+Glycinde	12	0.110277		0.79		37.6123	midpoint
+Glycymeris	5	0.115823		0.79		48.6260	midpoint
+Gobio	30	0.057444		3.19		10.2821	timetree
+Gobius	21	0.109052	BOLD:ACC0296	5.36	set_aside	18.8402	timetree
+Goneplax	5	0.053485	BOLD:ACI2562	12.31	set_aside	27.7442	midpoint
+Goniada	28	0.112007		1.56		37.9062	midpoint
+Grammicolepis	3	0.057464				14.7283	midpoint
+Graniberia	3	0.058965				18.0892	midpoint
+Granopupa	3	0.076367				20.5861	midpoint
+Grapsus	10	0.108872	BOLD:ADK2931	6.90	set_aside	17.5775	midpoint
+Gyraulus	74	0.086878		3.00		26.9426	midpoint
+Haemopis	22	0.078835	BOLD:AAI1954;BOLD:AAI6526;BOLD:ABY6228;BOLD:AEB0055;BOLD:AGO2983;BOLD:AGO2984;BOLD:AGO2985;BOLD:AGO2986	4.44	set_aside	22.2793	midpoint
+Halichondria	10	0.091466		1.96		27.5175	midpoint
+Haliclona	48	0.092955	BOLD:AAM1198;BOLD:ACH2276;BOLD:ADX0725;BOLD:ADX6953;BOLD:ADX6954;BOLD:ADX6955;BOLD:ADX6956;BOLD:AFT3623	17.02	set_aside	59.8865	midpoint_timetree_demoted
+Haliotis	32	0.105966		2.79		42.0700	timetree
+Haliphron	2	0.016308				13.1454	midpoint
+Halobatrachus	2	0.024706				14.9485	midpoint
+Halophiloscia	15	0.090938		1.62		38.2514	midpoint
+Haminoea	40	0.105367		2.95		18.5946	midpoint
+Haploginglymus	5	0.121606		1.12		12.2970	timetree
+Harmothoe	86	0.116443		3.25		24.1573	midpoint
+Harpinia	7	0.180720		0.67		17.9923	midpoint
+Hatumia	3	0.087052				25.4222	midpoint
+Haustorius	2	0.106221				13.7939	midpoint
+Hediste	72	0.075113	BOLD:AEE1424	4.27	set_aside	39.1614	midpoint
+Helicella	17	0.112198		2.61		50.1421	midpoint
+Helicigona	6	0.054767		1.40		19.8502	midpoint
+Helicodonta	4	0.102866		1.25		26.0790	midpoint
+Helix	143	0.113168		2.90		9.6705	timetree
+Helobdella	66	0.129068		3.20		36.4050	midpoint
+Hemicycla	39	0.086268	BOLD:AHU0953	3.58	set_aside	9.6100	midpoint
+Hemimysis	15	0.114371		1.32		38.3027	midpoint
+Henlea	68	0.113601		2.27		35.9369	midpoint
+Heptranchias	4	0.013696	BOLD:AEB3916	7.31	set_aside	16.5757	midpoint
+Herbstia	2	0.085145				21.9950	midpoint
+Hermaea	6	0.108541		1.31		31.0607	midpoint
+Hermania	2	0.041158				9.8765	midpoint
+Heteralepas	3	0.086197				23.9556	midpoint
+Heteroclymene	3	0.129043	BOLD:AHM2723	3.95	set_aside	37.1398	midpoint
+Heterocypris	14	0.118157		2.19		47.6690	midpoint
+Heteromastus	9	0.111460		1.40		53.2990	midpoint
+Heterorhabdus	11	0.092701		1.63		28.7061	midpoint
+Hexadella	7	0.035369		0.95		25.6391	midpoint
+Hexaplex	8	0.084868		2.16		23.8467	midpoint
+Hippocampus	41	0.115331	BOLD:AAD7359;BOLD:AEG4447	4.46	set_aside	11.2797	timetree
+Hippolyte	20	0.128655	BOLD:ACM1554;BOLD:ADW9935	4.38	set_aside	41.7310	midpoint
+Hirtomurex	16	0.132847		2.20		19.8519	midpoint
+Hirudo	17	0.116609	BOLD:AAC0140	5.08	set_aside	27.0962	midpoint
+Holothuria	89	0.114628		2.66		45.6381	midpoint_timetree_demoted
+Homola	5	0.080952		0.67		25.3233	midpoint
+Hoplostethus	16	0.061660		1.19		18.2254	timetree
+Hormogaster	106	0.107077		3.32		20.6573	midpoint
+Hyalocylis	3	0.043885				11.1380	midpoint
+Hydatina	4	0.039733		2.33		9.3776	midpoint
+Hydra	33	0.093408		2.14		39.6006	midpoint_timetree_demoted
+Hydrobia	5	0.026391	BOLD:AHT9929	19.67	set_aside	11.7045	timetree
+Hygophum	19	0.102798		2.51		16.9981	timetree
+Hygromia	19	0.100576		1.57		39.1174	midpoint
+Hymeniacidon	4	0.080700		0.90		27.7564	timetree
+Hymenopenaeus	6	0.073287		0.77		14.3622	midpoint
+Hyperoplus	2	0.033264				10.6318	midpoint
+Hypleurochilus	5	0.029073	BOLD:AAC3143;BOLD:AAC3144	77.39	set_aside	4.5481	timetree
+Hypselodoris	39	0.093739		3.19		16.1687	midpoint
+Hystricella	5	0.040646		2.59		30.1799	midpoint
+Iberobathynella	22	0.116687		1.95		35.0374	midpoint
+Iberochondrostoma	5	0.044189		1.16		5.4794	timetree
+Iberogammarus	2	0.015084				7.9167	midpoint
+Iberus	69	0.107738		2.43		12.3525	midpoint
+Ictalurus	9	0.054951		1.46		16.0058	timetree
+Idas	29	0.103726		2.67		45.8276	timetree
+Idotea	30	0.124906		3.18		43.9296	timetree
+Illex	2	0.016799				5.5626	midpoint_timetree_demoted
+Ilyocryptus	15	0.108701	BOLD:ACA1859	5.25	set_aside	32.3098	midpoint
+Inachus	8	0.038849	BOLD:ABX4182	3.79	set_aside	10.4012	midpoint
+Iphimedia	4	0.214027		0.74		19.5802	midpoint
+Iphinoe	4	0.073218		0.96		35.4656	midpoint
+Iphitime	6	0.119570		0.97		24.4797	midpoint
+Ircinia	6	0.032487		0.77		17.2064	midpoint_timetree_demoted
+Isarachnanthus	4	0.045879		0.81		41.5965	midpoint
+Islamia	8	0.064254		0.92		13.8088	timetree
+Isurus	2	0.071652				40.4138	timetree
+Janira	9	0.117269		1.13		48.3747	midpoint
+Janolus	19	0.114154		2.22		23.5577	midpoint
+Jassa	19	0.123904		1.88		28.2336	midpoint
+Joeropsis	7	0.199150		1.67		76.0400	timetree
+Jorunna	21	0.106560		2.03		19.1009	midpoint
+Jujubinus	33	0.088906	BOLD:ADR2133;BOLD:ADR5548;BOLD:ADR8392;BOLD:AHT8729	9.01	set_aside	15.1676	timetree
+Knoutsodonta	7	0.081298	BOLD:AAC9568;BOLD:AAZ3494	8.82	set_aside	16.2221	midpoint
+Kyphosus	9	0.051959		2.70		8.9685	timetree
+Labrus	3	0.063114				12.8836	timetree
+Lacydonia	17	0.100543		1.12		43.0046	midpoint
+Laetmonice	15	0.120776		2.15		59.0814	midpoint
+Laevicardium	2	0.109030				28.5690	timetree
+Lagis	2	0.078982				19.0597	midpoint
+Lagocephalus	21	0.096517	BOLD:AHM1680;BOLD:AHM1681;BOLD:AHM1682	4.98	set_aside	16.1853	midpoint
+Lampadena	13	0.072544	BOLD:AAU5685	4.29	set_aside	36.8036	timetree
+Lampanyctus	38	0.090951	BOLD:AAF2850	4.85	set_aside	26.5839	timetree
+Lampetra	13	0.049585		1.98		26.7151	timetree
+Laona	5	0.113578		0.89		24.5765	midpoint
+Laonice	47	0.148680		2.16		55.5897	midpoint
+Lasaea	8	0.102439		1.30		53.6884	midpoint
+Latreillia	2	0.017767				4.8070	timetree
+Lauria	10	0.043976		3.36		25.1092	midpoint
+Learchis	2	0.105002				18.3497	midpoint
+Lehmannia	15	0.079203		2.46		27.6469	midpoint
+Leiochone	3	0.080082	BOLD:ADB2453;BOLD:ADW3071	10.35	set_aside	41.3766	midpoint
+Lekanesphaera	4	0.111568		1.68		37.9253	midpoint
+Leodice	12	0.142093		2.28		50.8620	midpoint
+Lepadogaster	3	0.054285				6.8894	timetree
+Lepas	27	0.125455		2.69		70.6460	timetree
+Lepidion	8	0.058834		2.72		6.4317	timetree
+Lepidochitona	17	0.148166		0.67		42.2247	midpoint
+Lepidocybium	2	0.013347				7.5551	midpoint
+Lepidonotus	27	0.121342	BOLD:ADX6043	3.50	set_aside	24.6603	midpoint
+Lepidopleurus	5	0.034225	BOLD:ACS4583;BOLD:AHW0876	7.17	set_aside	16.9615	midpoint
+Lepidopus	2	0.107609				15.4336	midpoint
+Lepidorhombus	3	0.047685				17.1177	timetree
+Lepidotrigla	35	0.050920	BOLD:ACB3288;BOLD:ADJ8721	5.79	set_aside	12.5689	timetree
+Lepomis	24	0.081746	BOLD:ADW8529	5.83	set_aside	14.2998	timetree
+Leptaxis	10	0.090763		0.75		25.2766	midpoint
+Leptochiton	40	0.133069		1.54		33.4448	midpoint
+Lernaea	4	0.104968		0.91		33.7864	midpoint
+Lesueurigobius	2	0.085526				23.3467	timetree
+Leuciscus	6	0.035005	BOLD:AAE3495	5.28	set_aside	15.7721	timetree
+Leucoraja	8	0.056096		2.47		13.3161	midpoint
+Leucothoe	22	0.205244		3.15		19.1742	midpoint
+Levinsenia	10	0.155019	BOLD:ACD1704	3.99	set_aside	40.3716	midpoint
+Limacia	9	0.085735		1.67		13.7343	midpoint
+Limacus	5	0.062071	BOLD:ADR8326	18.02	set_aside	24.4749	midpoint
+Limapontia	3	0.104689	BOLD:AHD2409	3.67	set_aside	26.8987	midpoint
+Limax	53	0.066747		1.75		25.3800	midpoint
+Limnodriloides	8	0.113018	BOLD:ACQ7482;BOLD:ADR7330	7.77	set_aside	41.5904	midpoint
+Limnodrilus	88	0.133485		2.03		35.5846	midpoint
+Limnoria	9	0.163808		1.91		58.9165	midpoint
+Liocarcinus	8	0.080635		1.09		17.5983	timetree
+Liparis	24	0.085977		3.49		9.1746	midpoint
+Lipkea	2	0.099810				62.7782	midpoint
+Lipogenys	2	0.043585				12.1344	midpoint
+Littorina	16	0.099703	BOLD:ADZ9662	4.22	set_aside	70.1541	timetree
+Lobianchia	6	0.088251		0.78		33.4120	timetree
+Loligo	4	0.055720	BOLD:AGD4615	7.72	set_aside	18.2623	midpoint
+Lophius	10	0.105903		2.95		22.4431	timetree
+Lophochaeta	4	0.034803		1.79		18.1699	midpoint
+Lophozozymus	5	0.090803		1.31		19.0727	midpoint
+Lucicutia	24	0.121479		3.28		33.0542	midpoint
+Luciobarbus	25	0.040049		1.50		4.7898	timetree
+Lumbricillus	47	0.118708		2.27		36.7358	midpoint
+Lumbriculus	22	0.116129		1.91		43.3820	midpoint
+Lumbricus	121	0.114777		2.57		29.6080	timetree
+Lumbrineris	49	0.135847		2.06		20.2113	midpoint
+Lyconus	2	0.027416				1.2110	timetree
+Lymnaea	18	0.069689	BOLD:AGK8515;BOLD:AHT6801;BOLD:AHT6802	4.86	set_aside	19.9609	midpoint
+Lysidice	10	0.145332		0.92		51.4385	midpoint
+Lysippe	8	0.115716		1.11		28.2042	midpoint
+Macrochaeta	8	0.116615		1.75		49.2318	midpoint
+Macrogastra	20	0.113955		3.30		24.3159	midpoint
+Macropipus	2	0.072932				11.8241	midpoint
+Macropodia	6	0.071548		1.41		14.1153	midpoint
+Macroramphosus	5	0.029708		3.37		6.0188	timetree
+Macrorhynchia	4	0.058415		0.85		35.3762	midpoint
+Macrothrix	10	0.115318		1.32		33.2787	midpoint
+Macrotritopus	4	0.091527		0.78		25.3551	midpoint
+Magallana	12	0.088448	BOLD:AGK8372;BOLD:AHR1176	3.90	set_aside	33.1282	midpoint
+Magelona	33	0.131911		2.37		63.8179	midpoint
+Maja	5	0.093313		0.67		24.7305	midpoint
+Malacocephalus	4	0.085966		2.33		18.4246	timetree
+Malacolimax	3	0.031194	BOLD:ABA4144;BOLD:AHM0816	174.17	set_aside	17.3505	midpoint
+Maldane	10	0.117977		2.04		50.2212	midpoint
+Margaretta	2	0.117347				56.6543	midpoint
+Margaritifera	11	0.068824		1.55		25.5770	midpoint_timetree_demoted
+Marinogammarus	3	0.219957				30.2312	midpoint
+Marionia	18	0.110901		1.63		18.6241	midpoint
+Marionina	172	0.141631		1.88		40.1262	midpoint
+Marphysa	43	0.122479	BOLD:ADM4181;BOLD:AFT2452;BOLD:AGK8297	4.72	set_aside	43.7434	midpoint
+Marsenina	8	0.096881		1.21		25.4397	midpoint
+Marthasterias	2	0.014831				20.6247	midpoint
+Maurolicus	6	0.099295		1.43		11.3687	midpoint
+Megabalanus	16	0.097582		1.89		10.8700	timetree
+Megasyllis	6	0.138958		1.55		59.2256	midpoint
+Melanochlamys	9	0.129234		1.09		20.1858	midpoint
+Melanoides	21	0.082107	BOLD:AHV7567	3.97	set_aside	37.6890	midpoint
+Melanonus	2	0.054400				10.6983	timetree
+Melanopsis	14	0.076242		1.84		36.3179	midpoint
+Melita	24	0.137347		2.63		38.5650	midpoint
+Membranipora	15	0.087140		2.31		52.8665	midpoint
+Menetus	2	0.013684				10.6927	midpoint
+Mengoana	4	0.063202		0.95		21.0926	midpoint
+Mercuria	18	0.045799	BOLD:AGE7234	18.10	set_aside	12.3988	timetree
+Merluccius	10	0.049107		3.30		15.4231	timetree
+Mesenchytraeus	50	0.105599		2.78		64.5118	timetree
+Mesocalanus	5	0.107245		1.57		38.0545	midpoint
+Mesochaetopterus	4	0.135180		1.93		32.5373	midpoint
+Mesocyclops	24	0.109257	BOLD:AAN2460;BOLD:ACQ6126	3.85	set_aside	15.1673	midpoint
+Mesonerilla	3	0.109993				44.3268	midpoint
+Metacrangonyx	41	0.105446		3.10		76.4179	timetree
+Metapenaeopsis	39	0.091141		2.49		48.3900	timetree
+Metapenaeus	23	0.094473		2.80		38.3700	timetree
+Metridia	13	0.133048		1.76		18.3494	midpoint
+Microchirus	5	0.081675		2.95		7.0286	rate_capped
+Microdeutopus	8	0.125771		0.96		30.7693	midpoint
+Micromelo	4	0.073168		1.05		12.7257	midpoint
+Micropogonias	3	0.034437	BOLD:AHR0923	27.05	set_aside	14.4227	timetree
+Microporella	25	0.146627		2.13		53.1818	midpoint
+Micropterus	9	0.037235		2.52		9.4352	timetree
+Microscolex	15	0.110679		2.28		41.4825	midpoint
+Microstomus	3	0.054532				8.9338	timetree
+Miktoniscus	2	0.096355				33.7469	midpoint
+Milax	4	0.038685		0.79		37.5752	midpoint
+Mimachlamys	2	0.093423				32.2041	midpoint_timetree_demoted
+Mitra	11	0.108678		2.63		28.2133	midpoint
+Mobula	8	0.058876		0.89		22.2700	timetree
+Moina	48	0.097680	BOLD:ADM7342;BOLD:ADM7422;BOLD:AHT5379;BOLD:AHW2097	9.04	set_aside	39.8281	midpoint
+Moitessieria	4	0.081117	BOLD:AHT5370	12.82	set_aside	29.7580	midpoint
+Mola	3	0.024136				6.6890	midpoint
+Mollia	2	0.082035				13.8341	midpoint
+Molva	3	0.046848				23.5877	timetree
+Monacha	41	0.101661		3.18		39.3279	midpoint
+Monocorophium	6	0.101121	BOLD:AHE9359	3.65	set_aside	24.1118	midpoint
+Monodaeus	4	0.030969		0.99		11.1385	midpoint
+Mourgona	7	0.105177		1.11		21.4906	midpoint
+Mugil	39	0.104312	BOLD:ADK3460;BOLD:ADL3842;BOLD:ADL3843	5.64	set_aside	24.6392	timetree
+Mullus	7	0.091004		1.26		24.2248	timetree
+Munida	112	0.108436	BOLD:AEK8506	3.70	set_aside	36.7129	midpoint
+Munidopsis	103	0.127338		2.41		82.2900	timetree
+Muraena	6	0.098465		1.84		32.4843	midpoint
+Mustelus	14	0.058615		2.10		25.6782	timetree
+Mycale	7	0.058165		1.39		28.6096	midpoint_timetree_demoted
+Myliobatis	12	0.053395		1.52		15.6384	midpoint
+Myosotella	6	0.126475		1.62		67.9410	midpoint
+Myrianida	31	0.133985		1.50		58.1563	midpoint
+Mystides	6	0.100741	BOLD:ACM6197;BOLD:AGO6541	7.13	set_aside	17.4049	midpoint
+Mytilus	23	0.120903	BOLD:ACJ0771;BOLD:ACJ4542	7.10	set_aside	72.6009	timetree
+Myxicola	13	0.097699		1.16		44.4203	midpoint
+Myxilla	4	0.063968		0.80		40.9216	midpoint
+Myzobdella	4	0.025775	BOLD:AHK8053	8.71	set_aside	19.0105	midpoint
+Nais	41	0.089838		2.65		27.6767	midpoint
+Namanereis	2	0.105552				46.4231	midpoint
+Nannocalanus	3	0.072398				13.4110	midpoint
+Nassarius	189	0.092376	BOLD:AAO7538;BOLD:AAO7542	4.51	set_aside	22.6611	timetree
+Natatolana	2	0.079524				68.1000	timetree
+Naucrates	2	0.040846				7.5472	midpoint
+Neanthes	20	0.132065		3.19		51.9271	midpoint
+Neoergasilus	4	0.102973		1.25		48.1622	midpoint
+Neomerinthe	10	0.082160	BOLD:AAZ7680	4.30	set_aside	15.3037	midpoint
+Neoscopelus	8	0.055621	BOLD:AAF3790	3.96	set_aside	18.8591	timetree
+Nephtys	31	0.132473	BOLD:AAU5489;BOLD:ACP1686;BOLD:ADH6420;BOLD:ADP0242	8.79	set_aside	33.9885	midpoint
+Nepinnotheres	2	0.077784				12.7739	midpoint
+Nereiphylla	21	0.103934		1.23		17.6786	midpoint
+Nereis	85	0.139489		2.06		20.4805	midpoint
+Nettastoma	9	0.093646		3.30		22.9551	midpoint
+Nezumia	16	0.075982		2.04		13.4608	midpoint
+Ninoe	7	0.093308		1.92		46.7898	midpoint
+Niphargus	1028	0.136181	BOLD:ACQ7108;BOLD:AHA9943;BOLD:AHA9947	4.59	set_aside	20.2531	table_capped
+Notacanthus	9	0.064786		1.30		23.4076	timetree
+Notomastus	10	0.138749	BOLD:ACB7866;BOLD:ADL9889;BOLD:AHN5051;BOLD:AHT3639	6.62	set_aside	59.4668	midpoint
+Notoplites	3	0.102284	BOLD:AGP6495	4.28	set_aside	29.5075	midpoint
+Nucella	11	0.066394		2.14		12.3500	timetree
+Nudisyllis	2	0.136244				58.6445	midpoint
+Obscurella	4	0.093251		1.18		15.1509	midpoint
+Ocenebra	2	0.019908				5.3866	midpoint
+Ocinebrina	26	0.076302		1.85		10.5455	midpoint
+Oconnorella	2	0.108310				35.0900	midpoint
+Octodrilus	56	0.115293	BOLD:AEO2819	3.91	set_aside	51.1706	timetree
+Octolasion	12	0.096720		3.43		70.7045	timetree
+Octopus	82	0.101818		3.48		9.1550	timetree
+Oculina	2	0.023708				3.0411	timetree
+Odontosyllis	35	0.123540		2.63		55.8433	midpoint
+Odostomia	25	0.164436	BOLD:AEE4593;BOLD:AEH4130;BOLD:AEH4132;BOLD:AFI5925	6.63	set_aside	77.4688	midpoint
+Oestophora	32	0.100716		3.40		27.3447	midpoint
+Okenia	24	0.101899		2.45		14.5113	midpoint
+Omalogyra	2	0.152889				74.6995	midpoint
+Oncaea	6	0.134576		1.21		20.0000	timetree
+Onchidella	26	0.135206		1.29		70.2468	midpoint
+Ophelina	23	0.148740	BOLD:ACA1249;BOLD:ACG1324	6.89	set_aside	68.1620	midpoint
+Ophichthus	65	0.102569	BOLD:ADA9592;BOLD:ADL2802	6.33	set_aside	17.1049	midpoint
+Ophiothrix	81	0.127729		1.91		46.0457	timetree
+Ophryotrocha	68	0.191398	BOLD:AAI1130;BOLD:AAW9248;BOLD:AAW9252;BOLD:AAW9253;BOLD:ACB6826;BOLD:AHI2772;BOLD:AHT3098	4.63	set_aside	30.9715	midpoint
+Opisthoteuthis	10	0.078158		3.47		35.1246	midpoint
+Oplophorus	6	0.065415		1.33		25.2737	timetree
+Orchestia	10	0.122212		2.94		7.1600	timetree
+Orculella	7	0.095169		1.71		8.7381	midpoint
+Orientogalba	3	0.031679				12.1141	midpoint
+Ostrea	17	0.108685		2.80		36.7232	midpoint
+Otala	5	0.083755	BOLD:AHT2745	6.71	set_aside	15.1409	midpoint
+Owenia	15	0.100931		1.99		51.2867	midpoint
+Oxychilus	56	0.108602		2.87		34.9970	midpoint
+Oxyloma	48	0.095833	BOLD:ACP8686;BOLD:AFT0929;BOLD:AGU9287	6.71	set_aside	59.1408	midpoint
+Oxynoe	10	0.130336		1.84		37.6264	midpoint
+Oxynotus	5	0.035736		1.79		28.5946	timetree
+Pachygrapsus	8	0.114165		2.92		27.8618	timetree
+Pagellus	3	0.074146				11.3471	midpoint
+Pagodula	4	0.057965		1.08		13.3509	midpoint
+Pagrus	5	0.058735		0.74		34.6904	timetree
+Pagurus	105	0.106589	BOLD:AEH9342;BOLD:AGD3012	4.65	set_aside	70.1400	timetree
+Palaemon	74	0.128912		2.91		44.2542	midpoint
+Palicus	3	0.076038				33.0804	midpoint
+Palinurus	7	0.051256		1.09		14.1316	timetree
+Palio	3	0.047841				7.8960	midpoint
+Pandalus	8	0.109462	BOLD:AAA9256;BOLD:AAX1996	11.41	set_aside	30.2426	midpoint
+Pangasianodon	4	0.064348		2.94		15.4128	timetree
+Panopeus	13	0.081676	BOLD:AEL3942	11.05	set_aside	18.5467	midpoint
+Parablennius	19	0.089403	BOLD:AEE7000	10.67	set_aside	8.3941	midpoint
+Paracalanus	23	0.088973	BOLD:AAU0467	3.66	set_aside	24.7970	midpoint
+Paracaprella	3	0.102662				31.4192	midpoint
+Parachondrostoma	2	0.009610				3.6858	timetree
+Paracyclops	5	0.133496		1.36		20.7653	midpoint
+Paradoneis	8	0.172606		1.78		42.6002	midpoint
+Paradoris	7	0.089198		0.76		17.4757	midpoint
+Paraeuchaeta	14	0.095660		1.60		11.9410	midpoint
+Paraiberobathynella	3	0.053135				23.6436	midpoint
+Paralaoma	27	0.063714		1.20		48.2223	midpoint
+Paraliparis	42	0.055608	BOLD:AEH7486;BOLD:AHJ0269	4.29	set_aside	7.3784	midpoint
+Paramysis	17	0.107779	BOLD:AAE6885;BOLD:AAF7891;BOLD:AAF7892	4.54	set_aside	22.5177	midpoint
+Parapagurus	5	0.060616		0.67		29.0573	midpoint
+Parapenaeus	13	0.066925	BOLD:ACS4192;BOLD:ACV8642	4.98	set_aside	19.4548	midpoint
+Parapleustes	2	0.030475				7.3884	midpoint
+Parasmittina	46	0.117870	BOLD:AFE2212;BOLD:AGS3490;BOLD:AHI2670;BOLD:AHI6371	5.05	set_aside	46.4764	midpoint
+Paratimea	3	0.011053				14.3769	midpoint
+Parthenopoides	2	0.014734				13.4327	midpoint
+Parvicardium	7	0.149577		1.39		7.9678	timetree
+Pasiphaea	10	0.121304		3.10		45.0739	midpoint
+Patella	14	0.071631	BOLD:AAC5581;BOLD:AEB4428	5.61	set_aside	37.4300	timetree
+Pectenogammarus	35	0.128181		2.00		23.0780	midpoint
+Pedipes	2	0.177144				56.0000	timetree
+Pegusa	7	0.104728	BOLD:ABX5980	3.57	set_aside	10.5768	midpoint
+Pelagia	4	0.020910	BOLD:ADW0675;BOLD:ADW3040;BOLD:ADW4157	15.25	set_aside	18.3259	midpoint
+Peltodoris	5	0.101757		0.97		18.6654	midpoint
+Penaeopsis	3	0.037080				14.4811	midpoint
+Penaeus	53	0.107084	BOLD:AHD0548	8.49	set_aside	91.8862	timetree
+Penares	8	0.023568	BOLD:AEH5616	4.38	set_aside	13.1625	midpoint
+Pennella	16	0.072701		2.31		30.9005	midpoint
+Peracle	8	0.173072		3.03		29.1769	midpoint
+Percnon	5	0.073597		2.58		10.8684	timetree
+Periclimenes	60	0.151771	BOLD:AAU0787	4.22	set_aside	48.0177	midpoint
+Perinereis	70	0.128194	BOLD:AGK5819;BOLD:AHT1544	5.11	set_aside	51.1605	midpoint
+Peristedion	13	0.072104		2.17		22.8475	timetree
+Petalifera	4	0.093849		0.69		26.5575	midpoint
+Phacellophora	3	0.022404	BOLD:ACM3971	10.06	set_aside	14.8370	midpoint
+Phakellia	4	0.063868		0.70		36.1608	midpoint
+Phallocryptus	4	0.090563	BOLD:AAC0288	3.93	set_aside	30.8644	midpoint
+Phidiana	6	0.081916		1.29		16.2075	midpoint
+Philine	40	0.128698		2.36		17.4649	midpoint
+Philinoglossa	3	0.144215				15.9802	midpoint
+Philinopsis	17	0.110033		1.26		18.6260	midpoint
+Phorbas	13	0.054638	BOLD:AGK5668	4.69	set_aside	24.5562	midpoint_timetree_demoted
+Phorcus	9	0.076179		1.27		15.0170	timetree
+Phoxinus	45	0.085608	BOLD:AAH8407;BOLD:AAH8408;BOLD:AGX8902;BOLD:AHO5721	10.63	set_aside	14.1539	midpoint
+Phtisica	6	0.116910		0.89		35.6195	midpoint
+Phycis	3	0.074635				20.0233	timetree
+Phyllaplysia	2	0.064071				21.9433	midpoint
+Phyllidia	32	0.103302	BOLD:AEB1210;BOLD:AHT0232	4.84	set_aside	15.8000	timetree
+Phyllodoce	65	0.108054	BOLD:AHT0193;BOLD:AHT0194	9.88	set_aside	34.4752	midpoint
+Phyllorhiza	6	0.054773		0.87		25.9088	midpoint
+Physa	13	0.101174		0.77		78.4217	timetree
+Pilumnopeus	3	0.138110				30.1388	midpoint
+Pilumnus	53	0.108416		2.84		39.5458	timetree
+Pinnotheres	6	0.087565		0.89		8.8405	timetree
+Pisa	7	0.084110		3.11		21.8609	midpoint
+Piseinotecus	3	0.116889				20.4933	midpoint
+Pisidia	17	0.100105		0.92		36.8450	timetree
+Pisinna	2	0.076111				28.8251	midpoint
+Pisione	15	0.124818		1.32		47.1508	midpoint
+Pista	45	0.128387		1.93		40.0887	midpoint
+Placida	15	0.123443		1.55		29.2088	midpoint
+Placiphorella	12	0.083787		1.25		31.7526	midpoint
+Plagusia	3	0.076043				28.8386	midpoint
+Planes	2	0.007148				4.5040	midpoint
+Planorbella	8	0.044221	BOLD:AAH9428	5.39	set_aside	19.2219	midpoint
+Platichthys	3	0.036269				6.4537	midpoint
+Platorchestia	37	0.086075		2.95		19.1000	timetree
+Platydoris	9	0.100655		3.15		18.5641	midpoint
+Platynereis	59	0.136357	BOLD:AFT6467;BOLD:AFT6997;BOLD:AHS9647	7.70	set_aside	20.2492	midpoint
+Pleonexes	2	0.099864				21.0029	midpoint
+Pleoticus	2	0.077135				14.7344	midpoint
+Plesionika	62	0.138915		2.70		34.0693	midpoint
+Pleurobranchaea	8	0.095627		2.05		4.6900	timetree
+Pleurobranchus	18	0.087449		1.78		11.5100	timetree
+Pleuromamma	33	0.133769		2.08		18.3991	midpoint
+Pleuroxus	17	0.124382		1.49		41.9013	midpoint
+Plicopurpura	2	0.070397				21.6109	midpoint
+Plocamopherus	10	0.092144		1.12		14.2384	midpoint
+Plumularia	46	0.106046		3.17		22.7100	timetree
+Pneumodermopsis	3	0.209887				63.6602	midpoint
+Podarkeopsis	5	0.121137		2.99		49.7515	midpoint
+Podocerus	15	0.136197		1.42		39.4595	midpoint
+Poecilochaetus	15	0.145705		2.63		80.4957	midpoint
+Polititapes	6	0.149134		0.78		53.3101	midpoint
+Pollicipes	3	0.106586				29.2600	timetree
+Polybius	5	0.069218	BOLD:AAC6074	5.28	set_aside	11.5191	midpoint
+Polycera	28	0.093990		2.49		11.0675	midpoint
+Polycerella	2	0.065770				9.2581	midpoint
+Polycheles	14	0.106263		1.28		158.5000	timetree
+Polycirrus	72	0.139042	BOLD:AAE9883;BOLD:AGK4991	3.92	set_aside	78.6335	midpoint
+Polygordius	21	0.138994	BOLD:AHS9392;BOLD:AHS9393	3.65	set_aside	78.6201	midpoint
+Polymastia	23	0.078994		1.22		49.3136	midpoint
+Polymetme	4	0.045610		2.60		3.1408	timetree
+Polyprion	3	0.018116				7.0597	timetree
+Pomacea	49	0.113164		3.41		50.8759	timetree
+Pomadasys	41	0.107530		1.79		38.9157	timetree
+Pomatias	3	0.055344	BOLD:AAD6371	3.83	set_aside	23.6474	midpoint
+Pomatoschistus	19	0.090934		1.33		12.1378	timetree
+Ponentina	5	0.030993		1.06		26.3539	midpoint
+Pontinus	11	0.063446		2.06		13.0052	timetree
+Pontohedyle	13	0.130679	BOLD:ACH5980;BOLD:AHS9209	13.09	set_aside	27.6104	midpoint
+Pontophilus	2	0.109016				29.9658	midpoint
+Pontoscolex	27	0.123739		2.53		49.9377	midpoint
+Porcellana	5	0.103954		0.68		21.4814	midpoint
+Porcellio	72	0.126095	BOLD:AEI0381;BOLD:AEI0382	4.00	set_aside	22.0988	midpoint
+Porcellionides	22	0.114418		1.78		21.0506	midpoint
+Portugala	4	0.057308		2.88		20.0850	midpoint
+Postandrilus	3	0.070750				30.7591	timetree
+Potamocypris	4	0.108502		1.06		45.6799	midpoint
+Potamopyrgus	3	0.043931				19.6606	timetree
+Potomida	4	0.019887		1.20		9.7705	midpoint
+Praxillella	27	0.135703		2.37		53.8621	midpoint
+Prionospio	58	0.154984		2.89		56.7559	midpoint
+Pristina	39	0.113265	BOLD:AFS2612	3.58	set_aside	31.0765	midpoint
+Proasellus	385	0.139933	BOLD:AGD1973	3.56	set_aside	41.4914	midpoint
+Procambarus	112	0.066113	BOLD:ACH8211;BOLD:ACI1003	3.97	set_aside	28.0297	midpoint
+Proceraea	34	0.124339		2.53		56.0236	midpoint
+Processa	12	0.112734		2.08		43.4525	midpoint
+Proporcellio	2	0.051562				14.1313	midpoint
+Prosphaerosyllis	3	0.225313				75.4156	midpoint
+Protodorvillea	5	0.157934		0.67		54.6707	midpoint
+Protodrilus	25	0.131951		2.11		76.6022	midpoint
+Protohyale	14	0.126038	BOLD:AEE0171	4.69	set_aside	23.5874	midpoint
+Psammoryctides	7	0.098260		3.20		30.5305	midpoint
+Pseudamnicola	85	0.103405		2.90		6.4060	timetree
+Pseudocaranx	4	0.046821	BOLD:AEC9052	6.57	set_aside	10.0049	timetree
+Pseudochondrostoma	3	0.007469				4.7995	timetree
+Pseudomystides	10	0.074790		1.49		22.0743	midpoint
+Pseudoniphargus	46	0.135980		1.89		42.6982	timetree
+Pseudoprotella	2	0.106908				32.0625	midpoint
+Pseudorasbora	10	0.075854		2.54		18.1170	timetree
+Pseudosuccinea	4	0.018648		1.20		10.3257	midpoint
+Pseudosyllis	2	0.082789				45.7146	midpoint
+Psolus	25	0.120723		3.44		50.1477	midpoint
+Pterocirrus	9	0.107280		0.83		26.4377	midpoint
+Pteroeides	2	0.014220				9.9368	midpoint
+Pterotrachea	5	0.074646	BOLD:AHS8210	4.61	set_aside	9.7967	midpoint
+Pupilla	33	0.067636		1.33		12.2600	timetree
+Pyramidula	98	0.041645		2.63		24.4348	midpoint
+Pyrenaearia	21	0.058252	BOLD:ADR5799;BOLD:ADR6192	4.39	set_aside	20.2497	midpoint
+Pyromaia	2	0.084333				23.5105	midpoint
+Quadrimaera	2	0.102605				36.0120	midpoint
+Radix	90	0.100344		1.95		15.2454	midpoint
+Raja	24	0.079771		3.44		20.9465	midpoint
+Rajella	8	0.022019		1.46		8.3427	midpoint
+Raphitoma	27	0.122032		2.25		24.6162	midpoint
+Remora	6	0.090260		0.96		19.5373	timetree
+Rhinoptera	5	0.050402	BOLD:ADZ8849	5.42	set_aside	10.1708	midpoint
+Rhipidogammarus	3	0.040519				17.6310	timetree
+Rhizostoma	4	0.076189		0.76		33.1108	midpoint
+Rhodope	10	0.128854		1.34		68.5770	midpoint
+Rhyacodrilus	31	0.102277		3.47		27.6039	midpoint
+Rhyssoplax	12	0.105602		1.31		34.7106	midpoint
+Ringicula	5	0.112720		2.20		64.1400	midpoint
+Rissoa	6	0.106531		1.00		30.2938	midpoint
+Rissoella	7	0.141698		0.71		71.9136	midpoint
+Rostanga	15	0.116394		2.41		19.9628	midpoint
+Rostroraja	2	0.039458				14.7317	midpoint
+Ruditapes	3	0.013349				8.9531	midpoint_timetree_demoted
+Rumina	5	0.095140		0.88		41.6304	midpoint
+Runcina	32	0.098450		1.80		30.9576	midpoint
+Sabellaria	8	0.109219	BOLD:AHS7202	5.17	set_aside	49.0114	midpoint
+Salaria	4	0.061656	BOLD:ADW8901;BOLD:AEB2160	3.64	set_aside	11.8709	midpoint
+Salmo	3	0.051785				10.1726	timetree
+Salvelinus	6	0.027270		3.18		7.5621	timetree
+Sarda	4	0.026507	BOLD:ACE3529	22.08	set_aside	10.8297	timetree
+Sardinella	20	0.103990		1.36		11.8012	timetree
+Scalibregma	19	0.166826		1.98		80.0888	midpoint
+Scaphander	25	0.096042		2.65		19.5695	midpoint
+Scapholeberis	34	0.139393		1.81		44.1895	midpoint
+Scartella	8	0.038291		2.24		5.8450	timetree
+Scherotheca	98	0.097167		2.29		38.9828	timetree
+Schizoporella	6	0.113667	BOLD:ADX5813;BOLD:AHI1797	8.20	set_aside	37.3636	timetree
+Scolecithricella	6	0.133795		2.17		37.2522	midpoint
+Scolelepis	40	0.133128		2.48		52.6022	midpoint
+Scomber	2	0.052310				10.1716	timetree
+Scomberesox	2	0.006203				4.0220	midpoint
+Scophthalmus	2	0.088827				13.9624	midpoint
+Scorpaena	45	0.107010		2.72		16.9234	midpoint
+Scyliorhinus	7	0.070875		2.07		73.2677	timetree
+Scyllaea	3	0.086058				16.4060	midpoint
+Scyllarides	14	0.113391		2.52		39.2058	midpoint
+Scyllarus	7	0.125100	BOLD:AEA5642	4.21	set_aside	124.8278	timetree
+Sepia	77	0.093857	BOLD:AHQ8224	3.92	set_aside	75.4212	timetree
+Sepietta	2	0.040679				7.9470	midpoint
+Sepiola	8	0.062268		1.70		12.6933	midpoint
+Serejohyale	3	0.090155	BOLD:ACX1858;BOLD:ACX1859	10.76	set_aside	19.9491	midpoint
+Sergia	5	0.063112		1.04		6.1681	midpoint
+Seriola	12	0.083886		1.01		5.8769	timetree
+Serranus	29	0.107645		2.92		36.8820	timetree
+Serratorotula	2	0.076168				41.3140	midpoint
+Setia	2	0.031233				16.4031	midpoint
+Sicyonia	26	0.108092		1.98		39.1238	midpoint
+Silurus	16	0.057618		1.25		22.7390	timetree
+Simnia	7	0.080043		1.90		17.3311	timetree
+Simocephalus	69	0.096504		2.36		32.0000	timetree
+Sinotaia	45	0.081509		3.44		27.8969	midpoint
+Siphonaria	182	0.222093		1.63		38.8400	timetree
+Sipunculus	30	0.127060	BOLD:AHJ9322	6.98	set_aside	207.9962	timetree
+Skeneopsis	2	0.060932				28.4972	midpoint
+Solatopupa	4	0.039293		0.92		4.8300	timetree
+Solea	5	0.081424		1.23		9.3261	midpoint
+Solen	16	0.100647		2.49		41.7794	midpoint
+Solenocera	22	0.098307		2.88		27.3600	timetree
+Somniosus	2	0.015105				10.7345	timetree
+Sparisoma	12	0.097245		1.40		12.1859	timetree
+Speleogobius	2	0.075331				9.9731	midpoint
+Sphaerium	22	0.070693	BOLD:AHS5481	7.29	set_aside	22.6644	midpoint
+Sphaerocoryne	3	0.017346				19.3897	midpoint
+Sphaeroma	7	0.133441		2.33		41.4766	midpoint
+Sphaerosyllis	6	0.281927		1.37		84.3600	midpoint
+Sphincterochila	2	0.026471				20.0680	midpoint
+Sphoeroides	13	0.087183		2.42		15.3828	midpoint
+Sphyradium	10	0.040253		2.22		5.6829	midpoint
+Sphyraena	39	0.121662		1.82		39.4901	timetree
+Spicara	3	0.043441	BOLD:AAE2830;BOLD:AAO4385	5.56	set_aside	10.5318	timetree
+Spinolambrus	2	0.030500				19.3268	midpoint
+Spiochaetopterus	10	0.157877		1.46		35.1629	midpoint
+Spiophanes	22	0.103735	BOLD:ACV3183;BOLD:AED9065;BOLD:AGD0788;BOLD:AGD0789	5.61	set_aside	46.4334	midpoint
+Spisula	3	0.111431	BOLD:AAB8219	4.88	set_aside	55.9953	midpoint
+Spondyliosoma	3	0.016952				3.1685	timetree
+Spondylus	7	0.123924		0.84		49.1233	midpoint
+Spongia	5	0.015900		1.23		4.8030	midpoint_timetree_demoted
+Spurilla	3	0.086799	BOLD:ACH7732	4.12	set_aside	13.3079	midpoint
+Squalius	29	0.039666	BOLD:AHM0973	5.65	set_aside	11.6088	timetree
+Squalus	11	0.036577		1.90		23.3434	timetree
+Squatina	16	0.051117		2.20		45.2831	timetree
+Stagnicola	23	0.098675	BOLD:AAG9389;BOLD:ACE9699	3.62	set_aside	23.7522	midpoint
+Stelletta	19	0.073309		2.67		23.2142	midpoint
+Stenasellus	60	0.124977	BOLD:AHO3506;BOLD:AHO3507	3.72	set_aside	39.4070	midpoint
+Stenula	3	0.112086				14.1696	midpoint
+Stephanocyathus	4	0.151133		0.99		22.6804	midpoint
+Sternaspis	29	0.102657		2.27		67.5663	midpoint
+Sthenelais	10	0.140248		1.84		49.9804	midpoint
+Stiliger	6	0.111010		1.27		27.6988	midpoint
+Stomias	11	0.083923	BOLD:ADB0867	3.69	set_aside	67.8261	timetree
+Stramonita	12	0.071835		1.95		23.5447	timetree
+Streptosyllis	5	0.114959		0.67		53.8691	midpoint
+Striarca	3	0.111539	BOLD:AHJ9134	10.86	set_aside	47.7182	midpoint
+Stromateus	2	0.062980				15.8015	midpoint
+Stylocheilus	6	0.026687		0.76		14.1619	midpoint
+Stylodrilus	24	0.138466	BOLD:AEV7054;BOLD:AHI8847	4.63	set_aside	47.3707	midpoint
+Suboestophora	2	0.013641				10.0636	midpoint
+Syllides	8	0.128603		1.10		56.9762	midpoint
+Syllidia	4	0.120949		2.59		49.7129	midpoint
+Syllis	152	0.175241	BOLD:ADW5236;BOLD:AGP9733;BOLD:AHS4784	3.92	set_aside	66.5098	midpoint
+Symphodus	8	0.061060		1.09		12.4658	timetree
+Symphurus	48	0.131625	BOLD:AAF2975;BOLD:AAK0973	5.57	set_aside	35.5865	timetree
+Synaphobranchus	10	0.037031		2.66		3.1256	timetree
+Synasellus	12	0.111626	BOLD:ADX5282	3.94	set_aside	78.7304	timetree
+Synchiropus	34	0.126562		2.61		16.1377	midpoint
+Syngnathus	21	0.097851		1.13		15.6688	timetree
+Synodus	67	0.125050		2.48		20.4807	midpoint
+Systellaspis	9	0.118845	BOLD:AAF3833;BOLD:ACR5490	6.20	set_aside	27.0397	midpoint
+Talitrus	3	0.071506	BOLD:AFS6718;BOLD:AHW3487	70.96	set_aside	12.1579	midpoint
+Tambja	26	0.094664		2.72		17.0332	midpoint
+Tanais	13	0.137230		2.18		36.1501	midpoint
+Taractichthys	2	0.018190				3.2831	timetree
+Taringa	4	0.096059		2.32		18.1353	midpoint
+Tectarius	5	0.103381	BOLD:ACB8708;BOLD:AHS4242;BOLD:AHS4243	5.50	set_aside	65.6706	timetree
+Tectura	2	0.318717				69.6877	midpoint
+Tedania	10	0.026068	BOLD:AAD9124	3.97	set_aside	22.1716	midpoint
+Temora	2	0.085222				24.5935	midpoint
+Tenellia	51	0.103399		3.36		16.8411	midpoint
+Testacella	12	0.106213	BOLD:AHS4079	3.53	set_aside	62.2613	midpoint
+Tethya	23	0.065037		1.56		27.2350	midpoint_timetree_demoted
+Tethysbaena	13	0.116712		2.31		57.9295	midpoint
+Thalassoma	16	0.083298		1.70		17.2036	timetree
+Tharyx	6	0.158101		1.02		48.1392	midpoint
+Theba	81	0.086040		1.56		10.9226	midpoint
+Thecacera	10	0.087725		1.05		10.6922	midpoint
+Thenea	2	0.018560				12.8766	midpoint
+Theodoxus	37	0.060678		1.24		48.7000	timetree
+Thermocyclops	13	0.119790	BOLD:AHS3846;BOLD:AHS3847	13.49	set_aside	15.8816	midpoint
+Thorogobius	2	0.067009				9.1851	midpoint
+Thracia	11	0.146489		2.24		64.5227	midpoint
+Thunnus	2	0.035542				3.4780	timetree
+Thuridilla	25	0.088865		1.91		15.9181	midpoint
+Thysanoteuthis	3	0.094700				26.6938	midpoint
+Todarodes	5	0.078764		1.66		62.2415	timetree
+Todaropsis	2	0.072953				21.8430	midpoint
+Torpedo	14	0.074551		1.38		34.2810	midpoint
+Trachinocephalus	10	0.088970	BOLD:ADL2607	3.55	set_aside	17.2753	midpoint
+Trachinotus	19	0.068603		1.92		16.9209	timetree
+Trachinus	3	0.054668	BOLD:ACG7030	3.71	set_aside	23.2313	timetree
+Trachurus	3	0.081455				5.7033	timetree
+Trachyrincus	3	0.036227				11.4266	timetree
+Trachysalambria	7	0.085720		0.95		30.6790	midpoint
+Trachyscorpia	4	0.024312		3.10		7.5955	midpoint
+Trapania	42	0.091966		1.79		13.7859	midpoint
+Trichoniscoides	3	0.026812				17.8017	midpoint
+Trichoniscus	29	0.127321		1.37		135.0600	timetree
+Tricolia	19	0.192150		1.40		55.7010	midpoint
+Trinchesia	7	0.105468		0.93		17.0088	midpoint
+Triops	78	0.098528	BOLD:ACQ4520;BOLD:ACQ5619	4.53	set_aside	24.9750	timetree
+Tripterygion	6	0.078144		2.39		29.5721	timetree
+Trisopterus	4	0.048753		1.43		14.6465	timetree
+Trissexodon	2	0.022485				12.9202	midpoint
+Tritia	24	0.089194		1.94		21.0600	timetree
+Trochoidea	6	0.135828		0.78		45.4589	midpoint
+Trochulus	154	0.096377	BOLD:ADK7044	4.99	set_aside	38.2922	midpoint
+Trophonopsis	2	0.038809				10.9243	midpoint
+Tropocyclops	18	0.148459		1.73		31.1549	midpoint
+Trypanosyllis	45	0.146688	BOLD:ADX4303	3.78	set_aside	60.8506	midpoint
+Tubificoides	27	0.127597		2.07		34.7909	midpoint
+Tudorella	6	0.049677		2.00		22.4042	midpoint
+Turbicellepora	2	0.097533				38.3526	midpoint
+Turritopsis	9	0.088936		1.61		42.8089	midpoint
+Tylodina	4	0.091878		0.74		42.1193	midpoint
+Tylos	60	0.141178		2.79		43.1300	timetree
+Typhlatya	20	0.126791		1.69		85.5699	timetree
+Umbonula	2	0.142886				51.1712	midpoint
+Unio	29	0.077255	BOLD:ADJ5790;BOLD:AGC9806	5.87	set_aside	13.2259	midpoint
+Upogebia	26	0.087567	BOLD:ACW4317;BOLD:AHE4408	5.01	set_aside	41.6787	midpoint
+Uranoscopus	22	0.097908		2.61		25.0476	midpoint
+Urothoe	6	0.101748	BOLD:ACJ4512	3.54	set_aside	13.5004	midpoint
+Valencia	4	0.066406		0.96		19.9959	timetree
+Vallonia	6	0.065246		1.60		20.3898	midpoint
+Vanneaugobius	3	0.093711	BOLD:ACG9187	14.90	set_aside	29.0000	timetree
+Vayssierea	5	0.111936		3.28		19.7319	midpoint
+Vejdovskybathynella	6	0.097866		1.87		34.8721	midpoint
+Venerupis	3	0.091937	BOLD:AAH7873;BOLD:AAW7336	3.98	set_aside	41.8567	midpoint
+Vermetus	3	0.204212				34.8909	midpoint
+Watersipora	19	0.098925		2.20		34.3736	midpoint
+Weinkauffia	2	0.121338				19.9542	midpoint
+Williamia	5	0.072437		3.24		51.4173	midpoint
+Xantho	3	0.087778				18.7523	midpoint
+Xenodermichthys	3	0.087093				17.2004	midpoint
+Xenostrobus	32	0.126645		2.63		55.7175	midpoint
+Xerocrassa	128	0.110067		2.59		49.6637	midpoint
+Xerogyra	14	0.081081		1.38		42.6255	midpoint
+Xeroplexa	15	0.080890		3.46		24.8060	midpoint
+Xerosecta	6	0.093325		1.18		45.7309	midpoint
+Xerotricha	2	0.010145				12.4238	midpoint
+Zanclea	34	0.086671		1.07		43.3417	midpoint
+Zelentia	5	0.093431		0.67		16.0088	midpoint
+Zenion	5	0.071657		0.67		7.3842	timetree
+Zenopsis	6	0.029308		1.41		4.9273	timetree
+Zeus	3	0.066435				12.8275	timetree
+Zeuxo	4	0.108175		1.34		32.0959	midpoint
+Zonitoides	10	0.062603		1.02		33.2522	midpoint
+Zophoscolex	13	0.119915		0.81		38.8227	midpoint
+Zospeum	36	0.058041		3.08		46.0251	midpoint
+Zu	3	0.092835				11.3204	timetree

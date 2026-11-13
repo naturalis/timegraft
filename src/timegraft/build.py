@@ -97,7 +97,22 @@ def build_genus(
     crown_cfg = marker_cfg["crown_age"]
     genus_rate, rate_source = rate if rate is not None else (crown_cfg.get("rate"), "default")
     root_to_tip = mean_root_to_tip(tree)
-    outliers = rate_outliers(tree, float((marker_cfg.get("screening") or {}).get("rate_outlier_z", 3.5)))
+    screening = marker_cfg.get("screening") or {}
+    outliers = rate_outliers(tree, float(screening.get("rate_outlier_z", 3.5)))
+    action = screening.get("rate_outlier_action", "flag")
+    if action not in ("flag", "set_aside"):
+        raise ValueError(f"screening.rate_outlier_action must be flag or set_aside, not {action!r}")
+    if action == "set_aside" and outliers["units"]:
+        kept = [(n, s) for n, s in ingroup if n not in set(outliers["units"])]
+        if len(kept) >= 2:
+            # rebuild without them; they are placed later like units set aside by screening
+            flagged = {**marker_cfg, "screening": {**screening, "rate_outlier_action": "flag"}}
+            tree, provenance = build_genus(genus, kept, outgroup, stem_age, flagged, known_crowns, timetree_crowns,
+                                           rooting, rate, crown_basis)
+            provenance.update(rate_outliers=";".join(outliers["units"]), rate_outlier_z=outliers["max_z"],
+                              rate_outlier_action="set_aside")
+            return tree, provenance
+        outliers["action"] = "kept: fewer than two units would be left"
 
     def choose_crown(t: dendropy.Tree):
         return crown_age(
@@ -161,6 +176,7 @@ def build_genus(
         "root_to_tip": f"{root_to_tip:.6f}",
         "rate_outliers": ";".join(outliers["units"]),
         "rate_outlier_z": outliers["max_z"],
+        "rate_outlier_action": (outliers.get("action") or "flag") if outliers["units"] else "",
         "rate": f"{genus_rate:.5f}" if by_rate_method and genus_rate else "",
         "rate_source": rate_source if by_rate_method and genus_rate else "",
         "rooting": how,
@@ -183,9 +199,9 @@ def rate_outliers(tree: dendropy.Tree, threshold: float = 3.5, min_units: int = 
     not catch, and stretches the crown age. The robust z-score is the distance
     from the median root-to-tip distance over 1.4826 times the median absolute
     deviation. Units above ``threshold`` (only on the long side) are listed;
-    ``max_z`` is the largest score in the genus. A diagnostic only: nothing is
-    removed. Genera with fewer than ``min_units`` units, or without spread,
-    are not assessed.
+    ``max_z`` is the largest score in the genus. What happens to them is up to
+    the caller (``screening.rate_outlier_action`` in ``build_genus``). Genera
+    with fewer than ``min_units`` units, or without spread, are not assessed.
     """
     distances = {}
     for leaf in tree.leaf_node_iter():
