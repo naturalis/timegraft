@@ -1,15 +1,30 @@
 """Crown ages of every genus under the four combinations of crown basis and plausibility test (#54).
 
-Usage: python crown_compare.py <subtrees dir> <global crown_ages.tsv> <sampled crown_ages.tsv> [out.tsv]
+Usage: python crown_compare.py <subtrees dir> <global crown_ages.tsv> <sampled crown_ages.tsv>
+                               [--known crown_ages table] [--out out.tsv] [--run-known table]
+
 Recomputes the crown age decision from the provenance of a genus-stage run (root-to-tip, rate, stem),
-which is all the decision depends on, so the trees need not be rebuilt for each combination.
+which is all the decision depends on, so the trees need not be rebuilt for each combination. ``--known``
+is the user's crown age table (``crown_ages`` in the configuration; for Iberia
+``data/crown_ages/literature.tsv``), which is applied before TimeTree, as in the workflow. The check
+against the run uses the table the run was made with (``--run-known``; none by default).
 """
-import csv, glob, math, statistics, sys
+import argparse, csv, glob, math, statistics
 import dendropy
+from timegraft.calibrate import read_crown_table
 from timegraft.dating import crown_age
 
-folder, global_path, sampled_path = sys.argv[1:4]
-out = sys.argv[4] if len(sys.argv) > 4 else None
+parser = argparse.ArgumentParser()
+parser.add_argument("folder")
+parser.add_argument("global_path")
+parser.add_argument("sampled_path")
+parser.add_argument("--known", help="crown age table applied before TimeTree, as in the run's configuration")
+parser.add_argument("--run-known", help="crown age table the genus-stage run was made with, for the check")
+parser.add_argument("--out")
+args = parser.parse_args()
+folder, global_path, sampled_path, out = args.folder, args.global_path, args.sampled_path, args.out
+known = read_crown_table(args.known) if args.known else {}
+run_known = read_crown_table(args.run_known) if args.run_known else {}
 prov = {}
 for path in sorted(glob.glob(f"{folder}/subtrees_*.tsv")):
     for r in csv.DictReader(open(path), delimiter="\t"):
@@ -25,15 +40,18 @@ for genus, r in sorted(prov.items()):
     row = {"genus": genus, "root_to_tip": d, "stem_age": stem, "barcode_age": d / rate}
     for basis in ("global", "sampled"):
         for test in (False, True):
-            c = crown_age(genus, stem, tree, {}, method="rate", rate=rate, suggested=tables[basis],
+            c = crown_age(genus, stem, tree, known, method="rate", rate=rate, suggested=tables[basis],
                           estimate="timetree_midpoint", plausibility=plaus if test else None)
             key = f"{basis}{'+test' if test else ''}"
             row[key] = c.age
             row[key + "_source"] = c.source
+    # the same decision with the run's own table, to check the recomputation against the run
+    row["_check"] = crown_age(genus, stem, tree, run_known, method="rate", rate=rate, suggested=tables["sampled"],
+                              estimate="timetree_midpoint", plausibility=plaus).age
     rows.append(row)
-# check: the run itself used sampled+test
-mismatch = [r["genus"] for r in rows if abs(r["sampled+test"] - float(prov[r["genus"]]["crown_age"])) > 1e-3]
-print(f"{len(rows)} genera; recomputed differs from the run for {len(mismatch)}: {mismatch[:5]}")
+mismatch = [r["genus"] for r in rows if abs(r.pop("_check") - float(prov[r["genus"]]["crown_age"])) > 1e-3]
+print(f"{len(rows)} genera; recomputed with the run's settings differs from the run for {len(mismatch)}: "
+      f"{mismatch[:5]}; crown age table: {len(known)} genera, of which {sum(g in prov for g in known)} have a subtree")
 for key in ("global", "global+test", "sampled", "sampled+test"):
     ratio = [r[key] / r["barcode_age"] for r in rows]
     tt = sum(1 for r in rows if r[key + "_source"] == "timetree")
