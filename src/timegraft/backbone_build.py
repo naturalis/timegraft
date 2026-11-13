@@ -325,6 +325,8 @@ def date_topology(
         raise ValueError(f"requery mode must be classify, apply or off, not {rq_mode!r}")
     requery_rows: dict[dendropy.Node, dict[str, str]] = {}
     if method == "precedence":
+        if rq_mode == "apply":
+            raise ValueError("requery mode 'apply' requires age method 'fit'")
         age, source = p_age, p_source
         if rq_mode != "off":
             requery_rows, _ = _requery(tree, calibrations, {}, set(), conflict, conflict_with, p_age, used, ncbi,
