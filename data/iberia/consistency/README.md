@@ -166,3 +166,32 @@ Conflicting nodes re-queried with disjoint picks and classified ([#53](https://g
 So the analysis's two readings are both seen. The crab clade is confirmed as under-spanning. Where TimeTree repeats its age with other picks, the conflict lies between OToL's and TimeTree's trees; these are the nodes to look at for topology. The 13 unresolved cases are what the method cannot reach with the taxa in the run.
 
 **With `mode: apply`**, the crab clade's calibration becomes 156.8 Ma with its own uncertainty. The node is no longer an outlier, and its fitted age moves from 168.6 to 167.7 Ma: the fit had already set the first age aside. No other node moves by more than 1%. Against the calibrations as replaced, calibrations off by more than a factor 1.5 go from 5 to 4.
+
+## `crowns/` (#54)
+
+TimeTree crown ages of the species sampled, and the plausibility test against the barcodes ([#54](https://github.com/naturalis/timegraft/issues/54)), at the defaults (`crown_query.basis: sampled`, `min_sampled: 2`, `single_species: none`; `crown_age.plausibility` with `rate_factor: 10`, `saturation: 0.15`, `young_factor: 3`). The backbone is identical to `agefit/`.
+
+- `crown_ages.tsv` and `metadata.json` are the backbone outputs, with both the sampled and the global crown per genus.
+- `crowns_compare.tsv` holds the crown age of each of the 1,039 genera with a subtree, under the four combinations of basis and test.
+- `crown_compare.py` makes that table from a genus-stage run. The crown decision depends only on the root-to-tip distance, rate and stem age the run records, together with the crown age table, so the trees need not be rebuilt per combination.
+- The genus stage was run as the Iberian configuration does it, with the literature crown ages of `data/crown_ages/literature.tsv` (*Gammarus*, *Niphargus*, *Daphnia*), on shards made from this backbone and `units/screened.tsv` of the archive. All four combinations apply that table first, as the workflow does. Recomputed with the run's own settings, the decisions match the run for all 1,039 genera.
+- The new TimeTree queries are in `timetree_cache.json`.
+
+**Basis.** 312 genera get the crown of their sampled species and 21 fall back to the global crown. 262 are sampled with a single species and get no TimeTree crown; 10 of those had a global one before. Of the genera with both answers, the sampled crown differs from the global one for 43, younger for 26 (*Trachurus* 24 to 6 Ma, *Mugil* 57 to 25, *Margaritifera* 230 to 109). Note that "sampled" means the species of the reference records, which for these BOLD data is mostly the genus worldwide (*Gammarus*: 184 species), so the basis changes less than it would for a truly regional reference.
+
+**Extreme crowns**, among the 1,039 genera:
+
+| | TimeTree crown used | Crown > 10 × barcode age | > 20 × | Crown < barcode age / 3 |
+| --- | --- | --- | --- | --- |
+| Before #54 (global, no test) | 267 | 42 | 7 | 5 |
+| Sampled only | 281 | 41 | 10 | 6 |
+| Global with the test | 251 | 31 | 0 | 0 |
+| Sampled with the test (new default) | 260 | 26 | 0 | 0 |
+
+The sampled crowns on their own let a few more extreme values in: more genera get a TimeTree crown, and TimeTree sometimes knows only a few of the sampled species. *Gammarus* is the clearest case: TimeTree knows 4 of its 184 sampled species, all close, and gives 1.1 Ma against 13.8 Ma from the barcodes. Here the literature table sets its crown instead. With the test, the extremes are gone in both directions.
+
+**Demoted, too old** (15; TimeTree crown of the sampled species, then the new crown age): *Ruditapes* 69 to 9.0 Ma (1.3% divergence), *Haliclona* 444 to 73, *Mycale* 162 to 29, *Hydra* 193 to 40, *Phorbas* 127 to 25, *Tethya* 131 to 27, *Aulopus* 53 to 11, *Cliona*, *Ircinia*, *Spongia*, *Holothuria*, *Margaritifera*, *Mimachlamys*, *Chimaera* and *Illex*. These include all seven genera the holistic analysis found above 20 times the barcode minimum.
+
+**Not used, too young** (6): *Stephanocyathus*, *Conchoderma* (1.0 Ma against 9.3), *Gadomus* (0.1 against 3.6), *Leptaxis*, *Euchaeta* and *Orculella*. Their crowns become the midpoint between the barcode age and the stem cap.
+
+**Overall.** 76 crown ages change, 26 of them older, by a median factor of 1.85. The sum of crown ages falls by 4.8%. The test allows a genus to evolve ten times slower than the rate, so 26 genera remain above 10 times the barcode age. Most are sponges, cnidarians and elasmobranchs, where that is plausible.

@@ -81,7 +81,22 @@ The first four columns (`genus`, `status`, `ott_id`, `ncbi_id`) are as before. A
 
 ## `backbone/crown_ages.tsv`
 
-`genus`, `crown_age` and `n_species` are as before. Added: `query_ids`, the species queried, and the same `timetree_*` columns as in `node_ages.tsv`. With `source: api` the table has no rows, as before.
+`genus`, `crown_age` and `n_species` are as before. Added: `query_ids`, the species queried, and the same `timetree_*` columns as in `node_ages.tsv`, for the query whose age is used. With `source: api` the table has no rows, as before. Since #54 also `crown_basis`, `n_sampled_species`, `sampled_crown_age` and `global_crown_age`, and a row with an empty `crown_age` for every genus sampled with a single species; see the next section.
+
+## Crown ages from the sampled species
+
+A TimeTree crown age used to be the crown of the whole genus: the MRCA of up to 12 of its species in OTT. In a regional run the genus subtree is built from the species sampled, and its root is their MRCA, which can be much younger. With `crown_query.basis: sampled` (the default, [#54](https://github.com/naturalis/timegraft/issues/54)) TimeTree is asked about the species sampled in the run instead: the species names of the genus's records, with the NCBI ids OTT holds for those names (or COL's, with `col.species` and `high` or `medium` confidence), where at least `min_sampled` (2) have an id and TimeTree finds two.
+
+| `crown_basis` | Meaning |
+| --- | --- |
+| `sampled` | The crown of the sampled species |
+| `global` | The crown of the genus, because the records name no species of it (or `basis: global`) |
+| `global_fallback` | The crown of the genus, because fewer than `min_sampled` sampled species have an id, or TimeTree knows fewer than two of them |
+| `single_sampled_species` | The genus is sampled with one species: its subtree lies within that species, which the crown of the genus does not describe, so it has no TimeTree crown (`crown_age` empty). `single_species: global` gives it the global crown instead (`global_fallback`) |
+
+`sampled_crown_age` and `global_crown_age` give both answers wherever TimeTree has them, so the effect of the basis is visible per genus. `n_sampled_species` counts the sampled species with an NCBI id.
+
+In the genus step, `provenance.tsv` carries the basis of the crown it used (`crown_basis`), the plausibility test of it against the barcodes (`crown_plausibility`: `plausible`, `implausible` (too old: demoted to an upper bound), `implausible_young` (too young: not used) or empty where not tested; `timetree_ratio`, the TimeTree crown over the barcode age; `ratio_allowed`, the largest ratio slow evolution and saturation explain) and the decision in words (`crown_decision`, for example `timetree[sampled] implausible (ratio 59.5 > 10.5): midpoint of barcodes and timetree[sampled]`). The test is described under [crown ages and rates](configuration.md#crown-ages-and-rates).
 
 ## Backbone ages from a weighted fit
 
@@ -264,4 +279,5 @@ New. What the backbone was built from: the format version of each output and of 
 - **`genera.tsv` format 6** (#51) adds the `anchor_*` columns above, and a new status, `attached_at_majority`. With the default `anchoring.rule: majority` and `prefer_sampled: true`, genera that are not a node of the synthesis can have a different anchor, and the backbone and its ages change around them.
 - **`node_ages.tsv` format 3** (#52) fills the calibration columns and adds `calibration_sigma`, `calibration_z`, `calibration_outlier`, `precedence_age` and `precedence_source`. With the default `ages.method: fit`, `source` takes new values (`timetree_fit`, `timetree_higher_taxa_fit`, with `_outlier`), `dropped_inconsistent` and `interpolated_after_drop` no longer occur, and backbone ages change wherever TimeTree ages conflicted. Code that selected TimeTree-dated nodes by `source in ("timetree", "timetree_higher_taxa")` should accept the `_fit` forms too.
 - **`node_ages.tsv` format 4** (#53) fills `conflict_class` and `requery_age` and adds the other `requery_*` and `conflict_*` columns. With the default `requery.mode: classify` no age changes; the first run on a cache asks TimeTree again for the re-queried nodes.
+- **`crown_ages.tsv` format 3** (#54) adds the basis columns and rows with an empty `crown_age` for genera sampled with one species; code that reads `crown_age` as a number must skip those (the genus step does). With the defaults, TimeTree crowns are those of the sampled species, and an implausible one is demoted to an upper bound, so crown ages change. `crown_query.basis: global` and `crown_age.plausibility.enabled: false` give the earlier behaviour. `provenance.tsv` gains `crown_basis`, `crown_plausibility`, `timetree_ratio`, `ratio_allowed` and `crown_decision`, after `timetree_crown`.
 - **The build reads the filtered records** (`units/filtered.tsv`) for the reference lineage, besides the representatives, so it runs again when the records change.
