@@ -13,9 +13,9 @@ Whether `consistency-layer` should become the default: the metrics and threshold
 | `inject.py` | Merges genera of the run into taxa elsewhere in a copy of the OTT taxonomy, as OTT did with *Onchidella* |
 | `perturb_cache.py` | Multiplies every TimeTree age in a copy of the cache by a random factor |
 | `subsample.py` | Keeps a random half of the genera |
-| `run_experiments.sh` | All backbone builds of the gate: clean, injected, perturbed, subsampled, ablations, reproducibility |
+| `run_experiments.sh` | All backbone builds of the gate: clean, injected, perturbed, subsampled, ablations, reproducibility. Exits non-zero if a build fails, and lists it in `exp/failed.txt`; running it again retries only the builds that are not complete. `evaluate.py` refuses to run while a build is missing or failed |
 | `run_posthoc.sh` | Two variants of the injection, added after the first results to explain them; not part of the gate |
-| `monitor.py` | Runs a command and records its wall time and the peak memory of its process tree |
+| `monitor.py` | Runs a command and records its wall time and peak memory: of the largest single process over its whole life, from the kernel, and of the whole process tree, sampled every 0.2 s |
 | `evaluate.py`, `benchlib.py` | Compute every metric from the runs and write `results/` |
 
 The pipeline is never patched for an experiment: errors and noise go into copies of its inputs (the taxonomy, the cache, the units), and the workflow scripts run as they are.

@@ -1,6 +1,6 @@
 metric	name	legacy	default	threshold	status	note
 0	legacy settings reproduce main		clades same; largest age difference 0.0000 Ma; 0 of 24882 screening decisions differ; 0 of 312 TimeTree crowns differ	identical	pass	backbone.tre byte-identical: True
-1a	Onchidella's nearest genera in the final tree	{'Echinodermata': 1}	{'Mollusca': 1}	all Mollusca	pass	backbone: legacy {'Echinodermata': 1}, default {'Mollusca': 325}
+1a	Onchidella: genera next to the clade of all units of its subtree, in the final tree	{'Echinodermata': 1} (26 units, a clade)	{'Mollusca': 325} (26 units, a clade)	all Mollusca	pass	with the units set aside by screening too: legacy {'Arthropoda': 282, 'Chordata': 255, 'Mollusca': 389, 'Annelida': 166, 'Echinodermata': 11, 'Bryozoa': 25, 'Cnidaria': 1} (28 units, not a clade), default {'Mollusca': 332, 'Echinodermata': 1} (28 units, not a clade); backbone: legacy {'Echinodermata': 1}, default {'Mollusca': 325}
 1b	injected misplacements with two checks: flagged	0 (no check)	1.000 (118 of 118)	>= 0.90	pass	
 1c	injected misplacements, all: flagged	0 (no check)	0.983 (118 of 120)	>= 0.50	pass	
 1d	flagged injected genera back in their own class	16 of 120 in own class	0.992 (117 of 118)	>= 0.90	pass	
@@ -24,8 +24,8 @@ metric	name	legacy	default	threshold	status	note
 6b	stem ages that differ by more than 10%: share with a recorded cause		1.000 (175 of 175)	>= 0.90	pass	counting a fitted age only at the nearest dated ancestor: 159 of 175; causes: {'fit_on_path': 175, 'anchor': 25, 'identifier': 14, 'reanchored': 1}
 6c	backbone PD of genus samples: rank correlation with and without perturbed ages	0.9118	0.9424	>= legacy - 0.01	pass	
 6d	PD ratio default over legacy, and total tree length	638002	630769 (-1.1%); 150 units at random: 1.0107; 100 genera, one unit each: 1.0128; 100 genera, five units each: 0.9960	none	report	
-7a	wall time of the full run (minutes)	48.0	52.6	<= 1.5 x legacy	pass	ratio 1.09
-7b	peak memory of the full run (MB)	758	1277	<= 1.5 x legacy and < 7000	FAIL	
+7a	wall time of the full run (minutes)	47.9	49.4	<= 1.5 x legacy	pass	ratio 1.03
+7b	peak memory of the full run (MB)	820	1321	<= 1.5 x legacy and < 7000	FAIL	largest single process 691 and 1192; process tree sampled every 0.2 s 820 and 1321
 7c	backbone and screening rebuilt: byte-identical		backbone again: 5 of 5 files; harness against workflow: 5 of 5; screening: identical	identical	pass	
 7d	backbone rebuilt with the network blocked		built; 5 of 5 files identical	succeeds, identical	pass	
 7e	test suite		235 passed, 2 skipped in 20.22s	passes	pass	

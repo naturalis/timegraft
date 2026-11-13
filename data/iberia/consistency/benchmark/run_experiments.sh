@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # The backbone experiments of the gate (#56): clean builds, injected misplacements, perturbed ages,
 # dropped genera, and the reproducibility builds. Run after the two full runs (see README.md).
+# Exits non-zero if any build failed (listed in exp/failed.txt); rerunning it retries only those.
 #
 #   run_experiments.sh BENCH REPO OTOL [JOBS]
 #
@@ -14,15 +15,23 @@ E=$BENCH/exp
 CACHE=$BENCH/branch/resources/api_cache.json
 SEEDS="1 2 3 4 5"
 mkdir -p "$E"
+rm -f "$E/failed.txt"  # failures of an earlier attempt are retried below
 export PYTHONPATH=$H:$REPO/src
 
 bb() {  # bb NAME UNITS CACHE_SOURCE [backbone.py options]: build one backbone with its own copy of the cache
+  # A build counts as done only when backbone.py has written seconds.txt, its last step. A failed build
+  # is recorded in failed.txt, its partial outputs are removed, and the function returns non-zero.
   local name=$1 units=$2 cache=$3; shift 3
-  if [ -s "$E/$name/metadata.json" ]; then return 0; fi
-  mkdir -p "$E/$name"
+  if [ -s "$E/$name/seconds.txt" ]; then return 0; fi
+  rm -rf "$E/$name"; mkdir -p "$E/$name"
   cp "$cache" "$E/$name/cache.json"
-  python "$H/backbone.py" --repo "$REPO" --units "$units" --otol "$OTOL" --cache "$E/$name/cache.json" \
-      --out "$E/$name" "$@" > "$E/$name/stdout.log" 2>&1 || echo "FAILED $name" >> "$E/failed.txt"
+  if ! python "$H/backbone.py" --repo "$REPO" --units "$units" --otol "$OTOL" --cache "$E/$name/cache.json" \
+      --out "$E/$name" "$@" > "$E/$name.log" 2>&1; then
+    echo "FAILED $name (log: $E/$name.log)" >> "$E/failed.txt"
+    rm -rf "$E/$name"
+    return 1
+  fi
+  mv "$E/$name.log" "$E/$name/stdout.log"
 }
 export -f bb; export E H REPO OTOL U CACHE
 
@@ -31,9 +40,9 @@ export -f bb; export E H REPO OTOL U CACHE
 for f in representatives.tsv filtered.tsv; do ln -sf "$U/$f" "$E/legacy_units/$f"; done
 # the default screening once more, for the reproducibility check
 [ -s "$E/default_units_again/screened.tsv" ] || python "$H/screen.py" --repo "$REPO" --units "$U" --out "$E/default_units_again"
-bb legacy_clean "$E/legacy_units" "$CACHE" --overlay "$H/legacy.yaml" &
-bb default_clean "$U" "$CACHE" &
-wait
+bb legacy_clean "$E/legacy_units" "$CACHE" --overlay "$H/legacy.yaml" & p1=$!
+bb default_clean "$U" "$CACHE" & p2=$!
+wait $p1 && wait $p2  # every later build depends on these two: stop here if either failed
 # ages of the default without re-queries, which change no age: the reference of the offline noise runs
 bb default_norequery "$U" "$E/default_clean/cache.json" --set backbone_build.ages.requery.mode=off
 # every query either arm asks, for the offline runs
@@ -72,5 +81,9 @@ done
   # reproducibility: the default again from the cache it left, with and without the network
   echo "bb repro/again $U $E/default_clean/cache.json"
   echo "bb repro/offline $U $E/default_clean/cache.json --offline"
-} | xargs -P "$JOBS" -I{} bash -c "{}"
-[ ! -e "$E/failed.txt" ] || { echo "some builds failed:"; cat "$E/failed.txt"; }
+} | xargs -P "$JOBS" -I{} bash -c "{}" || true  # xargs runs every job; failures are collected below
+if [ -e "$E/failed.txt" ]; then
+  echo "some builds failed; rerun this script to retry them:" >&2
+  cat "$E/failed.txt" >&2
+  exit 1
+fi

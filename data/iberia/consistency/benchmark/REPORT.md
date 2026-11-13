@@ -10,7 +10,7 @@ By the rule declared in advance, that is a **hold**, because 7b (peak memory) is
 
 Reading the three failures for what they show, the recommendation is different from the rule's, and that is for the maintainer to accept or not:
 
-- **7b fails on a threshold that was set badly, not on a problem.** Peak memory rose from 0.76 to 1.28 GB, a factor 1.68 against an allowed 1.5. The absolute limit in the same metric was 7 GB. All of the excess over the allowed 1.14 GB is the backbone step reading `annotations.json` whole (0.23 GB), which is easy to avoid.
+- **7b fails on a threshold that was set badly, not on a problem.** Peak memory rose from 0.82 to 1.32 GB, a factor 1.61 against an allowed 1.5. The absolute limit in the same metric was 7 GB. The excess over the allowed 1.23 GB is the backbone step reading `annotations.json` whole, which adds 0.28 GB to that step and is easy to avoid.
 - **1f and 1g are real gaps, found by the benchmark, in how completely an injected error is undone.** They do not show the default doing worse than `main` on any real result: on the same injected errors `main` leaves 104 of 120 genera in the wrong class, the default 2. But two things the correction does not yet do are now measured, and both have a clear fix (below).
 - **Everything else improved or stayed the same**: the known real error is fixed end to end, conflicts and implausible crowns fall, the backbone is less sensitive to noise in TimeTree and to which genera are sampled, sample rankings are stable, and the run is reproducible offline.
 
@@ -23,7 +23,7 @@ Legacy is `main`; default is `consistency-layer`. "Known" and "blind" say whethe
 | # | Metric | Legacy | Default | Threshold | Status |
 | --- | --- | --- | --- | --- | --- |
 | 0 | `consistency-layer` with the layer switched off reproduces `main` | | `backbone.tre` byte-identical; 0 of 24,882 screening decisions and 0 of 312 TimeTree crowns differ | identical | pass (blind) |
-| 1a | *Onchidella*'s nearest genus in the final tree | an echinoderm | a mollusc (in the backbone: among 325 molluscs) | all Mollusca | pass |
+| 1a | *Onchidella* in the final tree: the genera next to the clade of all 26 units of its subtree | an echinoderm | 325 molluscs, nothing else | all Mollusca | pass |
 | 1b | Injected misplacements with two checks possible: flagged | no check exists | 118 of 118 | at least 0.90 | pass (blind) |
 | 1c | Injected misplacements, all: flagged | no check exists | 118 of 120 | at least 0.50 | pass (blind) |
 | 1d | Flagged genera placed back in their own class | 16 of 120 in their own class | 117 of 118 | at least 0.90 | pass (blind) |
@@ -47,9 +47,9 @@ Legacy is `main`; default is `consistency-layer`. "Known" and "blind" say whethe
 | 6b | Stem ages that differ by more than 10%: share with a recorded cause | | 175 of 175 as declared; 159 of 175 on a stricter reading | at least 0.90 | pass (blind) |
 | 6c | Backbone PD of genus samples: rank correlation with and without perturbed ages | 0.912 | 0.942 | not lower | pass (blind) |
 | 6d | Total branch length of the final tree; PD ratio default over legacy | 638,002 Ma | 630,769 Ma (-1.1%); PD 1.011, 1.013, 0.996 | none | report |
-| 7a | Wall time of the full run, two cores | 48.0 min | 52.6 min (1.09 times) | at most 1.5 times | pass (blind) |
-| 7b | Peak memory of the full run | 758 MB | 1,277 MB (1.68 times) | at most 1.5 times, and below 7 GB | **fail** (blind) |
-| 7c | Backbone and screening rebuilt | | byte-identical: backbone twice, harness against workflow, screening twice | identical | pass (blind) |
+| 7a | Wall time of the full run, two cores | 47.9 min | 49.4 min (1.03 times; 1.09 in the first pair of runs) | at most 1.5 times | pass (blind) |
+| 7b | Peak memory of the full run | 820 MB | 1,321 MB (1.61 times) | at most 1.5 times, and below 7 GB | **fail** (blind) |
+| 7c | Backbone and screening rebuilt | | byte-identical: backbone twice, harness against workflow, screening twice, and both full runs repeated | identical | pass (blind) |
 | 7d | Backbone rebuilt with the network blocked | | built; all files identical | identical | pass (blind) |
 | 7e | Test suite | | 235 passed, 2 skipped (no LSD2, no R) | passes | pass |
 
@@ -61,7 +61,7 @@ With `legacy.yaml`, `consistency-layer` gives the backbone of `main` byte for by
 
 ### Known errors (1a to 1g)
 
-**The real case is fixed, end to end.** In the final tree of `main`, the nearest genus to the gastropod *Onchidella* is a sea urchin; in the default it is a mollusc.
+**The real case is fixed, end to end.** The 26 units of *Onchidella*'s subtree form a clade in both final trees. In `main` the genus next to that clade is a sea urchin; in the default the clade sits in a clade of 325 mollusc genera and nothing else. Its two other units were set aside by screening and are placed next to land snails, in both runs. Counting those too, the smallest clade with all 28 units in the default holds 332 mollusc genera and one set-aside *Holothuria* unit, placed there by its nearest neighbour; in `main` it is nearly the whole tree.
 
 **Injected merges are found and moved back.** 120 genera in five replicates were merged in a copy of OTT into a taxon of another phylum or class, which is what OTT did to *Onchidella*. The default flags 118 and places 117 of those back in their own class, with no genus flagged that had no error. The two it misses have no NCBI id of their own, so the merged-id check has nothing to compare; both are listed for review. `main` has no check: 16 of the 120 end up in their own class by accident of where the host sits.
 
@@ -99,9 +99,9 @@ The layer corrects parts of the tree; it does not reshuffle it. Faith's PD of th
 
 ### Operations (7a to 7e)
 
-- **Time**: 52.6 against 48.0 minutes. Screening takes 297 s instead of 102 s (the second search of #55); the backbone 25 s instead of 17 s. The genus subtrees (51 to 53 minutes of CPU) and the placement of units (16 minutes) dominate both runs and did not change.
-- **Memory**: the peak of both runs is the backbone step. On `consistency-layer` it takes 908 MB with the layer off and 1,143 MB with it on; without reading `annotations.json` it takes 910 MB (`results/memory.tsv`).
-- **Reproducibility**: the default backbone is byte-identical when built twice, when built by the harness and by the workflow, and when built with the network blocked. The screening is byte-identical when run twice.
+- **Time**: 49.4 against 47.9 minutes (52.6 against 48.0 in the first pair of runs; the difference between the pairs is noise on a shared machine). Screening takes 284 s instead of 97 s (the second search of #55); the backbone 25 s instead of 19 s. The genus subtrees (51 minutes of CPU) and the placement of units (15 to 17 minutes) dominate both runs.
+- **Memory**: the peak of both runs is the backbone step. On `consistency-layer` it takes 907 MB with the layer off and 1,190 MB with it on; without reading `annotations.json` it takes 909 MB (`results/memory.tsv`). Memory is measured both as the largest single process over its whole life (from the kernel) and as the sum over the process tree, sampled every 0.2 s; the gate takes the larger. The first pair of runs sampled every 2 s and found 758 and 1,277 MB.
+- **Reproducibility**: the default backbone is byte-identical when built twice, when built by the harness and by the workflow, and when built with the network blocked. The screening is byte-identical when run twice. Both full runs were repeated (to measure memory better) and gave byte-identical backbones, screening, provenance, placements and final trees.
 
 ## What each part of the layer contributes
 
@@ -127,11 +127,19 @@ The two full runs side by side are in `results/end_to_end.tsv`.
 1. **After re-anchoring, send only the genus's own species to TimeTree.** For a flagged genus, keep the species whose NCBI lineage agrees with the reference lineage (the lookup that the merged-id check already makes), and drop the others from the node queries and the global crown. Expected from the variant: stems within 1.5 from 0.73 to about 0.82, and other stems moved from 297 to about 142. *Onchidella* keeps its gastropod species and loses the sand dollars.
 2. **Re-anchor within the family where the genus's species say where.** After choosing the target taxon, anchor on the majority clade of the genus's species inside it (the rule of #51), and fall back to the taxon when none are there. This addresses the remaining 21 misses and most of the remaining collateral. For *Onchidella* nothing changes: the synthesis has its species under the merged genus, with the sea urchins, so none lies inside the family.
 3. **Let the lineage check flag on its own at class level or above.** Now 91 of 120 name-only errors are listed for review and left in place. On this run the lineage check at that level has no false positive in 1,218 genera. Keep the two-check rule for differences below class level.
-4. **Read `annotations.json` for the nodes needed only.** Brings the peak from 1.28 to about 1.05 GB, under the declared limit. Low priority.
+4. **Read `annotations.json` for the nodes needed only.** Brings the peak from 1.32 to about 1.05 GB, under the declared limit. Low priority.
 5. **Leave these switched as they are**: `requery.mode: classify`, `translation.action: flag`, `rate_outlier_action: flag`, `mutual_pairs: both`. Nothing here measured them end to end. `mutual_pairs: further` has the best case of the four (#55), and the rise in units on the wrong side of the root is a reason to test it with rooting as the metric.
 6. **Tighten the gate before it is used again**: replace 6b with the stricter reading; state memory as an absolute limit; add rooting (units on the wrong side of the root) as a metric; add the two injection variants as declared metrics.
 
 Follow-ups 1 to 3 change the result only for flagged genera, so they can go in after the merge without changing the Iberian tree.
+
+## Changes after review
+
+Review of the pull request (#67) found three weaknesses in the harness. All are fixed, and the gate was evaluated again; the verdict is the same.
+
+- **Metric 1a looked at one unit.** It took the first unit of *Onchidella* in the tree and the genera nearest to it. It now takes the clade of all units of the genus's subtree, and reports the view with the set-aside units as well (above). The result is the same.
+- **Peak memory was sampled every 2 s.** A short peak could be missed. `monitor.py` now records the largest single process over its whole life from the kernel, and samples the process tree every 0.2 s; both full runs were repeated with it. Both peaks came out higher (820 and 1,321 MB instead of 758 and 1,277), and the ratio lower (1.61 instead of 1.68): 7b still fails. Wall time and outputs of the repeated runs are above.
+- **A failed build counted as done.** In `run_experiments.sh` and `run_posthoc.sh` a failed build was written to `failed.txt` but the scripts still succeeded, and `evaluate.py` would have read whatever was there. Now a build counts as done only when it has finished, a failed one is removed and makes the script fail, and `evaluate.py` refuses incomplete experiments. No build of this benchmark had failed.
 
 ## What this benchmark cannot tell
 

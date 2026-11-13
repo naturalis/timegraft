@@ -26,6 +26,19 @@ HERE = Path(__file__).resolve().parent
 OUT.mkdir(parents=True, exist_ok=True)
 metrics = []
 
+# refuse to evaluate incomplete experiments: a build is complete when backbone.py wrote seconds.txt
+if (EXP / "failed.txt").exists():
+    sys.exit(f"builds failed (see {EXP / 'failed.txt'}); rerun run_experiments.sh first")
+for run in ("main", "branch"):
+    meta = json.load(open(BENCH / f"{run}_run.json"))
+    if meta.get("returncode") != 0:
+        sys.exit(f"the full run of {run} failed (return code {meta.get('returncode')})")
+REQUIRED = ["legacy_clean", "default_clean", "default_norequery", "repro/again", "repro/offline"] + [
+    f"{kind}/s{seed}/{arm}" for kind in ("inject", "noise", "sub") for seed in SEEDS for arm in ("legacy", "default")]
+missing = [name for name in REQUIRED if not (EXP / name / "seconds.txt").exists()]
+if missing:
+    sys.exit(f"{len(missing)} builds are missing or incomplete, e.g. {missing[:3]}; rerun run_experiments.sh first")
+
 
 def gate(number, name, legacy, default, threshold, passed, note=""):
     status = "report" if passed is None else ("pass" if passed else "FAIL")
@@ -72,29 +85,53 @@ def company_phyla(bb, genus):
     return Counter(phylum.get(g, "?") for g in bb.smallest_clade_with_company(genus))
 
 
-def unit_company(tree_path, reps_path, genus):
-    """Phyla of the genera of the other units in the smallest clade of the final tree around the genus's units."""
+SET_ASIDE = ("other_genus", "isolated", "numt_like")
+
+
+def unit_company(root, genus, all_units=False):
+    """Where the units of a genus sit in the final tree of a run.
+
+    Returns the phyla of the other genera in the smallest clade that holds every unit of the genus and at
+    least one unit of another genus, whether the genus's units form a clade of their own, and how many
+    units were taken. Every unit is taken, not one, so a genus whose units are split over the tree
+    cannot pass on one of them. By default "the units of a genus" are those of its subtree, and the
+    company is counted among units of other genera's subtrees: units set aside by screening are, by
+    definition, not taken to belong to their genus, and are placed by nearest neighbour. With
+    ``all_units``, set-aside units count too.
+    """
     import dendropy
 
-    unit_genus = {r["unit_id"]: r["genus"] for r in read(reps_path)}
-    tree = dendropy.Tree.get(path=str(tree_path), schema="newick", preserve_underscores=True, rooting="force-rooted")
-    own = {u for u, g in unit_genus.items() if g == genus}
-    leaves = [leaf for leaf in tree.leaf_node_iter() if leaf.taxon.label in own]
-    if not leaves:
-        return Counter()
-    node = leaves[0].parent_node
+    unit_genus = {r["unit_id"]: r["genus"] for r in read(root / "units/representatives.tsv")}
+    decision = {r["unit_id"]: r["decision"] for r in read(root / "units/screened.tsv")}
+    if not all_units:
+        unit_genus = {u: g for u, g in unit_genus.items() if decision.get(u) not in SET_ASIDE}
+    tree = dendropy.Tree.get(path=str(root / "timegraft.tre"), schema="newick", preserve_underscores=True,
+                             rooting="force-rooted")
+    present = {leaf.taxon.label for leaf in tree.leaf_node_iter() if unit_genus.get(leaf.taxon.label) == genus}
+    if not present:
+        return Counter(), None, 0
+    node = tree.mrca(taxon_labels=sorted(present)) if len(present) > 1 else \
+        tree.find_node_with_taxon_label(next(iter(present)))
+    clade_of_own = {leaf.taxon.label for leaf in node.leaf_iter()} <= present
     while node is not None:
         others = {unit_genus.get(leaf.taxon.label, "") for leaf in node.leaf_iter()} - {genus, ""}
         if others:
-            return Counter(phylum.get(g, "?") for g in others)
+            return Counter(phylum.get(g, "?") for g in others), clade_of_own, len(present)
         node = node.parent_node
-    return Counter()
+    return Counter(), clade_of_own, len(present)
 
 
-legacy_on = unit_company(MAIN / "timegraft.tre", MAIN / "units/representatives.tsv", "Onchidella")
-default_on = unit_company(BRANCH / "timegraft.tre", BRANCH / "units/representatives.tsv", "Onchidella")
-gate("1a", "Onchidella's nearest genera in the final tree", dict(legacy_on), dict(default_on), "all Mollusca",
-     bool(default_on) and set(default_on) == {"Mollusca"},
+def describe(company, own, n):
+    return f"{dict(company)} ({n} units, {'a clade' if own else 'not a clade'})"
+
+
+legacy_on, default_on = unit_company(MAIN, "Onchidella"), unit_company(BRANCH, "Onchidella")
+legacy_all, default_all = (unit_company(MAIN, "Onchidella", all_units=True),
+                           unit_company(BRANCH, "Onchidella", all_units=True))
+gate("1a", "Onchidella: genera next to the clade of all units of its subtree, in the final tree",
+     describe(*legacy_on), describe(*default_on), "all Mollusca",
+     bool(default_on[0]) and set(default_on[0]) == {"Mollusca"},
+     f"with the units set aside by screening too: legacy {describe(*legacy_all)}, default {describe(*default_all)}; "
      f"backbone: legacy {dict(company_phyla(main_bb, 'Onchidella'))}, default {dict(company_phyla(e2e_bb, 'Onchidella'))}")
 
 # 1b-1g. Injected misplacements -----------------------------------------------------------------------------
@@ -498,12 +535,18 @@ lsec, dsec = rule_seconds(BENCH / "main"), rule_seconds(BENCH / "branch")
 write(OUT / "runtime.tsv", [{"rule": rule, "legacy_seconds": lsec.get(rule, ""), "default_seconds": dsec.get(rule, "")}
                             for rule in sorted(set(lsec) | set(dsec))]
       + [{"rule": "whole run (wall)", "legacy_seconds": lrun["seconds"], "default_seconds": drun["seconds"]},
-         {"rule": "peak memory (MB)", "legacy_seconds": lrun["peak_rss_mb"], "default_seconds": drun["peak_rss_mb"]}])
+         {"rule": "peak memory (MB)", "legacy_seconds": lrun["peak_rss_mb"], "default_seconds": drun["peak_rss_mb"]},
+         {"rule": "peak memory of the process tree, sampled every 0.2 s (MB)",
+          "legacy_seconds": lrun.get("peak_tree_rss_mb", ""), "default_seconds": drun.get("peak_tree_rss_mb", "")},
+         {"rule": "peak memory of the largest single process, exact (MB)",
+          "legacy_seconds": lrun.get("max_single_process_mb", ""), "default_seconds": drun.get("max_single_process_mb", "")}])
 ratio = drun["seconds"] / lrun["seconds"]
 gate("7a", "wall time of the full run (minutes)", fmt(lrun["seconds"] / 60, 1), fmt(drun["seconds"] / 60, 1),
      "<= 1.5 x legacy", ratio <= 1.5 and drun["returncode"] == 0 and lrun["returncode"] == 0, f"ratio {ratio:.2f}")
 gate("7b", "peak memory of the full run (MB)", lrun["peak_rss_mb"], drun["peak_rss_mb"], "<= 1.5 x legacy and < 7000",
-     drun["peak_rss_mb"] <= 1.5 * lrun["peak_rss_mb"] and drun["peak_rss_mb"] < 7000)
+     drun["peak_rss_mb"] <= 1.5 * lrun["peak_rss_mb"] and drun["peak_rss_mb"] < 7000,
+     f"largest single process {lrun.get('max_single_process_mb')} and {drun.get('max_single_process_mb')}; "
+     f"process tree sampled every 0.2 s {lrun.get('peak_tree_rss_mb')} and {drun.get('peak_tree_rss_mb')}")
 FILES = ("backbone.tre", "node_ages.tsv", "genera.tsv", "crown_ages.tsv", "concordance.tsv")
 again = {f: filecmp.cmp(EXP / "default_clean" / f, EXP / "repro/again" / f, False) for f in FILES}
 workflow = {f: filecmp.cmp(EXP / "default_clean" / f, BRANCH / "backbone" / f, False) for f in FILES}
