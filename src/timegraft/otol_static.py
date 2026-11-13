@@ -133,6 +133,8 @@ class Taxonomy:
         wanted = {m["ott_id"]: g for g, m in self.genus.items() if m["ott_id"] is not None}
         self.species: dict[str, list[tuple[int, int | None]]] = defaultdict(list)
         self.species_ncbi: dict[str, int | None] = {}  # species name to its NCBI id, for comparison with COL
+        self.species_uid: dict[str, int] = {}  # species name to its OTT id, for the species sampled in a run (#51)
+        self.species_name: dict[int, str] = {}
         for uid, _parent, _name, rank, sourceinfo, _uniq, flags, *_ in _rows(path):
             if rank != "species" or "extinct" in flags:
                 continue
@@ -140,6 +142,8 @@ class Taxonomy:
             if genus is not None:
                 self.species[genus].append((int(uid), _ncbi(sourceinfo)))
                 self.species_ncbi.setdefault(_name, _ncbi(sourceinfo))
+                self.species_uid.setdefault(_name, int(uid))
+                self.species_name[int(uid)] = _name
 
     def _within_context(self, uid: int) -> bool:
         if self.context_uid is None:
@@ -289,13 +293,55 @@ class SynthTree:
         return next(n for n in paths[0] if n in common)
 
 
-def genus_anchors(synth: SynthTree, taxonomy: Taxonomy, genera: list[str]) -> tuple[dict[str, int], dict[str, str]]:
+ANCHOR_RULES = ("majority", "mrca")
+# genera.tsv columns describing how a genus that is not a node of the synthesis was anchored (#51)
+ANCHOR_COLUMNS = ("anchor_rule", "anchor_fallback", "anchor_basis", "anchor_species", "anchor_species_inside",
+                  "anchor_outside_share",
+                  "anchor_outside_species", "anchor_mrca_node", "anchor_mrca_clade_genera")
+
+
+def majority_clade(synth: SynthTree, nodes: list[int], share: float = 0.5) -> tuple[int, int]:
+    """The smallest clade of the synthetic tree holding more than ``share`` of ``nodes``, and how many it holds.
+
+    Clades holding more than half of the same set are nested, so for
+    ``share`` >= 0.5 the smallest is unique: the deepest node on the path
+    from any of them to the root whose count passes the threshold.
+    """
+    counts: dict[int, int] = defaultdict(int)
+    for node in set(nodes):
+        for step in synth.path_to_root(node):
+            counts[step] += 1
+    n = len(set(nodes))
+    passing = [node for node, c in counts.items() if c > share * n]
+    sizes = synth.subtree_sizes()
+    best = min(passing, key=lambda node: (int(sizes[node]), node))
+    return best, counts[best]
+
+
+def genus_anchors(synth: SynthTree, taxonomy: Taxonomy, genera: list[str], rule: str = "mrca",
+                  sampled: dict[str, set[str]] | None = None, share: float = 0.5, min_species: int = 3,
+                  min_sampled: int = 2, diagnostics: dict[str, dict[str, str]] | None = None,
+                  ) -> tuple[dict[str, int], dict[str, str]]:
     """The node of the synthetic tree that stands for each genus, and how it was found.
 
     See :func:`genus_topology_newick` for the rules and the status values.
+
+    A genus that is not a node of the synthesis is anchored on its species
+    there. With ``rule`` ``mrca`` (the rule before #51) that is the MRCA of
+    all of them, so a single stray species can drag the anchor, and the stem
+    with it, deep into the tree. With ``rule`` ``majority`` (#51) it is the
+    smallest clade holding more than ``share`` of them (``attached_at_majority``),
+    where there are at least ``min_species``; with fewer, there is no
+    majority to speak of and the MRCA is used. The species are those
+    ``sampled`` in the run (names per genus) where at least ``min_sampled``
+    of them are in the synthesis, otherwise all species of the genus in OTT.
+    ``diagnostics``, if given, receives per genus the ``ANCHOR_COLUMNS``.
     """
+    if rule not in ANCHOR_RULES:
+        raise ValueError(f"anchoring rule must be one of {ANCHOR_RULES}, not {rule!r}")
     anchor: dict[str, int] = {}
     status: dict[str, str] = {}
+    genus_of = None
     for genus in genera:
         match = taxonomy.genus.get(genus, {"status": "unmatched"})
         if match["status"] != "matched":
@@ -305,10 +351,45 @@ def genus_anchors(synth: SynthTree, taxonomy: Taxonomy, genera: list[str]) -> tu
         if node is not None:
             anchor[genus], status[genus] = node, "in_synthesis"
             continue
-        present = [synth.index[f"ott{uid}"] for uid, _ in taxonomy.species.get(genus, []) if f"ott{uid}" in synth.index]
+        species = {uid for uid, _ in taxonomy.species.get(genus, []) if f"ott{uid}" in synth.index}
+        basis = "all"
+        if sampled and genus in sampled:
+            mine = {taxonomy.species_uid[n] for n in sampled[genus] if n in taxonomy.species_uid} & species
+            if len(mine) >= min_sampled:
+                species, basis = mine, "sampled"
+        present = sorted(synth.index[f"ott{uid}"] for uid in species)
         if present:
-            anchor[genus] = synth.mrca(present) if len(present) > 1 else int(synth.parent[present[0]])
-            status[genus] = "attached_at_mrca"
+            mrca_node = synth.mrca(present) if len(present) > 1 else int(synth.parent[present[0]])
+            anchor[genus], status[genus] = mrca_node, "attached_at_mrca"
+            used, fallback = "mrca", ""
+            if rule == "majority":
+                if len(present) < min_species:
+                    fallback = "too_few_species"
+                else:
+                    best, _ = majority_clade(synth, present, share)
+                    if best != mrca_node:
+                        anchor[genus], status[genus], used = best, "attached_at_majority", "majority"
+                    else:
+                        fallback = "no_smaller_majority"
+            if diagnostics is not None:
+                if genus_of is None:
+                    genus_of = synth.tip_genera(taxonomy)
+                sizes = synth.subtree_sizes()
+                inside_nodes = set(range(anchor[genus], anchor[genus] + int(sizes[anchor[genus]])))
+                outside = [uid for uid in sorted(species) if synth.index[f"ott{uid}"] not in inside_nodes]
+                values = genus_of[mrca_node: mrca_node + int(sizes[mrca_node])]
+                diagnostics[genus] = {
+                    "anchor_rule": used,
+                    "anchor_fallback": fallback,
+                    "anchor_basis": basis,
+                    "anchor_species": str(len(present)),
+                    "anchor_species_inside": str(len(present) - len(outside)),
+                    "anchor_outside_share": f"{len(outside) / len(present):.3f}",
+                    "anchor_outside_species": ";".join(taxonomy.species_name.get(u, f"ott{u}") for u in outside[:10])
+                    + (";..." if len(outside) > 10 else ""),
+                    "anchor_mrca_node": synth.label[mrca_node],
+                    "anchor_mrca_clade_genera": str(int(np.unique(values[values >= 0]).size)),
+                }
             continue
         # last resort: the nearest taxonomic ancestor that is in the synthesis
         uid = int(taxonomy.parent[match["ott_id"]])
@@ -332,7 +413,8 @@ def genus_topology_newick(
     species) is attached at the MRCA of its species in the synthesis, and
     failing that at its nearest taxonomic ancestor in the synthesis. Returns
     the Newick string and a status per genus: ``in_synthesis``,
-    ``attached_at_mrca``, ``attached_at_taxon:<ott id>``, or why it is missing.
+    ``attached_at_mrca``, ``attached_at_majority`` (#51),
+    ``attached_at_taxon:<ott id>``, or why it is missing.
     ``anchors`` gives the anchors and statuses to use instead, as returned by
     :func:`genus_anchors` and possibly corrected (#50).
     """

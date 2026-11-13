@@ -41,6 +41,11 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.col.join` | `col` | `col`: send a genus to TimeTree with COL's NCBI id where it is one of the ids OTT holds for it, or OTT has none; `ott`: always OTT's |
 | `backbone_build.col.species` | `false` | Also resolve every species name of the records (`backbone/col_species.tsv`) |
 | `backbone_build.col.workers` | 4 | Concurrent requests to ChecklistBank |
+| `backbone_build.anchoring.rule` | `majority` | Genera that are not a node of the synthesis: `majority` (smallest clade with more than `share` of their species) or `mrca` (MRCA of all; before #51) ([provenance](provenance.md#anchoring-genera-that-are-not-a-node-of-the-synthesis)) |
+| `backbone_build.anchoring.share` | 0.5 | Share of the species the anchor clade must hold, more than |
+| `backbone_build.anchoring.min_species` | 3 | Fewer species in the synthesis: the MRCA |
+| `backbone_build.anchoring.prefer_sampled` | `true` | Anchor on the species in the run's records rather than all species in OTT |
+| `backbone_build.anchoring.min_sampled` | 2 | Sampled species needed in the synthesis to use them |
 | `backbone_build.concordance.enabled` | `true` | Placement concordance: `backbone/concordance.tsv`; needed for re-anchoring ([provenance](provenance.md#placement-concordance), #49) |
 | `backbone_build.concordance.flag_level` | `class` | A lineage or merged-id check fails when the lineages part at this rank or higher: `family`, `superfamily`, `order`, `class`, `phylum`, `kingdom` |
 | `backbone_build.concordance.max_share` | 0.0 | The barcode-neighbour check fails when at most this share of the cross-genus hits is in a phylum of the backbone sisters |

@@ -53,6 +53,13 @@ backbone_build:
                              # holds for it, or OTT has none; ott: always OTT's (as before #48)
     species: false           # also resolve every species name of the records (slow: one query per name)
     workers: 4
+  anchoring:                 # genera that are not a node of the synthesis (#51)
+    rule: majority           # majority: smallest clade with more than `share` of the genus's species;
+                             # mrca: the MRCA of all of them (as before #51)
+    share: 0.5
+    min_species: 3           # fewer species in the synthesis: MRCA, since there is no majority to speak of
+    prefer_sampled: true     # use the species in the run's records, where at least min_sampled are in the
+    min_sampled: 2           # synthesis; otherwise all species of the genus in OTT
   concordance:               # placement concordance, report only (#49): backbone/concordance.tsv
     enabled: true
     flag_level: class        # a lineage or merged-id check fails when the two lineages are in different

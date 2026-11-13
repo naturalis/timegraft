@@ -67,3 +67,36 @@ The backbone with flagged genera re-anchored before dating ([#50](https://github
   - *Onchidella*: 360.0 Ma before, now 466.4 Ma. The synthesis resolves Onchidiidae only to a 30-way polytomy within the gastropods, which TimeTree dates at 466 Ma (19 estimates). The genus is in the right clade now, but at the depth the synthesis allows, which is a matter for #51 and #52.
 - **The two deepest nodes below the root.** Before, they were 750.0 and 749.9 Ma; now they are 682.3 and 682.0 Ma. With *Onchidella* among the sea urchins, TimeTree had dated their node at 721 Ma (Bilateria). That age outranked the higher-taxon age of 682 Ma for the node above, so both were dropped and interpolated near the root. One misplaced genus therefore shifted the deepest backbone ages, which enter the PD of every sample. This is the propagation the holistic analysis describes.
 - **Everything else.** 767 of the 780 node ages are unchanged.
+
+## `anchoring/` (#51)
+
+The backbone with majority-clade anchoring ([#51](https://github.com/naturalis/timegraft/issues/51)) at the defaults (`rule: majority`, `share: 0.5`, `min_species: 3`, `prefer_sampled: true`, `min_sampled: 2`), on top of `reanchor/`: `backbone.tre`, `node_ages.tsv`, `crown_ages.tsv`, `genera.tsv`, `concordance.tsv`, `metadata.json`. `rule: mrca` with `prefer_sampled: false` reproduces `reanchor/` exactly.
+
+**Which genera.** The rule applies to the 149 genera that are not a node of the synthesis and are anchored on their species; the 996 that are nodes and the 38 attached at an enclosing taxon are untouched. For 145 of the 149 the anchor uses the species sampled in the run; for 4 there were fewer than two of those in the synthesis, so all species of the genus in OTT were used. 62 genera are now anchored on a majority clade. 75 keep the MRCA because no smaller clade holds a majority of their species (`no_smaller_majority`), and 12 keep it because they have fewer than three species in the synthesis (`too_few_species`).
+
+**Outlier sensitivity.** Genera anchored at the base of a clade of more than 50 genera go from 20 to 12, and of more than 10 genera from 61 to 43. Examples, as genera in the anchor clade under the MRCA and then the majority rule:
+
+- *Carassius*: 277 to 2, with *C. gibelio* and *C. cuvieri* outside.
+- *Caryophyllia*: 269 to 10.
+- *Oculina*: 235 to 3.
+- *Squatina*: 117 to 1.
+- *Barbus*: 114 to 2.
+- *Octopus*: 49 to 10.
+
+`anchor_outside_share` and `anchor_outside_species` give, for each genus, the species left out.
+
+**Effect on ages.**
+
+- 31 stem ages change: 25 decrease and 6 increase.
+- Largest decreases: *Etmopterus* 258 to 130 Ma, *Loligo* and *Alloteuthis* 158 to 77 Ma, *Squatina* 258 to 182 Ma, *Pagellus* and *Dentex* 62 to 22 Ma, *Balanus* 94 to 57 Ma, *Raja* and *Dipturus* 98 to 68 Ma.
+- The increases are small, at most 13 to 20 Ma (*Sepietta*, *Rondeletiola*).
+- 758 of the 780 earlier node ages are unchanged; the backbone now has 784 nodes, because genera that were part of polytomies are separated.
+- The total branch length of the backbone falls by 0.25%.
+- Placement concordance is unchanged: *Onchidella* is flagged and re-anchored, and *Arbacia* and *Magelona* are for review.
+
+Taking each part on its own:
+
+- Sampled species with the MRCA rule changes one anchor, for *Loligo*.
+- The majority rule on all species moves 16 genera and changes 8 stems.
+
+**What it does not fix.** The worst cases in the analysis keep their anchors, because their species are scattered over the synthetic tree rather than drawn out by a few strays: *Mycale* (465 genera, all 8 sampled species spread out), *Munidopsis* (238), *Trachurus* and *Pseudocaranx* (190), *Periclimenes* (170) and *Phakellia* (136). They are marked `no_smaller_majority`. They need either weighting of the conflicting TimeTree ages around them (#52) or a curated decision.

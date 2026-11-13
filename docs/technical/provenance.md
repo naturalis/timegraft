@@ -72,6 +72,7 @@ The first four columns (`genus`, `status`, `ott_id`, `ncbi_id`) are as before. A
 | `anchor_node` | Node of the synthetic tree the genus is a tip at (see `status`) |
 | `anchor_clade_genera` | Genera in the clade of that node; large for a genus attached at the MRCA of its species when one species lies far away ([#51](https://github.com/naturalis/timegraft/issues/51)) |
 | `n_species_ott`, `n_species_in_synthesis` | Species of the genus in OTT, and those of them in the synthetic tree |
+| `anchor_rule`, `anchor_fallback`, `anchor_basis`, `anchor_species`, `anchor_species_inside`, `anchor_outside_share`, `anchor_outside_species`, `anchor_mrca_node`, `anchor_mrca_clade_genera` | How a genus that is not a node of the synthesis was anchored on its species; see [below](#anchoring-genera-that-are-not-a-node-of-the-synthesis) |
 | `records_n` | Reference records of the genus |
 | `records_family`, `records_order`, `records_class`, `records_phylum` and their `_share` | The most common name per rank among those records, and the share of records naming that rank that agree. This is the reference lineage that placement concordance compares with OTT ([#49](https://github.com/naturalis/timegraft/issues/49)) |
 | `col_*`, `join_ncbi_id`, `join_ncbi_source` | Catalogue of Life as identifier hub; see [below](#catalogue-of-life-as-identifier-hub) |
@@ -113,6 +114,25 @@ COL is used for identifiers only. The topology still comes from the OTT and synt
 With `backbone_build.col.species: true`, every species name of the records is resolved too, into `backbone/col_species.tsv` (`genus`, `species`, the COL match and confidence, the NCBI id derived from it, and the NCBI id OTT has for the name, `ott_ncbi_id`). This is one query per name and off by default; it is meant for crown ages from the sampled species ([#54](https://github.com/naturalis/timegraft/issues/54)). Otherwise the file has only its header.
 
 **Reproducibility.** `col.release` is a ChecklistBank dataset key, by default 316691 (COL26.10 XR, 16 October 2026). An alias such as `3LXR` also works but follows the latest release; the key it resolved to is in `metadata.json` and the log warns. Every ChecklistBank answer is cached in `backbone_build.cache` under keys starting with `col:` and the release key, so a run with the same release and cache gives the same result without network access.
+
+## Anchoring genera that are not a node of the synthesis
+
+A genus that is not a node of the synthetic tree (in Iberia, 149 of 1,218) is anchored on its species there. The MRCA of all of them, the rule before [#51](https://github.com/naturalis/timegraft/issues/51), lets a single stray species (a misidentification, a species that belongs elsewhere, a regional subset of a global genus) pull the anchor, and the stem age with it, deep into the tree: *Carassius* hung at the base of a clade of 277 genera because two of its five species sit elsewhere. With `anchoring.rule: majority` (the default) the anchor is instead the smallest clade holding more than `anchoring.share` (default half) of the species; clades holding more than half of the same species are nested, so that clade is unique.
+
+**Which species.** Those sampled in the run (the species names of the genus's records found in OTT), where at least `min_sampled` (default 2) of them are in the synthesis: the genus subtree is built from those units, so that is the clade it should hang from. Otherwise all species of the genus in OTT.
+
+**Fallbacks.** With fewer than `min_species` (default 3) species in the synthesis there is no majority to speak of, and the MRCA is used (`too_few_species`). Where no clade smaller than the MRCA holds a majority, because the species are scattered, the MRCA is used too (`no_smaller_majority`). With a single species, the genus hangs from its parent, as before. Genera that are a node of the synthesis, or that are only attached at an enclosing taxon, are not affected. `anchoring.rule: mrca` with `prefer_sampled: false` gives the rule before #51.
+
+| Column | Meaning |
+| --- | --- |
+| `anchor_rule` | `majority` or `mrca`: which rule set the anchor. Empty for genera that are a node of the synthesis or attached at an enclosing taxon |
+| `anchor_fallback` | Why the MRCA was used under the majority rule: `too_few_species`, `no_smaller_majority`; empty otherwise |
+| `anchor_basis` | `sampled` (the run's species) or `all` (all species in OTT) |
+| `anchor_species`, `anchor_species_inside` | Species used, and those in the clade anchored at |
+| `anchor_outside_share`, `anchor_outside_species` | The share of them left outside that clade, and their names (at most ten) |
+| `anchor_mrca_node`, `anchor_mrca_clade_genera` | The MRCA of all of them and the genera in its clade: where the earlier rule would have put the genus, against `anchor_node` and `anchor_clade_genera` for where it is now |
+
+The status of a genus anchored on a majority clade is `attached_at_majority`. For a re-anchored genus (#50) these columns describe its original anchoring.
 
 ## Placement concordance
 
@@ -168,7 +188,7 @@ Columns in `genera.tsv`:
 
 ## `backbone/metadata.json`
 
-New. What the backbone was built from: the format version of each output and of the cache, the timegraft version, the source, OTT and synthesis releases, the matching context, whether synthesis support was read, the concordance and re-anchoring settings with the number of genera per `concordance_flag` and per `placement_action`, the COL release (key, alias, version) with counts of genera by confidence and crosswalk path and of genera joined with COL's NCBI id, and a summary of the TimeTree evidence (queries per evidence level, TimeTree database versions, and how many cache entries are at version 1, were upgraded, or now get a different answer from TimeTree).
+New. What the backbone was built from: the format version of each output and of the cache, the timegraft version, the source, OTT and synthesis releases, the matching context, whether synthesis support was read, the anchoring, concordance and re-anchoring settings with the number of genera per status and the number of genera per `concordance_flag` and per `placement_action`, the COL release (key, alias, version) with counts of genera by confidence and crosswalk path and of genera joined with COL's NCBI id, and a summary of the TimeTree evidence (queries per evidence level, TimeTree database versions, and how many cache entries are at version 1, were upgraded, or now get a different answer from TimeTree).
 
 ## Migration note for downstream consumers
 
@@ -180,4 +200,5 @@ New. What the backbone was built from: the format version of each output and of 
 - **`genera.tsv` format 3** (#48) replaces the three reserved `col_*` columns of format 2 with the filled ones above, adds `ott_resolution` and the `join_*` columns, and keeps the earlier columns and their order.
 - **`genera.tsv` format 4** (#49) fills `lineage_distance`, `merged_id_distance`, `neighbour_concordance` and `concordance_flag`; `backbone/concordance.tsv` is new. The build now also reads `units/screened.tsv`, so it runs after screening.
 - **`genera.tsv` format 5 and `concordance.tsv` format 2** (#50) add the re-anchoring columns above. With the default `reanchor.mode: apply` the backbone changes wherever a genus is flagged: the genus has a new place and `status` (`reanchored:<node>`), and the ages around its old and new place change. `mode: report` keeps the earlier backbone.
+- **`genera.tsv` format 6** (#51) adds the `anchor_*` columns above, and a new status, `attached_at_majority`. With the default `anchoring.rule: majority` and `prefer_sampled: true`, genera that are not a node of the synthesis can have a different anchor, and the backbone and its ages change around them.
 - **The build reads the filtered records** (`units/filtered.tsv`) for the reference lineage, besides the representatives, so it runs again when the records change.
