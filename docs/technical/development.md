@@ -42,6 +42,7 @@ Rule scripts import the package from `src/` through the `src` parameter that eve
 | `concordance` | placement concordance: rank-level distances between lineages, barcode neighbours against backbone sisters, flags |
 | `reanchor` | moving flagged genera before dating: targets from the reference lineage, synthesis nodes, curated overrides |
 | `agefit` | weighted, robust fit of backbone ages under monotonicity: calibration uncertainty, tree isotonic regression, conflict metrics |
+| `requery` | re-querying conflicting nodes with disjoint picks: triggers, picks, classification |
 | `timetree` | TimeTree MRCA queries with caching and concurrency; cache format version 2 with the evidence behind each age ([provenance](provenance.md)) |
 | `backbone_build` | dating a genus topology with TimeTree; conflicts; interpolation; the columns of `node_ages.tsv` and `genera.tsv` |
 | `graft` | grafting subtrees onto the backbone |

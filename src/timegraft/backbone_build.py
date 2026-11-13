@@ -21,6 +21,8 @@ import dendropy
 from .col import GENUS_COLUMNS as COL_GENUS_COLUMNS
 from .col import compare_ids
 from . import agefit
+from . import requery as rq
+from .requery import COLUMNS as REQUERY_COLUMNS
 from .timetree import EVIDENCE_COLUMNS, TimeTree
 
 REPORT_COLUMNS = (
@@ -36,11 +38,11 @@ REPORT_COLUMNS = (
     # and source the precedence rule before #52 gives the node
     "calibration_sigma", "calibration_weight", "fitted_age", "calibration_residual", "calibration_z",
     "calibration_outlier", "precedence_age", "precedence_source",
-    # filled by a later issue of #46: re-query of conflicts (#53)
-    "conflict_class", "requery_age",
+    # re-query of conflicting nodes with disjoint picks, and what it says about the cause (#53)
+    *REQUERY_COLUMNS,
 )
 # columns reserved for later issues, written empty until those land
-RESERVED_COLUMNS = ("conflict_class", "requery_age")
+RESERVED_COLUMNS = ()
 AGE_METHODS = ("fit", "precedence")
 
 
@@ -209,6 +211,7 @@ def date_topology(
     support: dict[str, dict[str, int]] | None = None,
     method: str = "fit",
     fit: dict | None = None,
+    requery: dict | None = None,
 ) -> tuple[dendropy.Tree, list[dict]]:
     """Set branch lengths in Ma on a genus-level topology, in place.
 
@@ -244,6 +247,13 @@ def date_topology(
     ``precedence`` an age that is not younger than its nearest dated
     ancestor is dropped, as before #52. Either way the report also gives the
     ages and sources of the precedence rule, for comparison.
+
+    ``requery`` (#53; settings ``mode``: ``classify``, ``apply`` or ``off``;
+    ``z_trigger``, ``ratio_trigger``, ``move``) re-asks TimeTree about
+    conflicting nodes with picks disjoint from the first query, and
+    classifies the conflict (:mod:`timegraft.requery`). With ``apply`` (fit
+    only) the re-query age replaces the first for nodes classed as
+    ``under_spanning`` or ``pick_specific``, and the ages are fitted again.
     """
     if method not in AGE_METHODS:
         raise ValueError(f"unknown age method {method!r}; use one of {', '.join(AGE_METHODS)}")
@@ -309,10 +319,27 @@ def date_topology(
     calibrations, cal_parent, unresolved = _calibrations(tree, age, source, used, timetree, synth_nodes, support,
                                                          fit)
     calibration_rows = _calibration_rows(calibrations)
+    requery = dict(requery or {})
+    rq_mode = {False: "off", True: "classify"}.get(requery.get("mode"), requery.get("mode", "classify"))
+    if rq_mode not in ("classify", "apply", "off"):
+        raise ValueError(f"requery mode must be classify, apply or off, not {rq_mode!r}")
+    requery_rows: dict[dendropy.Node, dict[str, str]] = {}
     if method == "precedence":
         age, source = p_age, p_source
+        if rq_mode != "off":
+            requery_rows, _ = _requery(tree, calibrations, {}, set(), conflict, conflict_with, p_age, used, ncbi,
+                                       timetree, per_side, per_genus, requery)
     else:
-        age, source, fitted_rows = _fit(tree, calibrations, cal_parent, unresolved, source, fit)
+        age, source, fitted_rows, result = _fit(tree, calibrations, cal_parent, unresolved, source, fit)
+        if rq_mode != "off":
+            requery_rows, replace = _requery(tree, calibrations, result.z, result.outlier, conflict, conflict_with,
+                                             result.age, used, ncbi, timetree, per_side, per_genus, requery)
+            if rq_mode == "apply" and replace:
+                for node, (value, sigma) in replace.items():
+                    calibrations[node] = agefit.Calibration(value, sigma, calibrations[node].source)
+                    requery_rows[node]["requery_applied"] = "yes"
+                calibration_rows = _calibration_rows(calibrations)
+                age, source, fitted_rows, result = _fit(tree, calibrations, cal_parent, unresolved, source, fit)
         for node, row in fitted_rows.items():
             calibration_rows[node].update(row)
         for node, value in interpolate(tree, age, method=interpolation, richness=richness).items():
@@ -363,6 +390,8 @@ def date_topology(
                                     "calibration_z", "calibration_outlier")})
         row.update(calibration_rows.get(node, {}))
         row.update(precedence_age=f"{p_age[node]:.4f}", precedence_source=p_source[node])
+        row.update({c: "" for c in REQUERY_COLUMNS})
+        row.update(requery_rows.get(node, {}))
         row.update({c: "" for c in RESERVED_COLUMNS})
     return tree, report
 
@@ -487,7 +516,63 @@ def _fit(tree, calibrations, parent, unresolved, source, settings):
             "calibration_z": f"{result.z[node]:.3f}",
             "calibration_outlier": "yes" if node in result.outlier else "",
         }
-    return fitted, new_source, rows
+    return fitted, new_source, rows, result
+
+
+def _requery(tree, calibrations, z, outliers, conflict, conflict_with, reference, used, ncbi, timetree, per_side,
+             per_genus, settings):
+    """Re-query triggered nodes with disjoint picks and classify them (#53).
+
+    Returns the report columns per triggered node, and for the nodes whose
+    class says the first age was the picks' doing (``under_spanning``,
+    ``pick_specific``) the re-query age with its uncertainty, for ``apply``.
+    """
+    todo = rq.triggers(z, outliers, conflict, conflict_with, float(settings.get("z_trigger", rq.Z_TRIGGER)),
+                       float(settings.get("ratio_trigger", rq.RATIO_TRIGGER)))
+    rows, replace = {}, {}
+    for node in tree.preorder_node_iter():
+        if node not in todo or node not in calibrations or calibrations[node].fixed or node not in used:
+            continue
+        first = calibrations[node].age
+        exclude = set(used[node])
+        sides = [rq.disjoint_side([l.taxon.label for l in child.leaf_iter()], ncbi, exclude, per_side, per_genus)
+                 for child in node.child_node_iter()]
+        row = {c: "" for c in rq.COLUMNS}
+        row["requery_trigger"] = todo[node]
+        if sum(1 for s in sides if s) < 2:
+            row.update(conflict_class="unresolved", conflict_detail="no_disjoint_picks")
+            rows[node] = row
+            continue
+        # up to `attempts` disjoint pick sets, until TimeTree finds taxa on two sides
+        again, ids = None, sorted({i for side in sides for i in side})
+        for attempt in range(int(settings.get("attempts", 3))):
+            if attempt:
+                sides = [rq.disjoint_side([l.taxon.label for l in child.leaf_iter()], ncbi, exclude, per_side,
+                                          per_genus, attempt) for child in node.child_node_iter()]
+                if sum(1 for s in sides if s) < 2:
+                    break
+            ids = sorted({i for side in sides for i in side})
+            again = timetree.split_age([s for s in sides if s])
+            if again is not None:
+                break
+        evidence = timetree.evidence(ids) if hasattr(timetree, "evidence") else {}
+        first_evidence = timetree.evidence(used[node]) if hasattr(timetree, "evidence") else {}
+        n_first = int(first_evidence.get("n_estimates") or 0)
+        n_again = int(evidence.get("n_estimates") or 0) if again is not None else 0
+        cls, detail, confidence = rq.classify(first, again, reference.get(node, first), n_first, n_again,
+                                              float(settings.get("move", rq.MOVE)))
+        row.update(requery_ids="+".join(map(str, ids)), requery_age="" if again is None else f"{again:.4f}",
+                   requery_mrca_ncbi=evidence.get("mrca_ncbi", "") if again is not None else "",
+                   requery_n_estimates=str(n_again) if again is not None else "",
+                   conflict_class=cls, conflict_detail=detail, conflict_confidence=confidence)
+        rows[node] = row
+        if cls in ("under_spanning", "pick_specific") and again:
+            entry = timetree.cache.get(timetree._key(ids)) if hasattr(timetree, "cache") else None
+            entry = entry if isinstance(entry, dict) else {}
+            sigma = agefit.calibration_sigma(entry.get("estimates") or (), entry.get("ci_low"), entry.get("ci_high"),
+                                             higher_taxa=False)
+            replace[node] = (again, sigma)
+    return rows, replace
 
 
 def age_fit_summary(report: list[dict], severe: float = 1.5) -> dict:
@@ -500,8 +585,12 @@ def age_fit_summary(report: list[dict], severe: float = 1.5) -> dict:
         calibrations[row["node"]] = agefit.Calibration(float(row["timetree_age"]), float(row["calibration_sigma"]))
         final[row["node"]] = float(row["age"])
         precedence[row["node"]] = float(row["precedence_age"])
+    # with requery.mode apply, some calibrations were replaced by their re-query age (#53)
+    effective = {n: agefit.Calibration(float(r["requery_age"]), calibrations[n].sigma)
+                 for r in report for n in [r["node"]] if n in calibrations and r.get("requery_applied") == "yes"}
     return {
         "final": agefit.misfit(final, calibrations, severe),
+        "final_against_requery": agefit.misfit(final, {**calibrations, **effective}, severe) if effective else None,
         "precedence": agefit.misfit(precedence, calibrations, severe),
         "outliers": sum(1 for r in report if r.get("calibration_outlier") == "yes"),
     }

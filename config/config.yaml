@@ -65,6 +65,13 @@ backbone_build:
       huber_k: 1.5           # calibrations off by more than this many sigma are down-weighted
       outlier_z: 3.0         # and reported as outliers beyond this
       min_gap: 0.01          # each edge between calibrated nodes at least 1% of the older age
+    requery:                 # re-ask TimeTree about conflicting nodes with disjoint picks (#53)
+      mode: classify         # classify (report the likely cause); apply (fit only: use the re-query age
+                             # where the first age was the picks' doing, and fit again); off
+      z_trigger: 2.0         # re-query calibrations this many sigma or more from the fit,
+      ratio_trigger: 1.5     # and both nodes of a precedence conflict this large or larger
+      move: 1.25             # a re-query age within this factor of the first counts as the same
+      attempts: 3            # disjoint pick sets to try until TimeTree finds taxa on two sides
   anchoring:                 # genera that are not a node of the synthesis (#51)
     rule: majority           # majority: smallest clade with more than `share` of the genus's species;
                              # mrca: the MRCA of all of them (as before #51)
