@@ -28,20 +28,24 @@ from .seqio import write_fasta
 PLACEMENT_COLUMNS = ("asv_id", "status", "tip", "unit_id", "genus", "identity", "attach_age")
 
 
-def vsearch_hits(
+def vsearch_search(
     queries: list[tuple[str, str]],
     refs: list[tuple[str, str]],
     min_identity: float,
     query_cov: float = 0.9,
     maxaccepts: int = 20,
     threads: int = 1,
-) -> dict[str, list[tuple[str, float]]]:
-    """Hits per query as (reference id, identity in 0..1), best first."""
+    fields: tuple[str, ...] = (),
+):
+    """Run a VSEARCH global search; yield (query id, reference id, identity in 0..1, *fields).
+
+    ``fields`` are extra VSEARCH user fields (e.g. ``qilo``, ``qrow``, ``trow``),
+    returned as strings in the order given.
+    """
     if shutil.which("vsearch") is None:
         raise RuntimeError("vsearch not found on PATH")
-    hits: dict[str, list[tuple[str, float]]] = defaultdict(list)
     if not queries or not refs:
-        return hits
+        return
     with tempfile.TemporaryDirectory() as tmp:
         q, r, out = Path(tmp) / "q.fasta", Path(tmp) / "r.fasta", Path(tmp) / "hits.tsv"
         # neutral names: identifiers such as BOLD:AAA0001 are kept out of the FASTA headers
@@ -52,14 +56,29 @@ def vsearch_hits(
                 "vsearch", "--usearch_global", str(q), "--db", str(r),
                 "--id", str(min_identity), "--query_cov", str(query_cov),
                 "--maxaccepts", str(maxaccepts), "--maxrejects", "64",
-                "--userout", str(out), "--userfields", "query+target+id",
+                "--userout", str(out), "--userfields", "+".join(("query", "target", "id") + tuple(fields)),
                 "--threads", str(threads), "--quiet",
             ],
             check=True,
         )
-        for line in out.read_text().splitlines():
-            qi, ri, ident = line.split("\t")
-            hits[queries[int(qi[1:])][0]].append((refs[int(ri[1:])][0], float(ident) / 100.0))
+        with open(out) as handle:
+            for line in handle:
+                qi, ri, ident, *extra = line.rstrip("\n").split("\t")
+                yield (queries[int(qi[1:])][0], refs[int(ri[1:])][0], float(ident) / 100.0, *extra)
+
+
+def vsearch_hits(
+    queries: list[tuple[str, str]],
+    refs: list[tuple[str, str]],
+    min_identity: float,
+    query_cov: float = 0.9,
+    maxaccepts: int = 20,
+    threads: int = 1,
+) -> dict[str, list[tuple[str, float]]]:
+    """Hits per query as (reference id, identity in 0..1), best first."""
+    hits: dict[str, list[tuple[str, float]]] = defaultdict(list)
+    for query, ref, ident in vsearch_search(queries, refs, min_identity, query_cov, maxaccepts, threads):
+        hits[query].append((ref, ident))
     for key in hits:
         hits[key].sort(key=lambda h: -h[1])
     return hits

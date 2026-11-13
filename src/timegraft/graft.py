@@ -22,6 +22,8 @@ PROVENANCE_COLUMNS = (
     "ratio_allowed",
     "crown_decision",
     "root_to_tip",
+    "rate_outliers",
+    "rate_outlier_z",
     "rate",
     "rate_source",
     "rooting",

@@ -109,6 +109,17 @@ Everything that differs between markers sits in `markers.<name>`:
 | `screening.margin` | 0.02 | | A unit at least this much more similar (identity) to another genus than to any congener is set aside |
 | `screening.min_identity` | 0.80 | | A unit with no congener at this identity is set aside, if the genus has units that do |
 | `screening.query_cov` | 0.7 | | Share of a representative that must align in the search |
+| `screening.mutual_pairs` | `both` | | Two units of different genera, each the other's nearest unit of another genus and both `other_genus`: set aside `both`, or only the `further` from its own genus; see [mutual pairs](#mutual-pairs) |
+| `screening.classes` | `class` | | Rank for thresholds per taxon and for `units/screening_calibration.tsv` |
+| `screening.thresholds` | `{}` | | `margin` and `min_identity` per taxon at that rank, e.g. `{Copepoda: {min_identity: 0.82}}`; see [thresholds per class](#thresholds-per-class) |
+| `screening.threshold_table` | | | The same as a table (`class`, `margin`, `min_identity`); `thresholds` wins where both name a class |
+| `screening.reference.path` | | | A wider reference: a table of sequences from outside the run (`genus`, `sequence`, ranks; `unit_id` optional); see [a wider reference](#a-wider-reference) |
+| `screening.reference.scope` | `family` | | Use the reference sequences in a `genus`, `family`, `order`, `class` or `phylum` of the run, or `all` |
+| `screening.translation.enabled` | `true` | | Compare each unit codon by codon with its nearest relative (COI only); see [codon comparison](#codon-comparison) |
+| `screening.translation.min_changed_codons` | 8 | | `numt_like` needs at least this many changed codons ... |
+| `screening.translation.max_nonsynonymous_share` | 0.5 | | ... of which more than this share change the amino acid |
+| `screening.translation.action` | `flag` | | `flag`: report only; `set_aside`: set `numt_like` units aside like the others |
+| `screening.rate_outlier_z` | 3.5 | | Genus subtrees: list units whose root-to-tip distance lies this many robust standard deviations above the median (`rate_outliers` in `provenance.tsv`); 0 turns it off |
 | `crown_age.method` | `rate` | `fraction` | How to set a genus crown age when no better source exists |
 | `crown_age.rate` | 0.0115 | | Default substitution rate, per site per Myr, per lineage; sets the lower bound of the crown age, see [crown ages and rates](#crown-ages-and-rates) |
 | `crown_age.rates` | `{}` | | Rate per taxon, `rank: {name: rate}` |
@@ -137,9 +148,50 @@ Within-genus barcode distances set the lower bound of a genus's crown age, so a 
 - **`other_genus`**: it is at least `margin` more similar to a unit of another genus than to any unit of its own genus; or
 - **`isolated`**: no unit of its own genus reaches `min_identity`, while other units of the genus do.
 
-Genera with one unit are not screened, and a genus never loses all its units: if every unit would be set aside, all are kept (`kept_whole_genus`). Set-aside units are not discarded. They are placed like units without a usable genus: next to their nearest unit, at the age implied by their distance to it, or, if nothing reaches `placement.place_identity`, on the stem of their own genus (`stem_fraction` of the way from its crown to its stem node). They stay in the tree and in diversity, but do not shape the genus subtree or its crown age. `units/screened.tsv` gives every decision with its evidence.
+Genera with one unit are not screened, and a genus never loses all its units: if every unit would be set aside, all are kept (`kept_whole_genus`). Set-aside units are not discarded. They are placed like units without a usable genus: next to their nearest unit, at the age implied by their distance to it, or, if nothing reaches `placement.place_identity`, on the stem of their own genus (`stem_fraction` of the way from its crown to its stem node). They stay in the tree and in diversity, but do not shape the genus subtree or its crown age. `units/screened.tsv` gives every decision with its evidence: the nearest unit of the same genus and of another genus with their identities and where they came from (`run` or `external`), the thresholds that applied and the class they belong to, and the reason in words ([provenance](provenance.md#screening-units)). No unit is set aside without a row that says why.
 
-The thresholds are judgements. On the Iberian data the search takes two minutes for 25,000 units, and these settings set aside about 5% of units ([results](../science/results/2026-11-screening.md)). Screening is off for ITS until the thresholds are tested on fungal data: identities across fungal genera are lower and less comparable.
+The thresholds are judgements. On the Iberian data the search takes two minutes for 25,000 units, and these settings set aside about 5% of units ([results](../science/results/2026-11-screening.md)).
+
+#### Mutual pairs
+
+When a unit carries the name of the wrong genus, it is nearer to another genus than to its own, but its nearest true congener is often nearer to it than to any of its own congeners too: a pair of units, each the other's nearest unit of another genus, cannot tell which of the two has the wrong name. By default both are set aside. With `mutual_pairs: further`, only the one with the larger excess of the other-genus identity over its best congener is, and the other is kept with a reason that names the pair.
+
+On the Iberian data, with units given the name of another genus of their family, `further` cuts the correct units set aside along with them from 101 to 23 per 329 errors, at the cost of one in a hundred errors no longer caught, and sets aside 83 fewer units without any injected error (1,211 instead of 1,294). The default stays `both` until the benchmark of [#56](https://github.com/naturalis/timegraft/issues/56) has judged what it does to the trees ([evidence](../../data/iberia/consistency/README.md#screening-55)).
+
+#### Thresholds per class
+
+Identities between congeners differ between groups: congeneric sponges are closer than congeneric copepods. `screen_units` writes `units/screening_calibration.tsv`, which summarises per class (or the rank in `classes`) the identity of each kept unit to its nearest congener, how many units are nearer to another genus, how many were set aside, and how often codon changes alter the amino acid. It suggests a `min_identity` per class: the 1% quantile of congener identity among kept units, rounded down to a percent, between the search cut-off and 0.95, for classes with at least 50 such units. The suggestions are not applied: copy the ones you accept into `thresholds` or `threshold_table`. A class threshold below `min_identity` sees nothing new, because the search does not report hits below `min_identity`; the log warns about it.
+
+On the Iberian data, the suggested thresholds range from 0.80 to 0.89 (sponges). With them, mislabelled units are caught about as often as with 0.80 for every class (a few more teleosts, gastropods and elasmobranchs), while slightly more units are set aside without any injected error, so the defaults stay as they were ([evidence](../../data/iberia/consistency/README.md#screening-55)). A higher `min_identity` for all classes catches a few more errors but sets aside far more: 7.7% of units at 0.82 and 15% at 0.85, against 5.2% at 0.80.
+
+#### A wider reference
+
+Screening only sees the units in the run. A unit of a genus that is rare in the run, or misidentified as a genus whose relatives are not in it, may have nothing to be nearer to. `reference.path` adds sequences from outside the run, for instance BOLD records of the same families from other regions. They are searched with the units, within `reference.scope` (by default, only sequences of families that occur in the run), and count as evidence: a closer congener, or a closer unit of another genus. They are never decided on and do not enter the tree. Each best hit in `units/screened.tsv` says whether it came from the run or the reference, and `reference_scope` records the setting. The table needs `genus` and `sequence`, and the rank named in `scope`; rows whose `unit_id` is in the run are skipped.
+
+#### Codon comparison
+
+For COI, each unit is compared codon by codon with its nearest congener (or, without one, its nearest unit of another genus), in its own genetic code (see [genetic codes](#genetic-codes)) and its reading frame: the forward frame with the fewest stops, and among equals the one in which the differences are most often silent. Mitochondrial copies that diverge change mostly third positions, which rarely change the amino acid; a nuclear copy (NUMT), or a sequence with many errors, changes the amino acid at about three of four changed codons. A unit is:
+
+- **`numt_like`**: at least `min_changed_codons` codons differ, and more than `max_nonsynonymous_share` of them change the amino acid;
+- **`frameshift`**: the alignment with its relative is out of frame over a stretch, because of an indel whose length is not a multiple of three. The pair cannot tell which of the two has the indel, so this is reported only;
+- **`ok`**, or **`not_assessed`** when the unit has no relative at `min_identity` or its alignment was not kept.
+
+By default this only reports (`action: flag`). With `action: set_aside`, `numt_like` units are set aside like the others, under the same whole-genus rule. The reading-frame filter removes copies with stops, but most recent copies have none: on the Iberian sequences, three quarters of copies with 2% random substitutions still pass it, and this comparison flags 97% of them.
+
+#### Relative rates within a genus
+
+When the genus subtrees are built, the root-to-tip distance of each unit in the rooted tree, before dating, is compared with those of its congeners: units more than `rate_outlier_z` robust standard deviations (1.4826 times the median absolute deviation) above the median are listed in `rate_outliers` in `provenance.tsv`, with the largest score in `rate_outlier_z`. A long branch in a genus stretches its crown age; it may be a fast lineage, a poor sequence, a nuclear copy or a misidentification that screening did not catch. Nothing is removed: the list says where to look. Genera with fewer than four units are not assessed.
+
+#### Screening ITS
+
+Screening is off for ITS. Identities across fungal genera are lower and less comparable than for COI, alignment of ITS across genera is poor, and there is no reading frame for the codon comparison. Before turning it on for a data set, calibrate it:
+
+1. Run with `screening.enabled: true` and `margin: 1` (nothing is set aside as `other_genus`), with `min_identity` at the lowest identity at which you trust ITS alignments (0.80 is a start).
+2. Read `units/screening_calibration.tsv`: congener identities per class, and the share of units nearer to another genus.
+3. Run the injection part of `data/iberia/consistency/screening/benchmark.py` on the representatives and records of the run, to measure how many mislabelled units each `margin` and `min_identity` catches, and what else changes.
+4. Turn it on when, at the chosen thresholds, units given the name of another genus of their family are caught about as well as for COI on the Iberian data (0.91 at the defaults; at least 0.85), no more than about 10% of the units of any class with 200 units or more are set aside without injected errors (the highest COI class, Gymnolaemata, is at 15%; most are below 6%), and the classes that need their own thresholds have them in `thresholds`.
+
+Set `translation.enabled` to false for ITS: it is not coding, and `screen_units` marks the units `not_coding` regardless.
 
 ### Crown ages and rates
 

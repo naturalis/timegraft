@@ -262,6 +262,26 @@ Columns in `genera.tsv`:
 
 `ott_family` to `ott_phylum` keep OTT's own lineage, which is what was wrong. In `concordance.tsv`, `placement_action` repeats the action, and `neighbour_concordance_after` gives the barcode-neighbour check again on the corrected topology, for every genus, so that a correction can be seen to make the neighbours agree (for the genus and for its former sisters).
 
+## Screening units
+
+`units/screened.tsv` (format 2, [#55](https://github.com/naturalis/timegraft/issues/55)) gives one row per unit, with the evidence and reason for its screening decision. The first ten columns are those of format 1, in the same order, except that `best_congener_scope` and `best_other_scope` follow the hit they describe.
+
+| Column | Content |
+| --- | --- |
+| `decision` | `keep`, `other_genus`, `isolated`, `numt_like` (only with `translation.action: set_aside`), `kept_whole_genus`, or `not_screened` |
+| `best_congener`, `best_congener_identity`, `best_congener_scope` | The nearest unit of the same genus, its identity, and whether it is a unit of the `run` or a sequence of the `external` reference (identifier `external:<id>`) |
+| `best_other`, `best_other_genus`, `best_other_identity`, `best_other_scope` | The same for the nearest unit of another genus |
+| `reference_scope` | What was searched: `run`, or `run+external:<rank>` with a wider reference |
+| `threshold_class`, `margin`, `min_identity` | The thresholds that applied to this unit, and the class they were set for (`default` when none was) |
+| `reason` | The comparison behind the decision, in words, e.g. `closer to another genus (Gyraulus at 0.9900) than to any congener (0.9000) by 0.0900 >= margin 0.02` |
+| `translation`, `translation_ref`, `translation_reason` | The codon comparison: `ok`, `numt_like`, `frameshift`, `not_assessed` or `not_coding`; the unit it was compared with; and the counts behind it in words |
+| `codons_compared`, `codons_changed`, `aa_changes`, `nonsynonymous_share` | Codons compared and changed, how many changed the amino acid, and that as a share of the changed codons |
+| `frameshift_stretches` | Stretches of the alignment that are out of frame |
+
+`units/screening_calibration.tsv` (new) summarises per class: units, genera, units in screened genera, the 1%, 5% and 50% quantiles of congener identity among kept units, units nearer to another genus by any amount and as a share, units set aside and as a share, the 95% quantile of `nonsynonymous_share`, `numt_like` units, and the suggested `min_identity` ([configuration](configuration.md#thresholds-per-class)).
+
+`provenance.tsv` gains `rate_outliers` (units whose root-to-tip distance in the rooted genus tree lies more than `screening.rate_outlier_z` robust standard deviations above the median, separated by `;`) and `rate_outlier_z` (the largest score in the genus), after `root_to_tip`. Both are empty for genera with fewer than four units.
+
 ## `backbone/metadata.json`
 
 New. What the backbone was built from: the format version of each output and of the cache, the timegraft version, the source, OTT and synthesis releases, the matching context, whether synthesis support was read, the age method with the conflict metrics of the final and the precedence ages, the anchoring, concordance and re-anchoring settings with the number of genera per status and the number of genera per `concordance_flag` and per `placement_action`, the COL release (key, alias, version) with counts of genera by confidence and crosswalk path and of genera joined with COL's NCBI id, and a summary of the TimeTree evidence (queries per evidence level, TimeTree database versions, and how many cache entries are at version 1, were upgraded, or now get a different answer from TimeTree).
@@ -281,3 +301,4 @@ New. What the backbone was built from: the format version of each output and of 
 - **`node_ages.tsv` format 4** (#53) fills `conflict_class` and `requery_age` and adds the other `requery_*` and `conflict_*` columns. With the default `requery.mode: classify` no age changes; the first run on a cache asks TimeTree again for the re-queried nodes.
 - **`crown_ages.tsv` format 3** (#54) adds the basis columns and rows with an empty `crown_age` for genera sampled with one species; code that reads `crown_age` as a number must skip those (the genus step does). With the defaults, TimeTree crowns are those of the sampled species, and an implausible one is demoted to an upper bound, so crown ages change. `crown_query.basis: global` and `crown_age.plausibility.enabled: false` give the earlier behaviour. `provenance.tsv` gains `crown_basis`, `crown_plausibility`, `timetree_ratio`, `ratio_allowed` and `crown_decision`, after `timetree_crown`.
 - **The build reads the filtered records** (`units/filtered.tsv`) for the reference lineage, besides the representatives, so it runs again when the records change.
+- **`units/screened.tsv` format 2** (#55) adds the scope, threshold, reason and codon columns above; `units/screening_calibration.tsv` is new, and `screen_units` also reads the filtered records. With the defaults, the same units are set aside as before: the codon comparison only reports. `provenance.tsv` gains `rate_outliers` and `rate_outlier_z` after `root_to_tip`.

@@ -195,3 +195,45 @@ The sampled crowns on their own let a few more extreme values in: more genera ge
 **Not used, too young** (6): *Stephanocyathus*, *Conchoderma* (1.0 Ma against 9.3), *Gadomus* (0.1 against 3.6), *Leptaxis*, *Euchaeta* and *Orculella*. Their crowns become the midpoint between the barcode age and the stem cap.
 
 **Overall.** 76 crown ages change, 26 of them older, by a median factor of 1.85. The sum of crown ages falls by 4.8%. The test allows a genus to evolve ten times slower than the rate, so 26 genera remain above 10 times the barcode age. Most are sponges, cnidarians and elasmobranchs, where that is plausible.
+
+## `screening/` (#55)
+
+Screening of the reference units with the extensions of [#55](https://github.com/naturalis/timegraft/issues/55): a wider reference, thresholds per class, a codon comparison with the nearest relative, a choice for mutual pairs, a relative-rate check in the genus subtrees, and a reason for every decision. `benchmark.py` makes every table here except `rate_outliers.tsv`, from `units/representatives.tsv` of `iberia-run-tolerant.tar.gz` and the records of `records.tsv.gz` without those in its `units/rejected.tsv`, with VSEARCH 2.29.1 on two cores. Run on 13 November 2026.
+
+- `screened.tsv.gz` and `calibration.tsv`: `units/screened.tsv` and `units/screening_calibration.tsv` as `screen_units` writes them at the defaults.
+- `injection.tsv`, `injection_classes.tsv`: mislabelled units, over a grid of thresholds and per class.
+- `numt_simulation.tsv`: simulated nuclear copies against real pairs of nearest relatives.
+- `external.tsv`: the wider reference.
+- `runtime.tsv`: time per step.
+- `rate_outliers.tsv`: the new provenance columns from a genus-stage run, made as for `crowns/` (same backbone, crown table and literature ages, `units/screened.tsv` of the archive).
+
+**Nothing changes at the defaults.** The decisions are those of the archive for all 24,882 units (23,528 `keep`, 850 `other_genus`, 444 `isolated`, 60 `kept_whole_genus`), and the 1,039 crown ages of the genus-stage run are those of `crowns/`. What is new is in the columns: every row of `screened.tsv.gz` has the thresholds that applied, where its nearest hits came from and its reason in words, so no unit leaves its genus without a stated cause.
+
+**Mislabelled units.** In each of five replicates, 2% of the kept units of genera with at least three units were given the name of another such genus, either of the same family (329 units) or of another order of the same phylum (464). The search is not repeated: only the names change, so each setting is cheap to test.
+
+| `margin` | `mutual_pairs` | Caught, same family | Caught, other order | Correct units set aside with them, per 329 (family) | Set aside without injected errors |
+| --- | --- | --- | --- | --- | --- |
+| 0 | both | 0.95 | 0.98 | 324 | 7.9% |
+| 0.01 | both | 0.93 | 0.98 | 152 | 6.0% |
+| **0.02** | **both** | **0.91** | **0.99** | **101** | **5.2%** |
+| 0.03 | both | 0.88 | 0.99 | 80 | 4.8% |
+| 0.05 | both | 0.84 | 0.99 | 55 | 4.5% |
+| 0.02 | further | 0.90 | 0.98 | 23 | 4.9% |
+
+All at `min_identity` 0.80. Errors across orders are nearly always caught; errors within a family are the hard case, and one in ten is missed at the defaults: mostly units whose congener and other-genus identities lie within the margin of each other, and some in genera that would otherwise lose all their units. Raising `min_identity` catches a few more within families (0.94 at 0.85) but sets aside 15% of units without injected errors, against 5.2%.
+
+What the error does to correct units was the surprise. 84 of 91 correct units set aside in one replicate were the nearest true congener of an injected unit: they now find a unit of "another genus" closer than their own congeners. A pair cannot tell which of the two carries the wrong name. `mutual_pairs: further` keeps the unit of the pair that is closer to its own genus. It cuts the collateral by three quarters at the cost of one error in a hundred, and sets aside 83 fewer units in the run itself (767 `other_genus` instead of 850). It is not the default yet: what it does to rooting and crown ages is for #56 to judge.
+
+**Thresholds per class.** `calibration.tsv` suggests `min_identity` from 0.80 (most classes) to 0.89 (Demospongiae), from the 1% quantile of congener identity. With the suggestions, recall per class is the same or slightly higher (Elasmobranchii 0.75 to 0.81, Teleostei 0.92 to 0.93), and slightly more units are set aside (Gastropoda 5.2% to 5.9%), so the defaults stay. The classes differ more in how many units are set aside without injected errors than in recall: from 1.1% (Elasmobranchii) and 2.2% (Teleostei) to 9.7% (Polychaeta), 10% (Demospongiae) and 15% (Gymnolaemata). Those high shares are where genera are least natural or least well identified, not where the thresholds are wrong.
+
+**Nuclear copies.** 2,000 unit sequences were copied with random substitutions at all codon positions, as a nuclear copy accumulates them, and compared with their source. At the defaults (`min_changed_codons: 8`, `max_nonsynonymous_share: 0.5`), copies 2% from their source are flagged `numt_like` in 97% of cases and copies 4% or more from it in nearly all (99.8% and more); copies 1% from it are not, because fewer than eight codons differ. Such copies fall within the BIN of their source and do not form a unit of their own. Among real pairs of nearest relatives, 1.1% are flagged: 266 units, at a median identity of 0.97 to their relative with 17 changed codons. Nuclear copies and sequences with many errors look alike in this test. Of the copies with substitutions, between 86% (1%) and 34% (8%) still pass the reading-frame filter, so the filter alone misses most recent copies.
+
+A first version took the reading frame of the frame with fewest stops and, among equals, the first. Under the echinoderm code, with only two stops, several frames are often open, and eight sea cucumber units (seven *Holothuria*, one *Psolus*) were flagged for changes that are silent in their true frame. Among equally open frames, the one with the fewest amino-acid changes is now taken, and all eight have nearly all their changes silent. Two other *Holothuria* units remain flagged: a pair at 97% identity of which 15 of 21 changed codons alter the amino acid.
+
+245 pairs are out of frame over a stretch (`frameshift`), mostly by a single base in either sequence; the pair cannot tell which. They are reported, not acted on.
+
+**Relative rates.** In 820 genera with at least four units, 412 units in 235 genera lie more than 3.5 robust standard deviations above the median root-to-tip distance of their genus, 116 genera above 5 and 33 above 10. The largest scores come from small genera whose units are otherwise very close (*Malacolimax*, *Baeolidia*, *Hypleurochilus*). 46 of the 412 units (11%) are also `numt_like`, against 1.1% of all units: the two diagnostics point at the same sequences far more often than by chance. The list is a diagnostic; nothing is removed.
+
+**A wider reference.** The genera of each family were split at random between the run (16,011 units) and an external reference (8,870 sequences, all within families of the run). Screening the run half alone sets aside 760 units, of the 900 that the screening with all genera sets aside among them: 148 are missed, because the genus they are closest to is not in the run, and 8 are extra. With the reference, 898 of the 900 are found and none is extra; 219 decisions rest on an external hit, as `best_other_scope` records.
+
+**Runtime**, on two cores: the all-against-all search of 24,882 units takes 96 s, and 99 s when the alignments for the codon comparison are kept; decisions take 0.5 s, the codon comparison 10 s and the calibration 0.1 s. The external reference added 1 s to a search of 16,011 units (67 to 68 s) for 8,870 more sequences, because the search time is set by the queries more than by the reference. The relative-rate check only summarises root-to-tip distances that the genus stage already computes; that stage took 26 minutes here and 24 for `crowns/`, a difference that time spent on these sums cannot account for. Memory is not an issue: the kept alignments are two per unit.

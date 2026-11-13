@@ -159,6 +159,19 @@ markers:
       margin: 0.02           # ... at least this much more similar to another genus than to any congener
       min_identity: 0.80     # ... or no congener at this identity (while the genus has units that do)
       query_cov: 0.7         # all-against-all search of the representatives with VSEARCH
+      mutual_pairs: both     # two units each nearest to the other's genus: set aside both, or only the further
+      classes: class         # rank for thresholds per taxon and for units/screening_calibration.tsv
+      thresholds: {}         # per taxon at that rank: {Copepoda: {margin: 0.03, min_identity: 0.82}}
+      threshold_table:       # the same as a table (class, margin, min_identity)
+      reference:             # a wider reference: sequences from outside the run (#55)
+        path:                # table with genus, sequence and the ranks below (unit_id optional)
+        scope: family        # use those in a family of the run (genus, order, class, phylum, all)
+      translation:           # compare codons with the nearest relative, in the unit's genetic code
+        enabled: true
+        min_changed_codons: 8          # numt_like: at least this many codons differ ...
+        max_nonsynonymous_share: 0.5   # ... and more than this share of them change the amino acid
+        action: flag         # flag (report only) or set_aside
+      rate_outlier_z: 3.5    # genus subtrees: list units this far (robust z) beyond the median root-to-tip distance
     crown_age:
       method: rate           # used when crown_ages has no entry for a genus
       rate: 0.0115           # default rate: substitutions per site per Myr, per lineage (about 2.3%
@@ -204,7 +217,7 @@ markers:
       method: kmer
       k: 8
     screening:
-      enabled: false         # identity thresholds not yet tested for ITS (#38)
+      enabled: false         # off until calibrated on fungal data: see "Screening ITS" in docs/technical/configuration.md
     crown_age:
       method: fraction       # no reliable ITS rate: a stated fraction of the stem age
       fraction: 0.5
