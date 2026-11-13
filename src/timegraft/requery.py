@@ -107,10 +107,10 @@ def classify(first: float, again: float | None, reference: float, n_first: int =
     if abs(shift) < math.log(move):
         cls, detail = "topology", "stable_young" if young else "stable_old"
         decisive = abs(shift) < math.log(1.1)
-    elif shift > 0 and young:
+    elif shift > 0 and young and abs(math.log(again / reference)) < abs(math.log(first / reference)):
         cls, detail = "under_spanning", "moved_older"
         decisive = shift >= math.log(strong)
-    elif shift < 0 and not young:
+    elif shift < 0 and not young and abs(math.log(again / reference)) < abs(math.log(first / reference)):
         cls, detail = "pick_specific", "moved_younger"
         decisive = -shift >= math.log(strong)
     else:
