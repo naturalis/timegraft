@@ -82,6 +82,9 @@ def find_target(taxonomy, names: Mapping[tuple[str, str], list[int]], reference:
         if target.startswith("ott:"):
             uid = int(target[4:])
             rank_name = taxonomy.rank_name.get(uid)
+            if (uid < 0 or uid >= len(taxonomy.parent)
+                    or (taxonomy.parent[uid] < 0 and rank_name is None)):
+                return None, target, "override_not_found"
             return uid, f"{rank_name[0]}:{rank_name[1]}" if rank_name else target, "override"
         rank, _, name = target.partition(":")
         found = names.get((rank, name), [])
