@@ -123,7 +123,7 @@ All under `outdir`.
 | `backbone/node_ages.tsv` | Per backbone node: age, its source, TimeTree's raw answer, the NCBI ids queried, and a conflict ratio; the evidence behind TimeTree's age (estimates, studies, interval, the node it dated) and the support of the node in the synthesis ([provenance](provenance.md)) |
 | `backbone/crown_ages.tsv` | TimeTree crown age estimates, with the species queried and TimeTree's evidence ([provenance](provenance.md)) |
 | `backbone/col_species.tsv` | With `backbone_build.col.species`: each species name of the records resolved in the Catalogue of Life, with its NCBI id ([provenance](provenance.md#catalogue-of-life-as-identifier-hub)) |
-| `backbone/concordance.tsv` | Per genus: three independent checks of its placement in OToL (reference lineage, merged NCBI ids, barcode neighbours) and a flag where two fail, sorted for review; report only ([provenance](provenance.md#placement-concordance)) |
+| `backbone/concordance.tsv` | Per genus: three independent checks of its placement in OToL (reference lineage, merged NCBI ids, barcode neighbours) and a flag where two fail, sorted for review, with what was done about it ([provenance](provenance.md#placement-concordance)); flagged genera are moved before dating ([re-anchoring](provenance.md#re-anchoring-flagged-genera)) |
 | `backbone/metadata.json` | Releases the backbone was built from, the format version of each output and of the TimeTree cache, and a summary of the TimeTree evidence |
 | `units/rejected.tsv` | Records rejected by the filter, with the reason |
 | `units/representatives.tsv`, `units/unassigned.tsv` | One representative per unit; units without a usable genus |

@@ -58,6 +58,7 @@ rule build_backbone:
         synth=SYNTH if STATIC else [],
         taxonomy=TAXONOMY if STATIC else [],
         annotations=ANNOTATIONS if SUPPORT else [],
+        overrides=(BB.get("reanchor") or {}).get("overrides") or [],
     output:
         tree=f"{OUT}/backbone/backbone.tre",
         genera=f"{OUT}/backbone/genera.tsv",

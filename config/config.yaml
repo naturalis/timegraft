@@ -61,6 +61,11 @@ backbone_build:
                              # cross-genus hits is in a phylum of its backbone sisters
     min_hits: 5              # ... and is only made with at least this many hits
     min_flags: 2             # a genus is flagged when this many checks fail
+  reanchor:                  # move genera that placement concordance flags, before dating (#50)
+    mode: apply              # apply; report (decide and record, change nothing); off
+    min_severity: class      # only flags whose lineages part at this rank or higher
+    overrides:               # optional curated table: genus, action (reanchor or keep), target
+                             # (rank:name or ott:<id>), source, note; e.g. config/placement_overrides.tsv
   cache: resources/api_cache.json
 
 # Validation of the informative window: barcode distances against a trusted

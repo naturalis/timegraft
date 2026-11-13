@@ -49,3 +49,21 @@ Placement concordance ([#49](https://github.com/naturalis/timegraft/issues/49)) 
 The false positives of the three checks do not overlap. That is why two failures are required, as the holistic analysis proposed.
 
 **Sensitivity.** *Onchidella* is still the only flagged genus whether `flag_level` is `superfamily`, `order`, `class` or `phylum`, and whether `max_share` is 0 or 0.25. Only the number of genera for review changes: 13 or 14 at superfamily level, 10 or 11 at order level, and 2 or 3 at class or phylum level. The run has a single real misplacement, so it cannot tell how many misplacements the checks miss. The error injection of #56 is meant for that.
+
+## `reanchor/` (#50)
+
+The backbone with flagged genera re-anchored before dating ([#50](https://github.com/naturalis/timegraft/issues/50)), at the defaults (`mode: apply`, `min_severity: class`, no curated table). It contains `backbone.tre`, `node_ages.tsv`, `crown_ages.tsv`, `genera.tsv`, `concordance.tsv` and `metadata.json`. The new TimeTree queries are in `timetree_cache.json`.
+
+**What moved.** Only *Onchidella*, the one flagged genus. Its reference family, Onchidiidae (from COL), is a node of the synthesis (ott474706), and *Onchidella* now hangs there instead of at its own synthesis node among the sea urchins. Its row in `genera.tsv` records the trigger (three of three checks failed, severity 5), the original anchor (ott162893), the target and how it was found (`reference_lineage;taxon_in_synthesis`), and `auto` as the source. No other genus is affected; `mode: report` and a curated `keep` for *Onchidella* both reproduce the backbone of `backbone-col/` exactly.
+
+**What that changed:**
+
+- **Sisters and outgroups.**
+  - *Onchidella*'s nearest sister clades are now 325 gastropod genera, the bivalves and the cephalopods. Before, they were *Arbacia*, the other sea urchins and the sea cucumbers.
+  - *Arbacia*'s sisters are now *Paracentrotus*, *Psammechinus* and *Sphaerechinus*. Before, its only sister was *Onchidella*.
+- **Barcode neighbours.** The check rerun on the corrected backbone (`neighbour_concordance_after`) goes from 0 to 1 for both *Onchidella* and *Arbacia*.
+- **Stem ages.**
+  - *Arbacia*: 360.0 Ma before, now 207.5 Ma.
+  - *Onchidella*: 360.0 Ma before, now 466.4 Ma. The synthesis resolves Onchidiidae only to a 30-way polytomy within the gastropods, which TimeTree dates at 466 Ma (19 estimates). The genus is in the right clade now, but at the depth the synthesis allows, which is a matter for #51 and #52.
+- **The two deepest nodes below the root.** Before, they were 750.0 and 749.9 Ma; now they are 682.3 and 682.0 Ma. With *Onchidella* among the sea urchins, TimeTree had dated their node at 721 Ma (Bilateria). That age outranked the higher-taxon age of 682 Ma for the node above, so both were dropped and interpolated near the root. One misplaced genus therefore shifted the deepest backbone ages, which enter the PD of every sample. This is the propagation the holistic analysis describes.
+- **Everything else.** 767 of the 780 node ages are unchanged.

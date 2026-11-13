@@ -322,7 +322,8 @@ def genus_anchors(synth: SynthTree, taxonomy: Taxonomy, genera: list[str]) -> tu
 
 
 def genus_topology_newick(
-    synth: SynthTree, taxonomy: Taxonomy, genera: list[str]
+    synth: SynthTree, taxonomy: Taxonomy, genera: list[str],
+    anchors: tuple[dict[str, int], dict[str, str]] | None = None,
 ) -> tuple[str, dict[str, str]]:
     """Newick topology with one tip per genus, induced from the synthetic tree.
 
@@ -332,8 +333,10 @@ def genus_topology_newick(
     failing that at its nearest taxonomic ancestor in the synthesis. Returns
     the Newick string and a status per genus: ``in_synthesis``,
     ``attached_at_mrca``, ``attached_at_taxon:<ott id>``, or why it is missing.
+    ``anchors`` gives the anchors and statuses to use instead, as returned by
+    :func:`genus_anchors` and possibly corrected (#50).
     """
-    anchor, status = genus_anchors(synth, taxonomy, genera)
+    anchor, status = anchors if anchors is not None else genus_anchors(synth, taxonomy, genera)
     if len(anchor) < 2:
         raise ValueError("fewer than two genera could be placed in the synthetic tree")
 
