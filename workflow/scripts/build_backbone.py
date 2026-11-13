@@ -199,7 +199,8 @@ try:
                                  interpolation=settings.get("interpolation", "pure_birth"), richness=richness,
                                  synth_nodes=synth_nodes, support=support,
                                  method=(settings.get("ages") or {}).get("method", "fit"),
-                                 fit=(settings.get("ages") or {}).get("fit") or {})
+                                 fit=(settings.get("ages") or {}).get("fit") or {},
+                                 requery=(settings.get("ages") or {}).get("requery") or {})
 finally:
     cache.save()
 
@@ -214,7 +215,7 @@ write_tsv(snakemake.output.concordance, concordance, CONCORDANCE_COLUMNS)
 # what the backbone was built from, and in what format the outputs are (#47)
 entries = [v for k, v in cache.data.items() if k.startswith("mrca:") and isinstance(v, dict)]
 metadata = {
-    "output_format": {"genera.tsv": 6, "node_ages.tsv": 3, "concordance.tsv": 2, "crown_ages.tsv": 2, "timetree_cache": CACHE_VERSION},
+    "output_format": {"genera.tsv": 6, "node_ages.tsv": 4, "concordance.tsv": 2, "crown_ages.tsv": 2, "timetree_cache": CACHE_VERSION},
     "timegraft_version": __version__,
     "source": settings.get("source", "static"),
     "taxonomy": settings.get("taxonomy", "ott3.7.3") if settings.get("source", "static") == "static" else "api",
@@ -229,6 +230,13 @@ metadata = {
         "settings": settings.get("ages") or {},
         # conflict metrics over all calibrations: the final ages and those of the precedence rule (#52)
         **age_fit_summary(report),
+        # re-queried conflicting nodes by class and confidence (#53)
+        "requery": {
+            "by_class": dict(Counter(r["conflict_class"] for r in report if r.get("conflict_class"))),
+            "by_detail": dict(Counter(r["conflict_detail"] for r in report if r.get("conflict_detail"))),
+            "by_confidence": dict(Counter(f"{r['conflict_class']}:{r['conflict_confidence'] or '-'}"
+                                          for r in report if r.get("conflict_class"))),
+        },
     },
     "anchoring": {
         "settings": settings.get("anchoring") or {},

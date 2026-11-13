@@ -145,3 +145,24 @@ For the crab clade, the fit comes out as the analysis argued: it trusts the desc
 - 136 genus stems move by more than 10%: 130 older and 6 younger.
 - The total backbone length grows by 2.8%. The root stays at 750.1 Ma.
 - TimeTree crown ages, which are capped at 0.9 of the stem, will therefore be capped less often in the genus trees.
+
+## `requery/` (#53)
+
+Conflicting nodes re-queried with disjoint picks and classified ([#53](https://github.com/naturalis/timegraft/issues/53)), at the defaults (`requery.mode: classify`, `z_trigger: 2`, `ratio_trigger: 1.5`, `move: 1.25`, `attempts: 3`), on top of `agefit/`.
+
+- `node_ages.tsv` and `metadata.json` are from that run. The backbone itself is identical to `agefit/`, since classification changes no age.
+- `node_ages_apply.tsv` is from the same run with `mode: apply`.
+- The re-queries are in `timetree_cache.json`. Rebuilding from it asks TimeTree nothing and gives the same classes.
+
+**22 nodes were re-queried**: 21 as one of the two nodes of a precedence conflict of 1.5 or more (among them the crab clade, which is also the fit's outlier, 3.6 sigma off), and one gadiform node for a fit residual of 2.4 sigma alone (unresolved).
+
+| Class | Nodes | Which |
+| --- | --- | --- |
+| `under_spanning` | 1 (high) | The 27-genus crab clade: 54.9 Ma at first; with disjoint picks 156.8 Ma (6 estimates), exactly TimeTree's age for Eubrachyura below it. The first picks fell within Portunoidea, as the holistic analysis suspected |
+| `topology` | 4 | Same age when asked again, conflict stands. Leuciscine cyprinids, 19.2 Ma against 29.6 from the fit (high). Hydrobiidae, 16.6 against 23.8 (medium). An eel node, 172.4 against 136.9 (high). Asellid isopods, 244.2 against 157.2 (medium) |
+| `consistent` | 4 (high) | Partners of a conflict whose other side was at fault, among them Eubrachyura itself |
+| `unresolved` | 13 | 9 where TimeTree found the disjoint picks on only one side (among them Lymnaeoidea and Hygrophila, and the heterotreme crab nodes), and 4 where every taxon of a side had been used (among them the sparid and the hydrobiid node) |
+
+So the analysis's two readings are both seen. The crab clade is confirmed as under-spanning. Where TimeTree repeats its age with other picks, the conflict lies between OToL's and TimeTree's trees; these are the nodes to look at for topology. The 13 unresolved cases are what the method cannot reach with the taxa in the run.
+
+**With `mode: apply`**, the crab clade's calibration becomes 156.8 Ma with its own uncertainty. The node is no longer an outlier, and its fitted age moves from 168.6 to 167.7 Ma: the fit had already set the first age aside. No other node moves by more than 1%. Against the calibrations as replaced, calibrations off by more than a factor 1.5 go from 5 to 4.

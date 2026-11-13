@@ -49,6 +49,11 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.ages.fit.huber_k` | 1.5 | Calibrations further than this many sigma from the fit are down-weighted |
 | `backbone_build.ages.fit.outlier_z` | 3.0 | ... and reported as outliers beyond this |
 | `backbone_build.ages.fit.min_gap` | 0.01 | Smallest step in age per edge between calibrated nodes, as a share of the older age |
+| `backbone_build.ages.requery.mode` | `classify` | Re-query conflicting nodes with disjoint picks and classify the conflict: `classify`; `apply` (fit only: use the re-query age where the first was the picks' doing, and fit again); `off` ([provenance](provenance.md#re-querying-conflicting-nodes), #53) |
+| `backbone_build.ages.requery.z_trigger` | 2.0 | Re-query calibrations this many sigma or more from the fit |
+| `backbone_build.ages.requery.ratio_trigger` | 1.5 | ... and both nodes of a precedence conflict of this ratio or more |
+| `backbone_build.ages.requery.move` | 1.25 | A re-query age within this factor of the first counts as the same |
+| `backbone_build.ages.requery.attempts` | 3 | Disjoint pick sets to try until TimeTree finds taxa on two sides |
 | `backbone_build.anchoring.rule` | `majority` | Genera that are not a node of the synthesis: `majority` (smallest clade with more than `share` of their species) or `mrca` (MRCA of all; before #51) ([provenance](provenance.md#anchoring-genera-that-are-not-a-node-of-the-synthesis)) |
 | `backbone_build.anchoring.share` | 0.5 | Share of the species the anchor clade must hold, more than; at least 0.5 and below 1 |
 | `backbone_build.anchoring.min_species` | 3 | Fewer species in the synthesis: the MRCA |
