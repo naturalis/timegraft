@@ -91,17 +91,17 @@ With `ages.method: fit` (the default) every TimeTree age is a soft constraint in
 
 - **On a log scale,** so that a factor two weighs the same at 5 and at 500 Ma.
 - **Weighted by the evidence.** The uncertainty of each age (`calibration_sigma`, the standard deviation of its log) comes from TimeTree's confidence interval where it gives one (taken as 95%), else from the spread of the study estimates (the standard error of their mean log), else `sigma_single` (0.5, about a factor 1.65) for a single estimate. It is never below `sigma_floor` (0.1), and is multiplied by `higher_taxa_factor` (2) for ages through enclosing taxa and by `taxonomy_only_factor` (1.5) for nodes no source tree of the synthesis supports. The weight is 1/sigma².
-- **Under a hard constraint:** every age is younger than that of its nearest calibrated ancestor by at least `min_gap` (1%) per edge between them, so no branch has length zero. The fit is an exact weighted isotonic regression on the tree of calibrated nodes.
+- **Under a hard constraint:** every age is younger than that of its nearest calibrated ancestor by at least `min_gap` (1%) per edge between them, so no branch has length zero. The fit is an exact weighted isotonic regression on the tree of calibrated nodes (checked against a general solver, ties and fixed nodes included).
 - **Robust.** A calibration more than `huber_k` (1.5) sigma from the fit is down-weighted (Huber weights, refitted until stable), so that one wild age does not drag its neighbours; beyond `outlier_z` (3) sigma it is reported as an outlier.
 
-A configured root age (`root_age`, where TimeTree has none) is fixed. A TimeTree age equal to that of its nearest calibrated ancestor still means TimeTree does not resolve the node, and is not used. Nodes without a calibration are interpolated between the fitted ages, as before.
+A configured root age (`root_age`, where TimeTree has none) is held exactly, as a hard constraint; calibrations that would be older are fitted just below it. A TimeTree age equal to that of its nearest calibrated ancestor still means TimeTree does not resolve the node, and is not used. Nodes without a calibration are interpolated between the fitted ages, as before.
 
 `ages.method: precedence` gives the rule before #52. Whichever method is used, `node_ages.tsv` also gives the precedence ages, so the two can be compared during the validation period.
 
 | Column | Meaning |
 | --- | --- |
 | `source` | With the fit: `timetree_fit` or `timetree_higher_taxa_fit` for a calibrated node (with `_outlier` appended for outliers), `configured`, `interpolated` or `interpolated_unresolved_in_timetree`. With precedence, as before |
-| `calibration_sigma`, `calibration_weight` | Uncertainty of the calibration as above, and its final weight after down-weighting |
+| `calibration_sigma`, `calibration_weight` | Uncertainty of the calibration as above, and its weight: after down-weighting with the fit, 1/sigma² with precedence. Filled in either method, so that the conflict metrics of both use the same weights |
 | `fitted_age` | The fitted age (equal to `age`) |
 | `calibration_residual`, `calibration_z` | log(fitted / TimeTree), and that over sigma |
 | `calibration_outlier` | `yes` beyond `outlier_z` |

@@ -26,7 +26,7 @@ def test_calibration_sigma():
     assert agefit.calibration_sigma([90, 100, 110, 95, 105, 100]) < agefit.calibration_sigma([90, 110])
 
 
-def _brute(parent, values, weights):
+def _brute(parent, values, weights, fixed=()):
     scipy = pytest.importorskip("scipy.optimize")
     import numpy as np
 
@@ -38,11 +38,15 @@ def _brute(parent, values, weights):
             row = np.zeros(len(nodes))
             row[index[n]], row[index[parent[n]]] = 1, -1
             rows.append(row)
-    w = np.array([weights[n] for n in nodes])
+    w = np.array([0.0 if n in fixed else weights[n] for n in nodes])
     y = np.array([values[n] for n in nodes])
+    constraints = [scipy.LinearConstraint(np.array(rows), -np.inf, 0)]
+    for n in fixed:
+        row = np.zeros(len(nodes))
+        row[index[n]] = 1
+        constraints.append(scipy.LinearConstraint(row[None, :], values[n], values[n]))
     res = scipy.minimize(lambda x: (w * (x - y) ** 2).sum(), y.copy(), jac=lambda x: 2 * w * (x - y),
-                         constraints=[scipy.LinearConstraint(np.array(rows), -np.inf, 0)], method="SLSQP",
-                         options={"ftol": 1e-14, "maxiter": 1000})
+                         constraints=constraints, method="SLSQP", options={"ftol": 1e-14, "maxiter": 1000})
     return (w * (res.x - y) ** 2).sum()
 
 
@@ -57,6 +61,45 @@ def test_tree_isotonic_is_exact():
         assert all(fit[i] <= fit[parent[i]] + 1e-12 for i in range(1, n))
         objective = sum(weights[i] * (fit[i] - values[i]) ** 2 for i in range(n))
         assert objective <= _brute(parent, values, weights) + 1e-6
+
+
+def test_tree_isotonic_with_ties():
+    # a child closing against a tied parent that then merges upward (found by review)
+    fit = agefit.tree_isotonic({"r": None, "z": "r", "zz": "z"}, {"r": 0, "z": 100, "zz": 100},
+                               {"r": 1, "z": 1, "zz": 1})
+    assert fit == pytest.approx({"r": 200 / 3, "z": 200 / 3, "zz": 200 / 3})
+    # the same in every order of the names, which only break ties
+    for names in (("a", "b", "c"), ("c", "b", "a"), ("b", "c", "a")):
+        r, z, zz = names
+        fit = agefit.tree_isotonic({r: None, z: r, zz: z}, {r: 0, z: 100, zz: 100}, {r: 1, z: 1, zz: 1})
+        assert fit[zz] <= fit[z] + 1e-12 and fit[z] <= fit[r] + 1e-12
+
+
+def test_tree_isotonic_is_exact_with_ties_and_fixed_nodes():
+    rng = random.Random(11)
+    for _ in range(150):
+        n = rng.randint(2, 12)
+        parent = {0: None, **{i: rng.randrange(i) for i in range(1, n)}}
+        values = {i: float(rng.randint(0, 4)) for i in range(n)}  # many ties
+        weights = {i: float(rng.randint(1, 3)) for i in range(n)}
+        fixed = {0} if rng.random() < 0.5 else set()
+        if fixed:
+            values[0] = 5.0  # a fixed root above everything is always feasible
+        fit = agefit.tree_isotonic(parent, values, weights, fixed)
+        assert all(fit[i] <= fit[parent[i]] + 1e-12 for i in range(1, n))
+        assert all(fit[i] == values[i] for i in fixed)
+        objective = sum(weights[i] * (fit[i] - values[i]) ** 2 for i in range(n) if i not in fixed)
+        assert objective <= _brute(parent, values, weights, fixed) + 1e-6
+
+
+def test_fixed_values_hold_exactly():
+    # a configured root at 100 against a very precise child at 200 (found by review): the root stays at 100
+    parent, depth = {"r": None, "a": "r"}, {"r": 0, "a": 1}
+    cal = {"r": agefit.Calibration(100, 1, "configured", fixed=True), "a": agefit.Calibration(200, 1e-9)}
+    result = agefit.fit_ages(parent, depth, cal, min_gap=0.01)
+    assert result.age["r"] == 100 and result.age["a"] == pytest.approx(100 / 1.01)
+    with pytest.raises(ValueError):
+        agefit.tree_isotonic({"r": None, "a": "r"}, {"r": 1.0, "a": 2.0}, {"r": 1, "a": 1}, {"r", "a"})
 
 
 def test_consistent_calibrations_are_kept():
@@ -150,6 +193,22 @@ def test_date_topology_fit_against_precedence():
     assert summary["final"]["weighted_rms"] < summary["precedence"]["weighted_rms"]
     # every edge has a positive length
     assert all(e.length is None or e.length > 0 for e in tree.preorder_edge_iter() if e.head_node.parent_node)
+
+
+def test_conflict_metrics_use_the_same_weights_in_either_method():
+    newick = "(((A,B),C),D);"
+    ncbi = {"A": 1, "B": 2, "C": 3, "D": 4}
+    ages = {frozenset({1, 2, 4}): 100.0, frozenset({1, 2, 3}): 120.0, frozenset({1, 2}): 30.0}
+    estimates = {frozenset({1, 2, 3}): [110, 115, 120, 125, 118, 122]}
+    reports = {}
+    for method in ("fit", "precedence"):
+        tree = dendropy.Tree.get(data=newick, schema="newick", rooting="force-rooted")
+        _, reports[method] = date_topology(tree, ncbi, TimeTree(fetch=_fake(ages, estimates)), method=method)
+    sigma = {m: [r["calibration_sigma"] for r in rep] for m, rep in reports.items()}
+    assert sigma["fit"] == sigma["precedence"] and any(sigma["fit"])
+    assert len(set(s for s in sigma["fit"] if s)) > 1  # not one default for all
+    assert age_fit_summary(reports["fit"])["precedence"] == age_fit_summary(reports["precedence"])["precedence"]
+    assert all(r["fitted_age"] == "" for r in reports["precedence"])
 
 
 def test_date_topology_unknown_method():

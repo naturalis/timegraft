@@ -79,21 +79,46 @@ def calibration_sigma(estimates: Sequence[float] = (), ci_low: float | None = No
 
 
 def tree_isotonic(parent: Mapping[Hashable, Hashable | None], values: Mapping[Hashable, float],
-                  weights: Mapping[Hashable, float]) -> dict[Hashable, float]:
+                  weights: Mapping[Hashable, float], fixed: set | frozenset = frozenset()) -> dict[Hashable, float]:
     """Weighted least-squares fit with every node at most its parent (the root is the maximum).
 
     ``parent`` maps each node to its parent (None for the root); every node
-    needs a value and a positive weight. Exact, by Thompson's block-merging
-    algorithm for tree orders: repeatedly take the open block with the
-    largest mean; if it is larger than the block holding its top node's
-    parent, merge it into that block, otherwise close it.
+    needs a value and a positive weight. Nodes in ``fixed`` keep their value
+    exactly. Exact, by Thompson's block-merging algorithm for tree orders:
+    repeatedly take the open block with the largest value; if it is larger
+    than the block holding its top node's parent, merge it into that block,
+    otherwise close it.
+
+    Why closed blocks stay valid: a block's value only goes down when it is
+    merged upward, which happens only to the open block with the largest
+    value; a block absorbing a child only goes up. So when a block is closed,
+    the block above it is either closed already, the root's, or open with the
+    same value, and of equal values the block nearest the root is taken first
+    (merged upward or closed) before any block below it. Without that order,
+    a tie lets a child close against a parent that then merges upward and
+    drops below it.
     """
     nodes = list(values)
+    depth: dict = {}
+
+    def node_depth(n):
+        chain = []
+        while n not in depth and n is not None:
+            chain.append(n)
+            n = parent.get(n)
+        d = -1 if n is None else depth[n]
+        for m in reversed(chain):
+            d += 1
+            depth[m] = d
+        return depth
+
+    for n in nodes:
+        node_depth(n)
     block_of = {n: n for n in nodes}  # union-find: representative
     total = {n: weights[n] * values[n] for n in nodes}
     mass = {n: float(weights[n]) for n in nodes}
+    pinned = {n: (float(values[n]) if n in fixed else None) for n in nodes}  # a fixed value in the block
     top = {n: n for n in nodes}  # the node of the block nearest the root
-    members = {n: [n] for n in nodes}
 
     def find(n):
         while block_of[n] != n:
@@ -101,24 +126,26 @@ def tree_isotonic(parent: Mapping[Hashable, Hashable | None], values: Mapping[Ha
             n = block_of[n]
         return n
 
+    def value(b):
+        return pinned[b] if pinned[b] is not None else total[b] / mass[b]
+
     open_blocks = {n for n in nodes if parent.get(n) is not None}
     while open_blocks:
-        b = max(open_blocks, key=lambda x: (total[x] / mass[x], str(x)))
-        p = find(parent[top[b]])
-        if total[b] / mass[b] <= total[p] / mass[p]:
-            open_blocks.discard(b)
-            continue
-        # merge b into p: the merged block keeps p's top
+        b = max(open_blocks, key=lambda x: (value(x), -depth[top[x]], str(x)))
         open_blocks.discard(b)
+        p = find(parent[top[b]])
+        if value(b) <= value(p):
+            continue
+        if pinned[b] is not None and pinned[p] is not None:
+            raise ValueError(f"fixed values conflict: {top[b]!r} ({pinned[b]}) is older than its ancestor "
+                             f"{top[p]!r} ({pinned[p]})")
+        # merge b into p; the merged block keeps p's top, and a fixed value of either
         block_of[b] = p
         total[p] += total[b]
         mass[p] += mass[b]
-        members[p].extend(members.pop(b))
-    out = {}
-    for n in nodes:
-        r = find(n)
-        out[n] = total[r] / mass[r]
-    return out
+        if pinned[p] is None:
+            pinned[p] = pinned[b]
+    return {n: value(find(n)) for n in nodes}
 
 
 @dataclass
@@ -139,17 +166,19 @@ def fit_ages(parent: Mapping[Hashable, Hashable | None], depth: Mapping[Hashable
     ``parent`` is the tree of calibrated nodes (each node's nearest
     calibrated ancestor; None for the root) and ``depth`` the number of
     edges from the root of the full tree to each, used for the minimum gap.
-    A fixed calibration keeps its age.
+    A fixed calibration keeps its age exactly; calibrations that would be
+    older than it are fitted at its age less the gap.
     """
     gap = math.log1p(min_gap)
     # with z = log(age) + gap * depth, "age at most the ancestor's, less the gap per edge" is z <= z(parent)
     target = {n: math.log(c.age) + gap * depth[n] for n, c in calibrations.items()}
-    base = {n: (1e12 if c.fixed else c.weight) for n, c in calibrations.items()}
+    fixed = {n for n, c in calibrations.items() if c.fixed}  # held exactly, not by a large weight
+    base = {n: (1.0 if c.fixed else c.weight) for n, c in calibrations.items()}
     weights = dict(base)
     result = FitResult()
     previous = None
     for iteration in range(1, max_iterations + 1):
-        z = tree_isotonic(parent, target, weights)
+        z = tree_isotonic(parent, target, weights, fixed)
         result.iterations = iteration
         if previous is not None and max(abs(z[n] - previous[n]) for n in z) < 1e-9:
             break
@@ -161,7 +190,7 @@ def fit_ages(parent: Mapping[Hashable, Hashable | None], depth: Mapping[Hashable
             weights[n] = base[n] * (1.0 if standardised <= huber_k else huber_k / standardised)
     for n, c in calibrations.items():
         log_age = z[n] - gap * depth[n]
-        result.age[n] = math.exp(log_age)
+        result.age[n] = c.age if c.fixed else math.exp(log_age)  # exact, not through exp(log())
         result.residual[n] = log_age - math.log(c.age)
         result.z[n] = result.residual[n] / c.sigma
         result.weight[n] = weights[n] if not c.fixed else float("inf")

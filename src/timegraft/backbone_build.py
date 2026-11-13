@@ -304,11 +304,17 @@ def date_topology(
             "timetree_same_as_ancestor": "interpolated_unresolved_in_timetree",
         }.get(p_source.get(node), "interpolated")
 
-    calibration_rows: dict[dendropy.Node, dict[str, str]] = {}
+    # the calibrations and their uncertainty, whichever method, so that the conflict metrics of both
+    # methods are computed with the same weights
+    calibrations, cal_parent, unresolved = _calibrations(tree, age, source, used, timetree, synth_nodes, support,
+                                                         fit)
+    calibration_rows = _calibration_rows(calibrations)
     if method == "precedence":
         age, source = p_age, p_source
     else:
-        age, source, calibration_rows = _fit(tree, age, source, raw, used, timetree, synth_nodes, support, fit)
+        age, source, fitted_rows = _fit(tree, calibrations, cal_parent, unresolved, source, fit)
+        for node, row in fitted_rows.items():
+            calibration_rows[node].update(row)
         for node, value in interpolate(tree, age, method=interpolation, richness=richness).items():
             age[node] = value
             source[node] = ("interpolated_unresolved_in_timetree" if source.get(node) == "timetree_same_as_ancestor"
@@ -405,32 +411,30 @@ def _precedence(tree, age, source):
     return age, source, conflict, conflict_with
 
 
-def _fit(tree, age, source, raw, used, timetree, synth_nodes, support, settings):
-    """Ages of the calibrated nodes from a weighted fit of all calibrations (#52); the rest is left undated.
+def _calibrations(tree, age, source, used, timetree, synth_nodes, support, settings):
+    """Every usable calibration with its uncertainty, whichever age method is used (#52).
 
-    A calibration equal to that of its nearest calibrated ancestor means
-    TimeTree does not resolve the node; it is not used, as before.
+    Returns the calibrations, each one's nearest calibrated ancestor (None
+    for the root), and the nodes left out because their TimeTree age equals
+    that of their nearest calibrated ancestor (TimeTree does not resolve
+    them).
     """
     root = tree.seed_node
     calibrations: dict[dendropy.Node, agefit.Calibration] = {}
     parent: dict[dendropy.Node, dendropy.Node | None] = {}
-    depth: dict[dendropy.Node, int] = {}
-    new_source = {n: s for n, s in source.items() if n.is_leaf()}
+    unresolved: set[dendropy.Node] = set()
     nearest: dict[dendropy.Node, dendropy.Node | None] = {}
     for node in tree.preorder_node_iter():
-        up = node.parent_node
-        depth[node] = 0 if up is None else depth[up] + 1
         if node.is_leaf():
             continue
-        anc = None
-        if up is not None:
-            anc = up if up in calibrations else nearest.get(up)
+        up = node.parent_node
+        anc = None if up is None else (up if up in calibrations else nearest.get(up))
         nearest[node] = anc
         if node not in age:
             continue
         if node is not root and anc is not None and abs(age[node] - calibrations[anc].age) <= 1e-9 * max(
                 1.0, calibrations[anc].age):
-            new_source[node] = "timetree_same_as_ancestor"
+            unresolved.add(node)
             continue
         if source[node] == "configured":
             calibrations[node] = agefit.Calibration(age[node], 1.0, "configured", fixed=True)
@@ -448,6 +452,22 @@ def _fit(tree, age, source, raw, used, timetree, synth_nodes, support, settings)
                 taxonomy_factor=float(settings.get("taxonomy_only_factor", agefit.TAXONOMY_ONLY_FACTOR)))
             calibrations[node] = agefit.Calibration(age[node], sigma, source[node])
         parent[node] = anc
+    return calibrations, parent, unresolved
+
+
+def _calibration_rows(calibrations) -> dict:
+    """The uncertainty columns of node_ages.tsv, which do not depend on the age method."""
+    return {node: {"calibration_sigma": f"{c.sigma:.4f}", "calibration_weight": f"{c.weight:.4f}"}
+            for node, c in calibrations.items() if not c.fixed}
+
+
+def _fit(tree, calibrations, parent, unresolved, source, settings):
+    """Ages of the calibrated nodes from a weighted fit of all calibrations (#52); the rest is left undated."""
+    depth: dict[dendropy.Node, int] = {}
+    for node in tree.preorder_node_iter():
+        depth[node] = 0 if node.parent_node is None else depth[node.parent_node] + 1
+    new_source = {n: s for n, s in source.items() if n.is_leaf()}
+    new_source.update({n: "timetree_same_as_ancestor" for n in unresolved})
     result = agefit.fit_ages(parent, depth, calibrations, min_gap=float(settings.get("min_gap", agefit.MIN_GAP)),
                              huber_k=float(settings.get("huber_k", agefit.HUBER_K)),
                              outlier_z=float(settings.get("outlier_z", agefit.OUTLIER_Z)))
@@ -461,7 +481,6 @@ def _fit(tree, age, source, raw, used, timetree, synth_nodes, support, settings)
         suffix = "_outlier" if node in result.outlier else ""
         new_source[node] = f"{c.source}_fit{suffix}"
         rows[node] = {
-            "calibration_sigma": f"{c.sigma:.4f}",
             "calibration_weight": f"{result.weight[node]:.4f}",
             "fitted_age": f"{result.age[node]:.4f}",
             "calibration_residual": f"{result.residual[node]:.4f}",
@@ -475,12 +494,10 @@ def age_fit_summary(report: list[dict], severe: float = 1.5) -> dict:
     """Conflict metrics over all calibrations, for the final ages and for the precedence rule (#52)."""
     calibrations, final, precedence = {}, {}, {}
     for row in report:
-        if not row.get("timetree_age") or row.get("source") in ("interpolated_unresolved_in_timetree",):
+        # the calibrations of the fit, which carry their uncertainty in either method
+        if not row.get("timetree_age") or not row.get("calibration_sigma"):
             continue
-        if row.get("precedence_source") == "interpolated_unresolved_in_timetree":
-            continue
-        sigma = float(row["calibration_sigma"]) if row.get("calibration_sigma") else agefit.SIGMA_SINGLE
-        calibrations[row["node"]] = agefit.Calibration(float(row["timetree_age"]), sigma)
+        calibrations[row["node"]] = agefit.Calibration(float(row["timetree_age"]), float(row["calibration_sigma"]))
         final[row["node"]] = float(row["age"])
         precedence[row["node"]] = float(row["precedence_age"])
     return {

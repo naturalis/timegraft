@@ -105,11 +105,11 @@ Taking each part on its own:
 
 Backbone ages from a weighted fit of all TimeTree calibrations ([#52](https://github.com/naturalis/timegraft/issues/52)), at the defaults, on top of `anchoring/`. The folder holds `backbone.tre`, `node_ages.tsv` and `metadata.json`. `genera.tsv`, `concordance.tsv` and `crown_ages.tsv` are identical to those in `anchoring/`, because the topology does not change. `ages.method: precedence` reproduces `anchoring/` exactly.
 
-**Conflict metrics over the 385 TimeTree calibrations** (from `metadata.json`; a factor is the final age over TimeTree's, or the reverse):
+**Conflict metrics over the 387 TimeTree calibrations** (from `metadata.json`; a factor is the final age over TimeTree's, or the reverse):
 
 | | Median factor | 90% | Largest | Off by more than 1.5 | RMS of residual / sigma |
 | --- | --- | --- | --- | --- | --- |
-| Precedence rule | 1.00 | 1.32 | 6.49 | 26 | 1.33 |
+| Precedence rule | 1.00 | 1.32 | 6.49 | 26 | 1.32 |
 | Weighted fit | 1.00 | 1.11 | 3.07 | 5 | 0.38 |
 
 This is what the fit optimises, so it shows that the fit honours the evidence it is given. It does not show that the ages are better.
