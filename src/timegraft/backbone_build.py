@@ -558,9 +558,11 @@ def _requery(tree, calibrations, z, outliers, conflict, conflict_with, reference
             if again is not None:
                 break
         evidence = timetree.evidence(ids) if hasattr(timetree, "evidence") else {}
-        first_evidence = timetree.evidence(used[node]) if hasattr(timetree, "evidence") else {}
-        n_first = int(first_evidence.get("n_estimates") or 0)
-        n_again = int(evidence.get("n_estimates") or 0) if again is not None else 0
+        def valid_estimate_count(query_ids):
+            entry = timetree.cache.get(timetree._key(query_ids)) if hasattr(timetree, "cache") else {}
+            return sum(1 for value in (entry.get("estimates") or ()) if value and value > 0) if isinstance(entry, dict) else 0
+        n_first = valid_estimate_count(used[node])
+        n_again = valid_estimate_count(ids) if again is not None else 0
         cls, detail, confidence = rq.classify(first, again, reference.get(node, first), n_first, n_again,
                                               float(settings.get("move", rq.MOVE)))
         row.update(requery_ids="+".join(map(str, ids)), requery_age="" if again is None else f"{again:.4f}",
