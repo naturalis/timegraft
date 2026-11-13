@@ -312,6 +312,8 @@ def majority_clade(synth: SynthTree, nodes: list[int], share: float = 0.5) -> tu
         for step in synth.path_to_root(node):
             counts[step] += 1
     n = len(set(nodes))
+if not 0.5 <= share < 1:
+        raise ValueError("share must be at least 0.5 and less than 1")
     passing = [node for node, c in counts.items() if c > share * n]
     sizes = synth.subtree_sizes()
     best = min(passing, key=lambda node: (int(sizes[node]), node))
