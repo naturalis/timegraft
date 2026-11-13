@@ -98,3 +98,14 @@ def test_controlled_fallbacks(data):
     assert status["Testa"] == "attached_at_mrca" and diagnostics["Testa"]["anchor_fallback"] == "no_smaller_majority"
     with pytest.raises(ValueError):
         genus_anchors(synth, taxonomy, GENERA, rule="median")
+
+
+@pytest.mark.parametrize("share", [0.0, 0.4, 1.0, 1.5])
+def test_share_outside_its_range_is_refused(data, share):
+    taxonomy, synth = data
+    nodes = [synth.index[f"ott{u}"] for u in (101, 102, 103)]
+    with pytest.raises(ValueError):
+        majority_clade(synth, nodes, share=share)
+    with pytest.raises(ValueError):
+        genus_anchors(synth, taxonomy, GENERA, rule="majority", share=share)
+    genus_anchors(synth, taxonomy, GENERA, rule="mrca", share=share)  # not used, so not checked

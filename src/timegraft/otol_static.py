@@ -300,6 +300,13 @@ ANCHOR_COLUMNS = ("anchor_rule", "anchor_fallback", "anchor_basis", "anchor_spec
                   "anchor_outside_species", "anchor_mrca_node", "anchor_mrca_clade_genera")
 
 
+def check_share(share: float) -> None:
+    """The majority clade is only well defined for 0.5 <= share < 1: below a half, clades that are not
+    nested can both pass; at 1 or more, none can."""
+    if not 0.5 <= share < 1:
+        raise ValueError(f"anchoring share must be at least 0.5 and less than 1, not {share}")
+
+
 def majority_clade(synth: SynthTree, nodes: list[int], share: float = 0.5) -> tuple[int, int]:
     """The smallest clade of the synthetic tree holding more than ``share`` of ``nodes``, and how many it holds.
 
@@ -307,13 +314,12 @@ def majority_clade(synth: SynthTree, nodes: list[int], share: float = 0.5) -> tu
     ``share`` >= 0.5 the smallest is unique: the deepest node on the path
     from any of them to the root whose count passes the threshold.
     """
+    check_share(share)
     counts: dict[int, int] = defaultdict(int)
     for node in set(nodes):
         for step in synth.path_to_root(node):
             counts[step] += 1
     n = len(set(nodes))
-if not 0.5 <= share < 1:
-        raise ValueError("share must be at least 0.5 and less than 1")
     passing = [node for node, c in counts.items() if c > share * n]
     sizes = synth.subtree_sizes()
     best = min(passing, key=lambda node: (int(sizes[node]), node))
@@ -341,6 +347,8 @@ def genus_anchors(synth: SynthTree, taxonomy: Taxonomy, genera: list[str], rule:
     """
     if rule not in ANCHOR_RULES:
         raise ValueError(f"anchoring rule must be one of {ANCHOR_RULES}, not {rule!r}")
+    if rule == "majority":
+        check_share(share)  # fail before any work, not at the first genus that needs it
     anchor: dict[str, int] = {}
     status: dict[str, str] = {}
     genus_of = None
