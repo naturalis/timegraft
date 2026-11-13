@@ -57,7 +57,21 @@ try:
                   if r.get("col_ott_id") and r.get("col_confidence") in ("high", "medium")}
         taxonomy = Taxonomy(snakemake.input.taxonomy, set(genera), context=settings.get("context"), prefer=prefer)
         synth = SynthTree(snakemake.input.synth)
-        anchors, placed = genus_anchors(synth, taxonomy, genera)
+        # genera that are not a node of the synthesis: anchored on the majority clade of their species,
+        # preferably of the species sampled in this run (#51)
+        an_cfg = settings.get("anchoring") or {}
+        sampled = defaultdict(set)
+        if an_cfg.get("prefer_sampled", True):
+            for r in read_tsv(snakemake.input.records):
+                if r.get("genus") and r.get("species"):
+                    sampled[r["genus"]].add(r["species"].strip())
+        anchor_diagnostics = {}
+        anchors, placed = genus_anchors(synth, taxonomy, genera, rule=an_cfg.get("rule", "majority"),
+                                        sampled=sampled, share=float(an_cfg.get("share", 0.5)),
+                                        min_species=int(an_cfg.get("min_species", 3)),
+                                        min_sampled=int(an_cfg.get("min_sampled", 2)),
+                                        diagnostics=anchor_diagnostics)
+        extra.append(anchor_diagnostics)
         newick, placed = genus_topology_newick(synth, taxonomy, genera, (anchors, placed))
         matches = {g: {**taxonomy.genus[g], "status": placed.get(g, taxonomy.genus[g]["status"])} for g in genera}
         ncbi = {g: lookup_ids(taxonomy, g) for g in genera}
@@ -197,7 +211,7 @@ write_tsv(snakemake.output.concordance, concordance, CONCORDANCE_COLUMNS)
 # what the backbone was built from, and in what format the outputs are (#47)
 entries = [v for k, v in cache.data.items() if k.startswith("mrca:") and isinstance(v, dict)]
 metadata = {
-    "output_format": {"genera.tsv": 5, "concordance.tsv": 2, "node_ages.tsv": 2, "crown_ages.tsv": 2, "timetree_cache": CACHE_VERSION},
+    "output_format": {"genera.tsv": 6, "concordance.tsv": 2, "node_ages.tsv": 2, "crown_ages.tsv": 2, "timetree_cache": CACHE_VERSION},
     "timegraft_version": __version__,
     "source": settings.get("source", "static"),
     "taxonomy": settings.get("taxonomy", "ott3.7.3") if settings.get("source", "static") == "static" else "api",
@@ -207,6 +221,10 @@ metadata = {
     "concordance": {
         "settings": settings.get("concordance") or {},
         "genera_by_flag": dict(Counter(r["concordance_flag"] or "concordant" for r in concordance)),
+    },
+    "anchoring": {
+        "settings": settings.get("anchoring") or {},
+        "genera_by_status": dict(Counter(m["status"].split(":")[0] for m in matches.values())),
     },
     "reanchor": {
         "settings": settings.get("reanchor") or {},

@@ -370,6 +370,9 @@ GENERA_COLUMNS = (
     "ott_family", "ott_order", "ott_class", "ott_phylum",
     # where it sits in the synthetic tree
     "anchor_node", "anchor_clade_genera", "n_species_ott", "n_species_in_synthesis",
+    # how a genus that is not a node of the synthesis was anchored on its species (#51)
+    "anchor_rule", "anchor_fallback", "anchor_basis", "anchor_species", "anchor_species_inside", "anchor_outside_share",
+    "anchor_outside_species", "anchor_mrca_node", "anchor_mrca_clade_genera",
     # lineage from the reference records: the most common name per rank, and its share
     "records_n", "records_family", "records_family_share", "records_order", "records_order_share",
     "records_class", "records_class_share", "records_phylum", "records_phylum_share",
