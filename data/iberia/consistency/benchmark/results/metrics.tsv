@@ -1,0 +1,31 @@
+metric	name	legacy	default	threshold	status	note
+0	legacy settings reproduce main		clades same; largest age difference 0.0000 Ma; 0 of 24882 screening decisions differ; 0 of 312 TimeTree crowns differ	identical	pass	backbone.tre byte-identical: True
+1a	Onchidella's nearest genera in the final tree	{'Echinodermata': 1}	{'Mollusca': 1}	all Mollusca	pass	backbone: legacy {'Echinodermata': 1}, default {'Mollusca': 325}
+1b	injected misplacements with two checks: flagged	0 (no check)	1.000 (118 of 118)	>= 0.90	pass	
+1c	injected misplacements, all: flagged	0 (no check)	0.983 (118 of 120)	>= 0.50	pass	
+1d	flagged injected genera back in their own class	16 of 120 in own class	0.992 (117 of 118)	>= 0.90	pass	
+1e	genera without an injected error flagged, per replicate		0.0 ([0, 0, 0, 0, 0])	<= 1	pass	
+1f	corrected genera with a stem age within 1.5 of the one without the error	21 of 120 injected within 1.5	0.726 (85 of 117)	>= 0.80	FAIL	
+1g	other genera whose stem age moves by more than 10%, five replicates together	248	297	<= half of legacy	FAIL	
+2a	TimeTree calibrations off from the final age by more than 1.5	26 of 381	5 of 387	<= half of legacy	pass	largest factor: legacy 6.4901, default 3.0701; 90%: 1.3225, 1.1146
+2b	RMS of calibration residuals over their uncertainty	1.387	0.3837	lower than legacy	pass	
+2c	nodes older than their parent	backbone 0	backbone 0, final tree 0	0	pass	
+3a	crown age more than 20 times the barcode age	7	0	0	pass	of 1036 and 1039 genera with a subtree
+3b	crown age more than 10 times the barcode age	40	25	fewer than legacy	pass	
+3c	TimeTree crown used that is less than a third of the barcode age	5	0	0	pass	
+3d	root-to-tip below 0.02 and crown above 20 Ma	4	1	none	report	
+4a	held-out TimeTree ages: median error factor	1.319	1.318	<= legacy x 1.02	pass	9650 held-out ages
+4b	held-out TimeTree ages: 90% quantile of the error factor	2.502	2.485	<= legacy x 1.02	pass	
+5a	ages perturbed: 90% quantile of the factor by which node ages move	1.769	1.487	<= legacy x 1.05	pass	medians 1.218, 1.167; default without re-queries differs from the default by at most 0.0000 Ma
+5b	ages perturbed: share of node ages that move by more than 1.5	0.210	0.093	<= legacy + 0.01	pass	stems, 90% quantile: 1.750, 1.489
+5c	half the genera dropped: 90% quantile of the factor by which clade ages move	1.429	1.271	<= legacy x 1.05	pass	share over 1.5: 0.092, 0.062
+5d	half the genera dropped: the same for genus stem ages	1.866	1.604	<= legacy x 1.05	pass	
+6a	PD of the same samples on the two final trees: rank correlation		150 units at random: 0.9891; 100 genera, one unit each: 0.9895; 100 genera, five units each: 0.9721	>= 0.90 in each design	pass	24907 units in both trees; 24909 and 24927 tips
+6b	stem ages that differ by more than 10%: share with a recorded cause		1.000 (175 of 175)	>= 0.90	pass	counting a fitted age only at the nearest dated ancestor: 159 of 175; causes: {'fit_on_path': 175, 'anchor': 25, 'identifier': 14, 'reanchored': 1}
+6c	backbone PD of genus samples: rank correlation with and without perturbed ages	0.9118	0.9424	>= legacy - 0.01	pass	
+6d	PD ratio default over legacy, and total tree length	638002	630769 (-1.1%); 150 units at random: 1.0107; 100 genera, one unit each: 1.0128; 100 genera, five units each: 0.9960	none	report	
+7a	wall time of the full run (minutes)	48.0	52.6	<= 1.5 x legacy	pass	ratio 1.09
+7b	peak memory of the full run (MB)	758	1277	<= 1.5 x legacy and < 7000	FAIL	
+7c	backbone and screening rebuilt: byte-identical		backbone again: 5 of 5 files; harness against workflow: 5 of 5; screening: identical	identical	pass	
+7d	backbone rebuilt with the network blocked		built; 5 of 5 files identical	succeeds, identical	pass	
+7e	test suite		235 passed, 2 skipped in 20.22s	passes	pass	

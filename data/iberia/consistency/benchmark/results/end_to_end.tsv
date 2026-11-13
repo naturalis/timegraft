@@ -1,0 +1,24 @@
+quantity	legacy	default
+genera in the backbone	1183	1186
+backbone nodes	779	784
+genera: subtree	1036	1039
+genera: single_unit	147	147
+units set aside by screening	1294	1139
+units in genus subtrees	23259	23432
+genera with units on the wrong side of the root	366	386
+units of a genus among its outgroup	276	314
+crown age from TimeTree	261	260
+TimeTree crown demoted to a bound		15
+sum of crown ages, genera with a subtree in both (Ma)	31060	30008
+median crown age (Ma)	24.76	24.82
+crown ages that differ by more than 10%		145
+crown ages that differ by more than a factor 1.5		80
+genus stems that differ by more than 10%		175
+genus stems that differ by more than a factor 1.5		76
+units placed next to their nearest unit	1029	872
+units on the stem of their genus	474	476
+units not placed	6	6
+tips of the final tree	24909	24927
+total branch length of the final tree (Ma)	638002	630769
+units flagged numt_like		265
+units listed as long branches		432

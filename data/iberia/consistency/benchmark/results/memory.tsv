@@ -1,0 +1,8 @@
+step	seconds	peak_rss_mb
+backbone, layer off (consistency-layer code)	22.0	908
+backbone, default	24.0	1143
+backbone, default without synthesis_support (annotations.json not read; ages differ)	26.0	910
+screening, layer off	102.1	390
+screening, default	286.3	475
+full run from main (Snakemake and two jobs at a time)	2882.9	758
+full run from consistency-layer	3155.2	1277

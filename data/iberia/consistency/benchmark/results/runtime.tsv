@@ -1,0 +1,14 @@
+rule	legacy_seconds	default_seconds
+build_backbone	17.4	24.8
+build_shard	3071.3	3183.9
+diversity		0.2
+filter_records	11.1	10.6
+graft	18.4	19.9
+place_asvs		0.2
+place_units	965.2	991.2
+representatives	147.9	135.8
+screen_units	102.2	297.1
+shard_genera	46.4	43.4
+validate		0.9
+whole run (wall)	2882.9	3155.2
+peak memory (MB)	758	1277
