@@ -56,7 +56,7 @@ def test_date_topology_drops_ages_older_than_ancestor():
     tree = dendropy.Tree.get(data="((A,B),C);", schema="newick", rooting="force-rooted")
     ncbi = {"A": 1, "B": 2, "C": 3}
     ages = {frozenset({1, 2, 3}): 40.0, frozenset({1, 3}): 40.0, frozenset({1, 2}): 55.0}
-    tree, report = date_topology(tree, ncbi, fake_timetree(ages))
+    tree, report = date_topology(tree, ncbi, fake_timetree(ages), method="precedence")
     sources = {r["example_genera"]: r["source"] for r in report}
     assert sources["A;B"] == "interpolated_after_drop"
     assert is_ultrametric(tree)
@@ -133,7 +133,7 @@ def test_direct_age_outranks_higher_taxa_ancestor():
     ages = {frozenset({1, 2, 4}): 100.0, frozenset({1, 3, 4}): 100.0, frozenset({1, 2}): 30.0,
             frozenset({11, 13}): 20.0}
     higher = {"A": [(101, 11)], "B": [(101, 11)], "C": [(103, 13)], "D": [(104, 14)]}
-    tree, report = date_topology(tree, ncbi, fake_timetree(ages, missing={3}), higher=higher)
+    tree, report = date_topology(tree, ncbi, fake_timetree(ages, missing={3}), higher=higher, method="precedence")
     by = {r["example_genera"]: r for r in report}
     assert by["A;B"]["source"] == "timetree"
     assert by["A;B;C"]["source"] == "interpolated_after_drop"

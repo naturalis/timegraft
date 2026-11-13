@@ -41,7 +41,7 @@ The first ten columns are as before. Added:
 | Column | Meaning |
 | --- | --- |
 | `timetree_attempt` | Which set of picks gave TimeTree's age: `0` for the first, `1` to `3` for later attempts, `higher_taxa` for enclosing taxa; empty if TimeTree gave none |
-| `conflict_with` | For a node in conflict (`conflict_ratio`), the node it conflicted with: the dated ancestor, or for a dropped `timetree_higher_taxa` age, the descendant that outranked it |
+| `conflict_with` | For a node in conflict (`conflict_ratio`), the node it conflicted with: the dated ancestor, or for a dropped `timetree_higher_taxa` age, the descendant that outranked it. Both describe the conflict as the precedence rule sees it, whichever `ages.method` is used |
 | `timetree_evidence` | `full` (version 2 cache entry), `legacy_cache` (version 1, only `timetree_found_ids` known), `none`; empty if TimeTree gave no age |
 | `timetree_found_ids` | The queried NCBI ids TimeTree found |
 | `timetree_mrca_ncbi` | NCBI id of the node TimeTree dated |
@@ -51,7 +51,7 @@ The first ten columns are as before. Added:
 | `timetree_api_version` | Version of the TimeTree database that answered |
 | `synth_node` | Label of the node of the synthetic tree behind the backbone node (`ott…` or `mrcaott…ott…`); static source only |
 | `synth_supported_by`, `synth_conflicts_with`, `synth_resolves`, `synth_partial_path_of`, `synth_terminal` | Number of source trees of the synthesis per kind of annotation, from its `annotations.json`. `synth_supported_by` of 0 means the node rests on the taxonomy alone. Empty without `backbone_build.synthesis_support` |
-| `calibration_weight`, `fitted_age`, `calibration_residual` | Reserved for the weighted fit of backbone ages ([#52](https://github.com/naturalis/timegraft/issues/52)); empty |
+| `calibration_sigma`, `calibration_weight`, `fitted_age`, `calibration_residual`, `calibration_z`, `calibration_outlier`, `precedence_age`, `precedence_source` | The weighted fit of backbone ages; see [below](#backbone-ages-from-a-weighted-fit) |
 | `conflict_class`, `requery_age` | Reserved for the re-query of conflicting nodes ([#53](https://github.com/naturalis/timegraft/issues/53)); empty |
 
 The TimeTree columns describe the query in `query_ids`, the one whose age was used (or dropped, for `dropped_inconsistent` nodes).
@@ -82,6 +82,32 @@ The first four columns (`genus`, `status`, `ott_id`, `ncbi_id`) are as before. A
 ## `backbone/crown_ages.tsv`
 
 `genus`, `crown_age` and `n_species` are as before. Added: `query_ids`, the species queried, and the same `timetree_*` columns as in `node_ages.tsv`. With `source: api` the table has no rows, as before.
+
+## Backbone ages from a weighted fit
+
+Before [#52](https://github.com/naturalis/timegraft/issues/52), a TimeTree age that was not younger than that of its nearest dated ancestor was dropped: the ancestor won, by its position in the tree, however weak its evidence. TimeTree ages that are too young usually come from queries that did not span the node, and those can then override better supported, older ages below them; the 27-genus crab clade at 54.9 Ma above Eubrachyura at 156.8 Ma is the example in the holistic analysis.
+
+With `ages.method: fit` (the default) every TimeTree age is a soft constraint instead, and all backbone ages are fitted together (`timegraft.agefit`):
+
+- **On a log scale,** so that a factor two weighs the same at 5 and at 500 Ma.
+- **Weighted by the evidence.** The uncertainty of each age (`calibration_sigma`, the standard deviation of its log) comes from TimeTree's confidence interval where it gives one (taken as 95%), else from the spread of the study estimates (the standard error of their mean log), else `sigma_single` (0.5, about a factor 1.65) for a single estimate. It is never below `sigma_floor` (0.1), and is multiplied by `higher_taxa_factor` (2) for ages through enclosing taxa and by `taxonomy_only_factor` (1.5) for nodes no source tree of the synthesis supports. The weight is 1/sigma².
+- **Under a hard constraint:** every age is younger than that of its nearest calibrated ancestor by at least `min_gap` (1%) per edge between them, so no branch has length zero. The fit is an exact weighted isotonic regression on the tree of calibrated nodes (checked against a general solver, ties and fixed nodes included).
+- **Robust.** A calibration more than `huber_k` (1.5) sigma from the fit is down-weighted (Huber weights, refitted until stable), so that one wild age does not drag its neighbours; beyond `outlier_z` (3) sigma it is reported as an outlier.
+
+A configured root age (`root_age`, where TimeTree has none) is held exactly, as a hard constraint; calibrations that would be older are fitted just below it. A TimeTree age equal to that of its nearest calibrated ancestor still means TimeTree does not resolve the node, and is not used. Nodes without a calibration are interpolated between the fitted ages, as before.
+
+`ages.method: precedence` gives the rule before #52. Whichever method is used, `node_ages.tsv` also gives the precedence ages, so the two can be compared during the validation period.
+
+| Column | Meaning |
+| --- | --- |
+| `source` | With the fit: `timetree_fit` or `timetree_higher_taxa_fit` for a calibrated node (with `_outlier` appended for outliers), `configured`, `interpolated` or `interpolated_unresolved_in_timetree`. With precedence, as before |
+| `calibration_sigma`, `calibration_weight` | Uncertainty of the calibration as above, and its weight: after down-weighting with the fit, 1/sigma² with precedence. Filled in either method, so that the conflict metrics of both use the same weights |
+| `fitted_age` | The fitted age (equal to `age`) |
+| `calibration_residual`, `calibration_z` | log(fitted / TimeTree), and that over sigma |
+| `calibration_outlier` | `yes` beyond `outlier_z` |
+| `precedence_age`, `precedence_source` | Age and source of the node under the precedence rule, for comparison |
+
+`metadata.json` gives conflict metrics over all calibrations, for the final ages and for the precedence ages: the median, 90th percentile and largest factor between age and TimeTree's, the number off by more than a factor 1.5 (`severe`), the root mean square of residuals over sigma, and the number of outliers.
 
 ## Catalogue of Life as identifier hub
 
@@ -188,7 +214,7 @@ Columns in `genera.tsv`:
 
 ## `backbone/metadata.json`
 
-New. What the backbone was built from: the format version of each output and of the cache, the timegraft version, the source, OTT and synthesis releases, the matching context, whether synthesis support was read, the anchoring, concordance and re-anchoring settings with the number of genera per status and the number of genera per `concordance_flag` and per `placement_action`, the COL release (key, alias, version) with counts of genera by confidence and crosswalk path and of genera joined with COL's NCBI id, and a summary of the TimeTree evidence (queries per evidence level, TimeTree database versions, and how many cache entries are at version 1, were upgraded, or now get a different answer from TimeTree).
+New. What the backbone was built from: the format version of each output and of the cache, the timegraft version, the source, OTT and synthesis releases, the matching context, whether synthesis support was read, the age method with the conflict metrics of the final and the precedence ages, the anchoring, concordance and re-anchoring settings with the number of genera per status and the number of genera per `concordance_flag` and per `placement_action`, the COL release (key, alias, version) with counts of genera by confidence and crosswalk path and of genera joined with COL's NCBI id, and a summary of the TimeTree evidence (queries per evidence level, TimeTree database versions, and how many cache entries are at version 1, were upgraded, or now get a different answer from TimeTree).
 
 ## Migration note for downstream consumers
 
@@ -201,4 +227,5 @@ New. What the backbone was built from: the format version of each output and of 
 - **`genera.tsv` format 4** (#49) fills `lineage_distance`, `merged_id_distance`, `neighbour_concordance` and `concordance_flag`; `backbone/concordance.tsv` is new. The build now also reads `units/screened.tsv`, so it runs after screening.
 - **`genera.tsv` format 5 and `concordance.tsv` format 2** (#50) add the re-anchoring columns above. With the default `reanchor.mode: apply` the backbone changes wherever a genus is flagged: the genus has a new place and `status` (`reanchored:<node>`), and the ages around its old and new place change. `mode: report` keeps the earlier backbone.
 - **`genera.tsv` format 6** (#51) adds the `anchor_*` columns above, and a new status, `attached_at_majority`. With the default `anchoring.rule: majority` and `prefer_sampled: true`, genera that are not a node of the synthesis can have a different anchor, and the backbone and its ages change around them.
+- **`node_ages.tsv` format 3** (#52) fills the calibration columns and adds `calibration_sigma`, `calibration_z`, `calibration_outlier`, `precedence_age` and `precedence_source`. With the default `ages.method: fit`, `source` takes new values (`timetree_fit`, `timetree_higher_taxa_fit`, with `_outlier`), `dropped_inconsistent` and `interpolated_after_drop` no longer occur, and backbone ages change wherever TimeTree ages conflicted. Code that selected TimeTree-dated nodes by `source in ("timetree", "timetree_higher_taxa")` should accept the `_fit` forms too.
 - **The build reads the filtered records** (`units/filtered.tsv`) for the reference lineage, besides the representatives, so it runs again when the records change.

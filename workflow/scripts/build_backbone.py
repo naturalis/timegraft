@@ -12,7 +12,8 @@ logging.basicConfig(filename=snakemake.log[0], level=logging.INFO, format="%(mes
 import dendropy
 
 from timegraft import __version__
-from timegraft.backbone_build import (GENERA_COLUMNS, REPORT_COLUMNS, date_topology, genera_rows, join_ncbi,
+from timegraft.backbone_build import (GENERA_COLUMNS, REPORT_COLUMNS, age_fit_summary, date_topology, genera_rows,
+                                      join_ncbi,
                                       records_lineage, timetree_summary)
 from timegraft.col import SPECIES_COLUMNS, compare_ids
 from timegraft.otol_static import CROWN_COLUMNS
@@ -196,7 +197,9 @@ try:
                                  root_age=settings.get("root_age"),
                                  per_genus=int(settings.get("species_per_genus", 3)), higher=higher,
                                  interpolation=settings.get("interpolation", "pure_birth"), richness=richness,
-                                 synth_nodes=synth_nodes, support=support)
+                                 synth_nodes=synth_nodes, support=support,
+                                 method=(settings.get("ages") or {}).get("method", "fit"),
+                                 fit=(settings.get("ages") or {}).get("fit") or {})
 finally:
     cache.save()
 
@@ -211,7 +214,7 @@ write_tsv(snakemake.output.concordance, concordance, CONCORDANCE_COLUMNS)
 # what the backbone was built from, and in what format the outputs are (#47)
 entries = [v for k, v in cache.data.items() if k.startswith("mrca:") and isinstance(v, dict)]
 metadata = {
-    "output_format": {"genera.tsv": 6, "concordance.tsv": 2, "node_ages.tsv": 2, "crown_ages.tsv": 2, "timetree_cache": CACHE_VERSION},
+    "output_format": {"genera.tsv": 6, "node_ages.tsv": 3, "concordance.tsv": 2, "crown_ages.tsv": 2, "timetree_cache": CACHE_VERSION},
     "timegraft_version": __version__,
     "source": settings.get("source", "static"),
     "taxonomy": settings.get("taxonomy", "ott3.7.3") if settings.get("source", "static") == "static" else "api",
@@ -221,6 +224,11 @@ metadata = {
     "concordance": {
         "settings": settings.get("concordance") or {},
         "genera_by_flag": dict(Counter(r["concordance_flag"] or "concordant" for r in concordance)),
+    },
+    "ages": {
+        "settings": settings.get("ages") or {},
+        # conflict metrics over all calibrations: the final ages and those of the precedence rule (#52)
+        **age_fit_summary(report),
     },
     "anchoring": {
         "settings": settings.get("anchoring") or {},

@@ -41,6 +41,14 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.col.join` | `col` | `col`: send a genus to TimeTree with COL's NCBI id where it is one of the ids OTT holds for it, or OTT has none; `ott`: always OTT's |
 | `backbone_build.col.species` | `false` | Also resolve every species name of the records (`backbone/col_species.tsv`) |
 | `backbone_build.col.workers` | 4 | Concurrent requests to ChecklistBank |
+| `backbone_build.ages.method` | `fit` | Resolving conflicting TimeTree ages: `fit` (all together, weighted by their evidence, ages decreasing towards the tips) or `precedence` (drop an age not younger than its dated ancestor; before #52) ([provenance](provenance.md#backbone-ages-from-a-weighted-fit)) |
+| `backbone_build.ages.fit.sigma_floor` | 0.1 | Smallest uncertainty of a calibration (standard deviation of its log age) |
+| `backbone_build.ages.fit.sigma_single` | 0.5 | Uncertainty of an age from a single study estimate |
+| `backbone_build.ages.fit.higher_taxa_factor` | 2.0 | Uncertainty multiplier for ages through enclosing taxa |
+| `backbone_build.ages.fit.taxonomy_only_factor` | 1.5 | Uncertainty multiplier for nodes no source tree of the synthesis supports |
+| `backbone_build.ages.fit.huber_k` | 1.5 | Calibrations further than this many sigma from the fit are down-weighted |
+| `backbone_build.ages.fit.outlier_z` | 3.0 | ... and reported as outliers beyond this |
+| `backbone_build.ages.fit.min_gap` | 0.01 | Smallest step in age per edge between calibrated nodes, as a share of the older age |
 | `backbone_build.anchoring.rule` | `majority` | Genera that are not a node of the synthesis: `majority` (smallest clade with more than `share` of their species) or `mrca` (MRCA of all; before #51) ([provenance](provenance.md#anchoring-genera-that-are-not-a-node-of-the-synthesis)) |
 | `backbone_build.anchoring.share` | 0.5 | Share of the species the anchor clade must hold, more than; at least 0.5 and below 1 |
 | `backbone_build.anchoring.min_species` | 3 | Fewer species in the synthesis: the MRCA |
