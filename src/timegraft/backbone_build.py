@@ -330,17 +330,19 @@ def date_topology(
         age, source = p_age, p_source
         if rq_mode != "off":
             requery_rows, _ = _requery(tree, calibrations, {}, set(), conflict, conflict_with, p_age, used, ncbi,
-                                       timetree, per_side, per_genus, requery)
+                                       timetree, per_side, per_genus, requery, fit, synth_nodes, support)
     else:
         age, source, fitted_rows, result = _fit(tree, calibrations, cal_parent, unresolved, source, fit)
         if rq_mode != "off":
             requery_rows, replace = _requery(tree, calibrations, result.z, result.outlier, conflict, conflict_with,
-                                             result.age, used, ncbi, timetree, per_side, per_genus, requery)
+                                             result.age, used, ncbi, timetree, per_side, per_genus, requery,
+                                             fit, synth_nodes, support)
             if rq_mode == "apply" and replace:
                 for node, (value, sigma) in replace.items():
                     calibrations[node] = agefit.Calibration(value, sigma, calibrations[node].source)
                     requery_rows[node]["requery_applied"] = "yes"
-                calibration_rows = _calibration_rows(calibrations)
+                # calibration_sigma keeps describing the first age (timetree_age); the replacement's is
+                # requery_sigma, so that every reported metric pairs an age with its own uncertainty
                 age, source, fitted_rows, result = _fit(tree, calibrations, cal_parent, unresolved, source, fit)
         for node, row in fitted_rows.items():
             calibration_rows[node].update(row)
@@ -442,6 +444,29 @@ def _precedence(tree, age, source):
     return age, source, conflict, conflict_with
 
 
+def _cache_entry(timetree, ids) -> dict:
+    entry = timetree.cache.get(timetree._key(ids)) if hasattr(timetree, "cache") else None
+    return entry if isinstance(entry, dict) else {}
+
+
+def _valid_estimates(entry: dict) -> list[float]:
+    """The study estimates of a cache entry that are usable ages (TimeTree can return sentinels such as -1)."""
+    return [e for e in entry.get("estimates") or () if e and e > 0]
+
+
+def _sigma(entry: dict, node, higher_taxa: bool, synth_nodes, support, settings) -> float:
+    """Uncertainty of a TimeTree age (#52), with the configured settings and the node's synthesis support."""
+    label = (synth_nodes or {}).get(node, "")
+    taxonomy_only = bool(label) and support is not None and not (support.get(label) or {}).get("supported_by")
+    return agefit.calibration_sigma(
+        _valid_estimates(entry), entry.get("ci_low"), entry.get("ci_high"),
+        higher_taxa=higher_taxa, taxonomy_only=taxonomy_only,
+        floor=float(settings.get("sigma_floor", agefit.SIGMA_FLOOR)),
+        single=float(settings.get("sigma_single", agefit.SIGMA_SINGLE)),
+        higher_factor=float(settings.get("higher_taxa_factor", agefit.HIGHER_TAXA_FACTOR)),
+        taxonomy_factor=float(settings.get("taxonomy_only_factor", agefit.TAXONOMY_ONLY_FACTOR)))
+
+
 def _calibrations(tree, age, source, used, timetree, synth_nodes, support, settings):
     """Every usable calibration with its uncertainty, whichever age method is used (#52).
 
@@ -470,17 +495,8 @@ def _calibrations(tree, age, source, used, timetree, synth_nodes, support, setti
         if source[node] == "configured":
             calibrations[node] = agefit.Calibration(age[node], 1.0, "configured", fixed=True)
         else:
-            entry = timetree.cache.get(timetree._key(used[node])) if hasattr(timetree, "cache") else None
-            entry = entry if isinstance(entry, dict) else {}
-            label = (synth_nodes or {}).get(node, "")
-            taxonomy_only = bool(label) and support is not None and not (support.get(label) or {}).get("supported_by")
-            sigma = agefit.calibration_sigma(
-                entry.get("estimates") or (), entry.get("ci_low"), entry.get("ci_high"),
-                higher_taxa=source[node] == "timetree_higher_taxa", taxonomy_only=taxonomy_only,
-                floor=float(settings.get("sigma_floor", agefit.SIGMA_FLOOR)),
-                single=float(settings.get("sigma_single", agefit.SIGMA_SINGLE)),
-                higher_factor=float(settings.get("higher_taxa_factor", agefit.HIGHER_TAXA_FACTOR)),
-                taxonomy_factor=float(settings.get("taxonomy_only_factor", agefit.TAXONOMY_ONLY_FACTOR)))
+            sigma = _sigma(_cache_entry(timetree, used[node]), node, source[node] == "timetree_higher_taxa",
+                           synth_nodes, support, settings)
             calibrations[node] = agefit.Calibration(age[node], sigma, source[node])
         parent[node] = anc
     return calibrations, parent, unresolved
@@ -521,8 +537,26 @@ def _fit(tree, calibrations, parent, unresolved, source, settings):
     return fitted, new_source, rows, result
 
 
+def _bracket(node, reference) -> tuple[float | None, float | None]:
+    """The ages the rest of the tree allows a node: the oldest of its nearest dated descendants (tips at 0)
+    and its nearest dated ancestor, from ``reference`` (ages of the other nodes; the node's own is ignored)."""
+    up = node.parent_node
+    while up is not None and up not in reference:
+        up = up.parent_node
+    stack, low = list(node.child_node_iter()), 0.0
+    while stack:
+        n = stack.pop()
+        if n.is_leaf():
+            continue
+        if n in reference:
+            low = max(low, reference[n])
+        else:
+            stack.extend(n.child_node_iter())
+    return low, (reference[up] if up is not None else None)
+
+
 def _requery(tree, calibrations, z, outliers, conflict, conflict_with, reference, used, ncbi, timetree, per_side,
-             per_genus, settings):
+             per_genus, settings, fit_settings=None, synth_nodes=None, support=None):
     """Re-query triggered nodes with disjoint picks and classify them (#53).
 
     Returns the report columns per triggered node, and for the nodes whose
@@ -558,23 +592,22 @@ def _requery(tree, calibrations, z, outliers, conflict, conflict_with, reference
             if again is not None:
                 break
         evidence = timetree.evidence(ids) if hasattr(timetree, "evidence") else {}
-        def valid_estimate_count(query_ids):
-            entry = timetree.cache.get(timetree._key(query_ids)) if hasattr(timetree, "cache") else {}
-            return sum(1 for value in (entry.get("estimates") or ()) if value and value > 0) if isinstance(entry, dict) else 0
-        n_first = valid_estimate_count(used[node])
-        n_again = valid_estimate_count(ids) if again is not None else 0
+        # only usable estimates count towards confidence, as towards the uncertainty
+        n_first = len(_valid_estimates(_cache_entry(timetree, used[node])))
+        n_again = len(_valid_estimates(_cache_entry(timetree, ids))) if again is not None else 0
         cls, detail, confidence = rq.classify(first, again, reference.get(node, first), n_first, n_again,
-                                              float(settings.get("move", rq.MOVE)))
+                                              float(settings.get("move", rq.MOVE)),
+                                              bracket=_bracket(node, reference))
         row.update(requery_ids="+".join(map(str, ids)), requery_age="" if again is None else f"{again:.4f}",
                    requery_mrca_ncbi=evidence.get("mrca_ncbi", "") if again is not None else "",
                    requery_n_estimates=str(n_again) if again is not None else "",
                    conflict_class=cls, conflict_detail=detail, conflict_confidence=confidence)
         rows[node] = row
         if cls in ("under_spanning", "pick_specific") and again:
-            entry = timetree.cache.get(timetree._key(ids)) if hasattr(timetree, "cache") else None
-            entry = entry if isinstance(entry, dict) else {}
-            sigma = agefit.calibration_sigma(entry.get("estimates") or (), entry.get("ci_low"), entry.get("ci_high"),
-                                             higher_taxa=False)
+            # the same rules as for the first age: configured floor and single-estimate default, and the
+            # node's synthesis support; disjoint picks are genera and species, never enclosing taxa
+            sigma = _sigma(_cache_entry(timetree, ids), node, False, synth_nodes, support, fit_settings or {})
+            row["requery_sigma"] = f"{sigma:.4f}"
             replace[node] = (again, sigma)
     return rows, replace
 
@@ -590,7 +623,7 @@ def age_fit_summary(report: list[dict], severe: float = 1.5) -> dict:
         final[row["node"]] = float(row["age"])
         precedence[row["node"]] = float(row["precedence_age"])
     # with requery.mode apply, some calibrations were replaced by their re-query age (#53)
-    effective = {n: agefit.Calibration(float(r["requery_age"]), calibrations[n].sigma)
+    effective = {n: agefit.Calibration(float(r["requery_age"]), float(r["requery_sigma"]))
                  for r in report for n in [r["node"]] if n in calibrations and r.get("requery_applied") == "yes"}
     return {
         "final": agefit.misfit(final, calibrations, severe),

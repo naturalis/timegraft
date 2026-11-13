@@ -39,6 +39,17 @@ def test_classify(first, again, reference, expected):
     assert rq.classify(first, again, reference, 4, 4)[:2] == expected
 
 
+def test_overshoot_is_not_a_correction():
+    # found by review: moving the right way but past the rest of the tree is no correction
+    assert rq.classify(100, 500, 200, 4, 4)[:2] == ("unresolved", "contrary")
+    # unless the rest of the tree allows it: the reference is a compromise the first age pulled down
+    assert rq.classify(100, 500, 200, 4, 4, bracket=(150, 600))[:2] == ("under_spanning", "moved_older")
+    assert rq.classify(100, 500, 200, 4, 4, bracket=(150, 400))[:2] == ("unresolved", "contrary")
+    assert rq.classify(100, 500, 200, 4, 4, bracket=(150, None))[:2] == ("unresolved", "contrary")
+    assert rq.classify(400, 20, 100, 4, 4)[:2] == ("unresolved", "contrary")
+    assert rq.classify(400, 20, 100, 4, 4, bracket=(10, 500))[:2] == ("pick_specific", "moved_younger")
+
+
 def test_confidence():
     assert rq.classify(54.9, 156.8, 168.6, 4, 6)[2] == "high"
     assert rq.classify(54.9, 156.8, 168.6, 1, 1)[2] == "medium"  # decisive move, thin evidence
@@ -92,6 +103,50 @@ def test_requery_classifies_and_can_apply():
     assert summary["final_against_requery"]["weighted_rms"] < summary["final"]["weighted_rms"]
     _, by, _ = _run("off")
     assert by[("A1;A2;B1", 4)]["conflict_class"] == "" and by[("A1;A2;B1", 4)]["requery_ids"] == ""
+
+
+def test_apply_keeps_each_age_with_its_own_uncertainty():
+    _, classified, _ = _run("classify")
+    _, applied, report = _run("apply")
+    ab_c, ab_a = classified[("A1;A2;B1", 4)], applied[("A1;A2;B1", 4)]
+    # calibration_sigma still describes the first age (timetree_age); the replacement has requery_sigma
+    assert ab_a["calibration_sigma"] == ab_c["calibration_sigma"] and ab_a["timetree_age"] == ab_c["timetree_age"]
+    assert ab_a["requery_sigma"] and ab_c["requery_sigma"]  # recorded whether applied or not
+    summary = age_fit_summary(report)
+    assert summary["precedence"] == age_fit_summary(_run("classify")[2])["precedence"]
+
+
+def test_requery_sigma_follows_the_fit_settings():
+    tree = dendropy.Tree.get(data=NEWICK, schema="newick", rooting="force-rooted")
+    tt = TimeTree(JsonCache(None), fetch=_fake(AGES))
+    _, report = date_topology(tree, NCBI, tt, per_side=1, per_genus=0, fit={"sigma_floor": 0.4},
+                              requery={"mode": "classify", "z_trigger": 1.0})
+    ab = next(r for r in report if r["conflict_class"] == "under_spanning")
+    # two estimates of 90: no spread, so the floor alone
+    assert float(ab["requery_sigma"]) == pytest.approx(0.4, abs=1e-4)
+
+
+def test_sentinel_estimates_do_not_count():
+    # the first query of AB comes back with one real estimate and two sentinels: one estimate, not three
+    def fetch(url, payload=None):
+        ids = [int(i) for i in url.split("/mrca/id/")[1].split("/")[0].split("+")]
+        reply = _fake(AGES)(url)
+        if set(ids) == {1, 3}:
+            reply["time_estimates"] = "{20,-1,-1}"
+        return reply
+
+    tree = dendropy.Tree.get(data=NEWICK, schema="newick", rooting="force-rooted")
+    _, report = date_topology(tree, NCBI, TimeTree(JsonCache(None), fetch=fetch), per_side=1, per_genus=0,
+                              requery={"mode": "classify", "z_trigger": 1.0})
+    ab = next(r for r in report if r["conflict_class"] == "under_spanning")
+    assert ab["conflict_confidence"] == "medium"  # decisive move, but the first age rests on one estimate
+
+
+def test_apply_needs_the_fit():
+    tree = dendropy.Tree.get(data=NEWICK, schema="newick", rooting="force-rooted")
+    with pytest.raises(ValueError):
+        date_topology(tree, NCBI, TimeTree(JsonCache(None), fetch=_fake(AGES)), per_side=1, per_genus=0,
+                      method="precedence", requery={"mode": "apply"})
 
 
 def test_requery_is_reproducible_from_the_cache():

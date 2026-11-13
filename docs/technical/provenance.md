@@ -121,22 +121,25 @@ A TimeTree age in conflict with the rest of the tree has two common causes, whic
 
 | `conflict_class` | `conflict_detail` | Reading |
 | --- | --- | --- |
-| `under_spanning` | `moved_older` | The first age was younger than the rest of the tree, and the re-query is older by more than `move` (1.25): the first picks did not span the node |
-| `pick_specific` | `moved_younger` | The first age was older than the rest of the tree, and the re-query is younger: one of the first picks is placed elsewhere by TimeTree |
+| `under_spanning` | `moved_older` | The first age was younger than the rest of the tree, and the re-query is older by more than `move` (1.25) and closer to the rest of the tree: the first picks did not span the node |
+| `pick_specific` | `moved_younger` | The first age was older than the rest of the tree, and the re-query is younger and closer to the rest of the tree: one of the first picks is placed elsewhere by TimeTree |
 | `topology` | `stable_young`, `stable_old` | The re-query gives the same age (within `move`) and the conflict stands: OToL and TimeTree disagree about the node or the taxa in it |
 | `consistent` | `close_to_reference` | The first age was within `move` of the rest of the tree and the re-query agrees: no conflict to explain. Typically the partner of a conflict whose other node was at fault |
-| `unresolved` | `no_answer`, `no_disjoint_picks`, `contrary` | TimeTree found taxa on fewer than two sides, every taxon of a side was used in the first query, or the re-query moved away from the rest of the tree: the evidence does not suffice |
+| `unresolved` | `no_answer`, `no_disjoint_picks`, `contrary` | TimeTree found taxa on fewer than two sides, every taxon of a side was used in the first query, or the re-query moved away from the rest of the tree, or past it beyond what the tree allows: the evidence does not suffice |
 
-`conflict_confidence` is `high` when the move is decisive (by 1.5 or more, or within 1.1 for `topology`) and both ages rest on two or more estimates, `medium` when one of those holds, `low` when neither does; empty for `unresolved`.
+"Closer to the rest of the tree" means nearer the reference age, or strictly between the ages of the node's nearest dated descendants and nearest dated ancestor. The second test matters because the reference is a compromise that the first age has pulled towards itself: an under-spanned node is fitted just above its descendants, and its true age can lie well beyond that.
 
-**Using the result.** With `requery.mode: classify` (the default) nothing changes: the classes are diagnostics, for topology correction and for the age fit. With `mode: apply` (only with `ages.method: fit`), the re-query age, with its own uncertainty, replaces the first for `under_spanning` and `pick_specific` nodes, and the ages are fitted again (`requery_applied`). `mode: off` skips the re-query. Every re-query is cached like any other TimeTree query, so the classes are reproducible on a fixed cache.
+`conflict_confidence` is `high` when the move is decisive (by 1.5 or more, or within 1.1 for `topology`) and both ages rest on two or more usable estimates (positive ones; TimeTree can return sentinels such as -1), `medium` when one of those holds, `low` when neither does; empty for `unresolved`.
+
+**Using the result.** With `requery.mode: classify` (the default) nothing changes: the classes are diagnostics, for topology correction and for the age fit. With `mode: apply` (only with `ages.method: fit`; with `precedence` it is refused), the re-query age, with its own uncertainty, replaces the first for `under_spanning` and `pick_specific` nodes, and the ages are fitted again (`requery_applied`). That uncertainty follows the same rules and settings as the first age's, including the node's synthesis support. `mode: off` skips the re-query. Every re-query is cached like any other TimeTree query, so the classes are reproducible on a fixed cache.
 
 | Column | Meaning |
 | --- | --- |
 | `requery_trigger` | Why the node was re-queried: `z`, `outlier`, `conflict`, separated by `;` |
 | `requery_ids`, `requery_age` | The NCBI ids of the re-query that gave an answer (or of the last tried) and TimeTree's age for them |
-| `requery_mrca_ncbi`, `requery_n_estimates` | The node TimeTree dated and the estimates behind it, to compare with `timetree_mrca_ncbi` and `timetree_n_estimates` of the first query |
+| `requery_mrca_ncbi`, `requery_n_estimates` | The node TimeTree dated and the usable estimates behind it, to compare with `timetree_mrca_ncbi` and `timetree_n_estimates` of the first query |
 | `conflict_class`, `conflict_detail`, `conflict_confidence` | As above |
+| `requery_sigma` | Uncertainty of the re-query age, for `under_spanning` and `pick_specific` nodes. `calibration_sigma` keeps describing the first age (`timetree_age`), also under `apply`, so that every metric pairs an age with its own uncertainty |
 | `requery_applied` | `yes` where the re-query age replaced the first (mode `apply`) |
 
 In `metadata.json`, `ages.requery` counts the re-queried nodes by class, detail and confidence; with `apply`, `ages.final_against_requery` gives the conflict metrics against the calibrations as replaced.
