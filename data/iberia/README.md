@@ -13,6 +13,7 @@ Inputs and outputs of the timegraft runs on genera of western Iberia, described 
 | `iberia-run.tar.gz` | Output folder of the run with the earlier strict rooting (and the earlier crown age rule) |
 | `rooting-diagnostics.tar.gz` | `diagnostics/rooting/` of the strict run: `per_genus.tsv`, `random_pairs.tsv` (20 random outgroup pairs per genus) and `report.md` (#19) |
 | `outgroup-benchmark/` | Scripts and per-genus results of the comparison of outgroup choices and rooting rules (#19) |
+| `allgenus_nocf_13nov26.txt` | List of genera from Jorge Moutinho's checklist. Currently unused but may be input for later Iberian runs after refactoring |
 
 The output folders leave out `units/records.tsv` and `units/filtered.tsv`, which the workflow rebuilds from the records.
 
