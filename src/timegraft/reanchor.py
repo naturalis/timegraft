@@ -99,9 +99,7 @@ def find_target(taxonomy, names: Mapping[tuple[str, str], list[int]], reference:
         agreeing = [uid for uid in candidates if higher & _lineage_names(taxonomy, uid)]
         if len(agreeing) == 1:
             return agreeing[0], f"{rank}:{name}", "reference_lineage"
-        if not agreeing and len(candidates) == 1:
-            return candidates[0], f"{rank}:{name}", "reference_name"
-        return None, f"{rank}:{name}", "ambiguous_target"
+        continue
     return None, "", "no_target"
 
 
