@@ -593,33 +593,93 @@ def genus_anchor_info(synth: SynthTree, taxonomy: Taxonomy, anchor: dict[str, in
     return out
 
 
-CROWN_COLUMNS = ("genus", "crown_age", "n_species", "query_ids", *(f"timetree_{c}" for c in EVIDENCE_COLUMNS))
+CROWN_COLUMNS = ("genus", "crown_age", "n_species", "query_ids", "crown_basis", "n_sampled_species",
+                 "sampled_crown_age", "global_crown_age", *(f"timetree_{c}" for c in EVIDENCE_COLUMNS))
+CROWN_BASES = ("sampled", "global")
 
 
-def crown_ages(taxonomy: Taxonomy, timetree, genera: list[str], max_species: int = 12) -> list[dict]:
-    """Crown age per genus: the TimeTree MRCA of up to ``max_species`` of its species.
+def _spread(items: list, n: int) -> list:
+    items = sorted(set(items))
+    step = max(1, len(items) // n)
+    return sorted(set(items[::step][:n]))
 
-    This is a lower bound: the sampled species need not span the crown.
-    Genera with fewer than two species known to TimeTree get no age. Each
-    row also holds the species queried and TimeTree's evidence for the age
-    (``CROWN_COLUMNS``, #47).
+
+def crown_ages(taxonomy: Taxonomy, timetree, genera: list[str], max_species: int = 12,
+               sampled: dict[str, set[str]] | None = None, basis: str = "sampled", min_sampled: int = 2,
+               single_species: str = "none", species_ncbi: dict[str, int] | None = None) -> list[dict]:
+    """Crown age per genus from TimeTree, and which species it is the crown of (``CROWN_COLUMNS``).
+
+    The *global* crown is the TimeTree MRCA of up to ``max_species`` of the
+    genus's species in OTT: the crown of the whole genus. In a regional run
+    the genus subtree is built from the species sampled, and its root is the
+    MRCA of those, which can be far younger (the holistic analysis: a
+    *Ruditapes* of three units and 1.3% divergence against a global crown of
+    69 Ma). With ``basis`` ``sampled`` (#54) the crown is therefore that of
+    the species sampled in the run (``sampled``: species names per genus,
+    found by name in OTT, or in ``species_ncbi``, e.g. from COL), where at
+    least ``min_sampled`` of them have an NCBI id and TimeTree knows two;
+    otherwise the global crown (``global_fallback``). A genus sampled with
+    a single species has no TimeTree crown with ``single_species`` ``none``
+    (``single_sampled_species``): its subtree is within one species, which
+    the crown of the genus does not describe; ``global`` uses the global
+    crown instead.
+
+    Either age is a lower bound: the species queried need not span the
+    crown. Genera with fewer than two species known to TimeTree get no age.
+    Every genus with a decision gets a row; ``crown_age`` is empty where
+    there is no TimeTree crown. Each row has both the sampled and the global
+    age, the species queried and TimeTree's evidence for the chosen age.
     """
-    picks_by_genus = {}
+    if basis not in CROWN_BASES:
+        raise ValueError(f"crown basis must be one of {CROWN_BASES}, not {basis!r}")
+    if single_species not in ("none", "global"):
+        raise ValueError(f"single_species must be 'none' or 'global', not {single_species!r}")
+    names_to_ncbi = dict(taxonomy.species_ncbi)
+    names_to_ncbi.update({k: v for k, v in (species_ncbi or {}).items() if v})
+    global_picks, sampled_picks, n_sampled = {}, {}, {}
     for genus in genera:
-        species = sorted(n for _, n in taxonomy.species.get(genus, []) if n)
-        if len(species) < 2:
-            continue
-        step = max(1, len(species) // max_species)
-        picks_by_genus[genus] = sorted(set(species[::step][:max_species]))
+        species = [n for _, n in taxonomy.species.get(genus, []) if n]
+        if len(species) >= 2:
+            global_picks[genus] = _spread(species, max_species)
+        if sampled is not None and genus in sampled:
+            ids = {names_to_ncbi[n] for n in sampled[genus] if names_to_ncbi.get(n)}
+            n_sampled[genus] = len(ids)
+            if len(ids) >= min_sampled:
+                sampled_picks[genus] = _spread(list(ids), max_species)
     if hasattr(timetree, "prefetch"):
-        timetree.prefetch(picks_by_genus.values())
-    rows = []
-    for genus, picks in picks_by_genus.items():
+        timetree.prefetch(list(global_picks.values()) + (list(sampled_picks.values()) if basis == "sampled" else []))
+
+    def age_of(picks):
+        if not picks:
+            return None
         result = timetree._query(picks)
-        if result["age"] is not None and len(result["found"]) >= 2:
-            row = {"genus": genus, "crown_age": f"{result['age']:.4f}", "n_species": len(result["found"]),
-                   "query_ids": "+".join(map(str, picks))}
-            if hasattr(timetree, "evidence"):
-                row.update({f"timetree_{c}": v for c, v in timetree.evidence(picks).items()})
-            rows.append(row)
+        return result["age"] if result["age"] is not None and len(result["found"]) >= 2 else None
+
+    rows = []
+    for genus in genera:
+        g_age = age_of(global_picks.get(genus))
+        s_age = age_of(sampled_picks.get(genus)) if basis == "sampled" else None
+        picks, age, how = None, None, "global"
+        if basis == "sampled":
+            if s_age is not None:
+                picks, age, how = sampled_picks[genus], s_age, "sampled"
+            elif n_sampled.get(genus) == 1 and single_species == "none":
+                how = "single_sampled_species"
+            elif g_age is not None:
+                picks, age = global_picks[genus], g_age
+                how = "global_fallback" if genus in n_sampled else "global"
+        elif g_age is not None:
+            picks, age = global_picks[genus], g_age
+        if age is None and how != "single_sampled_species":
+            continue
+        found = timetree._query(picks)["found"] if picks else []
+        row = {"genus": genus, "crown_age": "" if age is None else f"{age:.4f}", "n_species": len(found),
+               "query_ids": "+".join(map(str, picks or [])), "crown_basis": how,
+               "n_sampled_species": n_sampled.get(genus, ""),
+               "sampled_crown_age": "" if s_age is None else f"{s_age:.4f}",
+               "global_crown_age": "" if g_age is None else f"{g_age:.4f}"}
+        if hasattr(timetree, "evidence"):
+            row.update({f"timetree_{c}": v for c, v in
+                        (timetree.evidence(picks) if picks else {c: "" for c in EVIDENCE_COLUMNS}).items()})
+        rows.append(row)
     return rows

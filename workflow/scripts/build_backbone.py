@@ -61,14 +61,14 @@ try:
         # genera that are not a node of the synthesis: anchored on the majority clade of their species,
         # preferably of the species sampled in this run (#51)
         an_cfg = settings.get("anchoring") or {}
+        # the species sampled in this run: the names in the records of each genus
         sampled = defaultdict(set)
-        if an_cfg.get("prefer_sampled", True):
-            for r in read_tsv(snakemake.input.records):
-                if r.get("genus") and r.get("species"):
-                    sampled[r["genus"]].add(r["species"].strip())
+        for r in read_tsv(snakemake.input.records):
+            if r.get("genus") and r.get("species"):
+                sampled[r["genus"]].add(r["species"].strip())
         anchor_diagnostics = {}
         anchors, placed = genus_anchors(synth, taxonomy, genera, rule=an_cfg.get("rule", "majority"),
-                                        sampled=sampled, share=float(an_cfg.get("share", 0.5)),
+                                        sampled=sampled if an_cfg.get("prefer_sampled", True) else None, share=float(an_cfg.get("share", 0.5)),
                                         min_species=int(an_cfg.get("min_species", 3)),
                                         min_sampled=int(an_cfg.get("min_sampled", 2)),
                                         diagnostics=anchor_diagnostics)
@@ -174,7 +174,15 @@ try:
         if snakemake.input.annotations:
             support = synthesis_support(snakemake.input.annotations, set(synth_nodes.values()))
         if settings.get("crown_ages_from_timetree", True):
-            crowns = crown_ages(taxonomy, timetree, [g for g in genera if g in placed and placed[g] != "unmatched"])
+            # the crown of the species sampled in the run, not of the whole genus (#54); species ids from
+            # COL where it resolved them with confidence (col.species), otherwise from OTT
+            cq_cfg = settings.get("crown_query") or {}
+            col_ncbi = {r["species"]: int(r["col_ncbi_id"]) for r in col_species
+                        if r.get("col_ncbi_id") and r.get("col_confidence") in ("high", "medium")}
+            crowns = crown_ages(taxonomy, timetree, [g for g in genera if g in placed and placed[g] != "unmatched"],
+                                sampled=sampled, basis=cq_cfg.get("basis", "sampled"),
+                                min_sampled=int(cq_cfg.get("min_sampled", 2)),
+                                single_species=cq_cfg.get("single_species", "none"), species_ncbi=col_ncbi)
     else:
         from timegraft.opentree import OpenTree, genus_topology
 
@@ -215,7 +223,11 @@ write_tsv(snakemake.output.concordance, concordance, CONCORDANCE_COLUMNS)
 # what the backbone was built from, and in what format the outputs are (#47)
 entries = [v for k, v in cache.data.items() if k.startswith("mrca:") and isinstance(v, dict)]
 metadata = {
-    "output_format": {"genera.tsv": 6, "node_ages.tsv": 4, "concordance.tsv": 2, "crown_ages.tsv": 2, "timetree_cache": CACHE_VERSION},
+    "output_format": {"genera.tsv": 6, "node_ages.tsv": 4, "crown_ages.tsv": 3, "concordance.tsv": 2,
+                      "timetree_cache": CACHE_VERSION},
+    # which species the TimeTree crown ages are the crowns of (#54)
+    "crowns": {"settings": settings.get("crown_query") or {},
+               "genera_by_basis": dict(Counter(r.get("crown_basis") or "" for r in crowns))},
     "timegraft_version": __version__,
     "source": settings.get("source", "static"),
     "taxonomy": settings.get("taxonomy", "ott3.7.3") if settings.get("source", "static") == "static" else "api",

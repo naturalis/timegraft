@@ -62,6 +62,7 @@ def build_genus(
     timetree_crowns: dict[str, float] | None = None,
     rooting: dict | None = None,
     rate: tuple[float | None, str] | None = None,
+    crown_basis: dict[str, str] | None = None,
 ) -> tuple[dendropy.Tree, dict]:
     """Return the dated ingroup subtree and a provenance record.
 
@@ -73,6 +74,8 @@ def build_genus(
     ``rooting`` holds ``rule`` (tolerant or strict), ``fallback`` (mad or
     midpoint) and ``uncertainty`` (whether to record how much the crown age
     and PD depend on the root, #34); the defaults are tolerant, mad and true.
+    ``crown_basis`` gives per genus which species the TimeTree crown age is
+    the crown of (``sampled``, ``global``, ``global_fallback``; #54).
     """
     rooting = rooting or {}
     if len(ingroup) < 2:
@@ -107,6 +110,7 @@ def build_genus(
             suggested=timetree_crowns,
             timetree_bound=crown_cfg.get("timetree_bound", "max"),
             estimate=crown_cfg.get("estimate", "minimum"),
+            plausibility=crown_cfg.get("plausibility"),
         )
 
     dating = marker_cfg.get("dating", {"method": "mpl"})
@@ -147,6 +151,11 @@ def build_genus(
         "crown_upper_source": crown.upper_source,
         "barcode_age": "" if crown.barcode is None else f"{crown.barcode:.4f}",
         "timetree_crown": "" if crown.timetree is None else f"{crown.timetree:.4f}",
+        "crown_basis": (crown_basis or {}).get(genus, "") if crown.timetree is not None else "",
+        "crown_plausibility": crown.plausibility,
+        "timetree_ratio": "" if crown.timetree_ratio is None else f"{crown.timetree_ratio:.2f}",
+        "ratio_allowed": "" if crown.ratio_allowed is None else f"{crown.ratio_allowed:.2f}",
+        "crown_decision": crown_decision(crown, (crown_basis or {}).get(genus, "")),
         "root_to_tip": f"{root_to_tip:.6f}",
         "rate": f"{genus_rate:.5f}" if by_rate_method and genus_rate else "",
         "rate_source": rate_source if by_rate_method and genus_rate else "",
@@ -159,6 +168,30 @@ def build_genus(
         "status": "subtree",
     }
     return tree, provenance
+
+
+def crown_decision(crown, basis: str = "") -> str:
+    """How the crown age was decided, in words, for the provenance table (#54)."""
+    tt = f"timetree[{basis}]" if basis else "timetree"
+    upper = {"timetree": tt, "stem": "stem cap", "table": "table max"}.get(crown.upper_source, crown.upper_source)
+    if crown.source in ("table", "table_capped"):
+        return "table" if crown.source == "table" else "table, capped by the stem"
+    if crown.source == "timetree":
+        return f"{tt} (plausible)" if crown.plausibility == "plausible" else tt
+    if crown.source == "midpoint_timetree_demoted":
+        return (f"{tt} implausible (ratio {crown.timetree_ratio:.1f} > {crown.ratio_allowed:.1f}): "
+                f"midpoint of barcodes and {tt}")
+    if crown.source == "midpoint":
+        how = f"midpoint of barcodes and {upper}"
+    elif crown.source.endswith(("_capped", "_timetree_max", "_table_max")):
+        how = f"{crown.source.split('_')[0]}, at the upper bound ({upper})"
+    elif crown.source.endswith("_table_min"):
+        how = f"{crown.source.split('_')[0]}, raised to the table minimum"
+    else:
+        how = crown.source
+    if crown.plausibility == "implausible_young":
+        return f"{tt} implausible, too young (ratio {crown.timetree_ratio:.2f}): not used; {how}"
+    return how
 
 
 def tree_length(tree: dendropy.Tree) -> float:

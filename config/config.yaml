@@ -72,6 +72,10 @@ backbone_build:
       ratio_trigger: 1.5     # and both nodes of a precedence conflict this large or larger
       move: 1.25             # a re-query age within this factor of the first counts as the same
       attempts: 3            # disjoint pick sets to try until TimeTree finds taxa on two sides
+  crown_query:               # TimeTree crown ages (#54)
+    basis: sampled           # sampled: the crown of the species sampled in the run; global: of the genus
+    min_sampled: 2           # sampled species with an NCBI id needed; fewer: the global crown
+    single_species: none     # a genus sampled with one species: none (no TimeTree crown) or global
   anchoring:                 # genera that are not a node of the synthesis (#51)
     rule: majority           # majority: smallest clade with more than `share` of the genus's species;
                              # mrca: the MRCA of all of them (as before #51)
@@ -170,6 +174,11 @@ markers:
                              # age where it is below 0.9 of the stem, the midpoint otherwise; #42),
                              # minimum (the age from the barcodes, which saturation makes a lower
                              # bound) or midpoint (geometric mean of the lower and upper bound)
+      plausibility:          # a TimeTree crown too old for the barcodes is an upper bound only (#54)
+        enabled: true
+        rate_factor: 10      # how much slower than the rate a genus can evolve (sponges, anthozoans)
+        saturation: 0.15     # root-to-tip distance at which COI saturates within genera
+        young_factor: 3      # a TimeTree crown this many times younger than the barcodes is not used
     dating:
       method: mpl            # mpl (mean path length, built in), lsd2 (least squares, built from source)
                              # or chronos (penalised likelihood, needs R with ape; not the default, as
