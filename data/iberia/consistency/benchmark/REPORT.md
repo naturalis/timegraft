@@ -118,7 +118,7 @@ The default backbone with one part switched back at a time (`results/ablation.ts
 | Sampled crowns and plausibility (#54) | 83 TimeTree crowns differ from the global ones; the extreme crowns are gone | Keep |
 | Screening (#55) | 1,139 units set aside instead of 1,294, because congeners are no longer crowded out of the hits. 265 units flagged as likely nuclear copies and 432 as long branches, not acted on | Keep; see the note on rooting |
 
-**A side effect to know about.** The corrected screening keeps 155 more units in their genus, and some of them sit on the wrong side of the root: 386 genera have such units instead of 366, and 314 units fall among the outgroup instead of 276. The number of genera whose crown age depends strongly on the root is unchanged (19 against 20). This was not a gate metric.
+**A side effect to know about.** The corrected screening keeps 155 more units in their genus, and some of them sit on the wrong side of the root: 386 genera have such units instead of 366, and 314 units fall among the outgroup instead of 276. The number of genera whose crown age depends strongly on the root is unchanged (19 against 20). This was not a gate metric. Analysed in [#75](https://github.com/naturalis/timegraft/issues/75) (`../README.md`, `rooting/`): most of the new cases are units the fix kept, about equally far from their congeners and the outgroup, and they change the crown of only a few small genera; the new setting `rooting.misplaced_action: set_aside` can leave them out of the subtree (default `keep`).
 
 The two full runs side by side are in `results/end_to_end.tsv`.
 

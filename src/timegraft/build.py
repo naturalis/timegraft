@@ -74,8 +74,12 @@ def build_genus(
     it the marker's ``crown_age.rate`` is used.
 
     ``rooting`` holds ``rule`` (tolerant or strict), ``fallback`` (mad or
-    midpoint) and ``uncertainty`` (whether to record how much the crown age
-    and PD depend on the root, #34); the defaults are tolerant, mad and true.
+    midpoint), ``uncertainty`` (whether to record how much the crown age
+    and PD depend on the root, #34) and ``misplaced_action`` (``keep`` the
+    units that the root puts among the outgroup, or ``set_aside``: build the
+    subtree without them, once, and list them in ``misplaced_set_aside`` to
+    be placed later like units set aside by screening, #75); the defaults are
+    tolerant, mad, true and keep.
     ``crown_basis`` gives per genus which species the TimeTree crown age is
     the crown of (``sampled``, ``global``, ``global_fallback``; #54).
     """
@@ -94,6 +98,19 @@ def build_genus(
     before = copy_tree(unrooted) if uncertainty else None  # root_genus changes the tree it is given
     tree, how, rooted = root_genus(unrooted, in_names, out_names,
                                    rule=rooting.get("rule", "tolerant"), fallback=rooting.get("fallback", "mad"))
+    misplaced_action = rooting.get("misplaced_action", "keep")
+    if misplaced_action not in ("keep", "set_aside"):
+        raise ValueError(f"rooting.misplaced_action must be keep or set_aside, not {misplaced_action!r}")
+    if misplaced_action == "set_aside" and rooted["misplaced"]:
+        kept = [(n, s) for n, s in ingroup if n not in set(rooted["misplaced"])]
+        if len(kept) >= 2:
+            # rebuild without them, once: units misplaced in the rebuilt tree are kept (#75)
+            tree, provenance = build_genus(genus, kept, outgroup, stem_age, marker_cfg, known_crowns,
+                                           timetree_crowns, {**rooting, "misplaced_action": "keep"}, rate,
+                                           crown_basis)
+            provenance.update(misplaced_set_aside=";".join(rooted["misplaced"]), misplaced_action="set_aside")
+            return tree, provenance
+        misplaced_action = "kept: fewer than two units would be left"
 
     crown_cfg = marker_cfg["crown_age"]
     genus_rate, rate_source = rate if rate is not None else (crown_cfg.get("rate"), "default")
@@ -183,6 +200,8 @@ def build_genus(
         "rooting": how,
         "violations": rooted["violations"],
         "misplaced": ";".join(rooted["misplaced"]),
+        "misplaced_set_aside": "",
+        "misplaced_action": misplaced_action if rooted["misplaced"] and misplaced_action != "keep" else "",
         **spread,
         "dating": dating.get("method", "mpl"),
         "outgroup": ";".join(n for n, _ in outgroup),
