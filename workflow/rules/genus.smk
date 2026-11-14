@@ -33,6 +33,7 @@ rule build_shard:
         lsd2=LSD2_BIN if USE_LSD2 else [],
     output:
         f"{OUT}/subtrees/shard_{{i}}.tsv",
+        set_aside=f"{OUT}/subtrees/set_aside_{{i}}.tsv",
     params:
         src=SRC,
         marker_cfg=MARKER_CFG,

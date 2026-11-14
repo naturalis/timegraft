@@ -1,0 +1,4 @@
+injection	injected	two_checks_evaluable	flagged	review	back_in_own_class	stem_within_1.5	legacy_in_own_class	legacy_stem_within_1.5	false_flags	other_stems_moved_default	other_stems_moved_legacy
+merge (the gate)	120	118	118	2	117	85	16	21	0	297	248
+merge, the host's own species left out of the merged taxon	120	118	118	2	117	96	16	19	0	142	251
+name only: no merged NCBI ids, no species moved	120	69	29	91	28	15	16	15	0	177	184

@@ -36,10 +36,15 @@ Rule scripts import the package from `src/` through the `src` parameter that eve
 | `calibrate` | rates per class from genera of known crown age (`python -m timegraft.calibrate`) |
 | `build` | one dated subtree per genus |
 | `backbone` | reading a dated backbone, stem ages, sister genera and outgroup units, sharding |
-| `otol_static` | OTT taxonomy and synthetic tree from release files; genus topology; species and lineages |
+| `otol_static` | OTT taxonomy and synthetic tree from release files; genus topology; species and lineages; match, anchor and synthesis-support evidence |
 | `opentree` | the same via the OToL web API |
-| `timetree` | TimeTree MRCA queries with caching and concurrency |
-| `backbone_build` | dating a genus topology with TimeTree; conflicts; interpolation |
+| `col` | Catalogue of Life on ChecklistBank: matching with classification context, crosswalk to NCBI and OTT ids through the names index |
+| `concordance` | placement concordance: rank-level distances between lineages, barcode neighbours against backbone sisters, flags |
+| `reanchor` | moving flagged genera before dating: targets from the reference lineage, synthesis nodes, curated overrides |
+| `agefit` | weighted, robust fit of backbone ages under monotonicity: calibration uncertainty, tree isotonic regression, conflict metrics |
+| `requery` | re-querying conflicting nodes with disjoint picks: triggers, picks, classification |
+| `timetree` | TimeTree MRCA queries with caching and concurrency; cache format version 2 with the evidence behind each age ([provenance](provenance.md)) |
+| `backbone_build` | dating a genus topology with TimeTree; conflicts; interpolation; the columns of `node_ages.tsv` and `genera.tsv` |
 | `graft` | grafting subtrees onto the backbone |
 | `placement` | VSEARCH search, classification, attaching sequences on the tree |
 | `diversity` | Faith's PD, MPD, UniFrac, PhyloSor |

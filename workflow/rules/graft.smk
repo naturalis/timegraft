@@ -26,6 +26,7 @@ rule place_units:
         unassigned=rules.screen_units.output.unassigned,
         records=rules.filter_records.output.kept,
         reps=rules.screen_units.output.reps,
+        set_aside=expand(f"{OUT}/subtrees/set_aside_{{i}}.tsv", i=SHARDS),
     output:
         tree=f"{OUT}/timegraft.tre",
         placements=f"{OUT}/units_placed.tsv",

@@ -60,7 +60,7 @@ def test_higher_taxa_stand_in_only_when_they_stay_on_one_side(taxonomy):
         return {"found_ids": found, "precomputed_age": 600.0 if len(found) == 2 else None}
 
     ncbi = {g: lookup_ids(taxonomy, g) for g in ["Mytilus", "Ostrea", "Asterias"]}
-    tree, report = date_topology(tree, ncbi, TimeTree(fetch=fetch), higher=higher, root_age=None)
+    tree, report = date_topology(tree, ncbi, TimeTree(fetch=fetch), higher=higher, root_age=None, method="precedence")
     root = next(r for r in report if r["n_genera"] == 3)
     assert root["source"] == "timetree_higher_taxa" and float(root["age"]) == pytest.approx(600.0)
 

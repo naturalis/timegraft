@@ -1,0 +1,29 @@
+# The consistency layer switched off: consistency-layer run as main (e20fdf6) ran (#56).
+# Use on top of config/config.yaml and config/iberia.yaml.
+backbone_build:
+  upgrade_cache: false
+  synthesis_support: false
+  col:
+    enabled: false           # no identifier hub (#48)
+  concordance:
+    enabled: false           # no placement checks (#49)
+  reanchor:
+    mode: "off"              # no re-anchoring (#50)
+  anchoring:
+    rule: mrca               # MRCA of all species of the genus (#51)
+    prefer_sampled: false
+  ages:
+    method: precedence       # drop an age not younger than its dated ancestor (#52)
+    requery:
+      mode: "off"            # no re-queries (#53)
+  crown_query:
+    basis: global            # TimeTree crown of the whole genus (#54)
+markers:
+  coi:
+    screening:
+      deep_maxaccepts: 0     # first ten hits only (#55)
+      translation:
+        enabled: false
+    crown_age:
+      plausibility:
+        enabled: false       # TimeTree crown used as it comes (#54)

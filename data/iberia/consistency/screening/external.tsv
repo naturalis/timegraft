@@ -1,0 +1,3 @@
+screening	units	reference_sequences	set_aside	set_aside_with_all_genera	agree	missed	extra	other_genus_by_external_hit
+run half only	16011	0	683	783	675	108	8	0
+run half with external reference	16011	8870	780	783	780	3	0	173

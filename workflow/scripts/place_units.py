@@ -19,6 +19,9 @@ COLUMNS = ["unit_id", "reason", "status", "nearest_units", "genus", "identity", 
 tree = dendropy.Tree.get(path=snakemake.input.tree, schema="newick", preserve_underscores=True,
                          rooting="force-rooted")
 unassigned = read_tsv(snakemake.input.unassigned)
+# units with a long branch that the genus step left out of their subtree (#55)
+for path in getattr(snakemake.input, "set_aside", None) or []:
+    unassigned += read_tsv(path)
 rows_out = []
 if snakemake.params.enabled and unassigned:
     cfg = snakemake.params.settings
@@ -36,7 +39,7 @@ if snakemake.params.enabled and unassigned:
     placed = place_all(tree, rows, height=cfg.get("height", "rate"), rate=snakemake.params.rate,
                        terminal_fraction=cfg.get("terminal_fraction", 0.5))
     reason = {u["unit_id"]: u["reason"] for u in unassigned}
-    # units set aside by screening (#38) that match nothing well enough to be placed go on the stem
+    # units set aside by screening (#38, #55) that match nothing well enough to be placed go on the stem
     # of their own genus: they stay with it, but at an age the genus's crown and stem set
     own_genus = {u["unit_id"]: u["genera"].split(":")[0] for u in unassigned if u["reason"].startswith("screen_")}
     genus_units = defaultdict(list)

@@ -41,6 +41,61 @@ backbone_build:
   root_age:                  # Ma; only needed if TimeTree has no age for the root
   interpolation: pure_birth  # nodes TimeTree does not date: pure_birth (by the number of genera in the
                              # full clade; static source only, otherwise even) or even (as BLADJ); #16
+  synthesis_support: true    # static only: record per backbone node how many source trees of the synthesis
+                             # support or conflict with it (downloads annotations.json, 61 MB); #47
+  upgrade_cache: true        # ask TimeTree again for the evidence behind ages cached by older versions;
+                             # the cached ages are kept, so the backbone does not change (#47)
+  col:                       # Catalogue of Life as the hub for identifier joins (#48)
+    enabled: true
+    release: 316691          # ChecklistBank dataset key of the COL release (316691: COL26.10 XR); an alias
+                             # such as 3LXR follows the latest release, so runs are no longer reproducible
+    join: col                # col: send a genus to TimeTree with COL's NCBI id where it is one of the ids OTT
+                             # holds for it, or OTT has none; ott: always OTT's (as before #48)
+    species: false           # also resolve every species name of the records (slow: one query per name)
+    workers: 4
+  ages:                      # resolving conflicting TimeTree ages (#52)
+    method: fit              # fit: all calibrations together, weighted by their evidence, ages decreasing
+                             # towards the tips; precedence: drop an age not younger than its dated
+                             # ancestor (before #52). node_ages.tsv gives the precedence ages either way
+    fit:                     # uncertainty of a calibration, as the standard deviation of its log age:
+      sigma_floor: 0.1       #   never below this,
+      sigma_single: 0.5      #   this for a single study estimate,
+      higher_taxa_factor: 2.0    # times this for ages through enclosing taxa,
+      taxonomy_only_factor: 1.5  # and this for nodes no source tree of the synthesis supports
+      huber_k: 1.5           # calibrations off by more than this many sigma are down-weighted
+      outlier_z: 3.0         # and reported as outliers beyond this
+      min_gap: 0.01          # each edge between calibrated nodes at least 1% of the older age
+    requery:                 # re-ask TimeTree about conflicting nodes with disjoint picks (#53)
+      mode: classify         # classify (report the likely cause); apply (fit only: use the re-query age
+                             # where the first age was the picks' doing, and fit again); off
+      z_trigger: 2.0         # re-query calibrations this many sigma or more from the fit,
+      ratio_trigger: 1.5     # and both nodes of a precedence conflict this large or larger
+      move: 1.25             # a re-query age within this factor of the first counts as the same
+      attempts: 3            # disjoint pick sets to try until TimeTree finds taxa on two sides
+  crown_query:               # TimeTree crown ages (#54)
+    basis: sampled           # sampled: the crown of the species sampled in the run; global: of the genus
+    min_sampled: 2           # sampled species with an NCBI id needed; fewer: the global crown
+    single_species: none     # a genus sampled with one species: none (no TimeTree crown) or global
+  anchoring:                 # genera that are not a node of the synthesis (#51)
+    rule: majority           # majority: smallest clade with more than `share` of the genus's species;
+                             # mrca: the MRCA of all of them (as before #51)
+    share: 0.5
+    min_species: 3           # fewer species in the synthesis: MRCA, since there is no majority to speak of
+    prefer_sampled: true     # use the species in the run's records, where at least min_sampled are in the
+    min_sampled: 2           # synthesis; otherwise all species of the genus in OTT
+  concordance:               # placement concordance, report only (#49): backbone/concordance.tsv
+    enabled: true
+    flag_level: class        # a lineage or merged-id check fails when the two lineages are in different
+                             # classes or further apart (family, superfamily, order, class, phylum, kingdom)
+    max_share: 0.0           # the barcode-neighbour check fails when at most this share of a genus's
+                             # cross-genus hits is in a phylum of its backbone sisters
+    min_hits: 5              # ... and is only made with at least this many hits
+    min_flags: 2             # a genus is flagged when this many checks fail
+  reanchor:                  # move genera that placement concordance flags, before dating (#50)
+    mode: apply              # apply; report (decide and record, change nothing); off
+    min_severity: class      # only flags whose lineages part at this rank or higher
+    overrides:               # optional curated table: genus, action (reanchor or keep), target
+                             # (rank:name or ott:<id>), source, note; e.g. config/placement_overrides.tsv
   cache: resources/api_cache.json
 
 # Validation of the informative window: barcode distances against a trusted
@@ -104,6 +159,21 @@ markers:
       margin: 0.02           # ... at least this much more similar to another genus than to any congener
       min_identity: 0.80     # ... or no congener at this identity (while the genus has units that do)
       query_cov: 0.7         # all-against-all search of the representatives with VSEARCH
+      deep_maxaccepts: 100   # search again with this many hits where the first ten are all of one side
+      mutual_pairs: both     # two units each nearest to the other's genus: set aside both, or only the further
+      classes: class         # rank for thresholds per taxon and for units/screening_calibration.tsv
+      thresholds: {}         # per taxon at that rank: {Copepoda: {margin: 0.03, min_identity: 0.82}}
+      threshold_table:       # the same as a table (class, margin, min_identity)
+      reference:             # a wider reference: sequences from outside the run (#55)
+        path:                # table with genus, sequence and the ranks below (unit_id optional)
+        scope: family        # use those in a family of the run (genus, order, class, phylum, all)
+      translation:           # compare codons with the nearest relative, in the unit's genetic code
+        enabled: true
+        min_changed_codons: 8          # numt_like: at least this many codons differ ...
+        max_nonsynonymous_share: 0.5   # ... and more than this share of them change the amino acid
+        action: flag         # flag (report only) or set_aside
+      rate_outlier_z: 3.5    # genus subtrees: list units this far (robust z) beyond the median root-to-tip distance
+      rate_outlier_action: flag  # flag (list only) or set_aside (leave out of the subtree, place like set-aside units)
     crown_age:
       method: rate           # used when crown_ages has no entry for a genus
       rate: 0.0115           # default rate: substitutions per site per Myr, per lineage (about 2.3%
@@ -119,6 +189,11 @@ markers:
                              # age where it is below 0.9 of the stem, the midpoint otherwise; #42),
                              # minimum (the age from the barcodes, which saturation makes a lower
                              # bound) or midpoint (geometric mean of the lower and upper bound)
+      plausibility:          # a TimeTree crown too old for the barcodes is an upper bound only (#54)
+        enabled: true
+        rate_factor: 10      # how much slower than the rate a genus can evolve (sponges, anthozoans)
+        saturation: 0.15     # root-to-tip distance at which COI saturates within genera
+        young_factor: 3      # a TimeTree crown this many times younger than the barcodes is not used
     dating:
       method: mpl            # mpl (mean path length, built in), lsd2 (least squares, built from source)
                              # or chronos (penalised likelihood, needs R with ape; not the default, as
@@ -144,7 +219,7 @@ markers:
       method: kmer
       k: 8
     screening:
-      enabled: false         # identity thresholds not yet tested for ITS (#38)
+      enabled: false         # off until calibrated on fungal data: see "Screening ITS" in docs/technical/configuration.md
     crown_age:
       method: fraction       # no reliable ITS rate: a stated fraction of the stem age
       fraction: 0.5

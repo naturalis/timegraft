@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import math
 import shutil
+import statistics
 import subprocess
 import tempfile
+from collections.abc import Iterable
 from pathlib import Path
 
 import dendropy
@@ -62,6 +64,7 @@ def build_genus(
     timetree_crowns: dict[str, float] | None = None,
     rooting: dict | None = None,
     rate: tuple[float | None, str] | None = None,
+    crown_basis: dict[str, str] | None = None,
 ) -> tuple[dendropy.Tree, dict]:
     """Return the dated ingroup subtree and a provenance record.
 
@@ -73,6 +76,8 @@ def build_genus(
     ``rooting`` holds ``rule`` (tolerant or strict), ``fallback`` (mad or
     midpoint) and ``uncertainty`` (whether to record how much the crown age
     and PD depend on the root, #34); the defaults are tolerant, mad and true.
+    ``crown_basis`` gives per genus which species the TimeTree crown age is
+    the crown of (``sampled``, ``global``, ``global_fallback``; #54).
     """
     rooting = rooting or {}
     if len(ingroup) < 2:
@@ -93,6 +98,22 @@ def build_genus(
     crown_cfg = marker_cfg["crown_age"]
     genus_rate, rate_source = rate if rate is not None else (crown_cfg.get("rate"), "default")
     root_to_tip = mean_root_to_tip(tree)
+    screening = marker_cfg.get("screening") or {}
+    outliers = rate_outliers(tree, float(screening.get("rate_outlier_z", 3.5)), labels=in_names)
+    action = screening.get("rate_outlier_action", "flag")
+    if action not in ("flag", "set_aside"):
+        raise ValueError(f"screening.rate_outlier_action must be flag or set_aside, not {action!r}")
+    if action == "set_aside" and outliers["units"]:
+        kept = [(n, s) for n, s in ingroup if n not in set(outliers["units"])]
+        if len(kept) >= 2:
+            # rebuild without them; they are placed later like units set aside by screening
+            flagged = {**marker_cfg, "screening": {**screening, "rate_outlier_action": "flag"}}
+            tree, provenance = build_genus(genus, kept, outgroup, stem_age, flagged, known_crowns, timetree_crowns,
+                                           rooting, rate, crown_basis)
+            provenance.update(rate_outliers=";".join(outliers["units"]), rate_outlier_z=outliers["max_z"],
+                              rate_outlier_action="set_aside")
+            return tree, provenance
+        outliers["action"] = "kept: fewer than two units would be left"
 
     def choose_crown(t: dendropy.Tree):
         return crown_age(
@@ -107,6 +128,7 @@ def build_genus(
             suggested=timetree_crowns,
             timetree_bound=crown_cfg.get("timetree_bound", "max"),
             estimate=crown_cfg.get("estimate", "minimum"),
+            plausibility=crown_cfg.get("plausibility"),
         )
 
     dating = marker_cfg.get("dating", {"method": "mpl"})
@@ -147,7 +169,15 @@ def build_genus(
         "crown_upper_source": crown.upper_source,
         "barcode_age": "" if crown.barcode is None else f"{crown.barcode:.4f}",
         "timetree_crown": "" if crown.timetree is None else f"{crown.timetree:.4f}",
+        "crown_basis": (crown_basis or {}).get(genus, "") if crown.timetree is not None else "",
+        "crown_plausibility": crown.plausibility,
+        "timetree_ratio": "" if crown.timetree_ratio is None else f"{crown.timetree_ratio:.2f}",
+        "ratio_allowed": "" if crown.ratio_allowed is None else f"{crown.ratio_allowed:.2f}",
+        "crown_decision": crown_decision(crown, (crown_basis or {}).get(genus, "")),
         "root_to_tip": f"{root_to_tip:.6f}",
+        "rate_outliers": ";".join(outliers["units"]),
+        "rate_outlier_z": outliers["max_z"],
+        "rate_outlier_action": (outliers.get("action") or "flag") if outliers["units"] else "",
         "rate": f"{genus_rate:.5f}" if by_rate_method and genus_rate else "",
         "rate_source": rate_source if by_rate_method and genus_rate else "",
         "rooting": how,
@@ -159,6 +189,68 @@ def build_genus(
         "status": "subtree",
     }
     return tree, provenance
+
+
+def rate_outliers(tree: dendropy.Tree, threshold: float = 3.5, min_units: int = 4,
+                  labels: Iterable[str] | None = None) -> dict:
+    """Units whose root-to-tip distance stands out within the genus (#55).
+
+    A relative-rate check on the rooted genus tree, before dating: a unit
+    much further from the root than its congeners evolves faster, or carries
+    a poor sequence, a nuclear copy or a misidentification that screening did
+    not catch, and stretches the crown age. The robust z-score is the distance
+    from the median root-to-tip distance over 1.4826 times the median absolute
+    deviation. Units above ``threshold`` (only on the long side) are listed;
+    ``max_z`` is the largest score in the genus. What happens to them is up to
+    the caller (``screening.rate_outlier_action`` in ``build_genus``). Genera
+    with fewer than ``min_units`` units, or without spread, are not assessed.
+    ``labels``, when given, restricts the check to those tips (the ingroup):
+    ``root_genus`` returns the ingroup only, but the check should not depend on
+    that.
+    """
+    keep = set(labels) if labels is not None else None
+    distances = {}
+    for leaf in tree.leaf_node_iter():
+        if keep is not None and leaf.taxon.label not in keep:
+            continue
+        node, path = leaf, 0.0
+        while node.parent_node is not None:
+            path += node.edge.length or 0.0
+            node = node.parent_node
+        distances[leaf.taxon.label] = path
+    if threshold <= 0 or len(distances) < min_units:
+        return {"units": [], "max_z": ""}
+    values = sorted(distances.values())
+    median = statistics.median(values)
+    mad = statistics.median(abs(v - median) for v in values) * 1.4826
+    if mad <= 0:
+        return {"units": [], "max_z": ""}
+    z = {name: (d - median) / mad for name, d in distances.items()}
+    return {"units": sorted(n for n, v in z.items() if v > threshold), "max_z": f"{max(z.values()):.2f}"}
+
+
+def crown_decision(crown, basis: str = "") -> str:
+    """How the crown age was decided, in words, for the provenance table (#54)."""
+    tt = f"timetree[{basis}]" if basis else "timetree"
+    upper = {"timetree": tt, "stem": "stem cap", "table": "table max"}.get(crown.upper_source, crown.upper_source)
+    if crown.source in ("table", "table_capped"):
+        return "table" if crown.source == "table" else "table, capped by the stem"
+    if crown.source == "timetree":
+        return f"{tt} (plausible)" if crown.plausibility == "plausible" else tt
+    if crown.source == "midpoint_timetree_demoted":
+        return (f"{tt} implausible (ratio {crown.timetree_ratio:.1f} > {crown.ratio_allowed:.1f}): "
+                f"midpoint of barcodes and {tt}")
+    if crown.source == "midpoint":
+        how = f"midpoint of barcodes and {upper}"
+    elif crown.source.endswith(("_capped", "_timetree_max", "_table_max")):
+        how = f"{crown.source.split('_')[0]}, at the upper bound ({upper})"
+    elif crown.source.endswith("_table_min"):
+        how = f"{crown.source.split('_')[0]}, raised to the table minimum"
+    else:
+        how = crown.source
+    if crown.plausibility == "implausible_young":
+        return f"{tt} implausible, too young (ratio {crown.timetree_ratio:.2f}): not used; {how}"
+    return how
 
 
 def tree_length(tree: dendropy.Tree) -> float:

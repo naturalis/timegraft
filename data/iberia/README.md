@@ -5,13 +5,14 @@ Inputs and outputs of the timegraft runs on genera of western Iberia, described 
 | File | Contents |
 | --- | --- |
 | `records.tsv.gz` | Records cut from the BOLD public data package of 27 March 2026 with `timegraft.bcdm` (commands in `docs/technical/running.md`, "The Iberian run"): 102,794 records, 25,166 BINs, 1,232 genera |
-| `timetree_cache.json` | TimeTree answers from the runs; copy to `resources/api_cache.json` to get the same backbone ages without querying TimeTree |
+| `timetree_cache.json` | TimeTree answers from the runs, with the evidence behind each (cache format version 2, #47; same ages as before), and ChecklistBank answers for COL26.10 XR (#48); copy to `resources/api_cache.json` to get the same backbone without querying TimeTree or ChecklistBank |
 | `iberia-run-tolerant.tar.gz` | Output folder of the run with tolerant rooting, unit screening, a pure-birth backbone and crown ages from TimeTree or the midpoint of their bounds: the current settings of `config/iberia.yaml` and the source of the manuscript's numbers. `units/screened_representatives.tsv` is left out (it is `units/representatives.tsv` without the units set aside in `units/screened.tsv`) |
 | `screening/` | The analysis of units that do not fit their genus, and scripts comparing runs with and without screening (#38) |
 | `calibration/` | Substitution rates per class fitted to these genera; tried, rejected and not used (#18) |
 | `dating-benchmark/` | Tests of penalised likelihood, rates and bounds on the run as it was before crown ages changed (#36) |
 | `iberia-run.tar.gz` | Output folder of the run with the earlier strict rooting (and the earlier crown age rule) |
 | `rooting-diagnostics.tar.gz` | `diagnostics/rooting/` of the strict run: `per_genus.tsv`, `random_pairs.tsv` (20 random outgroup pairs per genus) and `report.md` (#19) |
+| `consistency/` | Evidence for the consistency layer (#46): the backbone with the evidence columns of #47, and with COL as identifier hub (#48) |
 | `outgroup-benchmark/` | Scripts and per-genus results of the comparison of outgroup choices and rooting rules (#19) |
 | `allgenus_nocf_13nov26.txt` | List of genera from Jorge Moutinho's checklist. Currently unused but may be input for later Iberian runs after refactoring |
 

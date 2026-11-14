@@ -34,6 +34,42 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.crown_ages_from_timetree` | `true` | Estimate genus crown ages from TimeTree species |
 | `backbone_build.root_age` | | Root age in Ma, only needed if TimeTree cannot date the root |
 | `backbone_build.interpolation` | `pure_birth` | Ages for nodes TimeTree does not date: `pure_birth`, by the number of genera in the full clade in the synthetic tree (static source only; otherwise `even`), or `even`, spaced evenly as in BLADJ ([results](../science/results/2026-11-interpolation.md)) |
+| `backbone_build.synthesis_support` | `true` | Static source only: record per backbone node how many source trees of the synthesis support or conflict with it; downloads the synthesis `annotations.json` ([provenance](provenance.md)) |
+| `backbone_build.upgrade_cache` | `true` | Ask TimeTree again for the evidence behind answers cached by versions before #47, keeping the cached ages ([provenance](provenance.md)) |
+| `backbone_build.col.enabled` | `true` | Resolve genera in the Catalogue of Life and derive NCBI and OTT ids from it ([provenance](provenance.md#catalogue-of-life-as-identifier-hub), #48) |
+| `backbone_build.col.release` | `316691` | ChecklistBank dataset key of the COL release (COL26.10 XR); an alias such as `3LXR` follows the latest release |
+| `backbone_build.col.join` | `col` | `col`: send a genus to TimeTree with COL's NCBI id where it is one of the ids OTT holds for it, or OTT has none; `ott`: always OTT's |
+| `backbone_build.col.species` | `false` | Also resolve every species name of the records (`backbone/col_species.tsv`) |
+| `backbone_build.col.workers` | 4 | Concurrent requests to ChecklistBank |
+| `backbone_build.ages.method` | `fit` | Resolving conflicting TimeTree ages: `fit` (all together, weighted by their evidence, ages decreasing towards the tips) or `precedence` (drop an age not younger than its dated ancestor; before #52) ([provenance](provenance.md#backbone-ages-from-a-weighted-fit)) |
+| `backbone_build.ages.fit.sigma_floor` | 0.1 | Smallest uncertainty of a calibration (standard deviation of its log age) |
+| `backbone_build.ages.fit.sigma_single` | 0.5 | Uncertainty of an age from a single study estimate |
+| `backbone_build.ages.fit.higher_taxa_factor` | 2.0 | Uncertainty multiplier for ages through enclosing taxa |
+| `backbone_build.ages.fit.taxonomy_only_factor` | 1.5 | Uncertainty multiplier for nodes no source tree of the synthesis supports |
+| `backbone_build.ages.fit.huber_k` | 1.5 | Calibrations further than this many sigma from the fit are down-weighted |
+| `backbone_build.ages.fit.outlier_z` | 3.0 | ... and reported as outliers beyond this |
+| `backbone_build.ages.fit.min_gap` | 0.01 | Smallest step in age per edge between calibrated nodes, as a share of the older age |
+| `backbone_build.ages.requery.mode` | `classify` | Re-query conflicting nodes with disjoint picks and classify the conflict: `classify`; `apply` (fit only: use the re-query age where the first was the picks' doing, and fit again); `off` ([provenance](provenance.md#re-querying-conflicting-nodes), #53) |
+| `backbone_build.ages.requery.z_trigger` | 2.0 | Re-query calibrations this many sigma or more from the fit |
+| `backbone_build.ages.requery.ratio_trigger` | 1.5 | ... and both nodes of a precedence conflict of this ratio or more |
+| `backbone_build.ages.requery.move` | 1.25 | A re-query age within this factor of the first counts as the same |
+| `backbone_build.ages.requery.attempts` | 3 | Disjoint pick sets to try until TimeTree finds taxa on two sides |
+| `backbone_build.crown_query.basis` | `sampled` | TimeTree crown ages of the species sampled in the run (`sampled`) or of the whole genus in OTT (`global`; before #54) ([provenance](provenance.md#crown-ages-from-the-sampled-species)) |
+| `backbone_build.crown_query.min_sampled` | 2 | Sampled species with an NCBI id needed; with fewer, the global crown |
+| `backbone_build.crown_query.single_species` | `none` | A genus sampled with one species: no TimeTree crown (`none`) or the global one (`global`) |
+| `backbone_build.anchoring.rule` | `majority` | Genera that are not a node of the synthesis: `majority` (smallest clade with more than `share` of their species) or `mrca` (MRCA of all; before #51) ([provenance](provenance.md#anchoring-genera-that-are-not-a-node-of-the-synthesis)) |
+| `backbone_build.anchoring.share` | 0.5 | Share of the species the anchor clade must hold, more than; at least 0.5 and below 1 |
+| `backbone_build.anchoring.min_species` | 3 | Fewer species in the synthesis: the MRCA |
+| `backbone_build.anchoring.prefer_sampled` | `true` | Anchor on the species in the run's records rather than all species in OTT |
+| `backbone_build.anchoring.min_sampled` | 2 | Sampled species needed in the synthesis to use them |
+| `backbone_build.concordance.enabled` | `true` | Placement concordance: `backbone/concordance.tsv`; needed for re-anchoring ([provenance](provenance.md#placement-concordance), #49) |
+| `backbone_build.concordance.flag_level` | `class` | A lineage or merged-id check fails when the lineages part at this rank or higher: `family`, `superfamily`, `order`, `class`, `phylum`, `kingdom` |
+| `backbone_build.concordance.max_share` | 0.0 | The barcode-neighbour check fails when at most this share of the cross-genus hits is in a phylum of the backbone sisters |
+| `backbone_build.concordance.min_hits` | 5 | Hits needed for the barcode-neighbour check |
+| `backbone_build.concordance.min_flags` | 2 | Failed checks needed to flag a genus |
+| `backbone_build.reanchor.mode` | `apply` | Move genera that placement concordance flags, before dating: `apply`; `report` (decide and record only); `off` ([provenance](provenance.md#re-anchoring-flagged-genera), #50) |
+| `backbone_build.reanchor.min_severity` | `class` | Only move genera whose lineages part at this rank or higher |
+| `backbone_build.reanchor.overrides` | | Curated table (`genus`, `action` `reanchor` or `keep`, `target`, `source`, `note`), e.g. `config/placement_overrides.tsv` |
 | `backbone_build.cache` | `resources/api_cache.json` | Cache of TimeTree answers; keep it between runs |
 
 ## General settings
@@ -73,6 +109,19 @@ Everything that differs between markers sits in `markers.<name>`:
 | `screening.margin` | 0.02 | | A unit at least this much more similar (identity) to another genus than to any congener is set aside |
 | `screening.min_identity` | 0.80 | | A unit with no congener at this identity is set aside, if the genus has units that do |
 | `screening.query_cov` | 0.7 | | Share of a representative that must align in the search |
+| `screening.deep_maxaccepts` | 100 | | VSEARCH keeps the first ten hits of each unit. Where all ten are of its own genus, or all of other genera, the unit is searched again with this many, so that the other side is not crowded out |
+| `screening.mutual_pairs` | `both` | | Two units of different genera, each the other's nearest unit of another genus and both `other_genus`: set aside `both`, or only the `further` from its own genus; see [mutual pairs](#mutual-pairs) |
+| `screening.classes` | `class` | | Rank for thresholds per taxon and for `units/screening_calibration.tsv` |
+| `screening.thresholds` | `{}` | | `margin` and `min_identity` per taxon at that rank, e.g. `{Copepoda: {min_identity: 0.82}}`; see [thresholds per class](#thresholds-per-class) |
+| `screening.threshold_table` | | | The same as a table (`class`, `margin`, `min_identity`); `thresholds` wins where both name a class |
+| `screening.reference.path` | | | A wider reference: a table of sequences from outside the run (`genus`, `sequence`, ranks; `unit_id` optional); see [a wider reference](#a-wider-reference) |
+| `screening.reference.scope` | `family` | | Use the reference sequences in a `genus`, `family`, `order`, `class` or `phylum` of the run, or `all` |
+| `screening.translation.enabled` | `true` | | Compare each unit codon by codon with its nearest relative (COI only); see [codon comparison](#codon-comparison) |
+| `screening.translation.min_changed_codons` | 8 | | `numt_like` needs at least this many changed codons ... |
+| `screening.translation.max_nonsynonymous_share` | 0.5 | | ... of which more than this share change the amino acid |
+| `screening.translation.action` | `flag` | | `flag`: report only; `set_aside`: set `numt_like` units aside like the others |
+| `screening.rate_outlier_z` | 3.5 | | Genus subtrees: list units whose root-to-tip distance lies this many robust standard deviations above the median (`rate_outliers` in `provenance.tsv`); 0 turns it off |
+| `screening.rate_outlier_action` | `flag` | | `flag`: list only; `set_aside`: leave them out of the genus subtree and place them like units set aside by screening; see [relative rates](#relative-rates-within-a-genus) |
 | `crown_age.method` | `rate` | `fraction` | How to set a genus crown age when no better source exists |
 | `crown_age.rate` | 0.0115 | | Default substitution rate, per site per Myr, per lineage; sets the lower bound of the crown age, see [crown ages and rates](#crown-ages-and-rates) |
 | `crown_age.rates` | `{}` | | Rate per taxon, `rank: {name: rate}` |
@@ -80,6 +129,10 @@ Everything that differs between markers sits in `markers.<name>`:
 | `crown_age.fraction` | | 0.5 | Crown age as a fraction of the stem age |
 | `crown_age.cap_fraction` | 0.9 | 0.9 | A crown age never exceeds this fraction of the stem age |
 | `crown_age.timetree_bound` | `max` | `max` | `max`: a TimeTree crown age is an upper bound on the crown age; `none`: TimeTree crown ages are not used |
+| `crown_age.plausibility.enabled` | `true` | | Test a TimeTree crown against the barcodes, and demote it to an upper bound when they cannot account for it ([#54](https://github.com/naturalis/timegraft/issues/54); see [crown ages and rates](#crown-ages-and-rates)) |
+| `crown_age.plausibility.rate_factor` | 10 | | How much slower than the rate a genus may evolve |
+| `crown_age.plausibility.saturation` | 0.15 | | Root-to-tip distance at which COI distances within genera level off |
+| `crown_age.plausibility.young_factor` | 3 | | A TimeTree crown more than this many times younger than the barcode age is not used at all |
 | `crown_age.estimate` | `timetree_midpoint` | `timetree_midpoint` | The age between the bounds: `timetree_midpoint` (TimeTree where available, otherwise the midpoint, or for ITS the fraction of the stem age), `minimum` or `midpoint` (COI only); see [crown ages and rates](#crown-ages-and-rates) |
 | `dating.method` | `mpl` | `mpl` | `mpl` (mean path length), `lsd2`, or `chronos` (penalised likelihood; see [dating within a genus](#dating-within-a-genus)) |
 | `dating.seq_length` | 658 | 500 | Barcode length, for LSD2's variance model |
@@ -92,14 +145,70 @@ Everything that differs between markers sits in `markers.<name>`:
 
 ### Screening units
 
+**What acts and what only reports.** "Set aside" means taken out of the genus subtree: the unit no longer shapes the subtree or the crown age of its genus, but it is still placed on the tree (next to its nearest unit, or on the stem of its genus) and still counts in diversity. Nothing in screening deletes a unit from the output. At the defaults, two checks set units aside and the others only report:
+
+| Check | Default | To make it act, or act more | Iberian run (24,882 units) |
+| --- | --- | --- | --- |
+| Nearer to another genus (`other_genus`) | Sets aside | Lower `margin` | 695 set aside; 989 at `margin: 0.01`, 1,519 at `margin: 0` |
+| No congener at `min_identity` (`isolated`) | Sets aside | Raise `min_identity`, for all or per class (`thresholds`) | 444 set aside; 3,007 at `min_identity: 0.85` (with the first check, 3,702 units or 15%, against 1,139 or 4.6%) |
+| Wider reference (`reference.path`) | Off | Give a table of sequences | More evidence, so more units set aside where the run lacks close relatives |
+| Mutual pairs (`mutual_pairs`) | Both set aside | `further` sets aside fewer, not more | 91 fewer units set aside |
+| Codon comparison, `numt_like` | Reports | `translation.action: set_aside` | 265 units flagged |
+| Codon comparison, `frameshift` | Reports | Cannot act: the pair does not tell which sequence has the indel | 245 units flagged |
+| Long branches in the genus subtree (`rate_outliers`) | Reports | `rate_outlier_action: set_aside` | 412 units in 235 genera flagged; set aside, 173 crown ages change, 10 by more than a quarter |
+| Thresholds suggested per class (`screening_calibration.tsv`) | Reports | Copy them into `thresholds` | |
+
+Whatever acts, a genus never loses all its units, and every decision and flag is written with its reason ([provenance](provenance.md#screening-units)). The settings and their evidence are below; the effect of each on mislabelled units is in the [Iberian record](../../data/iberia/consistency/README.md#screening-55).
+
 Within-genus barcode distances set the lower bound of a genus's crown age, so a unit that does not belong in its genus (a misidentification, a contaminant, or a genus that is not a natural group) can make the genus look much older. Before genus subtrees are built, `screen_units` searches all representatives against each other with VSEARCH and sets a unit aside when:
 
 - **`other_genus`**: it is at least `margin` more similar to a unit of another genus than to any unit of its own genus; or
 - **`isolated`**: no unit of its own genus reaches `min_identity`, while other units of the genus do.
 
-Genera with one unit are not screened, and a genus never loses all its units: if every unit would be set aside, all are kept (`kept_whole_genus`). Set-aside units are not discarded. They are placed like units without a usable genus: next to their nearest unit, at the age implied by their distance to it, or, if nothing reaches `placement.place_identity`, on the stem of their own genus (`stem_fraction` of the way from its crown to its stem node). They stay in the tree and in diversity, but do not shape the genus subtree or its crown age. `units/screened.tsv` gives every decision with its evidence.
+Genera with one unit are not screened, and a genus never loses all its units: if every unit would be set aside, all are kept (`kept_whole_genus`). Set-aside units are not discarded. They are placed like units without a usable genus: next to their nearest unit, at the age implied by their distance to it, or, if nothing reaches `placement.place_identity`, on the stem of their own genus (`stem_fraction` of the way from its crown to its stem node). They stay in the tree and in diversity, but do not shape the genus subtree or its crown age. `units/screened.tsv` gives every decision with its evidence: the nearest unit of the same genus and of another genus with their identities and where they came from (`run` or `external`), the thresholds that applied and the class they belong to, and the reason in words ([provenance](provenance.md#screening-units)). No unit is set aside without a row that says why.
 
-The thresholds are judgements. On the Iberian data the search takes two minutes for 25,000 units, and these settings set aside about 5% of units ([results](../science/results/2026-11-screening.md)). Screening is off for ITS until the thresholds are tested on fungal data: identities across fungal genera are lower and less comparable.
+The thresholds are judgements. On the Iberian data the search takes four and a half minutes for 25,000 units on two cores (one and a half without the second search of one-sided units), and these settings set aside 4.6% of units ([results](../science/results/2026-11-screening.md), [evidence](../../data/iberia/consistency/README.md#screening-55)).
+
+#### Mutual pairs
+
+When a unit carries the name of the wrong genus, it is nearer to another genus than to its own, but its nearest true congener is often nearer to it than to any of its own congeners too: a pair of units, each the other's nearest unit of another genus, cannot tell which of the two has the wrong name. By default both are set aside. With `mutual_pairs: further`, only the one with the larger excess of the other-genus identity over its best congener is, and the other is kept with a reason that names the pair.
+
+On the Iberian data, with units given the name of another genus of their family, `further` cuts the correct units set aside along with them from 112 to 25 per 333 errors, at the cost of one in a hundred errors no longer caught, and sets aside 91 fewer units without any injected error (1,048 instead of 1,139). The default stays `both` until the benchmark of [#56](https://github.com/naturalis/timegraft/issues/56) has judged what it does to the trees ([evidence](../../data/iberia/consistency/README.md#screening-55)).
+
+#### Thresholds per class
+
+Identities between congeners differ between groups: congeneric sponges are closer than congeneric copepods. `screen_units` writes `units/screening_calibration.tsv`, which summarises per class (or the rank in `classes`) the identity of each kept unit to its nearest congener, how many units are nearer to another genus, how many were set aside, and how often codon changes alter the amino acid. It suggests a `min_identity` per class: the 1% quantile of congener identity among kept units, rounded down to a percent, between the search cut-off and 0.95, for classes with at least 50 such units. The suggestions are not applied: copy the ones you accept into `thresholds` or `threshold_table`. A class threshold below `min_identity` sees nothing new, because the search does not report hits below `min_identity`; the log warns about it.
+
+On the Iberian data, the suggested thresholds range from 0.80 to 0.89 (sponges). With them, mislabelled units are caught as often as with 0.80 in every class (a few more teleosts), while slightly more units are set aside without any injected error, so the defaults stay as they were ([evidence](../../data/iberia/consistency/README.md#screening-55)). A higher `min_identity` for all classes catches a few more errors but sets aside far more: 7.2% of units at 0.82 and 15% at 0.85, against 4.6% at 0.80.
+
+#### A wider reference
+
+Screening only sees the units in the run. A unit of a genus that is rare in the run, or misidentified as a genus whose relatives are not in it, may have nothing to be nearer to. `reference.path` adds sequences from outside the run, for instance BOLD records of the same families from other regions. They are searched with the units, within `reference.scope` (by default, only sequences of families that occur in the run), and count as evidence: a closer congener, or a closer unit of another genus. They are never decided on and do not enter the tree. Each best hit in `units/screened.tsv` says whether it came from the run or the reference, and `reference_scope` records the setting. The table needs `genus` and `sequence`, and the rank named in `scope`; rows whose `unit_id` is in the run are skipped.
+
+#### Codon comparison
+
+For COI, each unit is compared codon by codon with its nearest congener (or, without one, its nearest unit of another genus), in its own genetic code (see [genetic codes](#genetic-codes)) and its reading frame: the forward frame with the fewest stops, and among equals the one in which the differences are most often silent. Mitochondrial copies that diverge change mostly third positions, which rarely change the amino acid; a nuclear copy (NUMT), or a sequence with many errors, changes the amino acid at about three of four changed codons. A unit is:
+
+- **`numt_like`**: at least `min_changed_codons` codons differ, and more than `max_nonsynonymous_share` of them change the amino acid;
+- **`frameshift`**: the alignment with its relative is out of frame over a stretch, because of an indel whose length is not a multiple of three. The pair cannot tell which of the two has the indel, so this is reported only;
+- **`ok`**, or **`not_assessed`** when the unit has no relative at `min_identity` or its alignment was not kept.
+
+By default this only reports (`action: flag`). With `action: set_aside`, `numt_like` units are set aside like the others, under the same whole-genus rule. The reading-frame filter removes copies with stops, but most recent copies have none: on the Iberian sequences, three quarters of copies with 2% random substitutions still pass it, and this comparison flags 97% of them.
+
+#### Relative rates within a genus
+
+When the genus subtrees are built, the root-to-tip distance of each unit in the rooted tree, before dating, is compared with those of its congeners: units more than `rate_outlier_z` robust standard deviations (1.4826 times the median absolute deviation) above the median are listed in `rate_outliers` in `provenance.tsv`, with the largest score in `rate_outlier_z`. A long branch in a genus stretches its crown age; it may be a fast lineage, a poor sequence, a nuclear copy or a misidentification that screening did not catch. By default nothing is done with them: the list says where to look. With `rate_outlier_action: set_aside`, the subtree is built again without them, and they are placed on the finished tree like units set aside by screening (reason `screen_rate_outlier` in `units_placed.tsv`); `rate_outlier_action` in `provenance.tsv` says which happened. At least two units are always kept. Genera with fewer than four units are not assessed. On the Iberian run, setting them aside takes 412 units out of 235 subtrees; mean root-to-tip distance in those genera falls by a median of 4%, and 173 crown ages change (the others come from TimeTree or the literature), by a median of 2% and by more than a quarter in 10 genera (*Pelagia* 47 to 18 Ma, *Bathytoshia* 16 to 8 Ma). The sum of all crown ages falls by 1.1%.
+
+#### Screening ITS
+
+Screening is off for ITS. Identities across fungal genera are lower and less comparable than for COI, alignment of ITS across genera is poor, and there is no reading frame for the codon comparison. Before turning it on for a data set, calibrate it:
+
+1. Run with `screening.enabled: true` and `margin: 1` (nothing is set aside as `other_genus`), with `min_identity` at the lowest identity at which you trust ITS alignments (0.80 is a start).
+2. Read `units/screening_calibration.tsv`: congener identities per class, and the share of units nearer to another genus.
+3. Run the injection part of `data/iberia/consistency/screening/benchmark.py` on the representatives and records of the run, to measure how many mislabelled units each `margin` and `min_identity` catches, and what else changes.
+4. Turn it on when, at the chosen thresholds, units given the name of another genus of their family are caught about as well as for COI on the Iberian data (0.89 at the defaults; at least 0.85), no more than about 10% of the units of any class with 200 units or more are set aside without injected errors (the highest COI class, Gymnolaemata, is at 15%; most are below 5%), and the classes that need their own thresholds have them in `thresholds`.
+
+Set `translation.enabled` to false for ITS: it is not coding, and `screen_units` marks the units `not_coding` regardless.
 
 ### Crown ages and rates
 
@@ -110,7 +219,9 @@ The crown age of a genus lies between two bounds, and both are recorded ([#36](h
 3. The **lower bound** (`method: rate`) is the age from the barcodes: the mean root-to-tip distance of the rooted genus tree divided by the substitution rate. Barcode distances saturate, also within genera, so with a rate from young calibrations this is a minimum, not an estimate. `crown_age_min` of the table raises it. With `method: fraction` there is no rate and no lower bound.
 4. `estimate` picks the age between the bounds. `timetree_midpoint` (the default, [#42](https://github.com/naturalis/timegraft/issues/42)) takes the TimeTree crown age wherever it is the upper bound, that is, below `cap_fraction` of the stem age and with no table bounds for the genus, even when the barcode minimum is older; for the other genera it takes the midpoint, the geometric mean of the two bounds (or, with `method: fraction`, which has no lower bound, the fraction of the stem age). TimeTree aggregates published timetrees and is the best estimate there is where it covers a genus. The midpoint is the best estimate without it: it has the smallest worst-case relative error when only the bounds are known, and on the Iberian genera it was within a factor of two of TimeTree's crown age for three quarters of genera, the minimum for a quarter ([results](../science/results/2026-11-dating.md)). `minimum` takes the age from the barcodes, or `fraction` of the stem age, moved to the nearest bound it violates; `midpoint` uses the midpoint for every genus.
 
-A TimeTree crown age is the MRCA of the species TimeTree knows under the genus name. It is far too old when the genus is not a natural group, which is why it only ever lowers an age. Earlier versions accepted it outright unless it exceeded `timetree_max_ratio` times the barcode age; that threshold made ages jump and is gone (the key is ignored, with a warning in the log).
+5. **Plausibility** (`method: rate`, `crown_age.plausibility`, [#54](https://github.com/naturalis/timegraft/issues/54)). A TimeTree crown that the barcodes cannot account for is an upper bound only: with `timetree_midpoint` the age is then the midpoint between the barcode age and the TimeTree crown (`crown_source` `midpoint_timetree_demoted`). The barcode age is a minimum for two reasons: the genus may evolve more slowly than the rate, by up to `rate_factor` (10; COI rates differ by about an order of magnitude between sponges or anthozoans and insects), and distances saturate. With saturation as d = s(1 - exp(-D/s)) for a plateau s (`saturation`, 0.15, about where the root-to-tip distances of the oldest Iberian genera level off), a distance d hides a true distance up to D = -s ln(1 - d/s), so a factor D/d: 1.05 at d = 0.013, 1.6 at 0.09, 2.7 at 0.137, unbounded at the plateau. The TimeTree crown is implausible when it is more than `rate_factor` times that factor older than the barcode age: at low divergence saturation cannot hide a crown tens of times older, while near saturation almost any crown is possible. The other way round, a TimeTree crown more than `young_factor` (3) times younger than the barcode age is implausible too (`implausible_young`): the barcode age can only be too old if the genus evolves faster than the rate, and the default rate is already a fast one, so TimeTree knew too few of the species asked about and they do not span the crown. Such a crown is not used at all, not even as a bound; this matters more with the sampled species, where TimeTree may know 4 of 184 (*Gammarus* in Iberia, crown 1.1 Ma against 13.8 Ma from the barcodes; there the literature table decides instead). `provenance.tsv` records the test (`crown_plausibility`, `timetree_ratio`, `ratio_allowed`) and the decision in words (`crown_decision`). With `method: fraction` (ITS) there is no barcode age, and no test.
+
+A TimeTree crown age is the MRCA of the species TimeTree is asked about. Before #54 those were up to 12 species of the genus in OTT, the crown of the whole genus; it is far too old when the genus is not a natural group, and when the run samples a few species of a large genus. Since #54 they are the species sampled in the run where TimeTree knows two (`backbone_build.crown_query`, see [provenance](provenance.md#crown-ages-from-the-sampled-species)). Either way it only ever lowers an age, unless it is the estimate. Earlier versions accepted it outright unless it exceeded `timetree_max_ratio` times the barcode age; that threshold made ages jump and is gone (the key is ignored, with a warning in the log).
 
 `provenance.tsv` records the result. `crown_source` is `table`, `timetree`, `rate`, `fraction` or `midpoint`; `rate` and `fraction` carry a suffix when a bound was applied (`_capped` for the stem age, `_timetree_max`, `_table_max`, `_table_min`). `crown_lower` and `crown_upper` are the bounds, `crown_upper_source` says which source set the upper one (`stem`, `timetree` or `table`), and `barcode_age` is the age from the barcodes before any bound. The diversity step reports Faith's PD and MPD with every crown at its lower and at its upper bound next to the values for the tree itself, so the part of a result that rests on crown ages is visible ([outputs](running.md#outputs)).
 

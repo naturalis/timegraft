@@ -21,6 +21,8 @@ estimate the crown age itself (docs/science/results/2026-11-dating.md).
 
 from __future__ import annotations
 
+import math
+
 import re
 import shutil
 import subprocess
@@ -44,6 +46,11 @@ class CrownAge:
     lower: float | None = None  # the youngest crown age the sources allow (None: no lower bound)
     upper: float | None = None  # the oldest
     upper_source: str = ""  # stem | timetree | table
+    # TimeTree crown against the barcodes (#54): plausible | implausible | "" (not tested), the ratio of the
+    # TimeTree crown to the age from the barcodes, and the largest ratio rate and saturation can explain
+    plausibility: str = ""
+    timetree_ratio: float | None = None
+    ratio_allowed: float | None = None
 
 
 def mean_root_to_tip(tree: dendropy.Tree) -> float:
@@ -67,6 +74,46 @@ def _table_entry(value) -> dict[str, float | None]:
     return {"age": float(value), "min": None, "max": None}
 
 
+def saturation_factor(distance: float, plateau: float) -> float:
+    """How much larger the true distance can be than ``distance`` if distances saturate at ``plateau``.
+
+    With saturation as d = plateau * (1 - exp(-D / plateau)), the true
+    distance is D = -plateau * ln(1 - d / plateau); the factor is D / d. It
+    is near 1 for small distances, where saturation cannot hide age, and
+    unbounded as the distance nears the plateau.
+    """
+    if distance <= 0:
+        return 1.0
+    if distance >= plateau:
+        return math.inf
+    return -plateau * math.log(1 - distance / plateau) / distance
+
+
+def timetree_plausibility(timetree_age: float, barcode_age: float, distance: float, rate_factor: float = 10.0,
+                          plateau: float = 0.15, young_factor: float = 3.0) -> tuple[str, float, float]:
+    """Can the barcodes be this young if the crown is as old as TimeTree says? (#54)
+
+    The age from the barcodes (mean root-to-tip distance over the rate) is a
+    minimum, too young for two reasons: the genus may evolve more slowly than
+    the rate (up to ``rate_factor`` times; COI rates differ by about an
+    order of magnitude between sponges or anthozoans and insects), and
+    distances saturate (``saturation_factor``). A TimeTree crown older than
+    both together allow is ``implausible``. The other way round, the barcode
+    age can only be too old if the genus evolves faster than the rate; a
+    TimeTree crown more than ``young_factor`` times younger than the barcode
+    age is ``implausible_young``: TimeTree knew too few of the species
+    queried, which then do not span the crown. Returns the verdict
+    (``plausible`` otherwise), the ratio and the largest ratio allowed.
+    """
+    ratio = timetree_age / barcode_age if barcode_age > 0 else math.inf
+    allowed = rate_factor * saturation_factor(distance, plateau)
+    if ratio > allowed:
+        return "implausible", ratio, allowed
+    if young_factor and ratio < 1 / young_factor:
+        return "implausible_young", ratio, allowed
+    return "plausible", ratio, allowed
+
+
 def crown_age(
     genus: str,
     stem_age: float,
@@ -79,6 +126,7 @@ def crown_age(
     suggested: Mapping[str, float] | None = None,
     timetree_bound: str = "max",
     estimate: str = "minimum",
+    plausibility: Mapping | None = None,
 ) -> CrownAge:
     """Choose the crown age for one genus, and the range the sources allow.
 
@@ -114,6 +162,16 @@ def crown_age(
       where it does not.
 
     Where bounds conflict, the upper bound wins.
+
+    ``plausibility`` (method ``rate`` only; ``enabled``, ``rate_factor``,
+    ``saturation``) tests a TimeTree crown against the barcodes
+    (:func:`timetree_plausibility`). An implausible one is still an upper
+    bound, but with ``timetree_midpoint`` no longer the estimate: the age is
+    the midpoint between the barcode age and it (``midpoint_timetree_demoted``).
+    One far younger than the barcode age is not used at all (the bounds are
+    as without TimeTree; ``plausibility`` ``implausible_young``).
+    The holistic analysis found such crowns where the genus is not a natural
+    group, or where the global genus is far older than the species sampled.
     """
     if timetree_bound not in ("max", "none"):
         raise ValueError(f"unknown timetree_bound {timetree_bound!r}; use 'max' or 'none'")
@@ -139,14 +197,25 @@ def crown_age(
     else:
         raise ValueError(f"unknown crown age method {method!r}")
 
+    test = {}
+    plausibility = dict(plausibility or {})
+    if method == "rate" and tt is not None and plausibility.get("enabled", True) and plausibility:
+        verdict, ratio, allowed = timetree_plausibility(tt, own, mean_root_to_tip(tree),
+                                                        float(plausibility.get("rate_factor", 10.0)),
+                                                        float(plausibility.get("saturation", 0.15)),
+                                                        float(plausibility.get("young_factor", 3.0)))
+        test = dict(plausibility=verdict, timetree_ratio=ratio, ratio_allowed=allowed)
+    # a TimeTree crown far younger than the barcodes is no bound at all: its species did not span the crown
+    tt_bound = None if test.get("plausibility") == "implausible_young" else tt
+
     upper, upper_source = cap, "stem"
     table_min = None
     if entry["min"] is not None or entry["max"] is not None:
         if entry["max"] is not None and entry["max"] < upper:
             upper, upper_source = entry["max"], "table"
         table_min = entry["min"]
-    elif tt is not None and timetree_bound == "max" and tt < upper:
-        upper, upper_source = tt, "timetree"
+    elif tt_bound is not None and timetree_bound == "max" and tt_bound < upper:
+        upper, upper_source = tt_bound, "timetree"
     suffix = {"stem": "capped", "timetree": "timetree_max", "table": "table_max"}[upper_source]
 
     lower = own if method == "rate" else None
@@ -158,18 +227,20 @@ def crown_age(
 
     if estimate == "timetree_midpoint":
         if upper_source == "timetree":
-            return CrownAge(upper, "timetree", tt, own, **bounds)
+            if test.get("plausibility") == "implausible":
+                return CrownAge((lower * upper) ** 0.5, "midpoint_timetree_demoted", tt, own, **bounds, **test)
+            return CrownAge(upper, "timetree", tt, own, **bounds, **test)
         estimate = "midpoint" if method == "rate" else "minimum"
     if own > upper:
-        return CrownAge(upper, f"{method}_{suffix}", tt, own, **bounds)
+        return CrownAge(upper, f"{method}_{suffix}", tt, own, **bounds, **test)
     if table_min is not None and own < table_min:
         if table_min >= upper:
-            return CrownAge(upper, f"{method}_{suffix}", tt, own, **bounds)
+            return CrownAge(upper, f"{method}_{suffix}", tt, own, **bounds, **test)
         if estimate == "minimum":
-            return CrownAge(table_min, f"{method}_table_min", tt, own, **bounds)
+            return CrownAge(table_min, f"{method}_table_min", tt, own, **bounds, **test)
     if estimate == "midpoint":
-        return CrownAge((lower * upper) ** 0.5, "midpoint", tt, own, **bounds)
-    return CrownAge(own, method, tt, own, **bounds)
+        return CrownAge((lower * upper) ** 0.5, "midpoint", tt, own, **bounds, **test)
+    return CrownAge(own, method, tt, own, **bounds, **test)
 
 
 def mpl_ultrametric(tree: dendropy.Tree, root_age: float) -> dendropy.Tree:

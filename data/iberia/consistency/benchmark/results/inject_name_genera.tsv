@@ -1,0 +1,121 @@
+seed	genus	kind	ott_id	ott_phylum	ott_class	host_ott_id	host_name	host_phylum	host_class	records_class	records_phylum	n_evaluable	n_flags	lineage_flag	merged_flag	neighbour_flag	neighbour_hits	concordance_flag	placement_action	reanchor_target	default_in_backbone	default_own_class	legacy_in_backbone	legacy_own_class	default_stem_factor	legacy_stem_factor
+1	Nephtys	phylum	336918	Annelida	Polychaeta	642650	Bosminopsis	Arthropoda	Branchiopoda	Polychaeta	Annelida	2	2	yes		yes	33	flag	reanchored	family:Nephtyidae (ott1072318)	True	True	True	False	1.000	2.821
+1	Thysanoteuthis	class	526074	Mollusca	Cephalopoda	2850058	Hypomenia	Mollusca	Solenogastres	Cephalopoda	Mollusca	1	1	yes			3	review			True	False	True	False	5.173	5.173
+1	Cuthona	phylum	951821	Mollusca	Gastropoda	123577	Oligacanthorhynchus	Acanthocephala	Archiacanthocephala	Gastropoda	Mollusca	2	2	yes		yes	14	flag	reanchored	order:Nudibranchia (ott76753)	True	True	True	False	4.632	4.470
+1	Margaritifera	class	88267	Mollusca	Bivalvia	27161	Zonites	Mollusca	Gastropoda	Bivalvia	Mollusca	2	1	yes			11	review			True	False	True	False	3.094	3.094
+1	Helicolenus	phylum	191015	Chordata	Actinopteri	779396	Seison	Rotifera	Seisonidea	Teleostei	Chordata	1	1	yes			1	review			True	True	True	False	11.261	11.181
+1	Tripterygion	class	104337	Chordata	Actinopteri	7060652	Fontitrygon	Chordata	Chondrichthyes	Teleostei	Chordata	2	1	yes			6	review			True	False	True	False	1.574	1.574
+1	Jujubinus	phylum	916012	Mollusca	Gastropoda	815378	Ritteriella	Chordata	Thaliacea	Gastropoda	Mollusca	2	1	yes			37	review			True	False	True	False	16.138	16.138
+1	Myliobatis	class	234337	Chordata	Chondrichthyes	634072	Soriculus	Chordata	Mammalia	Elasmobranchii	Chordata	2	2	yes		yes	12	flag	reanchored	family:Myliobatidae (ott715629)	True	False	True	False	4.780	6.873
+1	Remora	phylum	383926	Chordata	Actinopteri	961834	Mniobia	Rotifera	Bdelloidea	Teleostei	Chordata	2	1	yes			6	review			True	True	True	False	4.234	3.801
+1	Pleoticus	class	733132	Arthropoda	Malacostraca	3583169	Acheliana	Arthropoda	Pycnogonida	Malacostraca	Arthropoda	1	1	yes			4	review			True	True	True	True	6.671	6.671
+1	Miktoniscus	phylum	843807	Arthropoda	Malacostraca	2849734	Micropilina	Mollusca	Monoplacophora	Malacostraca	Arthropoda	1	1	yes			2	review			True	False	True	False	3.475	3.475
+1	Hymenopenaeus	class	83123	Arthropoda	Malacostraca	511972	Tachypleus	Arthropoda	Merostomata	Malacostraca	Arthropoda	2	1	yes			7	review			True	True	True	True	15.017	15.017
+1	Eluma	phylum	755781	Arthropoda	Malacostraca	5004684	Mixibius	Tardigrada	Eutardigrada	Malacostraca	Arthropoda	1	1	yes			3	review			True	False	True	False	7.408	6.576
+1	Ancylus	class	457186	Mollusca	Gastropoda	464341	Nierstraszella	Mollusca	Polyplacophora	Gastropoda	Mollusca	2	1	yes			13	review			True	False	True	False	4.741	11.511
+1	Neogammarus	phylum	2982761	Arthropoda	Malacostraca	199350	Protopterus	Chordata	Dipnoi	Malacostraca	Arthropoda	1	1	yes			1	review			True	False	True	False	8.196	7.576
+1	Litophyton	class	418998	Cnidaria	Anthozoa	866966	Chironex	Cnidaria	Cubozoa	Octocorallia	Cnidaria	1	1	yes			1	review			True	False	True	False	2.985	2.985
+1	Rajella	phylum	406382	Chordata	Chondrichthyes	762439	Xironogiton	Annelida	Clitellata	Elasmobranchii	Chordata	2	2	yes		yes	8	flag	reanchored	family:Rajidae (ott978560)	True	True	True	False	5.302	5.783
+1	Haploginglymus	class	5091688	Arthropoda	Malacostraca	822251	Pentanymphon	Arthropoda	Pycnogonida	Malacostraca	Arthropoda	1	1	yes			4	review			True	True	True	True	10.662	10.662
+1	Placiphorella	phylum	537134	Mollusca	Polyplacophora	451268	Erpetoichthys	Chordata	Cladistia	Polyplacophora	Mollusca	2	2	yes		yes	12	flag	reanchored	family:Mopaliidae (ott837691)	True	True	True	False	2.212	2.546
+1	Pontophilus	class	889072	Arthropoda	Malacostraca	401743	Hutchinsoniella	Arthropoda	Cephalocarida	Malacostraca	Arthropoda	1	1	yes			3	review			True	False	True	False	5.039	5.094
+1	Zenion	phylum	463427	Chordata	Actinopteri	562170	Mediorhynchus	Acanthocephala	Archiacanthocephala	Teleostei	Chordata	2	2	yes		yes	5	flag	reanchored	order:Zeiformes (ott816143)	True	True	True	False	1.188	2.416
+1	Zu	class	342731	Chordata	Actinopteri	1096003	Aetomylaeus	Chordata	Chondrichthyes	Teleostei	Chordata	1	1	yes			3	review			True	False	True	False	4.988	1.030
+1	Corophium	phylum	852801	Arthropoda	Malacostraca	3583561	Antygomonas	Kinorhyncha	Cyclorhagida	Malacostraca	Arthropoda	2	1	yes			5	review			True	False	True	False	8.614	7.718
+1	Soteriscus	class	2992938	Arthropoda	Malacostraca	256380	Symphylella	Arthropoda	Symphyla	Malacostraca	Arthropoda	1	1	yes			2	review			True	False	True	False	11.162	11.162
+2	Gadomus	phylum	9625	Chordata	Actinopteri	666200	Catenula	Platyhelminthes	Catenulida	Teleostei	Chordata	2	1	yes			7	review			True	True	True	True	11.936	11.278
+2	Ceriodaphnia	class	374387	Arthropoda	Branchiopoda	142355	Pauropus	Arthropoda	Pauropoda	Branchiopoda	Arthropoda	2	2	yes		yes	55	flag	reanchored	family:Daphniidae (ott424894)	True	True	True	False	2.900	2.153
+2	Margaretta	phylum	777570	Bryozoa	Gymnolaemata	37402	Eurypauropus	Arthropoda	Pauropoda	Gymnolaemata	Bryozoa	1	1	yes			0	review			True	False	True	False	1.423	2.679
+2	Cypridopsis	class	687310	Arthropoda	Ostracoda	3516402	Hylebainosoma	Arthropoda	Diplopoda	Ostracoda	Arthropoda	2	1	yes			35	review			True	False	True	False	2.024	2.311
+2	Idas	phylum	393553	Mollusca	Bivalvia	1031463	Callinera	Nemertea	Palaeonemertea	Bivalvia	Mollusca	1	1	yes			0	review			True	False	True	False	1.755	1.735
+2	Hediste	class	943098	Annelida	Polychaeta	896535	Ilyodrilus	Annelida	Clitellata	Polychaeta	Annelida	2	1	yes			74	review			True	False	True	False	2.152	2.205
+2	Orientogalba	phylum	2879283	Mollusca	Gastropoda	3646122	Rhopalaea	Chordata	Ascidiacea	Gastropoda	Mollusca	1	1	yes			3	review			True	False	True	False	10.153	21.242
+2	Carcinus	class	706427	Arthropoda	Malacostraca	2967668	Nasoecia	Arthropoda	Ostracoda	Malacostraca	Arthropoda	2	1	yes			6	review			True	False	True	False	2.913	11.163
+2	Venerupis	phylum	73960	Mollusca	Bivalvia	3583555	Condyloderes	Kinorhyncha	Cyclorhagida	Bivalvia	Mollusca	1	1	yes			2	review			True	False	True	False	2.378	2.495
+2	Spicara	class	528671	Chordata	Actinopteri	833444	Nebrius	Chordata	Chondrichthyes	Teleostei	Chordata	2	1	yes			7	review			True	False	True	False	3.678	3.038
+2	Glycera	phylum	941631	Annelida	Polychaeta	4951388	Octospinifer	Acanthocephala	Eoacanthocephala	Polychaeta	Annelida	2	1	yes			34	review			True	True	True	True	1.334	1.231
+2	Magelona	class	1067343	Annelida	Polychaeta	410502	Beringobdella	Annelida	Clitellata	Polychaeta	Annelida	2	2	yes		yes	11	flag	reanchored	family:Magelonidae (ott1067344)	True	True	True	False	1.000	2.202
+2	Beryx	phylum	704242	Chordata	Actinopteri	223745	Endorchis	Platyhelminthes	Cestoda	Teleostei	Chordata	1	1	yes			3	review			True	True	True	True	4.491	4.332
+2	Hygophum	class	264573	Chordata	Actinopteri	78150	Megalocercus	Chordata	Appendicularia	Teleostei	Chordata	2	2	yes		yes	21	flag	reanchored	family:Myctophidae (ott19301)	True	True	True	False	1.582	6.558
+2	Hyale	phylum	285707	Arthropoda	Malacostraca	298890	Nectonema	Nematomorpha	Nectonematoida	Malacostraca	Arthropoda	2	2	yes		yes	5	flag	reanchored	family:Hyalidae (ott575014)	True	True	True	False	1.079	6.680
+2	Botryphallus	class	2915545	Mollusca	Gastropoda	736817	Onithochiton	Mollusca	Polyplacophora	Gastropoda	Mollusca	1	1	yes			0	review			True	False	True	False	1.038	1.024
+2	Thalassoma	phylum	907844	Chordata	Actinopteri	841981	Neochordodes	Nematomorpha	Gordioida	Teleostei	Chordata	2	2	yes		yes	16	flag	reanchored	family:Labridae (ott214115)	True	True	True	False	2.573	12.770
+2	Schizoporella	class	780192	Bryozoa	Gymnolaemata	269393	Frondipora	Bryozoa	Stenolaemata	Gymnolaemata	Bryozoa	2	1	yes			5	review			True	True	True	True	1.694	1.663
+2	Gammarella	phylum	204417	Arthropoda	Malacostraca	893424	Anomopus	Rotifera	Bdelloidea	Malacostraca	Arthropoda	1	1	yes			3	review			True	False	True	False	1.627	1.537
+2	Craspedacusta	class	997626	Cnidaria	Hydrozoa	3680437	Lobonemoides	Cnidaria	Scyphozoa	Hydrozoa	Cnidaria	1	1	yes			0	review			True	False	True	False	2.929	2.929
+2	Sphincterochila	phylum	600166	Mollusca	Gastropoda	780336	Karalepis	Chordata	Actinopteri	Gastropoda	Mollusca	1	1	yes			2	review			True	False	True	False	5.199	5.197
+2	Gammarus	class	130011	Arthropoda	Malacostraca	3518033	Eurytion	Arthropoda	Chilopoda	Malacostraca	Arthropoda	2	1	yes			335	review			True	False	True	False	9.369	9.369
+2	Pterocirrus	phylum	897440	Annelida	Polychaeta	959471	Rhadinorhynchus	Acanthocephala	Palaeacanthocephala	Polychaeta	Annelida	2	1	yes			13	review			True	True	True	True	4.007	3.696
+2	Scaphander	class	160363	Mollusca	Gastropoda	660802	Myonera	Mollusca	Bivalvia	Gastropoda	Mollusca	2	1	yes			24	review			True	False	True	False	4.719	4.616
+3	Bragasellus	phylum	3000574	Arthropoda	Malacostraca	101800	Cactodera	Nematoda	Chromadorea	Malacostraca	Arthropoda	2	1	yes			27	review			True	False	True	False	4.031	4.993
+3	Aporrhais	class	512737	Mollusca	Gastropoda	978940	Pinctada	Mollusca	Bivalvia	Gastropoda	Mollusca	1	1	yes			3	review			True	False	True	False	1.255	1.334
+3	Daphnella	phylum	194643	Mollusca	Gastropoda	328403	Hemienchytraeus	Annelida	Clitellata	Gastropoda	Mollusca	2	2	yes		yes	9	flag	reanchored	family:Raphitomidae (ott43846)	True	True	True	False	1.000	2.289
+3	Bugula	class	595315	Bryozoa	Gymnolaemata	463359	Plumatella	Bryozoa	Phylactolaemata	Gymnolaemata	Bryozoa	2	1	yes			13	review			True	True	True	True	6.521	6.521
+3	Verruca	phylum	739237	Arthropoda	Hexanauplia	1049757	Fossobothrium	Platyhelminthes	Cestoda	Thecostraca	Arthropoda	1	1	yes			3	review			True	False	True	False	3.961	4.380
+3	Limax	class	777436	Mollusca	Gastropoda	2849913	Meiomenia	Mollusca	Solenogastres	Gastropoda	Mollusca	2	1	yes			53	review			True	False	True	False	4.034	4.034
+3	Bathytoshia	phylum	7060604	Chordata	Chondrichthyes	448016	Paramacrobiotus	Tardigrada	Eutardigrada	Elasmobranchii	Chordata	2	2	yes		yes	5	flag	reanchored	family:Dasyatidae (ott644001)	True	True	True	False	1.892	6.160
+3	Chlorophthalmus	class	19308	Chordata	Actinopteri	73661	Megachasma	Chordata	Chondrichthyes	Teleostei	Chordata	2	1	yes			15	review			True	False	True	False	1.829	1.829
+3	Hemicycla	phylum	359379	Mollusca	Gastropoda	329257	Godzilliognomus	Arthropoda	Remipedia	Gastropoda	Mollusca	2	2	yes		yes	40	flag	reanchored	family:Helicidae (ott997082)	True	True	True	False	9.726	6.187
+3	Hypselodoris	class	32015	Mollusca	Gastropoda	2853316	Bathyarca	Mollusca	Bivalvia	Gastropoda	Mollusca	2	1	yes			42	review			True	False	True	False	8.864	8.864
+3	Ameiurus	phylum	687155	Chordata	Actinopteri	950551	Lynceus	Arthropoda	Branchiopoda	Teleostei	Chordata	2	2	yes		yes	9	flag	reanchored	family:Ictaluridae (ott701513)	True	True	True	False	1.092	7.087
+3	Pilumnopeus	class	94753	Arthropoda	Malacostraca	5717340	Xibalbanus	Arthropoda	Remipedia	Malacostraca	Arthropoda	1	1	yes			3	review			True	False	True	False	5.735	1.295
+3	Porcellionides	phylum	588452	Arthropoda	Malacostraca	2943003	Coronarctus	Tardigrada	Heterotardigrada	Malacostraca	Arthropoda	2	2	yes		yes	22	flag	reanchored	family:Porcellionidae (ott588429)	True	True	True	False	1.866	4.606
+3	Processa	class	670099	Arthropoda	Malacostraca	142355	Pauropus	Arthropoda	Pauropoda	Malacostraca	Arthropoda	2	1	yes			14	review			True	False	True	False	2.581	2.973
+3	Triops	phylum	570422	Arthropoda	Branchiopoda	261199	Neorossia	Mollusca	Cephalopoda	Branchiopoda	Arthropoda	2	2	yes		yes	74	flag	reanchored	family:Triopsidae (ott709230)	True	True	True	False	1.000	6.819
+3	Pomadasys	class	794362	Chordata	Actinopteri	5926283	Appendicularia	Chordata	Appendicularia	Teleostei	Chordata	2	2	yes		yes	42	flag	reanchored	family:Haemulidae (ott99942)	True	True	True	False	1.583	2.367
+3	Aplysina	phylum	619376	Porifera	Demospongiae	2967631	Rotundoecia	Arthropoda	Ostracoda	Demospongiae	Porifera	1	1	yes			1	review			True	False	True	False	2.048	1.416
+3	Zeus	class	432552	Chordata	Actinopteri	3644379	Mesochordaeus	Chordata	Appendicularia	Teleostei	Chordata	1	1	yes			3	review			True	False	True	False	11.278	11.278
+3	Limacus	phylum	2882440	Mollusca	Gastropoda	212023	Polypodium	Cnidaria	Polypodiozoa	Gastropoda	Mollusca	2	2	yes		yes	6	flag	reanchored	family:Limacidae (ott969371)	True	True	True	False	1.000	4.457
+3	Brama	class	679815	Chordata	Actinopteri	950827	Notomyxine	Chordata	Hyperotreti	Teleostei	Chordata	2	1	yes			6	review			True	False	True	False	28.944	28.944
+3	Haliphron	phylum	752586	Mollusca	Cephalopoda	4116916	Fritillaria	Chordata	Appendicularia	Cephalopoda	Mollusca	1	1	yes			2	review			True	False	True	False	2.687	1.035
+3	Rostanga	class	779149	Mollusca	Gastropoda	942392	Mesonychoteuthis	Mollusca	Cephalopoda	Gastropoda	Mollusca	2	1	yes			19	review			True	False	True	False	2.542	2.186
+3	Craspedacusta	phylum	997626	Cnidaria	Hydrozoa	3511855	Verrucoentomon	Arthropoda	Protura	Hydrozoa	Cnidaria	1	1	yes			0	review			True	False	True	False	1.063	1.066
+3	Bolinichthys	class	341500	Chordata	Actinopteri	451268	Erpetoichthys	Chordata	Cladistia	Teleostei	Chordata	2	1	yes			10	review			True	True	True	True	5.632	5.632
+4	Oxynoe	phylum	588314	Mollusca	Gastropoda	874004	Dactylobiotus	Tardigrada	Eutardigrada	Gastropoda	Mollusca	2	1	yes			10	review			True	False	True	False	4.547	3.882
+4	Ganula	class	2882938	Mollusca	Gastropoda	94947	Leachia	Mollusca	Cephalopoda	Gastropoda	Mollusca	1	1	yes			4	review			True	False	True	False	1.748	2.032
+4	Myosotella	phylum	205113	Mollusca	Gastropoda	401743	Hutchinsoniella	Arthropoda	Cephalocarida	Gastropoda	Mollusca	1	1	yes			0	review			True	True	True	True	1.885	1.885
+4	Zophoscolex	class	871812	Annelida	Clitellata	327392	Hydroides	Annelida	Polychaeta	Clitellata	Annelida	2	1	yes			15	review			True	False	True	False	2.127	2.127
+4	Paradoneis	phylum	69165	Annelida	Polychaeta	331856	Leptoclinides	Chordata	Ascidiacea	Polychaeta	Annelida	1	1	yes			3	review			True	False	True	False	4.473	1.585
+4	Mourgona	class	1036540	Mollusca	Gastropoda	491347	Veleropilina	Mollusca	Monoplacophora	Gastropoda	Mollusca	2	1	yes			8	review			True	False	True	False	9.354	9.354
+4	Eucypris	phylum	637247	Arthropoda	Ostracoda	199343	Lepidosiren	Chordata	Dipnoi	Ostracoda	Arthropoda	2	2	yes		yes	51	flag	reanchored	family:Cyprididae (ott341236)	True	True	True	False	1.031	1.869
+4	Labrus	class	607772	Chordata	Actinopteri	7114	Psittinus	Chordata	Aves	Teleostei	Chordata	1	1	yes			3	review			True	True	True	False	18.249	16.870
+4	Gadella	phylum	89178	Chordata	Actinopteri	1027435	Lingula	Brachiopoda	Lingulata	Teleostei	Chordata	2	2	yes		yes	9	flag	reanchored	family:Moridae (ott1093612)	True	True	True	False	1.032	12.239
+4	Leptotrichus	class	2992947	Arthropoda	Malacostraca	741745	Pottsia	Arthropoda	Hexanauplia	Malacostraca	Arthropoda	1	1	yes			1	review			True	False	True	False	5.875	5.875
+4	Helicigona	phylum	569708	Mollusca	Gastropoda	4951423	Tenuisentis	Acanthocephala	Eoacanthocephala	Gastropoda	Mollusca	2	1	yes			6	review			True	True	True	True	5.817	5.839
+4	Nais	class	160972	Annelida	Clitellata	914163	Parougia	Annelida	Polychaeta	Clitellata	Annelida	2	1	yes			42	review			True	False	True	False	1.105	1.079
+4	Phacellophora	phylum	263065	Cnidaria	Scyphozoa	3583631	Kinorhynchus	Kinorhyncha	Allomalorhagida	Scyphozoa	Cnidaria	1	1	yes			4	review			True	False	True	False	5.041	4.370
+4	Ellisina	class	2935849	Bryozoa	Gymnolaemata	1087365	Diplosolen	Bryozoa	Stenolaemata	Gymnolaemata	Bryozoa	1	1	yes			0	review			True	True	True	True	2.452	1.788
+4	Chydorus	phylum	1022213	Arthropoda	Branchiopoda	941453	Clavelina	Chordata	Ascidiacea	Branchiopoda	Arthropoda	2	2	yes		yes	38	flag	reanchored	family:Eurycercidae (ott217720)	True	True	True	False	1.150	1.251
+4	Eobania	class	738647	Mollusca	Gastropoda	2849913	Meiomenia	Mollusca	Solenogastres	Gastropoda	Mollusca	2	1	yes			5	review			True	False	True	False	18.229	18.229
+4	Uranoscopus	phylum	76749	Chordata	Actinopteri	784432	Mothocya	Arthropoda	Malacostraca	Teleostei	Chordata	2	2	yes		yes	22	flag	reanchored	family:Uranoscopidae (ott76747)	True	True	True	False	1.000	2.114
+4	Siphonaria	class	255561	Mollusca	Gastropoda	146093	Sepiadarium	Mollusca	Cephalopoda	Gastropoda	Mollusca	2	1	yes			61	review			True	False	True	False	2.485	2.485
+4	Spondylus	phylum	441503	Mollusca	Bivalvia	613773	Imnadia	Arthropoda	Branchiopoda	Bivalvia	Mollusca	1	1	yes			0	review			True	False	True	False	1.010	1.010
+4	Gammarus	class	130011	Arthropoda	Malacostraca	803936	Parartemia	Arthropoda	Branchiopoda	Malacostraca	Arthropoda	2	1	yes			335	review			True	False	True	False	3.193	3.193
+4	Plagyrona	phylum	2882105	Mollusca	Gastropoda	557106	Lightiella	Arthropoda	Cephalocarida	Gastropoda	Mollusca	1	1	yes			1	review			True	True	True	True	3.039	3.039
+4	Diaixis	class	32420	Arthropoda	Hexanauplia	117586	Xanthocotelles	Arthropoda	Insecta	Copepoda	Arthropoda	1	1	yes			0	review			True	False	True	False	3.964	3.636
+4	Camachoaglaja	phylum	7497727	Mollusca	Gastropoda	3669882	Mymarothecium	Platyhelminthes	Monogenea	Gastropoda	Mollusca	1	1	yes			2	review			True	True	True	True	30.727	30.800
+4	Ephippion	class	764250	Chordata	Actinopteri	451268	Erpetoichthys	Chordata	Cladistia	Teleostei	Chordata	1	1	yes			1	review			True	True	True	True	6.451	6.451
+5	Galba	phylum	54084	Mollusca	Gastropoda	113819	Anhydrophryne	Chordata	Amphibia	Gastropoda	Mollusca	2	2	yes		yes	19	flag	reanchored	family:Lymnaeidae (ott844825)	True	True	True	False	3.559	16.429
+5	Apohyale	class	550241	Arthropoda	Malacostraca	897652	Godzillius	Arthropoda	Remipedia	Malacostraca	Arthropoda	2	2	yes		yes	21	flag	reanchored	family:Hyalidae (ott575014)	True	True	True	False	1.079	1.718
+5	Porcellionides	phylum	588452	Arthropoda	Malacostraca	1023791	Herdmania	Chordata	Ascidiacea	Malacostraca	Arthropoda	2	2	yes		yes	22	flag	reanchored	family:Porcellionidae (ott588429)	True	True	True	False	1.866	9.211
+5	Placiphorella	class	537134	Mollusca	Polyplacophora	7365	Mya	Mollusca	Bivalvia	Polyplacophora	Mollusca	2	1	yes			12	review			True	False	True	False	2.338	2.228
+5	Peracle	phylum	858530	Mollusca	Gastropoda	4170225	Acopauropus	Arthropoda	Pauropoda	Gastropoda	Mollusca	1	1	yes			0	review			True	False	True	False	8.789	8.789
+5	Pleoticus	class	733132	Arthropoda	Malacostraca	41679	Hottentotta	Arthropoda	Arachnida	Malacostraca	Arthropoda	1	1	yes			4	review			True	False	True	False	6.408	6.408
+5	Babakina	phylum	269659	Mollusca	Gastropoda	4116916	Fritillaria	Chordata	Appendicularia	Gastropoda	Mollusca	2	2	yes		yes	5	flag	reanchored	order:Nudibranchia (ott76753)	True	True	True	False	7.166	19.289
+5	Synasellus	class	3000587	Arthropoda	Malacostraca	2960099	Micropacter	Arthropoda	Remipedia	Malacostraca	Arthropoda	2	1	yes			13	review			True	False	True	False	1.610	1.143
+5	Eluma	phylum	755781	Arthropoda	Malacostraca	87794	Fredericella	Bryozoa	Phylactolaemata	Malacostraca	Arthropoda	1	1	yes			3	review			True	False	True	False	2.031	2.031
+5	Trissexodon	class	777518	Mollusca	Gastropoda	977343	Prochaetoderma	Mollusca	Caudofoveata	Gastropoda	Mollusca	1	1	yes			2	review			True	False	True	False	5.243	5.245
+5	Vermetus	phylum	348005	Mollusca	Gastropoda	5496	Poseidonemertes	Nemertea	Enopla	Gastropoda	Mollusca	1	1	yes			0	review			True	False	True	False	7.215	7.670
+5	Neoraja	class	406373	Chordata	Chondrichthyes	5707985	Rubicundus	Chordata	Hyperotreti	Elasmobranchii	Chordata	1	1	yes			1	review			True	False	True	False	5.464	5.655
+5	Xenostrobus	phylum	5973226	Mollusca	Bivalvia	823494	Proisotoma	Arthropoda	Collembola	Bivalvia	Mollusca	1	1	yes			0	review			True	False	True	False	1.691	1.297
+5	Nassarius	class	54415	Mollusca	Gastropoda	4965861	Gallardoia	Mollusca	Polyplacophora	Gastropoda	Mollusca	2	1	yes			186	review			True	False	True	False	5.279	5.279
+5	Raphitoma	phylum	823129	Mollusca	Gastropoda	384484	Stenostomum	Platyhelminthes	Catenulida	Gastropoda	Mollusca	2	2	yes		yes	28	flag	reanchored	family:Raphitomidae (ott43846)	True	True	True	False	1.441	8.662
+5	Alvania	class	606380	Mollusca	Gastropoda	329711	Trachycardium	Mollusca	Bivalvia	Gastropoda	Mollusca	2	1	yes			21	review			True	False	True	False	1.170	1.100
+5	Microhedyle	phylum	142138	Mollusca	Gastropoda	3583657	Paracentrophyes	Kinorhyncha	Allomalorhagida	Gastropoda	Mollusca	1	1	yes			3	review			True	False	True	False	9.234	7.606
+5	Pterocirrus	class	897440	Annelida	Polychaeta	90148	Tritogenia	Annelida	Clitellata	Polychaeta	Annelida	2	1	yes			13	review			True	False	True	False	3.093	3.020
+5	Labrus	phylum	607772	Chordata	Actinopteri	312365	Asajirella	Bryozoa	Phylactolaemata	Teleostei	Chordata	1	1	yes			3	review			True	False	True	False	7.255	7.255
+5	Hyale	class	285707	Arthropoda	Malacostraca	838365	Cilunculus	Arthropoda	Pycnogonida	Malacostraca	Arthropoda	2	1	yes			5	review			True	False	True	False	9.575	9.575
+5	Spisula	phylum	721794	Mollusca	Bivalvia	298890	Nectonema	Nematomorpha	Nectonematoida	Bivalvia	Mollusca	1	1	yes			0	review			True	False	True	False	1.914	1.655
+5	Temora	class	1000632	Arthropoda	Hexanauplia	5717677	Vizcaino	Arthropoda	Arachnida	Copepoda	Arthropoda	1	1	yes			3	review			True	False	True	False	2.541	2.541
+5	Chromogobius	phylum	361426	Chordata	Actinopteri	954709	Cryptocorynetes	Arthropoda	Remipedia	Teleostei	Chordata	1	1	yes			4	review			True	False	True	False	13.150	13.046
+5	Scyllarus	class	14032	Arthropoda	Malacostraca	904287	Gomphiocephalus	Arthropoda	Collembola	Malacostraca	Arthropoda	2	2	yes		yes	7	flag	reanchored	family:Scyllaridae (ott235752)	True	True	True	False	1.010	1.394
