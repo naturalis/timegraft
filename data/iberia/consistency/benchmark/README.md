@@ -17,6 +17,7 @@ Whether `consistency-layer` should become the default: the metrics and threshold
 | `run_posthoc.sh` | Two variants of the injection, added after the first results to explain them; not part of the gate |
 | `monitor.py` | Runs a command and records its wall time and peak memory: of the largest single process over its whole life, from the kernel, and of the whole process tree, sampled every 0.2 s |
 | `evaluate.py`, `benchlib.py` | Compute every metric from the runs and write `results/` |
+| `run_lineage_alone.sh`, `evaluate_lineage_alone.py` | The detection metrics again, for [#71](https://github.com/naturalis/timegraft/issues/71): the default (`concordance.lineage_alone_level: class`) and a control with it `off`, on the clean run and on both injection variants (merged ids and name only); flagged by rule, back in their own class, false flags (`results/lineage_alone*.tsv`) |
 
 The pipeline is never patched for an experiment: errors and noise go into copies of its inputs (the taxonomy, the cache, the units), and the workflow scripts run as they are.
 
