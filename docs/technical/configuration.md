@@ -67,6 +67,7 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.concordance.max_share` | 0.0 | The barcode-neighbour check fails when at most this share of the cross-genus hits is in a phylum of the backbone sisters |
 | `backbone_build.concordance.min_hits` | 5 | Hits needed for the barcode-neighbour check |
 | `backbone_build.concordance.min_flags` | 2 | Failed checks needed to flag a genus |
+| `backbone_build.concordance.lineage_alone_level` | `class` | The lineage check flags a genus on its own when the lineages part at this rank or higher; `off` keeps the two-check rule. In the gate of #56 the lineage check failed for all 240 injected errors, and in the clean Iberian run it fails at class level or above only for *Onchidella*; most wrong matches that leave no second NCBI id behind can fail no other check. With `class`, all 120 name-only errors of the gate are flagged (29 with `off`) and no other genus is ([provenance](provenance.md#placement-concordance), [#71](https://github.com/naturalis/timegraft/issues/71)) |
 | `backbone_build.reanchor.mode` | `apply` | Move genera that placement concordance flags, before dating: `apply`; `report` (decide and record only); `off` ([provenance](provenance.md#re-anchoring-flagged-genera), #50) |
 | `backbone_build.reanchor.min_severity` | `class` | Only move genera whose lineages part at this rank or higher |
 | `backbone_build.reanchor.overrides` | | Curated table (`genus`, `action` `reanchor` or `keep`, `target`, `source`, `note`), e.g. `config/placement_overrides.tsv` |

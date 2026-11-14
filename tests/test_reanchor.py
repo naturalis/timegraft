@@ -123,7 +123,7 @@ def test_reanchored_genus_moves_in_the_topology(taxonomy, synth):
     assert [u for u, _ in ra.lineage_from(taxonomy, uid)] == [13, 2, 1]
 
 
-def _assess(taxonomy, synth, anchors_status, hits):
+def _assess(taxonomy, synth, anchors_status, hits, reference_of=None, merged=None, lineage_alone=None):
     """Concordance on the topology from the given anchors, with Mytilus's reference lineage that of a mussel."""
     genera = GENERA
     newick, placed = genus_topology_newick(synth, taxonomy, genera, anchors_status)
@@ -132,17 +132,18 @@ def _assess(taxonomy, synth, anchors_status, hits):
     reference = {"Mytilus": ("col", {"family": "Mytilidae", "class": "Bivalvia", "phylum": "Mollusca"}),
                  "Ostrea": ("col", {"family": "Ostreidae", "class": "Bivalvia", "phylum": "Mollusca"}),
                  "Magallana": ("col", {"family": "Ostreidae", "class": "Bivalvia", "phylum": "Mollusca"}),
-                 "Asterias": ("col", {"family": "Asteriidae", "class": "Asteroidea", "phylum": "Echinodermata"})}
+                 "Asterias": ("col", {"family": "Asteriidae", "class": "Asteroidea", "phylum": "Echinodermata"}),
+                 **(reference_of or {})}
     phylum = {g: ref["phylum"] for g, (_, ref) in reference.items()}
     gastropod = [{"name": "Mollusca", "rank": "phylum"}, {"name": "Bivalvia", "rank": "class"}]
     starfish = [{"name": "Echinodermata", "rank": "phylum"}, {"name": "Asteroidea", "rank": "class"}]
-    merged = {"Mytilus": ["6548", "999"]}
+    merged = {"Mytilus": ["6548", "999"]} if merged is None else merged
     names = cc.name_index(taxonomy)
     from timegraft.otol_static import lineage_names
 
     rows = cc.assess(taxonomy, names, genera, matches, reference, merged, {"6548": gastropod, "999": starfish},
                      hits, cc.backbone_sisters(tree), phylum, lineage_names, flag_level=cc.LEVELS["class"],
-                     max_share=0.0, min_hits=5, min_flags=2)
+                     max_share=0.0, min_hits=5, min_flags=2, lineage_alone=lineage_alone)
     return rows, matches, names, reference, tree
 
 
@@ -179,6 +180,33 @@ def test_misplaced_genus_is_flagged_and_moved(tmp_path, mode):
     # no longer flagged: the neighbours agree; the merged ids still differ, as they are a property of the OTT record
     assert after["Mytilus"]["concordance_flag"] == "review" and after["Mytilus"]["neighbour_concordance"] == "1.000"
     assert after["Asterias"]["concordance_flag"] == ""
+
+
+@pytest.mark.parametrize("alone", [None, "class"])
+def test_wrong_name_only_is_moved_on_the_lineage_check(tmp_path, alone):
+    # OTT gave the name of the run's Asterias to a starfish, without merging any NCBI ids, and there are no
+    # barcode neighbours: only the lineage check can fail. With lineage_alone it flags and moves the genus (#71)
+    taxonomy = Taxonomy(DATA / "taxonomy.tsv", set(GENERA), context="Metazoa")
+    path = tmp_path / "synth.tre"
+    path.write_text("(((ott10)ott9,ott12)ott3,((ott15)ott14,(ott6,ott7)ott5)ott13)ott2;")
+    synth = SynthTree(path)
+    anchors, status = genus_anchors(synth, taxonomy, GENERA)
+    mussel = {"family": "Mytilidae", "class": "Bivalvia", "phylum": "Mollusca"}
+    rows, matches, names, reference, _ = _assess(
+        taxonomy, synth, (anchors, status), {}, reference_of={"Asterias": ("records", mussel)}, merged={},
+        lineage_alone=None if alone is None else cc.LEVELS[alone])
+    by = {r["genus"]: r for r in rows}
+    assert by["Asterias"]["lineage_flag"] == "yes" and by["Asterias"]["n_flags"] == "1"
+    provenance, moved = ra.plan(synth, taxonomy, names, matches, anchors, rows,
+                                {g: ref for g, (_, ref) in reference.items()}, {}, "apply", cc.LEVELS["class"])
+    if alone is None:  # the earlier rule: listed for review, left in place
+        assert by["Asterias"]["concordance_flag"] == "review" and by["Asterias"]["flag_rule"] == ""
+        assert moved == {}
+        return
+    assert by["Asterias"]["concordance_flag"] == "flag" and by["Asterias"]["flag_rule"] == "lineage_alone"
+    assert [r["genus"] for r in rows if r["concordance_flag"] == "flag"] == ["Asterias"]
+    assert provenance["Asterias"]["placement_action"] == "reanchored"
+    assert provenance["Asterias"]["reanchor_target"] == "family:Mytilidae (ott4)"
 
 
 def test_override_keeps_a_flagged_genus(tmp_path):

@@ -91,6 +91,8 @@ backbone_build:
                              # cross-genus hits is in a phylum of its backbone sisters
     min_hits: 5              # ... and is only made with at least this many hits
     min_flags: 2             # a genus is flagged when this many checks fail
+    lineage_alone_level: class  # ... or when the lineage check alone fails at this rank or higher; off: never
+                             # on its own (#71)
   reanchor:                  # move genera that placement concordance flags, before dating (#50)
     mode: apply              # apply; report (decide and record, change nothing); off
     min_severity: class      # only flags whose lineages part at this rank or higher
