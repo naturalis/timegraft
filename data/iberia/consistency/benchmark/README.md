@@ -15,6 +15,7 @@ Whether `consistency-layer` should become the default: the metrics and threshold
 | `subsample.py` | Keeps a random half of the genera |
 | `run_experiments.sh` | All backbone builds of the gate: clean, injected, perturbed, subsampled, ablations, reproducibility. Exits non-zero if a build fails, and lists it in `exp/failed.txt`; running it again retries only the builds that are not complete. `evaluate.py` refuses to run while a build is missing or failed |
 | `run_posthoc.sh` | Two variants of the injection, added after the first results to explain them; not part of the gate |
+| `run_injection.sh`, `evaluate_injection.py` | The injection part of the gate again, for [#69](https://github.com/naturalis/timegraft/issues/69): legacy, the default, and a control arm with `reanchor.check_ids: false`, each against its own clean build; metrics 1d, 1f and 1g, and why each other stem moves (`results/injection_69*.tsv`) |
 | `monitor.py` | Runs a command and records its wall time and peak memory: of the largest single process over its whole life, from the kernel, and of the whole process tree, sampled every 0.2 s |
 | `evaluate.py`, `benchlib.py` | Compute every metric from the runs and write `results/` |
 

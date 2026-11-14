@@ -1,0 +1,4 @@
+arm	injected	flagged	back_in_own_class	stem_within_1.5	share_within_1.5	other_stems_moved	other_stems_moved_per_seed	other_stems_moved_vs_legacy
+legacy	120	0	0	0		248	37;64;67;28;52	1.000
+default (check_ids: true)	120	118	117	96	0.821	142	8;21;54;52;7	0.573
+control (check_ids: false)	120	118	117	85	0.726	297	63;79;89;59;7	1.198
