@@ -48,7 +48,7 @@ Needed only when building the backbone (`backbone_build.enabled: true`), and not
 
 ## Memory and time
 
-The Iberian run (about 100,000 records, 25,000 units, 1,200 genera) takes about 50 minutes on two cores with a filled cache, and at most 1.3 GB of memory, in the backbone step ([benchmark](../../data/iberia/consistency/benchmark/REPORT.md)).
+The Iberian run (about 100,000 records, 25,000 units, 1,200 genera) takes about 50 minutes on two cores with a filled cache, and at most 1.3 GB of memory, in the backbone step ([benchmark](../../data/iberia/consistency/benchmark/REPORT.md)). Since [#72](https://github.com/naturalis/timegraft/issues/72) the backbone step reads `annotations.json` incrementally and peaks at 0.91 GB instead of 1.19 GB.
 
 ## Checking the installation
 

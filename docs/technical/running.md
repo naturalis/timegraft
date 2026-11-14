@@ -162,7 +162,7 @@ The root uncertainty columns of `provenance.tsv` ([#34](https://github.com/natur
 
 ## Run times
 
-The full Iberian run of November 2026 (102,794 records, 24,882 units with a genus, 1,186 genera in the backbone; the largest genus has 1,035 units) takes 48 to 53 minutes on 2 cores with a filled TimeTree cache, and at most 1.3 GB of memory ([benchmark](../../data/iberia/consistency/benchmark/REPORT.md), `results/runtime.tsv`). Of that, the genus subtrees with MAFFT take about 25 minutes (51 minutes of CPU on two cores), placing units without a genus or set aside 15 to 17, screening 5 (the second search for one-sided hits nearly triples it, [#85](https://github.com/naturalis/timegraft/issues/85)), the representatives 2 and the backbone half a minute. A first run without a cache spends several minutes more on TimeTree and ChecklistBank.
+The full Iberian run of November 2026 (102,794 records, 24,882 units with a genus, 1,186 genera in the backbone; the largest genus has 1,035 units) takes 48 to 53 minutes on 2 cores with a filled TimeTree cache, and at most 1.3 GB of memory ([benchmark](../../data/iberia/consistency/benchmark/REPORT.md), `results/runtime.tsv`); the peak was the backbone step, which since [#72](https://github.com/naturalis/timegraft/issues/72) takes 0.91 GB instead of 1.19 GB (`results/memory.tsv`). Of that, the genus subtrees with MAFFT take about 25 minutes (51 minutes of CPU on two cores), placing units without a genus or set aside 15 to 17, screening 5 (the second search for one-sided hits nearly triples it, [#85](https://github.com/naturalis/timegraft/issues/85)), the representatives 2 and the backbone half a minute. A first run without a cache spends several minutes more on TimeTree and ChecklistBank.
 
 ## Rooting diagnostics
 
