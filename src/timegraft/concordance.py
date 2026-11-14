@@ -38,6 +38,19 @@ RANK_LEVEL = {
 LEVEL_NAME = {0: "", 1: "family", 2: "superfamily", 3: "order", 4: "class", 5: "phylum", 6: "kingdom"}
 LEVELS = {v: k for k, v in LEVEL_NAME.items() if v}
 
+
+def level_setting(value) -> int | None:
+    """A rank setting as a level of :data:`LEVELS`, or ``None`` for ``off``.
+
+    YAML reads an unquoted ``off`` (or ``no``, ``false``) as ``False``, so that
+    counts as ``off`` too.
+    """
+    if value is None or value is False or str(value).lower() in ("off", "none", "false", "no", ""):
+        return None
+    if value not in LEVELS:
+        raise ValueError(f"unknown rank {value!r}; expected one of {', '.join(LEVELS)} or off")
+    return LEVELS[value]
+
 COLUMNS = (
     "rank", "genus", "status", "ott_id", "ott_family", "ott_class", "ott_phylum",
     # reference lineage
@@ -47,7 +60,7 @@ COLUMNS = (
     # barcode neighbours
     "neighbour_hits", "neighbour_phyla", "sister_phyla", "neighbour_concordance", "neighbour_flag",
     # aggregate
-    "n_evaluable", "n_flags", "severity", "concordance_flag",
+    "n_evaluable", "n_flags", "severity", "concordance_flag", "flag_rule",
     # what was done about it (#50), and the barcode-neighbour check again on the corrected topology
     "placement_action", "neighbour_concordance_after",
     # which NCBI ids of a re-anchored genus may go to TimeTree (#69): the lineage checked against, the ids kept,
@@ -183,12 +196,21 @@ def neighbour_concordance(genus: str, hits: Sequence[str], sisters: Sequence[str
     return out
 
 
-def aggregate(row: dict, flag_level: int, max_share: float, min_flags: int = 2) -> dict:
+def aggregate(row: dict, flag_level: int, max_share: float, min_flags: int = 2,
+              lineage_alone: int | None = None) -> dict:
     """Component flags, the number of checks made and failed, severity, and the overall flag.
 
     ``concordance_flag`` is ``flag`` when at least ``min_flags`` checks fail,
-    ``review`` when one does, empty when none does, and ``not_evaluable``
-    when no check could be made.
+    or when the lineage check fails at level ``lineage_alone`` or above (a
+    level of :data:`LEVELS`; ``None``: never on its own); ``review`` when one
+    check fails otherwise, empty when none does, and ``not_evaluable`` when no
+    check could be made. ``flag_rule`` says why a genus is flagged:
+    ``two_checks`` (which wins when both apply) or ``lineage_alone`` (#71).
+
+    The lineage check is allowed to decide alone because a wrong match that
+    leaves no second NCBI id behind can fail no other check within a phylum,
+    while in the clean Iberian run it fails at class level or above only for
+    the one genus that is truly misplaced (*Onchidella*).
     """
     flags = {
         "lineage_flag": row.get("lineage_distance", "") != "" and int(row["lineage_distance"]) >= flag_level,
@@ -198,10 +220,14 @@ def aggregate(row: dict, flag_level: int, max_share: float, min_flags: int = 2) 
     made = sum(1 for k in ("lineage_distance", "merged_id_distance", "neighbour_concordance") if row.get(k, "") != "")
     failed = sum(flags.values())
     levels = [int(row[k]) for k in ("lineage_distance", "merged_id_distance") if row.get(k, "") != ""]
+    alone = (lineage_alone is not None and flags["lineage_flag"]
+             and int(row["lineage_distance"]) >= lineage_alone)
+    rule = "two_checks" if failed >= min_flags else "lineage_alone" if alone else ""
     row.update({k: "yes" if v else "" for k, v in flags.items()})
     row.update(n_evaluable=str(made), n_flags=str(failed), severity=str(max(levels, default=0)),
                concordance_flag="not_evaluable" if not made else
-               "flag" if failed >= min_flags else "review" if failed else "")
+               "flag" if rule else "review" if failed else "",
+               flag_rule=rule)
     return row
 
 
@@ -215,14 +241,15 @@ def rank_rows(rows: list[dict]) -> list[dict]:
 
 
 def assess(taxonomy, names, genera, matches, reference, merged, classifications, hits, sisters, phylum,
-           lineage_names, flag_level: int, max_share: float, min_hits: int, min_flags: int) -> list[dict]:
+           lineage_names, flag_level: int, max_share: float, min_hits: int, min_flags: int,
+           lineage_alone: int | None = None) -> list[dict]:
     """All three checks and the aggregate for every genus, ranked for review (rows of concordance.tsv).
 
     ``reference`` maps a genus to (source, {rank: name}); ``merged`` to the
     NCBI ids OTT merged into it; ``hits`` to the genera of its units' nearest
     units outside the genus; ``sisters`` to its backbone sisters; ``phylum``
     any genus to its reference phylum; ``lineage_names`` gives the OTT
-    lineage columns of a genus.
+    lineage columns of a genus. ``lineage_alone``: see :func:`aggregate`.
     """
     rows = []
     for g in genera:
@@ -238,5 +265,5 @@ def assess(taxonomy, names, genera, matches, reference, merged, classifications,
             row.update(merged_id_distance(classifications, merged.get(g, [])))
         if g in sisters:
             row.update(neighbour_concordance(g, hits.get(g, []), sisters[g], phylum, min_hits=min_hits))
-        rows.append(aggregate(row, flag_level, max_share, min_flags))
+        rows.append(aggregate(row, flag_level, max_share, min_flags, lineage_alone))
     return rank_rows(rows)
