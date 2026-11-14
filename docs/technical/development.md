@@ -57,15 +57,17 @@ Marker-specific behaviour is selected by name from the marker block in the confi
 
 - **Filter**: `filters.CHECKS` maps a marker name to a check function returning `None` or a reason.
 - **Distance**: `distances.METHODS` maps a name to a pairwise function; `NEEDS_ALIGNMENT` says whether it needs aligned input; `distances.matrix` can take a vectorised fast path (as for `k2p`).
-- **Crown age**: `dating.crown_age` with `method` `rate` or `fraction`; bounds from the stem age, TimeTree and the crown age table.
+- **Crown age**: `dating.crown_age` with `method` `rate` or `fraction`; bounds from the stem age, TimeTree and the crown age table; the plausibility test of TimeTree crowns in `dating.timetree_plausibility`.
 - **Dating**: `mpl` or `lsd2`, chosen in `build.build_genus`.
 - **Placement height**: `rate` or `terminal`, in `placement.place_all`.
 
-## Adding a distance method (e.g. embeddings)
+## Adding a distance method
 
 1. Write a function `name(a: str, b: str, **options) -> float`, or better a matrix function for speed, and register it in `distances.METHODS` and `NEEDS_ALIGNMENT`.
-2. For embeddings, the function would look vectors up by sequence or unit id rather than embed on the fly; compute embeddings in a separate rule (GPU) and pass the file as an option ([issue #25](https://github.com/naturalis/timegraft/issues/25)).
+2. A method that needs precomputed data (for example vectors per unit) should read them from a file passed as an option, made in a separate rule, rather than compute them on the fly.
 3. Add it to `validation.methods` first and compare it with `k2p` and `kmer` before using it for trees.
+
+Embeddings from DNA language models were considered and decided against ([#25](https://github.com/naturalis/timegraft/issues/25)): they separate species, but beyond short distances they are no better than alignment-based or k-mer distances, and they need a GPU.
 
 ## Adding a marker (e.g. ITS)
 
@@ -84,6 +86,10 @@ snakemake --lint            # workflow style checks
 
 CI (GitHub Actions) installs VSEARCH, builds LSD2, runs the lint, a dry run and the tests.
 
+### Benchmarks on real data
+
+Unit tests do not show what a change does to a real tree. Changes that can move ages or placements are measured on the Iberian run, and the evidence is committed next to the data: `data/iberia/consistency/README.md` has a section per issue of the consistency layer, and `data/iberia/consistency/benchmark/` holds the release gate of [#56](https://github.com/naturalis/timegraft/issues/56): metrics declared in advance (`GATE.md`), a harness that runs the workflow scripts unchanged on perturbed copies of the inputs (injected OTT errors, noisy TimeTree ages, fewer genera), and the report. Rerun it, or its next version ([#74](https://github.com/naturalis/timegraft/issues/74)), before changing a default; see its README.
+
 ## Documentation
 
 - Technical documentation in `docs/technical`, scientific in `docs/science`, the manuscript in `docs/manuscript`.
@@ -92,6 +98,7 @@ CI (GitHub Actions) installs VSEARCH, builds LSD2, runs the lint, a dry run and 
 ## Conventions
 
 - All logic in `src/timegraft`, tested there; rule scripts stay thin.
-- Every decision that changes an age or a placement is recorded in an output table (provenance, node ages, placements), so results can be traced.
+- Every decision that changes an age or a placement is recorded in an output table (provenance, node ages, placements), so results can be traced. A change to an output format gets a migration note in `docs/technical/provenance.md`.
+- An experiment never patches the pipeline: errors and noise go into copies of its inputs, as in the benchmark.
 - Unit identifiers such as `BOLD:AAA0001` contain colons: never hand them to external tools as names; use neutral names and map back (as `build`, `placement` and `dating` do).
 - UK English in documentation.

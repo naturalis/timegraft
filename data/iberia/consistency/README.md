@@ -1,5 +1,7 @@
 # Consistency layer: evidence on the Iberian run
 
+> Each section below was measured on the state of the pipeline at its own issue; later issues changed some of the earlier numbers (for example, the screening fix of #55 changed 175 decisions). The numbers for the pipeline as merged into `main` are in `benchmark/` (#56), mainly `benchmark/results/end_to_end.tsv` and `benchmark/REPORT.md`.
+
 Material for the consistency layer ([#46](https://github.com/naturalis/timegraft/issues/46)) on the Iberian run. Each issue of the epic adds what it needs here, so that the benchmark of [#56](https://github.com/naturalis/timegraft/issues/56) can compare every step with the same starting point.
 
 ## `backbone/` (#47)

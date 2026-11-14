@@ -24,7 +24,13 @@ A journal style can be added with `--csl` and a CSL file from the [Zotero style 
 - **Draft**: introduction, methods and the first results are written; discussion is in outline; figures and tables are placeholders.
 - **Authors**: to be agreed.
 - **References**: entries with a `note` starting "Check:" have details that still need verifying against the source.
-- **Numbers** in the results come from the first run on real data ([docs/science/results/2026-11-iberia.md](../science/results/2026-11-iberia.md)) and will change as the method is calibrated (see the [roadmap](../technical/roadmap.md)).
+- **Numbers** in the results come from the archived Iberian run of 12 November 2026 ([data/iberia](../../data/iberia/README.md)), which predates the consistency layer.
+- **Out of date since the consistency layer** ([#46](https://github.com/naturalis/timegraft/issues/46), merged November 2026):
+  - *Methods, Reference units*: screening now searches one-sided hit lists again and records codon diagnostics.
+  - *Methods, Dated backbone*: COL as identifier hub; majority-clade anchoring instead of the MRCA; placement checks and re-anchoring; a weighted fit of ages instead of the precedence rule; re-queries.
+  - *Methods, Genus subtrees*: TimeTree crowns of the sampled species, the plausibility test; long branches listed.
+  - *Results*: the counts of set-aside units, backbone node sources, crown sources and rooting, and the *Onchidella* paragraph (now corrected by the pipeline).
+  - A new reference run (#77) should be the source of the revised numbers; the benchmark ([report](../../data/iberia/consistency/benchmark/REPORT.md)) could become an evaluation section.
 
 Open points are marked `[TODO]` in the text.
 

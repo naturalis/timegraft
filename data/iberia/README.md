@@ -6,17 +6,30 @@ Inputs and outputs of the timegraft runs on genera of western Iberia, described 
 | --- | --- |
 | `records.tsv.gz` | Records cut from the BOLD public data package of 27 March 2026 with `timegraft.bcdm` (commands in `docs/technical/running.md`, "The Iberian run"): 102,794 records, 25,166 BINs, 1,232 genera |
 | `timetree_cache.json` | TimeTree answers from the runs, with the evidence behind each (cache format version 2, #47; same ages as before), and ChecklistBank answers for COL26.10 XR (#48); copy to `resources/api_cache.json` to get the same backbone without querying TimeTree or ChecklistBank |
-| `iberia-run-tolerant.tar.gz` | Output folder of the run with tolerant rooting, unit screening, a pure-birth backbone and crown ages from TimeTree or the midpoint of their bounds: the current settings of `config/iberia.yaml` and the source of the manuscript's numbers. `units/screened_representatives.tsv` is left out (it is `units/representatives.tsv` without the units set aside in `units/screened.tsv`) |
+| `iberia-run-tolerant.tar.gz` | Output folder of the run with tolerant rooting, unit screening, a pure-birth backbone and crown ages from TimeTree or the midpoint of their bounds, made on 12 November 2026 **before the consistency layer** (#46): the source of the manuscript's numbers, but not of the pipeline as it now is (see "The current pipeline" below). `units/screened_representatives.tsv` is left out (it is `units/representatives.tsv` without the units set aside in `units/screened.tsv`) |
 | `screening/` | The analysis of units that do not fit their genus, and scripts comparing runs with and without screening (#38) |
 | `calibration/` | Substitution rates per class fitted to these genera; tried, rejected and not used (#18) |
 | `dating-benchmark/` | Tests of penalised likelihood, rates and bounds on the run as it was before crown ages changed (#36) |
 | `iberia-run.tar.gz` | Output folder of the run with the earlier strict rooting (and the earlier crown age rule) |
 | `rooting-diagnostics.tar.gz` | `diagnostics/rooting/` of the strict run: `per_genus.tsv`, `random_pairs.tsv` (20 random outgroup pairs per genus) and `report.md` (#19) |
-| `consistency/` | Evidence for the consistency layer (#46): the backbone with the evidence columns of #47, and with COL as identifier hub (#48) |
+| `consistency/` | Evidence for the consistency layer (#46): a section per issue (#47 to #55), each measured on the state of its own stage, and `benchmark/`, the release gate of #56 with two full runs of `main` and of the layer and their comparison |
 | `outgroup-benchmark/` | Scripts and per-genus results of the comparison of outgroup choices and rooting rules (#19) |
 | `allgenus_nocf_13nov26.txt` | List of genera from Jorge Moutinho's checklist. Currently unused but may be input for later Iberian runs after refactoring |
 
 The output folders leave out `units/records.tsv` and `units/filtered.tsv`, which the workflow rebuilds from the records.
+
+## The current pipeline
+
+The archived runs predate the consistency layer, which changes results at the default settings. The full runs of the pipeline as merged (`consistency-layer` at `b2e30a8`, equal to `main` after #68) were made for the benchmark of [#56](https://github.com/naturalis/timegraft/issues/56) and are summarised in `consistency/benchmark/results/end_to_end.tsv`. In short:
+
+- 1,139 units set aside by screening (1,294 in the archive);
+- 1,039 genus subtrees and 147 single-unit genera;
+- 24,927 tips in `timegraft.tre`, root at 750 Ma;
+- crown ages: 260 from TimeTree, 15 TimeTree crowns demoted to an upper bound, 761 at the midpoint of their bounds;
+- 386 genera with units on the wrong side of the root;
+- total branch length 630,769 Ma.
+
+Those output folders are not archived yet; a fresh reference run of `main` is [#77](https://github.com/naturalis/timegraft/issues/77). To make one now, run the commands below on `main`.
 
 ## How the runs were made
 
@@ -35,7 +48,7 @@ Later the same day it was rerun from screening onwards with the unit screening o
 
 On 12 November 2026 it was rebuilt from the backbone onwards (45 minutes), with the pure-birth interpolation of undated backbone nodes ([#16](https://github.com/naturalis/timegraft/issues/16)) from the Open Tree release files, and crown ages from TimeTree where available and the midpoint of their bounds otherwise ([#42](https://github.com/naturalis/timegraft/issues/42)). TimeTree answers came from `timetree_cache.json`; all 314 TimeTree ages are as before. The archive now holds this run.
 
-To rebuild the tolerant run from the repository root:
+To run the pipeline on these records from the repository root (on `main` this gives the current pipeline, not the archive, which was made with the commits listed above):
 
 ```bash
 mkdir -p resources/iberia
@@ -50,7 +63,7 @@ To look at the archived outputs instead:
 mkdir -p results/iberia && tar xzf data/iberia/iberia-run-tolerant.tar.gz -C results/iberia
 ```
 
-## Main numbers
+## Main numbers of the archived runs
 
 Both runs as first made, before screening: 1,046 genus subtrees plus 137 single-unit genera; 24,882 units with a genus, 215 without (212 placed); 727 records rejected; 24,894 tips in `timegraft.tre`, root at 750 Ma.
 - Tolerant run, current: 24,909 tips; 1,036 genus subtrees and 147 single-unit genera; 1,294 units set aside by screening (819 placed next to their nearest unit, 474 on the stem of their genus, 1 unplaced); 215 units without a usable genus (210 placed). Crown ages: 261 from TimeTree, 772 at the midpoint of their bounds, 1 at 0.9 of the stem age, 2 from the literature table (cut to 0.9 of the stem age); median 24.8 Ma. Total branch length 638,002 Ma (360,668 Ma with every crown at its lower bound, 1,424,818 Ma at its upper bound; 312,011 Ma under the first crown age rule).

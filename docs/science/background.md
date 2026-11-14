@@ -52,6 +52,6 @@ The collaboration with Microsoft has ended. The repository is public domain and 
 2. **Use barcodes only where they carry signal**, within genera, and measure that window per marker and clade rather than assume it.
 3. **Put everything in one unit, time**, so that PD is comparable across markers, clades and studies, and so that subtrees from different analyses fit together without rescaling.
 4. **Keep it alignment-free where needed** (ITS) and parallel by construction (every genus independently).
-5. **Embeddings are useful for search and coarse placement**; whether they beat k-mers or K2P for distances within a genus is an empirical question for the validation step.
+5. **Embeddings are useful for search and coarse placement**, but not as distances: they were later decided against for timegraft, because beyond short distances they do no better than alignment-based or k-mer distances and they need a GPU ([#25](https://github.com/naturalis/timegraft/issues/25)).
 
 This is the design timegraft implements; see [how it works](how-it-works.md). Work elsewhere on the same problem is discussed under [prior art](prior-art.md).

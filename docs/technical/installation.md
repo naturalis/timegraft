@@ -36,14 +36,19 @@ Everything runs on macOS. Two things to watch:
 
 ## Network access
 
-Needed only when building the backbone (`backbone_build.enabled: true`):
+Needed only when building the backbone (`backbone_build.enabled: true`), and not at all when the cache already holds every answer (`data/iberia/timetree_cache.json` does for the Iberian run):
 
 | Host | For |
 | --- | --- |
-| `files.opentreeoflife.org` | Open Tree of Life synthesis and taxonomy release files (about 140 MB, once) |
-| `api.timetree.org` | TimeTree node ages (answers are cached on disk) |
+| `files.opentreeoflife.org` | Open Tree of Life release files, once: the synthesis tree (31 MB), its `annotations.json` (61 MB; only with `backbone_build.synthesis_support`) and the taxonomy (about 420 MB unpacked) |
+| `api.timetree.org` | TimeTree node ages and the evidence behind them (answers are cached on disk) |
+| `api.checklistbank.org` | Catalogue of Life names, classifications and identifiers, with `backbone_build.col.enabled` (the default; answers are cached in the same file) |
 | `api.opentreeoflife.org` | only with `backbone_build.source: api` |
 | `github.com` | building LSD2 |
+
+## Memory and time
+
+The Iberian run (about 100,000 records, 25,000 units, 1,200 genera) takes about 50 minutes on two cores with a filled cache, and at most 1.3 GB of memory, in the backbone step ([benchmark](../../data/iberia/consistency/benchmark/REPORT.md)).
 
 ## Checking the installation
 
