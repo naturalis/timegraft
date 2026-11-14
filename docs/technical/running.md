@@ -50,6 +50,7 @@ Which rules run depends on the configuration: the backbone is either read or bui
 flowchart TB
     subgraph setup["Tools and reference files (once)"]
         download_otol["download_otol"]
+        download_otol_annotations["download_otol_annotations"]
         build_lsd2["build_lsd2"]
     end
     subgraph units["Reference units"]
@@ -79,10 +80,15 @@ flowchart TB
     bcdm_records -.-> filter_records
     filter_records --> representatives
     representatives --> build_backbone
+    filter_records --> build_backbone
+    screen_units --> build_backbone
     download_otol --> build_backbone
+    download_otol_annotations -.-> build_backbone
     representatives --> screen_units
+    filter_records --> screen_units
     screen_units --> shard_genera
     build_backbone --> shard_genera
+    filter_records --> shard_genera
     shard_genera --> build_shard
     build_backbone --> build_shard
     build_lsd2 -.-> build_shard
@@ -91,6 +97,7 @@ flowchart TB
     build_shard --> graft
     graft --> place_units
     screen_units --> place_units
+    build_shard --> place_units
     filter_records --> place_units
     place_units --> place_asvs
     filter_records --> place_asvs
@@ -104,7 +111,7 @@ flowchart TB
     validate --> all
 ```
 
-Dashed arrows are optional: `bcdm_records` only runs when `bcdm.path` is set, `build_lsd2` only with `dating.method: lsd2`. With `dating.method: chronos` the genus subtrees are built in an environment that also holds R and ape. To draw the graph for your own configuration:
+Dashed arrows are optional: `bcdm_records` only runs when `bcdm.path` is set, `build_lsd2` only with `dating.method: lsd2`, `download_otol_annotations` only with `backbone_build.synthesis_support`. The backbone reads the screening (the nearest units of other genera are one of its placement checks), and `place_units` reads the units that genus subtrees left out for a long branch (`subtrees/set_aside_<shard>.tsv`). With `dating.method: chronos` the genus subtrees are built in an environment that also holds R and ape. To draw the graph for your own configuration:
 
 ```bash
 snakemake --configfile config/config.yaml my_run.yaml --rulegraph mermaid-js
@@ -117,6 +124,7 @@ All under `outdir`.
 | File | Content |
 | --- | --- |
 | `timegraft.tre` | The dated tree; tips are unit ids |
+| `backbone/backbone.tre` | The dated backbone, one tip per genus (when built; otherwise the `backbone` input is used) |
 | `grafted.tre` | The same, before units without a genus were placed |
 | `provenance.tsv` | Per backbone genus: subtree, single unit or pruned; stem and crown age; where the crown age came from (`crown_source`), the bounds it lies between (`crown_lower`, `crown_upper`, `crown_upper_source`), the age from the barcodes before any bound (`barcode_age`), the TimeTree value (`timetree_crown`) with the species it is the crown of (`crown_basis`), its plausibility against the barcodes (`crown_plausibility`, `timetree_ratio`, `ratio_allowed`) and the decision in words (`crown_decision`; [#54](https://github.com/naturalis/timegraft/issues/54)), the mean root-to-tip distance of the rooted genus tree (`root_to_tip`) and the units far beyond it with what was done with them (`rate_outliers`, `rate_outlier_z`, `rate_outlier_action`; [#55](https://github.com/naturalis/timegraft/issues/55)) and the substitution rate with its source (`rate`, `rate_source`); rooting method, number of units on the wrong side of the root and the genus's units among the outgroup (`violations`, `misplaced`); how uncertain the root is and what that does to the ages (see below); dating method; outgroup |
 | `backbone/genera.tsv` | How each genus was matched in OTT and placed in the synthesis; the ids OTT holds for it, its OTT lineage and that of its reference records, and the clade it is anchored at ([provenance](provenance.md)) |
@@ -130,6 +138,8 @@ All under `outdir`.
 | `units/screened.tsv` | Per unit: the screening decision (`keep`, `other_genus`, `isolated`, `numt_like`, `kept_whole_genus`, or `not_screened` with screening off), its nearest unit of the same genus and of another genus with their identities and where they came from, the thresholds that applied, the reason in words, and the codon comparison with its nearest relative ([#38](https://github.com/naturalis/timegraft/issues/38), [#55](https://github.com/naturalis/timegraft/issues/55); columns in [provenance](provenance.md#screening-units)) |
 | `units/screening_calibration.tsv` | Per class: the identities to the nearest congener, the shares nearer to another genus and set aside, and a suggested `min_identity` ([configuration](configuration.md#thresholds-per-class)) |
 | `units/screened_representatives.tsv`, `units/screened_unassigned.tsv` | The representatives that build the genus subtrees, and the units to be placed: those without a usable genus plus those set aside by screening (reason `screen_other_genus`, `screen_isolated` or `screen_numt_like`); units left out of their genus subtree for a long branch (reason `screen_rate_outlier`, in `subtrees/set_aside_<shard>.tsv`) are placed the same way |
+| `subtrees/shard_<i>.tsv` | Per genus of the shard: its provenance row and its dated subtree as Newick; `graft` joins them into `provenance.tsv` |
+| `subtrees/set_aside_<i>.tsv` | Units left out of their genus subtree for a long branch (`screening.rate_outlier_action: set_aside`; empty otherwise), to be placed |
 | `genera/missing_from_backbone.tsv` | Genera with units that are not in the backbone |
 | `genera/taxonomy.tsv` | Family, order, class and phylum per genus (the most common value among its records), used to resolve rates per taxon |
 | `units_placed.tsv` | What happened to each unit without a genus or set aside by screening: `placed` next to its nearest unit, `genus_stem` (set aside, matching nothing: on the stem of its own genus), or `unplaced` |
@@ -152,7 +162,7 @@ The root uncertainty columns of `provenance.tsv` ([#34](https://github.com/natur
 
 ## Run times
 
-The first real run (102,794 records, 1,232 genera, 25,166 BINs; the largest genus has 1,035 BINs) took 20 to 28 minutes on 2 cores: about 5 minutes for representatives, 10 for the backbone on a first run (mostly TimeTree; later runs use the cache) and 13 for the genus subtrees with MAFFT.
+The full Iberian run of November 2026 (102,794 records, 24,882 units with a genus, 1,186 genera in the backbone; the largest genus has 1,035 units) takes 48 to 53 minutes on 2 cores with a filled TimeTree cache, and at most 1.3 GB of memory ([benchmark](../../data/iberia/consistency/benchmark/REPORT.md), `results/runtime.tsv`). Of that, the genus subtrees with MAFFT take about 25 minutes (51 minutes of CPU on two cores), placing units without a genus or set aside 15 to 17, screening 5 (the second search for one-sided hits nearly triples it, [#85](https://github.com/naturalis/timegraft/issues/85)), the representatives 2 and the backbone half a minute. A first run without a cache spends several minutes more on TimeTree and ChecklistBank.
 
 ## Rooting diagnostics
 

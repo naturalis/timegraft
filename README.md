@@ -17,9 +17,11 @@ timegraft builds a time-calibrated tree with barcode reference units at the tips
 ## Features
 
 - Reads BOLD data packages (TSV or Parquet) or plain record tables
-- Builds a dated genus-level backbone from Open Tree of Life release files and TimeTree
+- Builds a dated genus-level backbone from Open Tree of Life release files and TimeTree, with the Catalogue of Life as identifier hub
+- Checks the backbone before dating: genera that the Open Tree of Life misplaces are found and moved, and conflicting TimeTree ages are fitted together by their evidence
 - One dated subtree per genus, in parallel, then grafted onto the backbone without any global tree search
 - Marker plug-ins for filtering, distances, crown ages and dating; COI and ITS settings included
+- Screens reference units that do not fit their genus, with a reason for every decision
 - Matches metabarcoding ASVs to reference units and places unmatched ones on the tree
 - Faith's PD, MPD, UniFrac and PhyloSor per sample and per pair of samples
 - Validation of barcode distances against a reference tree, per taxonomic stratum
@@ -41,7 +43,7 @@ The dated tree is written to `results/toy/timegraft.tre`. To run on your own dat
 | | |
 | --- | --- |
 | **Technical** | [Installation](docs/technical/installation.md) · [Configuration](docs/technical/configuration.md) · [Running and outputs](docs/technical/running.md) · [Development](docs/technical/development.md) · [Roadmap](docs/technical/roadmap.md) |
-| **Scientific** | [Background](docs/science/background.md) · [Prior art](docs/science/prior-art.md) · [How it works](docs/science/how-it-works.md) · [Assumptions and limitations](docs/science/limitations.md) · [First results](docs/science/results/2026-11-iberia.md) |
+| **Scientific** | [Background](docs/science/background.md) · [Prior art](docs/science/prior-art.md) · [How it works](docs/science/how-it-works.md) · [Assumptions and limitations](docs/science/limitations.md) · [First results](docs/science/results/2026-11-iberia.md) · [Benchmark](data/iberia/consistency/benchmark/REPORT.md) |
 | **Manuscript** | [Draft preprint](docs/manuscript/manuscript.md) |
 
 ## Citing

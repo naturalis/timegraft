@@ -4,6 +4,8 @@ TimeTree dates only part of the backbone: in the Iberian run 261 of 779 nodes di
 
 In short: a pure-birth model is as accurate as even spacing only if it is given the size of the whole clade, not the number of genera that happen to be in the data. Given the number of genera in the clade in the Open Tree of Life synthesis, it is about as accurate as even spacing, and much less sensitive to which genera are sampled. It is now the default.
 
+
+> **Since then** ([#52](https://github.com/naturalis/timegraft/issues/52)): conflicting TimeTree ages are no longer resolved by precedence (dropping an age not younger than its dated ancestor) but fitted together, weighted by their evidence; interpolation of undated nodes is unchanged and comes after the fit. In the current Iberian run 387 of 784 nodes have a TimeTree age and 397 are interpolated ([benchmark](../../../data/iberia/consistency/benchmark/REPORT.md)).
 ## The model
 
 Under a pure-birth (Yule) process with speciation rate λ, a clade of *n* lineages is expected to have its crown at (*H<sub>n</sub>* − 1)/λ before the present, where *H<sub>n</sub>* is the *n*-th harmonic number, so roughly at ln *n*. An undated node with *n* lineages, below a dated node with *n<sub>a</sub>* and above a dated node (or a tip) with *n<sub>f</sub>*, is placed at the fraction (*h*(*n*) − *h*(*n<sub>f</sub>*)) / (*h*(*n<sub>a</sub>*) − *h*(*n<sub>f</sub>*)) of the way up from the lower age, with *h*(*n*) = *H<sub>n</sub>* − 1 and *h* = 0 for a tip. This amounts to fitting λ to each pair of dated nodes, so every TimeTree age is kept and ages still decrease towards the tips. Nothing in it depends on the barcodes, so it is the same for COI and ITS.
