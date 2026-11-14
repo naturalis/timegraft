@@ -237,6 +237,9 @@ def test_rate_outliers_flags_a_long_branch():
     assert rate_outliers(tree, 3.5, min_units=10) == {"units": [], "max_z": ""}
     even = dendropy.Tree.get(data="((a:1,b:1):1,(c:1,d:1):1);", schema="newick")
     assert rate_outliers(even)["units"] == []
+    # only the given tips are assessed: an outgroup tip left in the tree is never listed
+    assert rate_outliers(tree, 3.5, labels=["a", "b", "c", "d"])["units"] == []
+    assert rate_outliers(tree, 3.5, labels=["a", "b", "c", "d", "e"])["units"] == ["e"]
 
 
 @pytest.mark.skipif(shutil.which("vsearch") is None, reason="needs vsearch")

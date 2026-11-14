@@ -112,6 +112,22 @@ def test_upgrade_survives_network_trouble():
     assert is_legacy(cache.get("mrca:1+2"))
 
 
+def test_upgrade_keeps_the_legacy_entry_on_an_http_error():
+    from timegraft.webapi import ApiError
+
+    cache = JsonCache(None)
+    cache.set("mrca:1+2", {"found": [1, 2], "age": 50.0})
+
+    def fetch(url, payload=None):
+        raise ApiError(503, "service unavailable")
+
+    tt = TimeTree(cache, fetch=fetch, upgrade_legacy=True)
+    assert tt.split_age([[1], [2]]) == 50.0
+    assert is_legacy(cache.get("mrca:1+2")) and "error" not in cache.get("mrca:1+2")
+    tt.prefetch([[1, 2]])  # the concurrent path too
+    assert is_legacy(cache.get("mrca:1+2")) and "error" not in cache.get("mrca:1+2")
+
+
 def _fake(ages, missing=()):
     def fetch(url, payload=None):
         ids = [int(i) for i in url.split("/mrca/id/")[1].split("/")[0].split("+")]
