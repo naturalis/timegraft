@@ -167,10 +167,14 @@ class Taxonomy:
         return None
 
 
-def lookup_ids(taxonomy: "Taxonomy", genus: str, n_species: int = 12) -> list:
-    """The genus's NCBI id (or None) followed by up to ``n_species`` species ids, spread over the list."""
+def lookup_ids(taxonomy: "Taxonomy", genus: str, n_species: int = 12, keep=None) -> list:
+    """The genus's NCBI id (or None) followed by up to ``n_species`` species ids, spread over the list.
+
+    With ``keep`` (NCBI id to bool) only the species ids it accepts are spread
+    over; the genus id is returned as it is (for re-anchored genera, #69).
+    """
     match = taxonomy.genus.get(genus) or {}
-    species = sorted(n for _, n in taxonomy.species.get(genus, []) if n)
+    species = sorted(n for _, n in taxonomy.species.get(genus, []) if n and (keep is None or keep(n)))
     if len(species) > n_species:
         step = len(species) / n_species
         species = [species[int(i * step)] for i in range(n_species)]
@@ -606,7 +610,8 @@ def _spread(items: list, n: int) -> list:
 
 def crown_ages(taxonomy: Taxonomy, timetree, genera: list[str], max_species: int = 12,
                sampled: dict[str, set[str]] | None = None, basis: str = "sampled", min_sampled: int = 2,
-               single_species: str = "none", species_ncbi: dict[str, int] | None = None) -> list[dict]:
+               single_species: str = "none", species_ncbi: dict[str, int] | None = None,
+               keep=None) -> list[dict]:
     """Crown age per genus from TimeTree, and which species it is the crown of (``CROWN_COLUMNS``).
 
     The *global* crown is the TimeTree MRCA of up to ``max_species`` of the
@@ -624,6 +629,11 @@ def crown_ages(taxonomy: Taxonomy, timetree, genera: list[str], max_species: int
     the crown of the genus does not describe; ``global`` uses the global
     crown instead.
 
+    With ``keep`` (genus and NCBI id to bool; :meth:`timegraft.reanchor.IdScreen.keep`)
+    only the species ids it accepts are queried, for both bases, and
+    ``n_sampled_species`` counts those: a re-anchored genus is not dated with
+    species of the other animal OTT merged into it (#69).
+
     Either age is a lower bound: the species queried need not span the
     crown. Genera with fewer than two species known to TimeTree get no age.
     Every genus with a decision gets a row; ``crown_age`` is empty where
@@ -638,11 +648,12 @@ def crown_ages(taxonomy: Taxonomy, timetree, genera: list[str], max_species: int
     names_to_ncbi.update({k: v for k, v in (species_ncbi or {}).items() if v})
     global_picks, sampled_picks, n_sampled = {}, {}, {}
     for genus in genera:
-        species = [n for _, n in taxonomy.species.get(genus, []) if n]
+        species = [n for _, n in taxonomy.species.get(genus, []) if n and (keep is None or keep(genus, n))]
         if len(species) >= 2:
             global_picks[genus] = _spread(species, max_species)
         if sampled is not None and genus in sampled:
-            ids = {names_to_ncbi[n] for n in sampled[genus] if names_to_ncbi.get(n)}
+            ids = {names_to_ncbi[n] for n in sampled[genus]
+                   if names_to_ncbi.get(n) and (keep is None or keep(genus, names_to_ncbi[n]))}
             n_sampled[genus] = len(ids)
             if len(ids) >= min_sampled:
                 sampled_picks[genus] = _spread(list(ids), max_species)
