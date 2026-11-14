@@ -1,6 +1,6 @@
 """Crown ages of every genus under the four combinations of crown basis and plausibility test (#54).
 
-Usage: python crown_compare.py <subtrees dir> <global crown_ages.tsv> <sampled crown_ages.tsv>
+Usage: python crown_compare.py <subtrees dir (shard_*.tsv of the workflow, or subtrees_*.tsv)> <global crown_ages.tsv> <sampled crown_ages.tsv>
                                [--known crown_ages table] [--out out.tsv] [--run-known table]
 
 Recomputes the crown age decision from the provenance of a genus-stage run (root-to-tip, rate, stem),
@@ -9,7 +9,7 @@ is the user's crown age table (``crown_ages`` in the configuration; for Iberia
 ``data/crown_ages/literature.tsv``), which is applied before TimeTree, as in the workflow. The check
 against the run uses the table the run was made with (``--run-known``; none by default).
 """
-import argparse, csv, glob, math, statistics
+import argparse, csv, glob, math, statistics, sys
 import dendropy
 from timegraft.calibrate import read_crown_table
 from timegraft.dating import crown_age
@@ -26,7 +26,11 @@ folder, global_path, sampled_path, out = args.folder, args.global_path, args.sam
 known = read_crown_table(args.known) if args.known else {}
 run_known = read_crown_table(args.run_known) if args.run_known else {}
 prov = {}
-for path in sorted(glob.glob(f"{folder}/subtrees_*.tsv")):
+# the workflow writes subtrees/shard_<i>.tsv; the stand-alone genus runs of these records, subtrees_<i>.tsv
+paths = sorted(glob.glob(f"{folder}/shard_*.tsv")) or sorted(glob.glob(f"{folder}/subtrees_*.tsv"))
+if not paths:
+    sys.exit(f"no shard_*.tsv or subtrees_*.tsv in {folder}")
+for path in paths:
     for r in csv.DictReader(open(path), delimiter="\t"):
         prov[r["genus"]] = r
 def crowns(path):

@@ -7,6 +7,7 @@ import shutil
 import statistics
 import subprocess
 import tempfile
+from collections.abc import Iterable
 from pathlib import Path
 
 import dendropy
@@ -98,7 +99,7 @@ def build_genus(
     genus_rate, rate_source = rate if rate is not None else (crown_cfg.get("rate"), "default")
     root_to_tip = mean_root_to_tip(tree)
     screening = marker_cfg.get("screening") or {}
-    outliers = rate_outliers(tree, float(screening.get("rate_outlier_z", 3.5)))
+    outliers = rate_outliers(tree, float(screening.get("rate_outlier_z", 3.5)), labels=in_names)
     action = screening.get("rate_outlier_action", "flag")
     if action not in ("flag", "set_aside"):
         raise ValueError(f"screening.rate_outlier_action must be flag or set_aside, not {action!r}")
@@ -190,7 +191,8 @@ def build_genus(
     return tree, provenance
 
 
-def rate_outliers(tree: dendropy.Tree, threshold: float = 3.5, min_units: int = 4) -> dict:
+def rate_outliers(tree: dendropy.Tree, threshold: float = 3.5, min_units: int = 4,
+                  labels: Iterable[str] | None = None) -> dict:
     """Units whose root-to-tip distance stands out within the genus (#55).
 
     A relative-rate check on the rooted genus tree, before dating: a unit
@@ -202,9 +204,15 @@ def rate_outliers(tree: dendropy.Tree, threshold: float = 3.5, min_units: int = 
     ``max_z`` is the largest score in the genus. What happens to them is up to
     the caller (``screening.rate_outlier_action`` in ``build_genus``). Genera
     with fewer than ``min_units`` units, or without spread, are not assessed.
+    ``labels``, when given, restricts the check to those tips (the ingroup):
+    ``root_genus`` returns the ingroup only, but the check should not depend on
+    that.
     """
+    keep = set(labels) if labels is not None else None
     distances = {}
     for leaf in tree.leaf_node_iter():
+        if keep is not None and leaf.taxon.label not in keep:
+            continue
         node, path = leaf, 0.0
         while node.parent_node is not None:
             path += node.edge.length or 0.0

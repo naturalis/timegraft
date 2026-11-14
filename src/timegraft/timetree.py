@@ -129,6 +129,9 @@ class TimeTree:
         except Exception as err:  # network trouble: keep the old entry, try again next run
             log.warning("could not upgrade the TimeTree cache entry for %s: %s", self._key(ids), err)
             return old
+        if new.get("error"):  # an HTTP error comes back as an entry, not an exception: keep the old one too
+            log.warning("could not upgrade the TimeTree cache entry for %s: %s", self._key(ids), new["error"])
+            return old
         fresh_found, fresh_age = new["found"], new["age"]
         new["found"], new["age"] = list(old.get("found") or []), old.get("age")
         new["upgraded_from"] = old.get("v", 1)
