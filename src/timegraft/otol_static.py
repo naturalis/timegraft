@@ -546,22 +546,120 @@ def synth_nodes(synth: SynthTree, anchor: dict[str, int], tree) -> dict:
 SUPPORT_KINDS = ("supported_by", "conflicts_with", "resolves", "partial_path_of", "terminal")
 
 
+class _JSONStream:
+    """Values from a JSON text, read incrementally from a file handle.
+
+    Holds only a window of the text: each value is decoded with
+    :meth:`json.JSONDecoder.raw_decode` once it is complete in the buffer, and
+    the buffer is extended when it is not. Enough to walk the members of an
+    object without loading the document; the members themselves are decoded
+    whole.
+    """
+
+    CHUNK = 1 << 20
+    _WS = re.compile(r"[ \t\n\r]*")
+
+    def __init__(self, handle):
+        self.handle = handle
+        self.buf = ""
+        self.pos = 0
+        self.eof = False
+        self.decoder = json.JSONDecoder()
+
+    def _fill(self) -> bool:
+        if self.eof:
+            return False
+        # grow the read with the pending text, so a long value is re-scanned a bounded number of times
+        chunk = self.handle.read(max(self.CHUNK, len(self.buf) - self.pos))
+        if not chunk:
+            self.eof = True
+            return False
+        self.buf = self.buf[self.pos:] + chunk
+        self.pos = 0
+        return True
+
+    def peek(self) -> str:
+        """The next non-whitespace character, or ``""`` at the end."""
+        while True:
+            self.pos = self._WS.match(self.buf, self.pos).end()
+            if self.pos < len(self.buf):
+                return self.buf[self.pos]
+            if not self._fill():
+                return ""
+
+    def expect(self, char: str) -> None:
+        found = self.peek()
+        if found != char:
+            raise ValueError(f"malformed JSON: expected {char!r}, found {found!r}")
+        self.pos += 1
+
+    def value(self):
+        self.peek()
+        while True:
+            try:
+                obj, end = self.decoder.raw_decode(self.buf, self.pos)
+            except json.JSONDecodeError:
+                if self._fill():
+                    continue
+                raise
+            # a number cut off at the end of the buffer decodes without error; make sure it is whole
+            if end == len(self.buf) and self._fill():
+                continue
+            self.pos = end
+            return obj
+
+    def members(self):
+        """(key, value) of the object that starts here, in file order."""
+        self.expect("{")
+        if self.peek() == "}":
+            self.pos += 1
+            return
+        while True:
+            key = self.value()
+            self.expect(":")
+            yield key, self
+            if self.peek() == ",":
+                self.pos += 1
+            else:
+                self.expect("}")
+                return
+
+
+def _top_level_member(handle, name: str):
+    """(key, value) of the object under the top-level key ``name``, streamed (#72).
+
+    Other top-level values are decoded and dropped one at a time; nothing is
+    yielded when the key is absent or does not hold an object.
+    """
+    stream = _JSONStream(handle)
+    for key, at in stream.members():
+        if key == name and at.peek() == "{":
+            for inner, value_at in at.members():
+                yield inner, value_at.value()
+        else:
+            at.value()
+
+
 def synthesis_support(path: str | Path, labels: set[str] | None = None) -> dict[str, dict[str, int]]:
     """Number of source trees per kind of annotation, per node of the synthetic tree.
 
     Read from the synthesis ``annotations.json``. The taxonomy is not a source
     tree there, so a node that is absent, or has no ``supported_by``, rests on
     the taxonomy alone. With ``labels`` only those nodes are kept.
+
+    The file (61 MB, about 340,000 nodes for synthesis 16.1) is streamed rather
+    than loaded, so only one node's annotation is held at a time (#72); as with
+    :func:`json.load`, the last of duplicate keys wins.
     """
-    with open(path, encoding="utf-8") as handle:
-        nodes = json.load(handle).get("nodes", {})
     out = {}
-    for label, annotation in nodes.items():
-        if labels is not None and label not in labels:
-            continue
-        if not isinstance(annotation, dict):
-            continue
-        out[label] = {k: len(annotation[k]) for k in SUPPORT_KINDS if isinstance(annotation.get(k), dict)}
+    with open(path, encoding="utf-8") as handle:
+        for label, annotation in _top_level_member(handle, "nodes"):
+            if labels is not None and label not in labels:
+                continue
+            if not isinstance(annotation, dict):
+                out.pop(label, None)
+                continue
+            out[label] = {k: len(annotation[k]) for k in SUPPORT_KINDS if isinstance(annotation.get(k), dict)}
     return out
 
 
