@@ -2,6 +2,7 @@ step	seconds	peak_rss_mb	max_single_process_mb	peak_tree_rss_mb
 backbone, layer off (consistency-layer code)	18.5	907	907	907
 backbone, default	22.1	1190	1190	1190
 backbone, default without synthesis_support (annotations.json not read; ages differ)	20.7	909	909	909
+backbone, default, annotations.json streamed (#72; outputs byte-identical to default)	19.7	909	909	909
 screening, layer off	90.3	390	298	390
 screening, default	268.2	475	475	475
 full run from main (Snakemake, two jobs at a time)	2875.8	820	691	820

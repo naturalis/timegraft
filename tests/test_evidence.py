@@ -8,8 +8,8 @@ import pytest
 
 from timegraft.backbone_build import (GENERA_COLUMNS, REPORT_COLUMNS, date_topology, genera_rows, records_lineage,
                                       timetree_summary)
-from timegraft.otol_static import (CROWN_COLUMNS, SynthTree, Taxonomy, crown_ages, genus_anchor_info, genus_anchors,
-                                   genus_topology_newick, lineage_names, synth_nodes, synthesis_support)
+from timegraft.otol_static import (CROWN_COLUMNS, SUPPORT_KINDS, SynthTree, Taxonomy, crown_ages, genus_anchor_info,
+                                   genus_anchors, genus_topology_newick, lineage_names, synth_nodes, synthesis_support)
 from timegraft.timetree import EVIDENCE_COLUMNS, TimeTree, is_legacy, parse_response
 from timegraft.webapi import JsonCache
 
@@ -219,6 +219,53 @@ def test_anchor_info_and_synthesis_nodes(tmp_path):
     }}))
     support = synthesis_support(path, {"ott2", "mrcaott6ott12", "ott99"})
     assert support == {"ott2": {"supported_by": 2, "conflicts_with": 1}, "mrcaott6ott12": {"resolves": 1}}
+
+
+@pytest.mark.parametrize("chunk", [1, 2, 3, 7, 1 << 20])
+def test_synthesis_support_streams_like_json_load(tmp_path, monkeypatch, chunk):
+    # #72: read incrementally; same result as json.load at any chunk boundary
+    from timegraft import otol_static
+    monkeypatch.setattr(otol_static._JSONStream, "CHUNK", chunk)
+    document = {
+        "date_completed": "2025-12-20", "num_tips": 12345678, "sources": ["ot_1@t1", "ot_2@t2"],
+        "source_id_map": {"ot_1@t1": {"study_id": "ot_1", "nested": [1, 2.5e-3, True, None, "\\u00e9 \\" ]}},
+        "nodes": {
+            "ott2": {"supported_by": {"a@t1": "n1", "b@t2": "n2"}, "conflicts_with": {"c@t3": ["n9"]}},
+            "mrcaott6ott12": {"resolves": {"a@t1": "n3"}, "was_uncontested": True},
+            "ott99": None,
+            "ott7": {},
+            "ott1234567": {"terminal": {"x@t9": "ott1234567"}, "supported_by": []},
+        },
+        "tree_id": "opentree16.1", "root_ott_id": 93302,
+    }
+    path = tmp_path / "annotations.json"
+    for text in (json.dumps(document), json.dumps(document, indent=1), json.dumps(document, separators=(",", ":"))):
+        path.write_text(text, encoding="utf-8")
+        expected = {k: {kind: len(v[kind]) for kind in SUPPORT_KINDS if isinstance(v.get(kind), dict)}
+                    for k, v in json.loads(text)["nodes"].items() if isinstance(v, dict)}
+        assert synthesis_support(path) == expected
+        assert list(synthesis_support(path)) == list(expected)
+        assert synthesis_support(path, {"ott2", "ott1234567", "ott404"}) == {
+            "ott2": {"supported_by": 2, "conflicts_with": 1}, "ott1234567": {"terminal": 1}}
+
+
+def test_synthesis_support_edge_cases(tmp_path):
+    path = tmp_path / "annotations.json"
+    path.write_text('{"tree_id": "x"}')
+    assert synthesis_support(path) == {}  # no nodes
+    path.write_text('{"nodes": {}, "tree_id": "x"}')
+    assert synthesis_support(path) == {}
+    path.write_text('{"nodes": null}')
+    assert synthesis_support(path) == {}
+    # the last of duplicate keys wins, as with json.load
+    path.write_text('{"nodes": {"ott1": {"resolves": {"a": 1}}, "ott1": {"supported_by": {"b": 1, "c": 2}}}}')
+    assert synthesis_support(path) == {"ott1": {"supported_by": 2}}
+    path.write_text('{"nodes": {"ott1": {"resolves": {"a": 1}}, "ott1": null}}')
+    assert synthesis_support(path) == {}
+    for broken in ('{"nodes": {"ott1": {"resolves": {"a": 1}}', '{"nodes": {"ott1" {}}}', '["nodes"]', ''):
+        path.write_text(broken)
+        with pytest.raises(ValueError):
+            synthesis_support(path)
 
 
 def test_crown_ages_carry_evidence():
