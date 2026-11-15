@@ -31,6 +31,7 @@ lineage_of = records_lineage(read_tsv(snakemake.input.records)) if snakemake.inp
 extra = [lineage_of]
 synth_nodes, support = None, None
 concordance = []
+id_screen = None  # the NCBI ids re-anchored genera may be dated with (#69)
 
 # COL XR as identifier hub (#48): genera (and optionally species) resolved with the lineage of their records
 col_cfg = settings.get("col") or {}
@@ -159,6 +160,22 @@ try:
                 for row in concordance:
                     row["placement_action"] = provenance.get(row["genus"], {}).get("placement_action", "")
                 extra.append(provenance)
+                # the ids a moved genus is dated with: only those whose NCBI lineage agrees with its new place,
+                # so no species of another animal merged into it by OTT reaches TimeTree (#69)
+                if moved and re_cfg.get("check_ids", True):
+                    def classify(ncbi_id):
+                        return client.classification(NCBI_DATASET, str(ncbi_id))
+
+                    try:
+                        id_screen = ra.IdScreen(classify, {g: ra.id_reference(taxonomy, classify, uid)
+                                                           for g, (_, uid) in moved.items()},
+                                                cc.LEVELS[re_cfg.get("min_severity", "class")])
+                        for g in sorted(moved):
+                            value = ncbi[g] if isinstance(ncbi[g], (list, tuple)) else [ncbi[g]]
+                            ncbi[g] = id_screen.screen(g, value,
+                                                       lambda keep, g=g: lookup_ids(taxonomy, g, keep=keep)[1:])
+                    finally:
+                        cache.save()
             extra.append({r["genus"]: {k: r[k] for k in ("lineage_distance", "merged_id_distance",
                                                          "neighbour_concordance", "concordance_flag")}
                           for r in concordance})
@@ -182,7 +199,14 @@ try:
             crowns = crown_ages(taxonomy, timetree, [g for g in genera if g in placed and placed[g] != "unmatched"],
                                 sampled=sampled, basis=cq_cfg.get("basis", "sampled"),
                                 min_sampled=int(cq_cfg.get("min_sampled", 2)),
-                                single_species=cq_cfg.get("single_species", "none"), species_ncbi=col_ncbi)
+                                single_species=cq_cfg.get("single_species", "none"), species_ncbi=col_ncbi,
+                                keep=id_screen.keep if id_screen is not None else None)
+        if id_screen is not None:
+            # after the crown queries, which may check further (sampled) ids
+            extra.append({g: id_screen.genera_row(g) for g in id_screen.references})
+            for row in concordance:
+                if row["genus"] in id_screen:
+                    row.update(id_screen.audit_row(row["genus"]))
     else:
         from timegraft.opentree import OpenTree, genus_topology
 
@@ -223,7 +247,7 @@ write_tsv(snakemake.output.concordance, concordance, CONCORDANCE_COLUMNS)
 # what the backbone was built from, and in what format the outputs are (#47)
 entries = [v for k, v in cache.data.items() if k.startswith("mrca:") and isinstance(v, dict)]
 metadata = {
-    "output_format": {"genera.tsv": 6, "node_ages.tsv": 4, "crown_ages.tsv": 3, "concordance.tsv": 2,
+    "output_format": {"genera.tsv": 7, "node_ages.tsv": 4, "crown_ages.tsv": 3, "concordance.tsv": 3,
                       "timetree_cache": CACHE_VERSION},
     # which species the TimeTree crown ages are the crowns of (#54)
     "crowns": {"settings": settings.get("crown_query") or {},
@@ -257,6 +281,13 @@ metadata = {
     "reanchor": {
         "settings": settings.get("reanchor") or {},
         "genera_by_action": dict(Counter(r.get("placement_action") for r in concordance if r.get("placement_action"))),
+        # NCBI ids of the moved genera checked against their new place, and dropped by reason (#69)
+        "ids": None if id_screen is None else {
+            "checked": sum(len(d) for d in id_screen.decisions.values()),
+            "dropped_by_reason": dict(Counter(r for d in id_screen.decisions.values() for r in d.values() if r)),
+            "genera_without_ids": sorted(g for g in id_screen.references
+                                         if not any(not r for r in id_screen.decisions[g].values())),
+        },
     },
     "col": None if clb is None else {
         **clb.info,

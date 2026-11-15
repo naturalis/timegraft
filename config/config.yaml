@@ -94,6 +94,8 @@ backbone_build:
   reanchor:                  # move genera that placement concordance flags, before dating (#50)
     mode: apply              # apply; report (decide and record, change nothing); off
     min_severity: class      # only flags whose lineages part at this rank or higher
+    check_ids: true          # send a moved genus to TimeTree only with NCBI ids whose lineage agrees with
+                             # its new place below min_severity; the others are dropped (#69)
     overrides:               # optional curated table: genus, action (reanchor or keep), target
                              # (rank:name or ott:<id>), source, note; e.g. config/placement_overrides.tsv
   cache: resources/api_cache.json

@@ -69,6 +69,7 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.concordance.min_flags` | 2 | Failed checks needed to flag a genus |
 | `backbone_build.reanchor.mode` | `apply` | Move genera that placement concordance flags, before dating: `apply`; `report` (decide and record only); `off` ([provenance](provenance.md#re-anchoring-flagged-genera), #50) |
 | `backbone_build.reanchor.min_severity` | `class` | Only move genera whose lineages part at this rank or higher |
+| `backbone_build.reanchor.check_ids` | `true` | Date a moved genus only with NCBI ids whose NCBI lineage agrees with its new place below `min_severity`; the others (such as species of another animal that OTT merged into the genus) are dropped ([provenance](provenance.md#re-anchoring-flagged-genera), #69) |
 | `backbone_build.reanchor.overrides` | | Curated table (`genus`, `action` `reanchor` or `keep`, `target`, `source`, `note`), e.g. `config/placement_overrides.tsv` |
 | `backbone_build.cache` | `resources/api_cache.json` | Cache of TimeTree answers; keep it between runs |
 

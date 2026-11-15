@@ -662,6 +662,8 @@ GENERA_COLUMNS = (
     # re-anchoring of flagged genera (#50): what was done, from where to where, why, on whose authority
     "placement_action", "original_status", "original_anchor", "reanchor_target", "reanchor_how",
     "reanchor_trigger", "reanchor_source", "reanchor_note",
+    # NCBI ids of a re-anchored genus checked against its new place, and dropped (#69; which, in concordance.tsv)
+    "reanchor_ids_checked", "reanchor_ids_dropped",
 )
 GENERA_RESERVED = ()
 LINEAGE_RANKS = ("family", "order", "class", "phylum")
