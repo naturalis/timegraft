@@ -1,0 +1,5 @@
+variant	arm	setting	injected	flagged	flagged_share	by_two_checks	by_lineage_alone	review	back_in_own_class	in_another_class	false_flags	false_flags_per_seed	false_flag_genera	corrected_stem_within_1.5	other_stems_moved	other_stems_moved_per_seed
+merge	default	lineage_alone_level: class	120	120	1.000	118	2	0	119	1	0	0;0;0;0;0		86	297	63;79;89;59;7
+merge	control	lineage_alone_level: off	120	118	0.983	118	0	2	117	1	0	0;0;0;0;0		85	297	63;79;89;59;7
+name	default	lineage_alone_level: class	120	120	1.000	29	91	0	120	0	0	0;0;0;0;0		74	388	88;74;52;105;69
+name	control	lineage_alone_level: off	120	29	0.242	29	0	91	28	1	0	0;0;0;0;0		15	177	27;40;33;17;60

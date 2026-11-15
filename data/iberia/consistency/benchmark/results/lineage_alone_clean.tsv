@@ -1,0 +1,3 @@
+arm	genus	flag_rule	severity	n_flags	lineage_distance
+default	Onchidella	two_checks	5	3	5
+control	Onchidella	two_checks	5	3	5
