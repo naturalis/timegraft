@@ -18,15 +18,24 @@ from the corrected backbone as for any other genus.
 A curated table can force a correction (``reanchor``) or prevent one
 (``keep``). Every decision is recorded in ``genera.tsv`` and
 ``concordance.tsv``.
+
+Moving a genus does not correct the identifiers it is dated with. Where OTT
+merged two genera of the same name, its taxon holds the species, and the
+NCBI ids, of both animals (*Onchidella*: gastropods and sand dollars), so
+TimeTree could still be asked for the age of the split between the two.
+:class:`IdScreen` therefore checks every NCBI id of a re-anchored genus
+against the NCBI lineage of the place it was moved to, and only those that
+agree go to TimeTree, in node queries and crown queries alike (#69).
 """
 
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Mapping
+from typing import Callable, Mapping, Sequence
 
 import numpy as np
 
+from .concordance import LEVEL_NAME, classification_lineage, split_level
 from .seqio import read_tsv
 
 MODES = ("apply", "report", "off")
@@ -35,6 +44,10 @@ OVERRIDE_COLUMNS = ("genus", "action", "target", "source", "note")
 # genera.tsv columns (#50)
 COLUMNS = ("placement_action", "original_status", "original_anchor", "reanchor_target", "reanchor_how",
            "reanchor_trigger", "reanchor_source", "reanchor_note")
+# genera.tsv columns of the identifier check (#69): NCBI ids checked and dropped (the genus id among them)
+ID_COLUMNS = ("reanchor_ids_checked", "reanchor_ids_dropped")
+# concordance.tsv columns of the same check: the lineage checked against, and the ids kept and dropped
+ID_AUDIT_COLUMNS = ("reanchor_ids_against", "reanchor_kept_ids", "reanchor_dropped_ids")
 
 
 def read_overrides(path: str | Path | None) -> dict[str, dict[str, str]]:
@@ -238,3 +251,109 @@ def plan(synth, taxonomy, names, matches: Mapping[str, dict], anchors: Mapping[s
             moved[genus] = (node, uid)
         provenance[genus] = row
     return provenance, moved
+
+
+def id_reference(taxonomy, classify: Callable[[int], Sequence[Mapping]], uid: int) -> tuple[list | None, str]:
+    """The NCBI lineage of the place a genus was moved to, for :class:`IdScreen` (#69).
+
+    The target taxon ``uid`` or, where it has no NCBI id or NCBI does not
+    classify that id, the nearest taxon above it that does: its name and rank,
+    followed by its NCBI classification (``classify``: NCBI id to a
+    ChecklistBank classification, root first), nearest first. Checking against
+    NCBI's own classification, rather than against the reference lineage from
+    COL or the records, keeps differences in naming between the two out of
+    the comparison. Also returns that taxon as ``rank:name (ncbi:id)``;
+    ``(None, "")`` when there is none.
+    """
+    for node, ncbi in lineage_from(taxonomy, uid):
+        if not ncbi:
+            continue
+        classification = classify(int(ncbi))
+        if not classification:
+            continue
+        rank, name = taxonomy.rank_name.get(node) or ("", "")
+        head = [(name, rank)] if name else []
+        return head + classification_lineage(classification), f"{rank}:{name} (ncbi:{ncbi})"
+    return None, ""
+
+
+class IdScreen:
+    """Which NCBI ids of re-anchored genera may be sent to TimeTree (#69).
+
+    ``references`` maps each re-anchored genus to the result of
+    :func:`id_reference`. An id is kept when its NCBI lineage parts from that
+    reference below ``level`` (a level of
+    :data:`timegraft.concordance.LEVELS`; the re-anchoring threshold, class by
+    default), and dropped when it parts at ``level`` or above
+    (``parts_at_<rank>``), when NCBI does not classify it (``unclassified``),
+    or when the genus has no reference to check against (``no_reference``):
+    an id that cannot be checked is not trusted for a genus known to be
+    misplaced. Genera that were not re-anchored are not checked, and all their
+    ids are kept. Decisions are made on first use and remembered.
+    """
+
+    def __init__(self, classify: Callable[[int], Sequence[Mapping]], references: Mapping[str, tuple[list | None, str]],
+                 level: int):
+        self.classify = classify
+        self.references = dict(references)
+        self.level = int(level)
+        self.decisions: dict[str, dict[int, str]] = {g: {} for g in self.references}
+        self.genus_id: dict[str, int] = {}
+
+    def __contains__(self, genus: str) -> bool:
+        return genus in self.references
+
+    def _reason(self, genus: str, ncbi_id: int) -> str:
+        reference = self.references[genus][0]
+        if not reference:
+            return "no_reference"
+        classification = self.classify(ncbi_id)
+        if not classification:
+            return "unclassified"
+        level, _ = split_level([(f"id:{ncbi_id}", "")] + classification_lineage(classification), reference)
+        return "" if level < self.level else f"parts_at_{LEVEL_NAME[level]}"
+
+    def keep(self, genus: str, ncbi_id) -> bool:
+        """Whether ``ncbi_id`` may stand for ``genus`` in a TimeTree query."""
+        if genus not in self.references or not ncbi_id:
+            return True
+        ncbi_id = int(ncbi_id)
+        decided = self.decisions[genus]
+        if ncbi_id not in decided:
+            decided[ncbi_id] = self._reason(genus, ncbi_id)
+        return decided[ncbi_id] == ""
+
+    def screen(self, genus: str, ids: Sequence, species: Callable[[Callable[[int], bool]], list]) -> list:
+        """The identifier list for :func:`timegraft.backbone_build.date_topology` of a re-anchored genus.
+
+        ``ids`` is its current list (genus id first, as
+        :func:`timegraft.otol_static.lookup_ids` and ``join_ncbi`` give it);
+        ``species`` returns the species ids from OTT given a filter, as
+        :func:`~timegraft.otol_static.lookup_ids` does with ``keep``. The
+        genus id is set to 0 when it is dropped. When nothing is kept the
+        list holds no id, so the nodes above the genus are queried with its
+        other genera or, failing those, the higher taxa of its new place.
+        """
+        head = int(ids[0]) if ids and ids[0] else 0
+        if head:
+            self.genus_id[genus] = head
+            if not self.keep(genus, head):
+                head = 0
+        return [head] + list(species(lambda n: self.keep(genus, n)))
+
+    def genera_row(self, genus: str) -> dict[str, str]:
+        """The ``ID_COLUMNS`` of a re-anchored genus."""
+        decided = self.decisions.get(genus, {})
+        return {"reanchor_ids_checked": str(len(decided)),
+                "reanchor_ids_dropped": str(sum(1 for r in decided.values() if r))}
+
+    def audit_row(self, genus: str) -> dict[str, str]:
+        """The ``ID_AUDIT_COLUMNS`` of a re-anchored genus; the genus id is marked ``genus:``."""
+        decided = self.decisions.get(genus, {})
+
+        def label(i):
+            return f"genus:{i}" if self.genus_id.get(genus) == i else str(i)
+
+        return {"reanchor_ids_against": self.references.get(genus, (None, ""))[1] or "none",
+                "reanchor_kept_ids": ";".join(label(i) for i, r in sorted(decided.items()) if not r),
+                "reanchor_dropped_ids": ";".join(f"{label(i)}:{r}" for i, r in sorted(decided.items()) if r)}

@@ -50,6 +50,9 @@ COLUMNS = (
     "n_evaluable", "n_flags", "severity", "concordance_flag",
     # what was done about it (#50), and the barcode-neighbour check again on the corrected topology
     "placement_action", "neighbour_concordance_after",
+    # which NCBI ids of a re-anchored genus may go to TimeTree (#69): the lineage checked against, the ids kept,
+    # and those dropped with the reason
+    "reanchor_ids_against", "reanchor_kept_ids", "reanchor_dropped_ids",
 )
 
 
