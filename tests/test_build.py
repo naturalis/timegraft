@@ -119,3 +119,43 @@ def test_rate_outliers_are_listed_or_set_aside(long_branch):
 
     with pytest.raises(ValueError):
         build_genus("Genus", ingroup, outgroup, 40.0, {**MARKER, "screening": {"rate_outlier_action": "drop"}}, {})
+
+
+def leaf_labels(tree):
+    return {leaf.taxon.label for leaf in tree.leaf_node_iter()}
+
+
+def test_misplaced_units_are_kept_by_default(genus):
+    ingroup, outgroup = genus
+    tree, prov = build_genus("Genus", ingroup, outgroup, 40.0, MARKER, {})
+    assert prov["misplaced"] == "G_odd" and prov["misplaced_set_aside"] == "" and prov["misplaced_action"] == ""
+    assert "G_odd" in leaf_labels(tree) and prov["n_units"] == 7
+    _, same = build_genus("Genus", ingroup, outgroup, 40.0, MARKER, {}, rooting={"misplaced_action": "keep"})
+    assert same == prov
+
+
+def test_misplaced_units_can_be_set_aside(genus):
+    # #75: build the subtree without the units the root puts among the outgroup
+    ingroup, outgroup = genus
+    _, kept = build_genus("Genus", ingroup, outgroup, 40.0, MARKER, {})
+    tree, aside = build_genus("Genus", ingroup, outgroup, 40.0, MARKER, {}, rooting={"misplaced_action": "set_aside"})
+    assert aside["misplaced_set_aside"] == "G_odd" and aside["misplaced_action"] == "set_aside"
+    assert aside["n_units"] == 6 and "G_odd" not in leaf_labels(tree)
+    assert aside["violations"] == 0 and aside["misplaced"] == "" and aside["rooting"] == "outgroup"
+    assert float(aside["crown_age"]) < float(kept["crown_age"])  # the misplaced unit made the genus look older
+    assert is_ultrametric(tree)
+
+
+def test_misplaced_units_stay_when_too_few_would_be_left(genus):
+    ingroup, outgroup = genus
+    two = [u for u in ingroup if u[0] in ("G0", "G_odd")]
+    tree, prov = build_genus("Genus", two, outgroup, 40.0, MARKER, {}, rooting={"misplaced_action": "set_aside"})
+    assert len(prov["misplaced"].split(";")) == 1 and prov["misplaced_set_aside"] == ""  # with two units, a tie
+    assert prov["misplaced_action"] == "kept: fewer than two units would be left"
+    assert leaf_labels(tree) == {"G0", "G_odd"}
+
+
+def test_misplaced_action_is_checked(genus):
+    ingroup, outgroup = genus
+    with pytest.raises(ValueError):
+        build_genus("Genus", ingroup, outgroup, 40.0, MARKER, {}, rooting={"misplaced_action": "drop"})

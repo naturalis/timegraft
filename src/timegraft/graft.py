@@ -30,6 +30,8 @@ PROVENANCE_COLUMNS = (
     "rooting",
     "violations",
     "misplaced",
+    "misplaced_set_aside",
+    "misplaced_action",
     "root_ambiguity",
     "root_alternatives",
     "crown_age_min",

@@ -55,6 +55,12 @@ for genus in sorted(groups):
         set_aside.extend({"unit_id": unit, "reason": "screen_rate_outlier", "genera": f"{genus}:",
                           "n_records": "", "record_id": "", "sequence": seq}
                          for unit, seq in group["in"] if unit in names)
+    if provenance.get("misplaced_action") == "set_aside":
+        # units the root put among the outgroup, left out of the subtree (#75): placed like the others
+        names = set(provenance["misplaced_set_aside"].split(";"))
+        set_aside.extend({"unit_id": unit, "reason": "screen_root_misplaced", "genera": f"{genus}:",
+                          "n_records": "", "record_id": "", "sequence": seq}
+                         for unit, seq in group["in"] if unit in names)
     logging.info("%s: %d units, crown %s Ma (%s), rooting %s (%s misplaced)", genus, provenance["n_units"],
                  provenance["crown_age"], provenance["crown_source"], provenance["rooting"],
                  provenance["violations"] or 0)
@@ -62,4 +68,5 @@ for genus in sorted(groups):
 write_tsv(snakemake.output[0], out, list(PROVENANCE_COLUMNS) + ["newick"])
 write_tsv(snakemake.output.set_aside, set_aside, ["unit_id", "reason", "genera", "n_records", "record_id", "sequence"])
 if set_aside:
-    logging.info("%d units with long branches set aside from their genus subtrees", len(set_aside))
+    logging.info("%d units with long branches or misplaced by the root set aside from their genus subtrees",
+                 len(set_aside))
