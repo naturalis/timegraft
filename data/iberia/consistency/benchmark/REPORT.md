@@ -150,3 +150,27 @@ Review of the pull request (#67) found three weaknesses in the harness. All are 
 - **The injections and perturbations stop at the backbone.** They were not carried through the genus subtrees (26 minutes per run). Stem ages bound crown ages, so the direction is clear, but the size of the effect on the final tree was not measured.
 - **Blind and known.** Nine of the thresholds were set knowing the stage-level result. The three failures and the robustness results were blind.
 - **Not tested per part**: which part produces the robustness, and the options left off at the default.
+
+## Rerun after the follow-ups (#89)
+
+On 15 November 2026 the gate was run again, unchanged, on `gate-89-combined`. That branch is `main` (`4721ea0`) with the five follow-up PRs merged in the order #92, #93, #94, #95, #96: annotations streamed (#72), the identifier check (#69), the lineage check alone (#71), the rooting analysis with an option left off (#75), and the long-branch figures (#76). The baseline is the same `main` (`e20fdf6`). The procedure is that of `README.md`, including `run_posthoc.sh`. The tools were VSEARCH 2.32.0 and MAFFT 7.505, with network access to TimeTree and ChecklistBank. Some connections dropped and were retried, and none of the 65 caches of the builds holds a failed answer. The tables are in `results_89/`; `results/` remains the record of the first gate.
+
+**27 of 28 must metrics pass** (25 in the first gate):
+
+| Metric | First gate | Rerun | Threshold |
+| --- | --- | --- | --- |
+| 1c share of injected merges flagged | 0.983 (118 of 120) | 1.000 (120 of 120) | ≥ 0.50 |
+| 1d flagged and back in their class | 0.992 (117 of 118) | 0.992 (119 of 120) | ≥ 0.90 |
+| **1f** corrected stems within a factor 1.5 | 0.726 (85 of 117), fail | **0.815 (97 of 119), pass** | ≥ 0.80 |
+| **1g** other stems moved by more than 10% | 297 against 248, fail | **142 against 248, fail** | ≤ half of legacy (124) |
+| 7a wall time of the full run | 49.4 min | 57.1 min (legacy 53.4) | ≤ 1.5 × legacy |
+| **7b** peak memory of the full run | 1,321 MB, fail | **1,045 MB, pass** (legacy 832) | ≤ 1.5 × legacy |
+| 7e test suite | 235 passed | 270 passed, 2 skipped | passes |
+
+Every other metric has the same value as in the first gate (0, 1a, 1b, 1e, 2a to 2c, 3a to 3d, 4a, 4b, 5a to 5d, 6a to 6d, 7c, 7d): none of the five PRs changes the clean backbone, the noise and subsampling experiments, PD or reproducibility.
+
+- **1f and 1g** are the identifier check of #69. 1f is 97 of 119 rather than #93's 96 of 117 because #71 flags the two merges that were only listed for review. 1g still fails for the cause found in #93: in replicates 3 and 4, re-anchored genera sit at their family's node rather than within the family, which changes which nodes inside the gastropods TimeTree dates. That is #70.
+- **7b** is #72. The peak is the 1,040 MB that #92 estimated.
+- **Name-only errors** (`run_posthoc.sh`; `injection_variants.tsv`): all 120 are flagged and placed back in their class (29 and 28 in the first gate). 86 have a stem within 1.5 (15 before), and 98 other stems move (177 before; legacy 184). These are the figures #94 measured on a local merge with #69.
+
+**Recommendation.** Merge the five PRs, in the order above (#71 after #69). Then do #70 on the merged `main` and rerun the gate once more for 1g. After that, #74 tightens the gate before it is used for anything else.
