@@ -616,6 +616,8 @@ class _JSONStream:
             return
         while True:
             key = self.value()
+            if not isinstance(key, str):
+                raise ValueError(f"malformed JSON: object key {key!r} is not a string")
             self.expect(":")
             yield key, self
             if self.peek() == ",":
@@ -625,19 +627,30 @@ class _JSONStream:
                 return
 
 
+RESET = object()  # from _top_level_member: a later top-level ``name`` replaces what came before
+
+
 def _top_level_member(handle, name: str):
     """(key, value) of the object under the top-level key ``name``, streamed (#72).
 
-    Other top-level values are decoded and dropped one at a time; nothing is
-    yielded when the key is absent or does not hold an object.
+    Other top-level values are decoded and dropped one at a time. Each time
+    the key ``name`` starts, :data:`RESET` is yielded first, so that, as with
+    :func:`json.load`, the last of duplicate top-level keys wins; nothing
+    more follows when its value is not an object. Text after the top-level
+    object other than whitespace raises :class:`ValueError`, as with
+    :func:`json.load`.
     """
     stream = _JSONStream(handle)
     for key, at in stream.members():
+        if key == name:
+            yield RESET, None
         if key == name and at.peek() == "{":
             for inner, value_at in at.members():
                 yield inner, value_at.value()
         else:
             at.value()
+    if stream.peek():
+        raise ValueError("malformed JSON: data after the top-level object")
 
 
 def synthesis_support(path: str | Path, labels: set[str] | None = None) -> dict[str, dict[str, int]]:
@@ -654,6 +667,9 @@ def synthesis_support(path: str | Path, labels: set[str] | None = None) -> dict[
     out = {}
     with open(path, encoding="utf-8") as handle:
         for label, annotation in _top_level_member(handle, "nodes"):
+            if label is RESET:
+                out = {}
+                continue
             if labels is not None and label not in labels:
                 continue
             if not isinstance(annotation, dict):

@@ -262,7 +262,15 @@ def test_synthesis_support_edge_cases(tmp_path):
     assert synthesis_support(path) == {"ott1": {"supported_by": 2}}
     path.write_text('{"nodes": {"ott1": {"resolves": {"a": 1}}, "ott1": null}}')
     assert synthesis_support(path) == {}
-    for broken in ('{"nodes": {"ott1": {"resolves": {"a": 1}}', '{"nodes": {"ott1" {}}}', '["nodes"]', ''):
+    # and so are duplicate top-level nodes: the last replaces the earlier ones, whatever it holds
+    path.write_text('{"nodes": {"ott1": {"resolves": {"a": 1}}}, "nodes": {"ott2": {"terminal": {"b": 1}}}}')
+    assert synthesis_support(path) == {"ott2": {"terminal": 1}}
+    for later in ('{}', 'null', '[]'):
+        path.write_text('{"nodes": {"ott1": {"resolves": {"a": 1}}}, "tree_id": "x", "nodes": ' + later + '}')
+        assert synthesis_support(path) == {}  # json.load gives an empty or no nodes object
+    for broken in ('{"nodes": {"ott1": {"resolves": {"a": 1}}', '{"nodes": {"ott1" {}}}', '["nodes"]', '',
+                   '{"nodes": {1: {}}}', '{"nodes": {"ott1": {}}, 2: 3}', '{"nodes": {}} trailing', '{"nodes": {}}}',
+                   '{"nodes": {}} {}'):
         path.write_text(broken)
         with pytest.raises(ValueError):
             synthesis_support(path)
