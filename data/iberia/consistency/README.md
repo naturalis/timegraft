@@ -288,3 +288,38 @@ The 3 genera with wrong-side units in the legacy run only (*Dendrophyllia*, *Fel
 **Decision.** `rooting.misplaced_action` is now a setting: `keep` (the default, which changes nothing) or `set_aside`. With `set_aside`, the subtree is built once more without the misplaced units, and they are placed like units set aside by screening (reason `screen_root_misplaced`). It mirrors `screening.rate_outlier_action`.
 
 The misplaced units are genuine in the sense that the barcodes cannot place them, and they matter for the crown of a few small genera. But they are not wrong records, and leaving them in a subtree they do not resolve is what makes those crowns depend on the root. Whether `set_aside` should become the default changes 37 crown ages, so it should be decided on the gate with rooting as a metric (#74), not on this run alone. `mutual_pairs: further` (#73) addresses the screening side, and can be measured on the same gate.
+
+## `options/` (#73)
+
+The options of the consistency layer that were left at their conservative defaults, each run end to end against the default ([#73](https://github.com/naturalis/timegraft/issues/73)). It covers the four of the issue, and `rooting.misplaced_action` of #75.
+
+How it was made, on 15 November 2026:
+
+- **The default** is the full run of the gate's rerun on `gate-89-combined`. Its pipeline code equals `main` at `8e57536` except for the review fix of #72, which leaves the output unchanged.
+- **Each alternative** is that run continued at `main` (`8e57536`) with one overlay setting one option. Snakemake (`--rerun-triggers mtime`) started from the step the option affects: the genus stage for `rate_outlier_action` and `misplaced_action`, the backbone for `requery.mode`, and the screening for `translation.action` and `mutual_pairs`. Each continued through the final tree.
+- **Inputs:** `records.tsv.gz`, `config/config.yaml` and `config/iberia.yaml`, `timetree_cache.json`, OTT 3.7.3, synthesis 16.1, VSEARCH 2.32.0 and MAFFT 7.505. The runs are not committed.
+
+`compare.py OUT DEFAULT NAME=RESULTS ...` writes `options.tsv` and `crown_changes.tsv` (every crown changed by more than 10%). It uses the definitions of the gate (`benchmark/evaluate.py`: tails 3a to 3d, the three PD designs of 6a with seed 6) and of #75 (a crown depends strongly on the root when `crown_age_max ≥ 1.25 × crown_age_min`). Run on the gate's two full runs, it reproduces the gate's numbers for these metrics.
+
+| | default | `requery.mode: apply` | `translation.action: set_aside` | `mutual_pairs: further` | `rate_outlier_action: set_aside` | `misplaced_action: set_aside` |
+| --- | --- | --- | --- | --- | --- | --- |
+| units set aside by screening | 1,139 | 1,139 | 1,401 (262 `numt_like`) | 1,048 | 1,139 | 1,139 |
+| units set aside from subtrees | 0 | 0 | 0 | 0 | 432 | 282 |
+| placed / on the genus stem / left out | 872 / 476 / 6 | the same | 1,120 / 490 / 6 | 784 / 473 / 6 | 1,256 / 521 / 9 | 1,134 / 496 / 6 |
+| genera with units on the wrong side of the root | 386 | 386 | 388 | 390 | **346** | **268** |
+| units of a genus among its outgroup | 314 | 314 | 318 | 307 | **248** | **42** |
+| crowns that depend strongly on the root | 19 | 19 | 19 | 19 | **11** | **2** |
+| crowns changed by more than 10% (older / younger) | | 0 | 2 (0 / 2) | 1 (1 / 0) | 31 (0 / 31) | 35 (0 / 35) |
+| of which by more than a quarter | | 0 | 1 | 0 | 10 | 14 |
+| sum of crown ages | | ±0 | −0.14% | +0.04% | −1.09% | −1.27% |
+| 3a / 3b / 3c / 3d | 0 / 25 / 0 / 1 | 0 / 25 / 0 / 1 | 0 / 25 / 0 / 1 | 0 / 25 / 0 / 1 | 0 / 26 / 0 / 1 | 0 / 29 / 0 / 1 |
+| 6a PD rank correlation (150 units; 100 genera × 1; 100 genera × 5) | | 1.000; 1.000; 1.000 | 0.9995; 1.000; 0.998 | 0.9997; 0.9997; 0.997 | 0.994; 0.998; 0.982 | 0.995; 0.997; 0.945 |
+| median PD ratio, 100 genera × 5 | | 1.000 | 1.000 | 1.000 | 1.009 | 1.026 |
+
+What the numbers say:
+
+- **`requery.mode: apply`** changes 9 of 784 backbone nodes, all in one crab clade and by at most 0.5%. No crown, rooting or PD changes.
+- **`translation.action: set_aside`** sets aside 262 likely nuclear copies. Rooting gets slightly worse (2 more genera, 4 more units among the outgroup), and two crowns change.
+- **`mutual_pairs: further`** keeps 91 units that `both` sets aside. Rooting is mixed: 4 more genera with units on the wrong side, 7 fewer units among the outgroup. One crown changes.
+- **`rate_outlier_action: set_aside`** improves every rooting measure. It makes 31 crowns younger by more than 10%, and PD hardly moves. 3b rises by one: *Sphaerocoryne* keeps three near-identical units, its barcode age falls from 8.1 to 1.5 and its crown from 45.0 to 19.4 Ma.
+- **`misplaced_action: set_aside`** improves rooting most: 42 units among the outgroup instead of 314, and 2 crowns that depend strongly on the root instead of 19. It makes 35 crowns younger by more than 10%. 3b rises by four for the same reason as above: small genera lose their deepest units, and their barcode age falls more than their crown (*Myxilla* 40.9 to 16.8 Ma, barcode age 5.6 to 0.9). But of the 263 set-aside units that are placed, only 43 are placed in their own genus. 220 go next to units of another genus, at a median identity of 84%. That is also why PD of samples of five units per genus rises by a median of 2.6%: such a sample now spans the deeper split to wherever these units were placed.
