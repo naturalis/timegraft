@@ -8,7 +8,9 @@ FLAG with ``screening.rate_outlier_action: flag`` (the default), SET_ASIDE the s
 same ``units/``, ``backbone/`` and ``genera/`` with ``rate_outlier_action: set_aside``. Writes
 ``rate_outliers.tsv`` and ``rate_outliers_set_aside.tsv`` (the provenance columns of every genus subtree) to
 OUT_DIR, and prints the figures quoted in ``data/iberia/consistency/README.md`` and
-``docs/technical/configuration.md``.
+``docs/technical/configuration.md``. Exits with an error, after writing the tables, if a crown age changes in
+a genus without long branches, or if the two runs do not have the same subtrees: the runs then do not share
+their inputs.
 """
 
 import csv
@@ -89,8 +91,12 @@ def main():
     total_a = sum(float(r["crown_age"]) for r in flag.values() if r["crown_age"])
     total_b = sum(float(r["crown_age"]) for r in aside.values() if r["crown_age"])
     print(f"sum of all crown ages: {total_b / total_a - 1:+.2%}")
+    # the two runs differ only in the long branches set aside: any other crown that changes means they do not
+    # share their inputs, and the figures above are void
     other = [g for g in aside if g not in moved and flag.get(g, {}).get("crown_age") != aside[g]["crown_age"]]
-    print("crowns that change in genera without long branches (should be none):", other)
+    if other or set(aside) != set(flag):
+        raise SystemExit(f"crowns change outside the genera with long branches, or the subtrees differ: {other[:10]}")
+    print("crowns outside the genera with long branches: all unchanged")
 
 
 if __name__ == "__main__":
