@@ -1,0 +1,189 @@
+genus	n_units	n_misplaced	crown_age	crown_source	crown_age_min	crown_age_max	set_aside	crown_age_without	crown_source_without	violations_without	misplaced_without	crown_factor	crown_age_min_without	crown_age_max_without
+Acanthochitona	43	1	39.5127	midpoint	37.8447	39.5127	built	38.4987	midpoint	0		1.026	38.4987	38.4987
+Acartia	69	2	49.3883	midpoint	48.5899	50.9490	built	48.5997	midpoint	0		1.016	48.5997	50.8789
+Actinella	6	2	45.6591	midpoint	45.1080	46.1927	built	45.1998	midpoint	0		1.010	45.1998	45.1998
+Alona	35	1	40.9295	midpoint	40.2918	43.1260	built	40.0055	midpoint	1		1.023	40.0055	42.9893
+Alpheus	306	1	40.2966	midpoint	38.5027	40.2966	built	40.0238	midpoint	4		1.007	38.2164	40.0238
+Alpioniscus	53	2	39.4074	midpoint	38.5226	39.4074	built	38.9661	midpoint	0		1.011	38.3201	38.9661
+Amathia	27	2	52.9278	midpoint	50.3373	52.9278	built	50.2159	midpoint	0		1.054	50.2159	50.2159
+Ambigolimax	9	1	23.2078	midpoint	20.2459	23.2078	built	20.2324	midpoint	0		1.147	20.2324	20.2324
+Ampharete	45	1	18.7278	midpoint	17.9481	18.7278	built	18.1923	midpoint	3		1.029	17.8801	18.1923
+Anaecypris	3	2	10.8900	timetree			fewer than two units left							
+Androniscus	6	1	38.4865	midpoint	37.2940	38.4865	built	37.4020	midpoint	1		1.029	37.4020	37.4020
+Anteaeolidiella	12	3	14.8230	midpoint	14.1186	14.8230	built	14.0952	midpoint	0		1.052	14.0952	14.0952
+Aoroides	21	1	32.8552	midpoint	32.8552	48.2150	built	33.1266	midpoint	1		1.008	33.1266	48.1854
+Aplysia	30	1	26.4777	midpoint	24.2786	26.4777	built	24.1891	midpoint	0		1.095	24.1891	24.1891
+Apohyale	25	5	25.0216	midpoint	24.8530	25.6177	built	24.9833	midpoint	1		1.002	24.8047	24.9833
+Aporrectodea	135	1	34.0566	midpoint	33.3481	34.2514	built	33.9810	midpoint	6		1.002	33.9810	33.9810
+Ashfordia	3	2	43.6250	midpoint	43.3073	43.7139	fewer than two units left							
+Asterina	8	2	57.1314	midpoint	39.5700	57.1314	built	39.5868	midpoint	0		1.443	39.5868	39.5868
+Athanas	3	1	40.1020	midpoint	31.4333	41.0473	built	31.4333	midpoint	0		1.276	31.4333	31.4333
+Baeolidia	6	2	16.2585	midpoint	15.9641	16.2585	built	15.9142	midpoint	0		1.022	15.9142	15.9142
+Balanus	14	2	20.1501	midpoint	19.8334	20.1501	built	19.7299	midpoint	0		1.021	19.7299	19.8599
+Bathytoshia	5	2	16.3730	midpoint	7.8888	16.3730	built	7.9112	midpoint	0		2.070	7.9112	7.9112
+Batracobdella	9	1	28.9713	midpoint	27.2804	28.9713	built	27.3361	midpoint	0		1.060	27.3361	27.3361
+Berthellina	14	1	7.4200	timetree			built	7.4200	timetree	0		1.000		
+Bimastos	29	1	23.8961	timetree			built	23.8961	timetree	0		1.000		
+Bosellia	3	1	22.5682	midpoint	15.4878	22.5682	built	15.4878	midpoint	0		1.457	15.4878	15.4878
+Bugula	12	4	27.9773	midpoint	25.8289	27.9773	built	25.8230	midpoint	0		1.083	25.7879	25.8230
+Caberea	9	4	37.6081	midpoint	23.7468	37.6081	built	23.5271	midpoint	0		1.599	23.5271	23.5271
+Calappa	24	1	39.6993	midpoint	38.5584	39.6993	built	38.5071	midpoint	0		1.031	38.5071	39.0476
+Caloria	12	4	18.6580	midpoint	16.8690	20.2147	built	16.9247	midpoint	0		1.102	16.9247	16.9247
+Cavolinia	11	2	18.3000	timetree			built	18.3000	timetree	0		1.000		
+Celleporaria	19	1	41.6325	midpoint	41.2590	42.0793	built	41.2667	midpoint	1	BOLD:AHV0466	1.009	40.8627	41.2667
+Centracanthus	2	1	16.8723	midpoint	16.8723	16.8723	fewer than two units left							
+Centroscymnus	5	1	15.5828	midpoint	14.9669	15.5828	built	14.9880	midpoint	0		1.040	14.9880	14.9880
+Cernuella	26	1	38.4420	midpoint	36.7867	38.4420	built	36.6897	midpoint	0		1.048	36.6897	36.6897
+Chilostoma	36	3	28.9201	midpoint	28.8322	28.9373	built	28.7515	midpoint	3		1.006	28.7515	28.7665
+Chiroteuthis	10	1	35.2400	timetree			built	35.2400	timetree	0		1.000		
+Cirriformia	26	1	50.3707	midpoint	44.6716	50.3707	built	44.5434	midpoint	0		1.131	43.1761	44.5434
+Clausocalanus	25	1	34.8677	midpoint	33.6663	34.8677	built	33.2290	midpoint	0		1.049	33.2290	33.2290
+Cochlicella	10	2	49.1845	midpoint	33.7759	49.1845	built	33.3195	midpoint	0		1.476	33.3195	33.3195
+Conger	21	2	47.8841	timetree			built	47.8841	timetree	0		1.000		
+Conopea	15	3	16.2298	midpoint	15.9897	16.2298	built	16.0295	midpoint	2		1.012	16.0295	16.0295
+Corophium	5	2	26.5406	midpoint	24.8225	26.6724	built	24.8470	midpoint	0		1.068	24.8470	24.8470
+Cratena	10	2	19.7852	midpoint	18.8074	19.7852	built	18.8437	midpoint	0		1.050	18.4210	18.8437
+Crepidula	50	1	24.6441	midpoint	24.3722	25.6101	built	24.3900	midpoint	1		1.010	24.3900	25.5964
+Crisilla	3	2	34.9400	midpoint	34.4457	34.9400	fewer than two units left							
+Cryptosaccus	2	1	28.6103	midpoint	28.6103	28.6103	fewer than two units left							
+Cuthona	9	4	17.1040	midpoint	17.0845	17.5668	built	16.7587	midpoint	2	BOLD:ACB7199;BOLD:AHU6851	1.021	14.0612	16.7587
+Cypridopsis	38	2	46.4382	midpoint	44.7298	46.4382	built	45.1644	midpoint	0		1.028	45.1644	45.1644
+Daphnella	8	1	22.9368	midpoint	22.3344	22.9368	built	22.4417	midpoint	0		1.022	22.4417	24.0964
+Dendrodoris	29	1	26.3839	midpoint	24.0883	26.6020	built	26.4985	midpoint	5		1.004	26.4985	26.4985
+Dentex	11	1	12.1463	midpoint	10.8109	12.1463	built	10.7980	midpoint	2	BOLD:ABV4021;BOLD:ACK3584	1.125	9.6719	10.7980
+Diogenes	67	3	28.5041	midpoint	28.1417	29.6429	built	28.4728	midpoint	6		1.001	28.4728	28.4728
+Discodoris	8	2	19.7056	midpoint	18.3046	19.7056	built	18.2947	midpoint	0		1.077	18.2947	18.2947
+Doris	72	4	21.7167	midpoint	21.5355	22.4969	built	21.3287	midpoint	4		1.018	21.3287	22.0093
+Edmundsella	2	1	9.3148	midpoint	9.3148	9.3148	fewer than two units left							
+Eiseniella	21	2	33.4866	midpoint	30.4953	33.4866	built	30.3429	midpoint	0		1.104	30.3429	30.3429
+Elasmopus	35	1	39.8313	midpoint	38.9353	39.8313	built	39.1836	midpoint	0		1.017	38.4248	39.1836
+Ellisina	2	1	46.6650	midpoint	46.6650	46.6650	fewer than two units left							
+Escharoides	7	3	98.5728	timetree			built	98.5728	timetree	0		1.000		
+Eteone	53	1	44.2143	midpoint	43.3815	44.2143	built	43.5933	midpoint	0		1.014	42.7369	43.5933
+Euchaeta	7	2	13.9860	midpoint	13.5114	13.9860	built	13.5217	midpoint	0		1.034	13.5217	13.5217
+Eumida	36	3	29.9635	midpoint	28.9895	29.9635	built	28.9605	midpoint	1		1.035	28.9605	31.2792
+Euomphalia	7	1	40.6835	midpoint	38.1059	40.6835	built	39.7088	midpoint	0		1.025	39.7088	39.7088
+Euraphia	5	2	13.0760	midpoint	10.5651	13.5253	built	10.5932	midpoint	0		1.234	10.5932	10.5932
+Facelina	15	7	19.0236	midpoint	17.7437	19.5064	built	17.7373	midpoint	0		1.073	17.4089	17.7373
+Figularia	2	1	28.2907	midpoint	28.2907	28.2907	fewer than two units left							
+Fusinus	18	1	20.7190	midpoint	19.3150	20.7190	built	19.4179	midpoint	0		1.067	19.2201	19.4179
+Galeus	8	3	13.8939	midpoint	10.9497	17.3549	built	10.7500	midpoint	0		1.292	10.7500	10.7500
+Gammaropsis	11	2	37.9035	midpoint	33.8316	37.9035	built	33.8571	midpoint	3	BOLD:AAU3888;BOLD:ACP9777;BOLD:ADV5082	1.120	33.2774	34.6564
+Gargamella	2	1	18.7391	midpoint	18.7391	18.7391	fewer than two units left							
+Geodia	30	1	32.1666	timetree			built	32.1666	timetree	0		1.000		
+Goneplax	6	1	32.0366	midpoint	27.7105	32.0366	built	27.7442	midpoint	0		1.155	27.7442	27.7442
+Halichondria	10	1	27.5175	midpoint	24.5651	27.5175	built	24.1045	midpoint	2		1.142	22.7570	24.1045
+Haminoea	41	2	19.1079	midpoint	18.5779	19.1079	built	18.4746	midpoint	0		1.034	18.4746	18.4746
+Harpinia	7	2	17.9923	midpoint	16.9294	17.9923	built	16.9873	midpoint	0		1.059	16.0234	16.9873
+Hediste	74	1	43.9081	midpoint	39.2353	43.9081	built	39.2023	midpoint	0		1.120	38.5277	39.2023
+Helicella	17	1	50.1421	midpoint	48.0381	50.1421	built	47.8286	midpoint	0		1.048	47.8286	47.8286
+Helix	144	3	9.6705	timetree			built	9.6705	timetree	4		1.000		
+Hemicycla	40	1	9.6430	midpoint	9.5000	9.6430	built	9.6100	midpoint	0		1.003	9.6100	9.7284
+Herbstia	2	1	21.9950	midpoint	21.9950	21.9950	fewer than two units left							
+Heteroclymene	4	2	37.2429	midpoint	35.5907	41.8209	built	35.5907	midpoint	0		1.046	35.5907	35.5907
+Hippocampus	43	2	11.2797	timetree			built	11.2797	timetree	0		1.000		
+Hydrobia	6	1	11.7045	timetree			built	11.7045	timetree	0		1.000		
+Hygophum	20	1	16.9981	timetree			built	16.9981	timetree	1		1.000		
+Hypleurochilus	7	2	4.5481	timetree			built	4.5481	timetree	0		1.000		
+Iphimedia	4	2	19.5802	midpoint	14.0502	20.5998	built	14.0502	midpoint	0		1.394	14.0502	14.0502
+Ircinia	6	4	17.2064	midpoint_timetree_demoted	8.9205	19.0384	built	8.9205	midpoint_timetree_demoted	0		1.929	8.9205	8.9205
+Jujubinus	37	4	15.1676	timetree			built	15.1676	timetree	0		1.000		
+Learchis	2	1	18.3497	midpoint	18.3497	18.3497	fewer than two units left							
+Leiochone	5	2	47.7545	midpoint	41.1793	48.6723	built	41.3766	midpoint	0		1.154	41.3766	41.3766
+Leodice	12	1	50.8620	midpoint	49.7885	50.8620	built	50.0332	midpoint	0		1.017	49.3519	50.0332
+Lepas	27	1	70.6460	timetree			built	70.6460	timetree	3		1.000		
+Lepidochitona	17	1	42.2611	midpoint	41.2892	42.2611	built	41.8931	midpoint	4		1.009	41.7055	41.8931
+Lepidopus	2	1	15.4336	midpoint	15.4336	15.4336	fewer than two units left							
+Lepidotrigla	37	2	12.5689	timetree			built	12.5689	timetree	0		1.000		
+Leptaxis	10	1	25.2766	midpoint	24.6938	25.7842	built	24.6962	midpoint	0		1.024	24.6962	25.4541
+Leucoraja	8	3	13.3161	midpoint	9.8133	14.0297	built	9.8501	midpoint	0		1.352	9.6800	9.8501
+Limapontia	4	1	26.9777	midpoint	26.4191	26.9777	built	26.4677	midpoint	0		1.019	26.4677	26.4677
+Littorina	17	1	70.1541	timetree			built	70.1541	timetree	0		1.000		
+Loligo	5	1	21.6484	midpoint	18.0489	21.6484	built	18.2623	midpoint	0		1.185	18.2623	18.2623
+Lumbricus	123	2	29.6080	timetree			built	29.6080	timetree	1		1.000		
+Lymnaea	21	1	20.5390	midpoint	19.9020	20.7889	built	19.9584	midpoint	0		1.029	19.9584	20.6480
+Macrotritopus	4	2	25.3551	midpoint	23.7062	29.0373	built	23.7062	midpoint	0		1.070	23.7062	23.7062
+Malacocephalus	5	1	18.4246	timetree			built	18.4246	timetree	0		1.000		
+Marinogammarus	3	2	30.2312	midpoint	29.5665	30.2312	fewer than two units left							
+Melanochlamys	10	3	20.1516	midpoint	19.9464	20.1516	built	20.0668	midpoint	0		1.004	18.9953	20.0668
+Mercuria	19	1	12.3988	timetree			built	12.3988	timetree	0		1.000		
+Mesenchytraeus	52	1	64.5118	timetree			built	64.5118	timetree	2		1.000		
+Metapenaeopsis	39	1	48.3900	timetree			built	48.3900	timetree	0		1.000		
+Metapenaeus	25	2	38.3700	timetree			built	38.3700	timetree	0		1.000		
+Metridia	13	2	18.3494	midpoint	17.8314	18.3494	built	18.2085	midpoint	1		1.008	17.4840	18.2085
+Moitessieria	5	1	31.8434	midpoint	29.7501	31.8434	built	29.7580	midpoint	0		1.070	29.7580	29.7580
+Myrianida	31	1	58.1563	midpoint	57.1510	58.1563	built	57.2741	midpoint	0		1.015	57.2741	58.2915
+Mytilus	25	2	72.6009	timetree			built	72.6009	timetree	0		1.000		
+Myxilla	4	2	40.9216	midpoint	16.8474	45.5747	built	16.8474	midpoint	0		2.429	16.8474	16.8474
+Neomerinthe	12	2	16.0046	midpoint	15.3053	17.2842	built	15.3037	midpoint	1		1.046	15.3037	15.3037
+Nereiphylla	21	1	17.6581	midpoint	17.2488	17.6581	built	17.3949	midpoint	0		1.015	17.3023	17.3949
+Notomastus	14	4	80.9709	midpoint	59.5189	80.9709	built	59.4668	midpoint	0		1.362	59.4668	59.4668
+Oconnorella	2	1	35.0900	midpoint	35.0900	35.0900	fewer than two units left							
+Odontosyllis	36	1	58.5625	midpoint	55.8872	58.5625	built	55.8433	midpoint	2		1.049	55.8433	55.8433
+Oestophora	32	1	27.3447	midpoint	26.8014	27.3447	built	27.0134	midpoint	0		1.012	26.8032	27.0134
+Ophichthus	67	1	17.3758	midpoint	16.6966	18.1184	built	17.1864	midpoint	1		1.011	17.1864	17.1864
+Otala	7	1	16.1603	midpoint	14.9149	16.1603	built	15.3402	midpoint	0		1.053	15.3402	15.3402
+Pachygrapsus	9	2	27.8618	timetree			built	27.8618	timetree	2		1.000		
+Pagellus	3	1	11.3471	midpoint	7.0026	11.4263	built	7.0026	midpoint	0		1.620	7.0026	7.0026
+Palaemon	75	1	44.7685	midpoint	44.1763	44.7685	built	44.4970	midpoint	0		1.006	44.0844	44.4970
+Parablennius	20	1	8.6064	midpoint	8.4112	8.6064	built	8.3731	midpoint	2		1.028	8.3731	8.3731
+Paracyclops	5	2	20.7653	midpoint	18.3795	20.7653	built	18.3596	midpoint	0		1.131	18.1989	18.3596
+Paraeuchaeta	14	1	11.9410	midpoint	11.8224	12.9196	built	11.8361	midpoint	0		1.009	11.8361	12.8589
+Parapenaeus	15	1	20.6986	midpoint	19.5765	20.6986	built	19.6852	midpoint	0		1.051	19.6852	19.6852
+Parasmittina	50	2	49.1268	midpoint	47.7286	52.7928	built	48.9753	midpoint	6		1.003	48.9753	52.5650
+Pegusa	8	3	10.7749	midpoint	10.4142	10.7749	built	10.3934	midpoint	0		1.037	10.3934	10.3934
+Pelagia	8	4	49.2179	midpoint	41.3159	50.2469	built	41.3527	midpoint	0		1.190	41.3527	41.3527
+Peltodoris	5	2	18.6654	midpoint	18.0927	19.4044	built	18.0347	midpoint	0		1.035	18.0347	18.0347
+Penaeus	54	1	91.8862	timetree			built	91.8862	timetree	1		1.000		
+Penares	9	1	14.7438	midpoint	13.4164	14.7438	built	13.2431	midpoint	0		1.113	13.2431	13.2431
+Petalifera	4	2	27.5389	midpoint	12.6874	29.9120	built	12.6874	midpoint	0		2.171	12.6874	12.6874
+Philinoglossa	3	1	15.9847	midpoint	14.7675	16.9658	built	14.7675	midpoint	0		1.082	14.7675	14.7675
+Phyllaplysia	4	2	26.4642	midpoint	21.9433	29.7588	built	21.9433	midpoint	0		1.206	21.9433	21.9433
+Pilumnopeus	3	2	30.1388	midpoint	29.2162	30.1388	fewer than two units left							
+Pisa	7	1	21.8609	midpoint	20.3354	22.4387	built	21.1831	midpoint	0		1.032	21.1831	21.1831
+Piseinotecus	3	1	20.4933	midpoint	19.7172	22.0262	built	19.7172	midpoint	0		1.039	19.7172	19.7172
+Pisidia	18	1	36.8450	timetree			built	36.8450	timetree	4		1.000		
+Pleonexes	2	1	21.0029	midpoint	21.0029	21.0029	fewer than two units left							
+Pleoticus	2	1	14.7344	midpoint	14.7344	14.7344	fewer than two units left							
+Pleurobranchus	19	1	11.5100	timetree			built	11.5100	timetree	1		1.000		
+Plocamopherus	10	1	14.2384	midpoint	13.7233	14.2384	built	13.6573	midpoint	0		1.043	13.6573	13.6573
+Podocerus	15	2	38.9636	midpoint	37.9830	40.1737	built	38.3511	midpoint	0		1.016	38.3511	39.2030
+Pomatias	4	1	27.4150	midpoint	23.6265	27.4150	built	23.6474	midpoint	0		1.159	23.6474	23.6474
+Pontinus	12	1	13.0052	timetree			built	13.0052	timetree	0		1.000		
+Porcellana	5	2	21.4814	midpoint	19.5395	21.9490	built	19.5495	midpoint	0		1.099	19.5495	19.5495
+Pseudomystides	11	1	24.4639	midpoint	22.2189	24.4639	built	22.5165	midpoint	0		1.086	21.5282	22.5165
+Pterocirrus	11	1	26.7598	midpoint	26.6028	27.0847	built	26.7295	midpoint	1		1.001	26.7000	26.7295
+Raja	24	3	20.9465	midpoint	19.2847	20.9465	built	19.2548	midpoint	1		1.088	19.2548	19.2548
+Rhinoptera	6	1	11.4687	midpoint	10.1975	11.4687	built	10.1708	midpoint	0		1.128	10.1708	10.1708
+Rhyssoplax	12	1	34.5330	midpoint	33.9802	34.5330	built	34.0093	midpoint	0		1.015	34.0093	34.5594
+Rostanga	17	1	19.9887	midpoint	19.9600	20.2128	built	19.9463	midpoint	6		1.002	19.8058	20.2113
+Salaria	6	2	14.7942	midpoint	11.8730	14.7942	built	11.8709	midpoint	0		1.246	11.8709	11.8709
+Scapholeberis	35	2	43.8147	midpoint	42.2982	43.8147	built	43.0851	midpoint	0		1.017	42.1103	43.0851
+Schizoporella	9	2	37.3636	timetree			built	37.3636	timetree	0		1.000		
+Scolecithricella	6	1	37.2522	midpoint	35.9111	37.2522	built	36.2903	midpoint	0		1.027	35.3002	36.2903
+Solea	5	2	9.3261	midpoint	7.7501	9.3261	built	7.7271	midpoint	0		1.207	7.7271	7.7271
+Solenocera	22	1	27.3600	timetree			built	27.3600	timetree	2		1.000		
+Sphaerosyllis	6	1	84.3600	midpoint	77.6592	84.3600	built	77.6235	midpoint	1	BOLD:AEB0962	1.087	65.6900	77.6235
+Sphoeroides	13	1	15.3828	midpoint	14.8370	15.3828	built	14.8269	midpoint	0		1.037	14.8269	14.8269
+Spicara	5	2	10.5318	timetree			built	10.5318	timetree	1		1.000		
+Stephanocyathus	4	3	22.6804	midpoint	4.2967	24.3460	fewer than two units left							
+Stiliger	7	1	28.3816	midpoint	27.6625	28.3816	built	27.6988	midpoint	0		1.025	26.9270	27.6988
+Stomias	12	1	67.8261	timetree			built	67.8261	timetree	0		1.000		
+Syllis	155	3	67.8754	midpoint	63.9060	67.8754	built	62.7007	midpoint	1		1.083	62.7007	65.8959
+Synodus	68	1	21.3508	midpoint	20.4901	21.3508	built	20.4807	midpoint	3		1.042	20.3923	20.4807
+Systellaspis	11	2	28.6664	midpoint	26.9550	28.6664	built	27.0397	midpoint	2		1.060	27.0397	27.0397
+Taringa	4	1	18.1353	midpoint	15.1664	18.1353	built	15.1658	midpoint	0		1.196	15.1658	15.1658
+Thuridilla	25	1	15.9181	midpoint	15.4750	15.9181	built	15.4558	midpoint	0		1.030	15.4558	15.8023
+Todarodes	5	2	62.2415	timetree			built	11.6268	midpoint_timetree_demoted	0		5.353	11.6268	11.6268
+Todaropsis	2	1	21.8430	midpoint	21.8430	21.8430	fewer than two units left							
+Trochoidea	7	3	44.5195	midpoint	40.6286	44.9841	built	40.6429	midpoint	0		1.095	40.6429	40.6429
+Trochulus	155	1	38.3534	midpoint	37.8801	38.3534	built	38.1144	midpoint	1		1.006	37.9874	38.1144
+Trophonopsis	2	1	10.9243	midpoint	10.9243	10.9243	fewer than two units left							
+Tylos	60	2	43.1300	timetree			built	43.1300	timetree	0		1.000		
+Umbonula	2	1	51.1712	midpoint	51.1712	51.1712	fewer than two units left							
+Unio	31	3	13.6893	midpoint	13.1173	15.7820	built	13.1780	midpoint	0		1.039	12.4267	13.1780
+Venerupis	5	2	56.6479	midpoint	41.8294	56.6479	built	41.8567	midpoint	0		1.353	41.8567	41.8567
+Vermetus	3	2	34.8909	midpoint	34.0001	34.8909	fewer than two units left							
+Verruca	2	1	48.9633	timetree			fewer than two units left							
+Weinkauffia	2	1	19.9275	midpoint	19.9275	19.9275	fewer than two units left							
+Zophoscolex	15	1	38.9518	midpoint	38.6451	39.0062	built	38.7409	midpoint	7	BOLD:AAH8357	1.005	34.2379	38.7409

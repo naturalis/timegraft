@@ -1,0 +1,80 @@
+genus	wrong_side_only_in	legacy_units	default_units	units_added	units_removed	outgroup_units_added	outgroup_units_removed	units_kept_by_the_fix	legacy_violations	default_violations	legacy_misplaced	legacy_outgroup_inside	default_misplaced	default_outgroup_inside	new_wrong_side_units	new_closer_to_the_other_side	cause	legacy_crown_age	default_crown_age	crown_factor	legacy_crown_source	default_crown_source	default_crown_age_min	default_crown_age_max	legacy_depends_strongly_on_root	default_depends_strongly_on_root
+Acanthochitona	default	42	43	1	0	0	0	BOLD:AAI9691	0	1	0	0	1	0	BOLD:AAI9691	1	a unit the screening fix kept is on the wrong side	38.4987	39.5127	1.026	midpoint	midpoint	37.8447	39.5127	False	False
+Acartia		65	69	4	0	0	0	BOLD:AAC8784;BOLD:AAN0451;BOLD:AHE3810;BOLD:AHV6592	2	2	2	0	2	0	BOLD:AHE3810	1	a unit the screening fix kept is on the wrong side	49.5180	49.3883	1.003	midpoint	midpoint	48.5899	50.9490	False	False
+Alpheus		305	306	1	0	1	1	BOLD:AAU0567;BOLD:AEL3965	4	4	0	4	1	3	BOLD:AAU0567	1	a unit the screening fix kept is on the wrong side	34.9088	40.2966	1.154	midpoint	midpoint	38.5027	40.2966	False	False
+Alvania		18	19	1	0	0	0	BOLD:ADZ6395	6	7	3	3	0	10	BOLD:AAX8867;BOLD:ADE4693;BOLD:ADS0119;BOLD:AEJ3384;BOLD:AFS7001;BOLD:AHB3486;BOLD:AHV2502	3	units the screening fix kept changed the tree	28.3796	30.7326	1.083	midpoint	midpoint	28.5383	30.7635	False	False
+Amphibalanus		18	18	0	0	3	3		6	6	1	5	0	6	BOLD:AAA5336;BOLD:AAE1207;BOLD:AAF4023;BOLD:AAX2913;BOLD:AAX3157	2	other changes to the genus or its outgroup	17.5999	16.7202	1.053	midpoint	midpoint	16.7202	19.2307	False	False
+Athanas	default	2	3	1	0	0	0	BOLD:AEL3965	0	1	0	0	1	0	BOLD:AEL3965	1	a unit the screening fix kept is on the wrong side	27.2946	40.1020	1.469	midpoint	midpoint	31.4333	41.0473	False	True
+Baeolidia	default	4	6	2	0	0	0	BOLD:ACH5137;BOLD:AFS4775	0	2	0	0	2	0	BOLD:ACH5137;BOLD:AFS4775	2	a unit the screening fix kept is on the wrong side	15.9142	16.2585	1.022	midpoint	midpoint	15.9641	16.2585	False	False
+Balanus		14	14	0	0	3	3		8	3	0	10	2	1	BOLD:ACR7373;BOLD:AEM8390	2	other changes to the genus or its outgroup	25.8758	20.1501	1.284	midpoint	midpoint	19.8334	20.1501	False	False
+Calanoides	default	3	5	2	0	0	0	BOLD:AAW8371;BOLD:ADX4284	0	1	0	0	0	1	BOLD:ACQ0505	0	units the screening fix kept changed the tree	18.7865	28.9660	1.542	midpoint	midpoint	28.9660	28.9660	False	False
+Calanus	default	16	17	1	0	0	0	BOLD:AAB5313	0	2	0	0	0	2	BOLD:ACQ2950;BOLD:AHD1962	0	units the screening fix kept changed the tree	17.9999	18.0231	1.001	midpoint	midpoint	18.0231	18.0231	False	False
+Caryophyllia	default	9	9	0	0	4	4		0	1	0	0	0	1	BOLD:AEG1190	1	other changes to the genus or its outgroup	15.5508	14.4958	1.073	midpoint	midpoint	14.4958	14.4958	False	False
+Chilostoma		34	36	2	0	0	0	BOLD:AHU9717;BOLD:AHU9725	4	5	0	4	3	2	BOLD:AHU9724;BOLD:AHU9725;BOLD:AHW1817;BOLD:AGD9453	1	a unit the screening fix kept is on the wrong side	29.3671	28.9201	1.015	midpoint	midpoint	28.8322	28.9373	False	False
+Clausocalanus	default	24	25	1	0	0	0	BOLD:AAJ1002	0	1	0	0	1	0	BOLD:AAJ1002	0	a unit the screening fix kept is on the wrong side	33.2290	34.8677	1.049	midpoint	midpoint	33.6663	34.8677	False	False
+Cobitis	default	80	81	1	0	0	0	BOLD:AEX7892	0	1	0	0	0	1	BOLD:ADW2582	0	units the screening fix kept changed the tree	11.1112	20.0968	1.809	timetree	timetree			False	False
+Conopea		15	15	0	0	2	2		5	5	3	2	3	2	BOLD:ACB5368;BOLD:ACB5391;BOLD:ACB5547;BOLD:ACQ7429;BOLD:ACV5376	1	other changes to the genus or its outgroup	18.0730	16.2298	1.114	midpoint	midpoint	15.9897	16.2298	False	False
+Crepidula		49	50	1	0	0	0	BOLD:AHU7171	1	2	0	1	1	1	BOLD:AHU7171	1	a unit the screening fix kept is on the wrong side	23.6564	24.6441	1.042	midpoint	midpoint	24.3722	25.6101	False	False
+Cuthona		7	9	2	0	0	0	BOLD:ACB8455;BOLD:AHX6371	3	5	0	3	4	1	BOLD:ACB8455;BOLD:ADF5485;BOLD:AHU6840;BOLD:AHX6371;BOLD:AAF1055	2	a unit the screening fix kept is on the wrong side	17.0851	17.1040	1.001	midpoint	midpoint	17.0845	17.5668	False	False
+Dendrodoris		27	29	2	0	0	0	BOLD:AED0443;BOLD:AHK7998	4	6	0	4	1	5	BOLD:AED0443;BOLD:AHT0238	1	a unit the screening fix kept is on the wrong side	11.3441	26.3839	2.326	rate_capped	midpoint	24.0883	26.6020	False	False
+Dendrophyllia	legacy	4	4	0	0	3	3		1	0	0	1	0	0		0	fewer wrong-side units in the default	6.9587	7.3167	1.051	midpoint	midpoint	7.3167	7.3167	False	False
+Deosergestes		4	4	0	0	1	1		1	2	0	1	0	2	BOLD:AAO9281	0	other changes to the genus or its outgroup	33.3842	6.8776	4.854	midpoint	midpoint	6.6481	6.9324	False	False
+Diogenes		65	67	3	1	0	0	BOLD:ACK1309;BOLD:AHK7807;BOLD:AHK7808	4	5	2	2	3	2	BOLD:AHK7808	0	a unit the screening fix kept is on the wrong side	28.4888	28.5041	1.001	midpoint	midpoint	28.1417	29.6429	False	False
+Dolabrifera		8	8	0	0	1	1	BOLD:AHI2520	2	1	0	2	0	1		0	fewer wrong-side units in the default	23.6897	23.6696	1.001	midpoint	midpoint	22.0701	23.6696	False	False
+Doris		70	72	2	0	0	0	BOLD:ADR2633;BOLD:AHJ0413	4	6	2	2	4	2	BOLD:ADR2633;BOLD:AHJ0413;BOLD:AFY7155	2	a unit the screening fix kept is on the wrong side	21.5413	21.7167	1.008	midpoint	midpoint	21.5355	22.4969	False	False
+Eteone		53	53	0	0	2	2	BOLD:ACM5370;BOLD:ADW0789	4	1	4	0	1	0		0	fewer wrong-side units in the default	44.3803	44.2143	1.004	midpoint	midpoint	43.3815	44.2143	False	False
+Eubranchus		30	31	1	0	0	0	BOLD:AHP2235	5	6	0	5	0	6	BOLD:ADR5292	0	units the screening fix kept changed the tree	17.2155	17.4807	1.015	midpoint	midpoint	17.4807	17.4807	False	False
+Eulalia		40	41	1	0	2	2	BOLD:ACM5370;BOLD:ADW0789;BOLD:ADW4547	2	1	0	2	0	1		0	fewer wrong-side units in the default	45.3191	44.9175	1.009	midpoint	midpoint	44.2882	44.9175	False	False
+Eumida		36	36	0	0	2	2	BOLD:ACM5370;BOLD:ADW0789	3	4	3	0	3	1	BOLD:ACM5370	1	a unit the screening fix kept is on the wrong side	30.2363	29.9635	1.009	midpoint	midpoint	28.9895	29.9635	False	False
+Euomphalia	default	6	7	1	0	0	0	BOLD:AFA0786	0	1	0	0	1	0	BOLD:ACT8095	1	units the screening fix kept changed the tree	40.7027	40.6835	1.000	midpoint	midpoint	38.1059	40.6835	False	False
+Facelina		12	15	3	0	0	0	BOLD:ACI0523;BOLD:AED1084;BOLD:AHU2775	4	7	4	0	7	0	BOLD:ACI0523;BOLD:ADZ2318;BOLD:AHU2775	1	a unit the screening fix kept is on the wrong side	18.8759	19.0236	1.008	midpoint	midpoint	17.7437	19.5064	False	False
+Favorinus	default	12	17	5	0	0	0	BOLD:ADR3822;BOLD:ADR8940;BOLD:ADR9625;BOLD:AGQ5065;BOLD:AHU2677	0	4	0	0	0	4	BOLD:AAF7070;BOLD:ACH5179;BOLD:ACI1087;BOLD:AHV2297	1	units the screening fix kept changed the tree	18.3863	19.2757	1.048	midpoint	midpoint	19.0575	19.2757	False	False
+Felimida	legacy	14	15	1	0	0	0	BOLD:AEI9734	2	0	0	2	0	0		0	fewer wrong-side units in the default	17.2034	17.0656	1.008	midpoint	midpoint	17.0656	17.2015	False	False
+Flabellina		4	7	3	0	1	0	BOLD:ACB7747;BOLD:ACI0220;BOLD:ADK0870;BOLD:AHS9929	1	3	0	1	0	3	BOLD:ACI2337;BOLD:AGQ5417	2	units the screening fix kept changed the tree	10.4020	10.2497	1.015	midpoint	midpoint	10.2497	10.6347	False	False
+Gammaropsis		6	11	5	0	0	0	BOLD:AAU3888;BOLD:ACP9777;BOLD:ADP1035;BOLD:ADV5082;BOLD:AGZ4591	3	5	2	1	2	3	BOLD:ABW1982;BOLD:ACH8783	1	units the screening fix kept changed the tree	39.7628	37.9035	1.049	midpoint	midpoint	33.8316	37.9035	False	False
+Haminoea	default	40	41	1	0	1	1	BOLD:AAO8838;BOLD:AGK8110	0	3	0	0	2	1	BOLD:AAO8837;BOLD:AAO8838;BOLD:ADR6541	2	a unit the screening fix kept is on the wrong side	18.5946	19.1079	1.028	midpoint	midpoint	18.5779	19.1079	False	False
+Hediste	default	73	74	1	0	0	0	BOLD:AAA8306	0	1	0	0	1	0	BOLD:AAA8306	0	a unit the screening fix kept is on the wrong side	39.6757	43.9081	1.107	midpoint	midpoint	39.2353	43.9081	False	False
+Helix		143	144	1	0	0	0	BOLD:ACI2239	6	7	2	4	3	4	BOLD:ACI2239	1	a unit the screening fix kept is on the wrong side	17.5415	9.6705	1.814	midpoint	timetree			False	False
+Henlea		68	71	3	0	0	0	BOLD:AAT8950;BOLD:ADX8815;BOLD:AEB0197	3	5	0	3	0	5	BOLD:AAT8932;BOLD:AAX7528	1	units the screening fix kept changed the tree	35.9369	36.0347	1.003	midpoint	midpoint	34.8824	36.0347	False	False
+Jassa		19	19	0	0	2	2	BOLD:AAU3888;BOLD:ACP9777	4	4	3	1	0	4	BOLD:AAY5675;BOLD:AGN5830;BOLD:AGN5831	1	units the screening fix kept changed the tree	28.2336	28.8456	1.022	midpoint	midpoint	28.8456	28.8456	False	False
+Lepidochitona		17	17	0	0	1	1	BOLD:AAI9691	4	5	0	4	1	4	BOLD:ACQ0782	0	units the screening fix kept changed the tree	42.2247	42.2611	1.001	midpoint	midpoint	41.2892	42.2611	False	False
+Lumbricus		121	123	2	0	0	0	BOLD:AFA1426;BOLD:AHE8103	1	3	0	1	2	1	BOLD:AFA1426;BOLD:AHE8103	1	a unit the screening fix kept is on the wrong side	34.4815	29.6080	1.165	midpoint	timetree			False	False
+Macrogastra	default	20	22	2	0	0	0	BOLD:AGF0088;BOLD:AHT6655	0	2	0	0	0	2	BOLD:ABV5061;BOLD:ADP4116	0	units the screening fix kept changed the tree	24.3159	24.3998	1.003	midpoint	midpoint	24.3165	24.3998	False	False
+Malacocephalus	default	4	5	1	0	0	0	BOLD:AAK1987	0	1	0	0	1	0	BOLD:AAK1987	1	a unit the screening fix kept is on the wrong side	18.4246	18.4246	1.000	timetree	timetree			False	False
+Marionina		172	173	1	0	0	0	BOLD:AHT6486	6	7	0	6	0	7	BOLD:ADW0839;BOLD:AGK8033	0	units the screening fix kept changed the tree	40.1262	39.8528	1.007	midpoint	midpoint	38.0294	40.2303	False	False
+Mesenchytraeus		50	52	2	0	0	0	BOLD:AFS1967;BOLD:AGE3262	5	4	0	5	1	3	BOLD:AAT8966	0	units the screening fix kept changed the tree	64.5118	64.5118	1.000	timetree	timetree			False	False
+Metapenaeus	default	23	25	2	0	0	0	BOLD:ADJ8050;BOLD:ADX2984	0	2	0	0	2	0	BOLD:ADJ8050;BOLD:ADX2984	2	a unit the screening fix kept is on the wrong side	38.3700	38.3700	1.000	timetree	timetree			False	False
+Mourgona	legacy	7	8	1	0	0	0	BOLD:ADK0337	1	0	0	1	0	0		0	fewer wrong-side units in the default	21.4906	21.2553	1.011	midpoint	midpoint	21.2553	21.2553	False	False
+Munida		113	114	1	0	0	0	BOLD:AEA1974	6	8	0	6	0	10	BOLD:ADE9875;BOLD:ADW1755;BOLD:AGM9553;BOLD:AHU8789	0	units the screening fix kept changed the tree	36.7183	37.6823	1.026	midpoint	midpoint	35.0528	39.0146	False	False
+Neomerinthe		11	12	1	0	0	0	BOLD:AAE5913	2	3	1	1	2	1	BOLD:AAE5913	1	a unit the screening fix kept is on the wrong side	15.9508	16.0046	1.003	midpoint	midpoint	15.3053	17.2842	False	False
+Octodrilus		57	58	1	0	0	0	BOLD:ADD6499	2	4	0	2	0	4	BOLD:AAI7114;BOLD:AED2501	1	units the screening fix kept changed the tree	51.1706	51.1706	1.000	timetree	timetree			False	False
+Odontosyllis		35	36	1	0	0	0	BOLD:AHT3431	2	3	0	2	1	2	BOLD:AHT3431	1	a unit the screening fix kept is on the wrong side	56.5177	58.5625	1.036	midpoint	midpoint	55.8872	58.5625	False	False
+Otala	default	6	7	1	0	0	0	BOLD:AHT2742	0	1	0	0	1	0	BOLD:AHT2742	1	a unit the screening fix kept is on the wrong side	15.2893	16.1603	1.057	midpoint	midpoint	14.9149	16.1603	False	False
+Palaemon		74	75	1	0	1	1	BOLD:ABV9748;BOLD:AEL3965	6	1	0	6	1	0	BOLD:ABV9748	0	a unit the screening fix kept is on the wrong side	38.4275	44.7685	1.165	midpoint	midpoint	44.1763	44.7685	False	False
+Parablennius		20	20	0	0	2	2		1	3	0	1	1	2	BOLD:ACG5017;BOLD:ACR6994	0	other changes to the genus or its outgroup	14.8160	8.6064	1.722	midpoint	midpoint	8.4112	8.6064	False	False
+Pegusa		8	8	0	0	3	2		2	3	0	2	3	0	BOLD:AAE1323;BOLD:AAU0486;BOLD:ADW4357	3	other changes to the genus or its outgroup	10.7156	10.7749	1.006	midpoint	midpoint	10.4142	10.7749	False	False
+Pelagia		7	8	1	0	0	0	BOLD:ADW0674	3	4	3	0	4	0	BOLD:ACA9117;BOLD:ACA9624;BOLD:ACH7777;BOLD:ACH7778	0	units the screening fix kept changed the tree	47.2750	49.2179	1.041	midpoint	midpoint	41.3159	50.2469	True	False
+Penares		9	9	0	0	1	1		1	1	0	1	1	0	BOLD:AEH5616	0	other changes to the genus or its outgroup	15.0948	14.7438	1.024	midpoint	midpoint	13.4164	14.7438	False	False
+Periclimenes		61	62	1	0	1	1	BOLD:ACX2796;BOLD:AEL3965	8	6	0	10	0	6	BOLD:AEL3965	1	a unit the screening fix kept is on the wrong side	41.8522	45.2448	1.081	midpoint	midpoint	44.7767	49.6230	False	False
+Philine		40	41	1	0	1	1	BOLD:AAZ3283;BOLD:AGK8110	8	9	0	8	0	10	BOLD:ACM2393;BOLD:AGK8110	1	a unit the screening fix kept is on the wrong side	17.4649	17.1708	1.017	midpoint	midpoint	17.1647	18.7010	False	False
+Phyllaplysia	default	2	4	2	0	0	0	BOLD:AHI2520;BOLD:AHO5715	0	2	0	0	2	0	BOLD:AHI2520;BOLD:AHO5715	2	a unit the screening fix kept is on the wrong side	21.9433	26.4642	1.206	midpoint	midpoint	21.9433	29.7588	False	True
+Phyllodoce		67	67	0	0	2	2	BOLD:ACM5370;BOLD:ADW0789	8	7	0	8	0	7	BOLD:AAY3574;BOLD:AGO6541	0	units the screening fix kept changed the tree	36.8948	35.5465	1.038	midpoint	midpoint	34.9015	41.2697	False	False
+Pisidia		17	18	1	0	0	0	BOLD:ADX5906	4	5	0	4	1	4	BOLD:ADX5906	1	a unit the screening fix kept is on the wrong side	36.8450	36.8450	1.000	timetree	timetree			False	False
+Pisione		15	14	0	1	0	0		6	7	5	1	0	7	BOLD:AAB0330;BOLD:AAB5090;BOLD:AAV8350;BOLD:ABA1518;BOLD:ACR3553;BOLD:ADK6991	2	other changes to the genus or its outgroup	47.7202	47.3995	1.007	midpoint	midpoint	47.3995	49.1433	False	False
+Pleurobranchus		18	19	1	0	0	0	BOLD:ACV7991	1	1	0	1	1	0	BOLD:ACV7991	0	a unit the screening fix kept is on the wrong side	11.5100	11.5100	1.000	timetree	timetree			False	False
+Pleuroxus		17	18	1	0	0	0	BOLD:AGN3042	4	2	0	4	0	2		0	fewer wrong-side units in the default	40.6634	41.6807	1.025	midpoint	midpoint	41.1031	41.6807	False	False
+Podocerus		15	15	0	0	1	1	BOLD:AAU3888	4	2	2	2	2	0		0	fewer wrong-side units in the default	39.4595	38.9636	1.013	midpoint	midpoint	37.9830	40.1737	False	False
+Pontinus	default	11	12	1	0	0	0	BOLD:AAC5020	0	1	0	0	1	0	BOLD:AAC5020	1	a unit the screening fix kept is on the wrong side	12.9078	13.0052	1.008	timetree	timetree			False	False
+Pontohedyle	default	15	15	0	0	1	1	BOLD:ACB8265	0	1	0	0	0	1	BOLD:ACB8265	0	a unit the screening fix kept is on the wrong side	30.1190	30.3465	1.008	midpoint	midpoint	30.3465	30.3465	False	False
+Protohyale		15	17	2	0	0	0	BOLD:ACX2879;BOLD:AFT5631	2	4	0	2	0	4	BOLD:AAB5862;BOLD:AAC4712	1	units the screening fix kept changed the tree	23.8248	23.6290	1.008	midpoint	midpoint	23.6290	23.7294	False	False
+Pseudomystides	default	10	11	1	0	1	1	BOLD:ACM5370;BOLD:ADW0789	0	1	0	0	1	0	BOLD:ADW0789	1	a unit the screening fix kept is on the wrong side	22.3409	24.4639	1.095	midpoint	midpoint	22.2189	24.4639	False	False
+Pterocirrus	default	9	11	2	0	1	1	BOLD:ACI1266;BOLD:ACM5370;BOLD:ADW0789	0	2	0	0	1	1	BOLD:ACI1266;BOLD:ADW0789	2	a unit the screening fix kept is on the wrong side	26.7570	26.7598	1.000	midpoint	midpoint	26.6028	27.0847	False	False
+Rostanga		15	17	2	0	0	0	BOLD:AHK0152;BOLD:AHK0153	5	5	4	1	1	4	BOLD:AHK0152;BOLD:AAX8785;BOLD:AEI3436;BOLD:AHJ8934	3	a unit the screening fix kept is on the wrong side	19.9628	19.9887	1.001	midpoint	midpoint	19.9600	20.2128	False	False
+Scapholeberis		34	35	1	0	0	0	BOLD:AHS6956	3	2	2	1	2	0		0	fewer wrong-side units in the default	44.1895	43.8147	1.009	midpoint	midpoint	42.2982	43.8147	False	False
+Schizoporella		8	9	1	0	0	0	BOLD:ADX5814	1	2	1	0	2	0	BOLD:ADX5814	1	a unit the screening fix kept is on the wrong side	37.3636	37.3636	1.000	timetree	timetree			False	False
+Stelletta		19	19	0	0	1	1		3	4	0	3	0	4	BOLD:ACH5846	0	other changes to the genus or its outgroup	23.2142	23.2093	1.000	midpoint	midpoint	23.2093	23.2093	False	False
+Stiliger	default	6	7	1	0	0	0	BOLD:AHI8854	0	1	0	0	1	0	BOLD:AHI8854	1	a unit the screening fix kept is on the wrong side	27.6988	28.3816	1.025	midpoint	midpoint	27.6625	28.3816	False	False
+Synodus		67	68	1	0	0	0	BOLD:AAF2335	3	3	0	3	1	2	BOLD:AAF2335	0	a unit the screening fix kept is on the wrong side	20.4807	21.3508	1.042	midpoint	midpoint	20.4901	21.3508	False	False
+Trinchesia		7	9	2	0	0	0	BOLD:AGX6806;BOLD:AGX6807	1	1	1	0	0	1	BOLD:ACB8642	0	units the screening fix kept changed the tree	17.0088	17.2929	1.017	midpoint	midpoint	17.2929	17.5759	False	False
+Verruca	default	0	2	2	0	10	0	BOLD:ACH5756	0	1	0	0	1	0	BOLD:ACH5756	1	a unit the screening fix kept is on the wrong side		48.9633			timetree			False	False
+Zophoscolex		13	15	2	0	0	0	BOLD:AAH8357;BOLD:AHS2081	5	7	0	5	1	6	BOLD:AHS2081;BOLD:AAB7509	0	a unit the screening fix kept is on the wrong side	38.8227	38.9518	1.003	midpoint	midpoint	38.6451	39.0062	False	False

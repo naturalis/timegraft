@@ -1,0 +1,221 @@
+genus	unit_id	wrong_side_in	kind	unit_genus	legacy_decision	default_decision	kept_by_the_fix	default_best_congener_identity	default_best_other_genus	default_best_other_identity	identity_to_genus	identity_to_outgroup	nearest_outgroup_genus	closer_to	identity_to_own_genus
+Acanthochitona	BOLD:AAI9691	default	misplaced	Acanthochitona	other_genus	keep	True	0.8280	Placiphorella	0.8470	0.829	0.847	Placiphorella	outgroup	
+Acartia	BOLD:AHE3810	default	misplaced	Acartia	other_genus	keep	True	0.8120	Anomalocera	0.8180	0.812	0.818	Anomalocera	outgroup	
+Acartia	BOLD:ACH6219	legacy	misplaced	Acartia	keep	keep	False	0.8210			0.821	0.786	Calocalanus	genus	
+Alpheus	BOLD:AAU0567	default	misplaced	Alpheus	other_genus	keep	True	0.8090	Eualus	0.8270	0.809	0.824	Eualus	outgroup	
+Alpheus	BOLD:ACH8715	legacy	outgroup_inside	Athanas	keep	keep	False	0.8470	Diogenes	0.8160	0.811			own_genus	0.847
+Alvania	BOLD:AAX8867	default	outgroup_inside	Rissoa	keep	keep	False	0.9500	Alvania	0.8270	0.827			own_genus	0.950
+Alvania	BOLD:ADE4693	default	outgroup_inside	Carinaria	keep	keep	False	0.9090	Firoloida	0.8210	0.808			own_genus	0.909
+Alvania	BOLD:ADS0119	default	outgroup_inside	Botryphallus	keep	keep	False				0.744			genus	
+Alvania	BOLD:AEJ3384	default	outgroup_inside	Aporrhais	keep	keep	False	0.9710	Echinolittorina	0.8560	0.834			own_genus	0.971
+Alvania	BOLD:AFS7001	default	outgroup_inside	Calyptoconcha	keep	keep	False		Pisinna	0.8190	0.805			genus	
+Alvania	BOLD:AHB3486	default	outgroup_inside	Corrosella	keep	keep	False		Pseudamnicola	0.9540	0.853			genus	
+Alvania	BOLD:AHV2502	default	outgroup_inside	Bythinella	keep	keep	False	0.9690	Fusinus	0.8270	0.807			own_genus	0.969
+Alvania	BOLD:ACL8829	legacy	misplaced	Alvania	keep	keep	False	0.9050	Odostomia	0.8870	0.845	0.833	Corrosella	genus	
+Alvania	BOLD:ACM7621	legacy	misplaced	Alvania	keep	keep	False	0.9050	Littorina	0.8900	0.849	0.834	Corrosella	genus	
+Alvania	BOLD:AHV5888	legacy	misplaced	Alvania	keep	keep	False	0.8790	Odostomia	0.8730	0.844	0.846	Corrosella	outgroup	
+Amphibalanus	BOLD:AAA5336	default	outgroup_inside	Balanus	keep	keep	False	0.8540	Megatrema	0.8570	0.858			genus	0.854
+Amphibalanus	BOLD:AAE1207	default	outgroup_inside	Megabalanus	keep	keep	False	0.8640	Amphibalanus	0.8560	0.856			own_genus	0.864
+Amphibalanus	BOLD:AAF4023	default	outgroup_inside	Megabalanus	keep	keep	False	0.9440	Amphibalanus	0.8660	0.866			own_genus	0.944
+Amphibalanus	BOLD:AAX2913	default	outgroup_inside	Megabalanus	keep	keep	False	0.8670	Amphibalanus	0.8550	0.855			own_genus	0.867
+Amphibalanus	BOLD:AAX3157	default	outgroup_inside	Megatrema	keep	keep	False		Conopea	0.8840	0.881			genus	
+Amphibalanus	BOLD:ACF6900	legacy	misplaced	Amphibalanus	keep	keep	False	0.8530	Balanus	0.8640	0.853	0.855	Megabalanus	outgroup	
+Amphibalanus	BOLD:ACB4811	legacy	outgroup_inside	Conopea	keep	keep	False	0.9080	Amphibalanus	0.8730	0.873			own_genus	0.908
+Amphibalanus	BOLD:ACB5368	legacy	outgroup_inside	Conopea	keep	keep	False	0.9230	Balanus	0.8780	0.873			own_genus	0.923
+Amphibalanus	BOLD:ACF8176	legacy	outgroup_inside	Conopea	keep	keep	False	0.9720	Megatrema	0.8840	0.877			own_genus	0.972
+Amphibalanus	BOLD:AEI8047	legacy	outgroup_inside	Conopea	keep	keep	False	0.9610	Amphibalanus	0.8890	0.889			own_genus	0.961
+Athanas	BOLD:AEL3965	default	misplaced	Athanas	other_genus	keep	True	0.8110	Processa	0.8150	0.785	0.804	Hippolyte	outgroup	
+Baeolidia	BOLD:ACH5137	default	misplaced	Baeolidia	other_genus	keep	True	0.8370	Candiella	0.8300	0.795	0.818	Spurilla	outgroup	
+Baeolidia	BOLD:AFS4775	default	misplaced	Baeolidia	other_genus	keep	True	0.8370	Favorinus	0.8300	0.808	0.824	Spurilla	outgroup	
+Balanus	BOLD:ACR7373	default	misplaced	Balanus	keep	keep	False	0.8670	Conopea	0.8760	0.867	0.875	Amphibalanus	outgroup	
+Balanus	BOLD:AEM8390	default	misplaced	Balanus	keep	keep	False	0.8540	Perforatus	0.8730	0.854	0.873	Perforatus	outgroup	
+Balanus	BOLD:AAD8495	legacy	outgroup_inside	Euraphia	keep	keep	False	0.9010	Chthamalus	0.8670	0.827			own_genus	0.901
+Balanus	BOLD:AAE1207	legacy	outgroup_inside	Megabalanus	keep	keep	False	0.8640	Amphibalanus	0.8560	0.854			own_genus	0.864
+Balanus	BOLD:AAX3157	legacy	outgroup_inside	Megatrema	keep	keep	False		Conopea	0.8840	0.862			genus	
+Balanus	BOLD:ABX4245	legacy	outgroup_inside	Austrominius	keep	keep	False		Conopea	0.8620	0.843			genus	
+Balanus	BOLD:ACB4811	legacy	outgroup_inside	Conopea	keep	keep	False	0.9080	Amphibalanus	0.8730	0.871			own_genus	0.908
+Balanus	BOLD:ACH5752	legacy	outgroup_inside	Verruca	keep	keep	False	0.8470	Balanus	0.8530	0.853			genus	
+Balanus	BOLD:ACQ7429	legacy	outgroup_inside	Amphibalanus	keep	keep	False	0.8860	Conopea	0.8890	0.875			own_genus	0.886
+Balanus	BOLD:ACV5077	legacy	outgroup_inside	Perforatus	keep	keep	False		Amphibalanus	0.8870	0.873			genus	
+Balanus	BOLD:AGN3049	legacy	outgroup_inside	Chthamalus	keep	keep	False	0.9130	Euraphia	0.8920	0.859			own_genus	0.913
+Calanoides	BOLD:ACQ0505	default	outgroup_inside	Calanus	keep	keep	False	0.9780	Calocalanus	0.8310	0.801			own_genus	0.978
+Calanus	BOLD:ACQ2950	default	outgroup_inside	Calanoides	keep	keep	False	0.9050	Paracalanus	0.8330	0.815			own_genus	0.905
+Calanus	BOLD:AHD1962	default	outgroup_inside	Mesocalanus	keep	keep	False	0.8600	Calocalanus	0.8300	0.809			own_genus	0.860
+Caryophyllia	BOLD:AEG1190	default	outgroup_inside	Stephanocyathus	kept_whole_genus	kept_whole_genus	False	0.8230	Caryophyllia	0.9590	0.959			genus	0.823
+Chilostoma	BOLD:AHU9724	default	misplaced	Chilostoma	keep	keep	False	0.9420	Ganula	0.8420	0.826	0.824	Allognathus	genus	
+Chilostoma	BOLD:AHU9725	default	misplaced	Chilostoma	other_genus	keep	True	0.8430	Helicigona	0.8520	0.843	0.852	Helicigona	outgroup	
+Chilostoma	BOLD:AHW1817	default	misplaced	Chilostoma	keep	keep	False	0.9420	Helix	0.8720	0.836	0.827	Allognathus	genus	
+Chilostoma	BOLD:AGD9453	default	outgroup_inside	Discula	keep	keep	False	0.9660	Caseolus	0.8390	0.803			own_genus	0.966
+Chilostoma	BOLD:ABW2000	legacy	outgroup_inside	Helicigona	keep	keep	False	0.9760	Chilostoma	0.8520	0.846			own_genus	0.976
+Chilostoma	BOLD:ACB7428	legacy	outgroup_inside	Hemicycla	keep	keep	False	0.9650	Allognathus	0.8530	0.827			own_genus	0.965
+Chilostoma	BOLD:ACV7227	legacy	outgroup_inside	Allognathus	keep	keep	False	0.9430	Hemicycla	0.8480	0.827			own_genus	0.943
+Clausocalanus	BOLD:AAJ1002	default	misplaced	Clausocalanus	other_genus	keep	True	0.8180	Paraeuchaeta	0.8250	0.819	0.805	Ctenocalanus	genus	
+Cobitis	BOLD:ADW2582	default	outgroup_inside	Barbatula	keep	keep	False	0.9590	Cobitis	0.8980	0.824			own_genus	0.959
+Conopea	BOLD:ACB5368	default	misplaced	Conopea	keep	keep	False	0.9230	Balanus	0.8780	0.877	0.873	Amphibalanus	genus	
+Conopea	BOLD:ACB5391	default	misplaced	Conopea	keep	keep	False	0.9160	Balanus	0.8720	0.868	0.858	Amphibalanus	genus	
+Conopea	BOLD:ACB5547	default	misplaced	Conopea	keep	keep	False	0.9230	Amphibalanus	0.8560	0.866	0.856	Amphibalanus	genus	
+Conopea	BOLD:ACQ7429	default	outgroup_inside	Amphibalanus	keep	keep	False	0.8860	Conopea	0.8890	0.889			genus	0.886
+Conopea	BOLD:ACV5376	default	outgroup_inside	Amphibalanus	keep	keep	False	0.8940	Conopea	0.8850	0.885			own_genus	0.894
+Conopea	BOLD:ACB4810	legacy	misplaced	Conopea	keep	keep	False	0.9610	Amphibalanus	0.8890	0.888	0.889	Amphibalanus	outgroup	
+Conopea	BOLD:ACB4811	legacy	misplaced	Conopea	keep	keep	False	0.9080	Amphibalanus	0.8730	0.872	0.873	Amphibalanus	outgroup	
+Conopea	BOLD:AEI8047	legacy	misplaced	Conopea	keep	keep	False	0.9610	Amphibalanus	0.8890	0.891	0.884	Amphibalanus	genus	
+Conopea	BOLD:AAX3157	legacy	outgroup_inside	Megatrema	keep	keep	False		Conopea	0.8840	0.884			genus	
+Conopea	BOLD:ACV5077	legacy	outgroup_inside	Perforatus	keep	keep	False		Amphibalanus	0.8870	0.862			genus	
+Crepidula	BOLD:AHU7171	default	misplaced	Crepidula	other_genus	keep	True	0.8230	Fusinus	0.8400	0.826	0.829	Aporrhais	outgroup	
+Cuthona	BOLD:ACB8455	default	misplaced	Cuthona	other_genus	keep	True	0.8320	Eubranchus	0.8500	0.837	0.829	Calma	genus	
+Cuthona	BOLD:ADF5485	default	misplaced	Cuthona	keep	keep	False	0.8580	Tenellia	0.8670	0.829	0.852	Tenellia	outgroup	
+Cuthona	BOLD:AHU6840	default	misplaced	Cuthona	keep	keep	False	0.8580	Tenellia	0.8630	0.834	0.860	Zelentia	outgroup	
+Cuthona	BOLD:AHX6371	default	misplaced	Cuthona	other_genus	keep	True	0.8280	Tenellia	0.8370	0.828	0.825	Calma	genus	
+Cuthona	BOLD:AAF1055	default	outgroup_inside	Eubranchus	keep	keep	False	0.8970	Amphorina	0.8920	0.836			own_genus	0.897
+Cuthona	BOLD:AAC2936	legacy	outgroup_inside	Tenellia	keep	keep	False	0.8680	Eubranchus	0.8650	0.852			own_genus	0.854
+Cuthona	BOLD:AAZ1396	legacy	outgroup_inside	Calma	keep	keep	False	0.8710	Tenellia	0.8500	0.820			own_genus	0.871
+Cuthona	BOLD:ACB8642	legacy	outgroup_inside	Zelentia	keep	keep	False	0.9560	Tenellia	0.9160	0.860			own_genus	0.956
+Dendrodoris	BOLD:AED0443	default	misplaced	Dendrodoris	other_genus	keep	True	0.8280	Taringa	0.8460	0.816	0.819	Baptodoris	outgroup	
+Dendrodoris	BOLD:AHT0238	default	outgroup_inside	Phyllidia	keep	keep	False	0.8910	Trapania	0.8360	0.825			own_genus	0.891
+Dendrophyllia	BOLD:AEG1411	legacy	outgroup_inside	Stephanocyathus	kept_whole_genus	kept_whole_genus	False	0.8120	Dendrophyllia	0.9800	0.980			genus	0.812
+Deosergestes	BOLD:AAO9281	default	outgroup_inside	Sergia	keep	keep	False	0.8940	Deosergestes	0.8760	0.876			own_genus	0.894
+Diogenes	BOLD:AHK7808	default	misplaced	Diogenes	other_genus	keep	True	0.8090	Galathea	0.8240	0.819	0.811	Cestopagurus	genus	
+Dolabrifera	BOLD:AAY1580	legacy	outgroup_inside	Phyllaplysia	keep	keep	False	0.8860	Petalifera	0.8720	0.867			own_genus	0.886
+Doris	BOLD:ADR2633	default	misplaced	Doris	other_genus	keep	True	0.8340	Peltodoris	0.8480	0.841	0.825	Jorunna	genus	
+Doris	BOLD:AHJ0413	default	misplaced	Doris	other_genus	keep	True	0.8210	Pelagella	0.8320	0.821	0.825	Geitodoris	outgroup	
+Doris	BOLD:AFY7155	default	outgroup_inside	Gargamella	kept_whole_genus	kept_whole_genus	False		Baptodoris	0.9090	0.839			genus	0.816
+Doris	BOLD:AEI3436	legacy	outgroup_inside	Baptodoris	keep	keep	False	0.8280	Paradoris	0.8410	0.825			genus	
+Eteone	BOLD:ACR5402	legacy	misplaced	Eteone	keep	keep	False	0.8520	Eumida	0.8510	0.869	0.847	Phyllodoce	genus	
+Eteone	BOLD:ACZ6421	legacy	misplaced	Eteone	keep	keep	False	0.9830	Syllis	0.8710	0.857	0.857	Nereiphylla	genus	
+Eteone	BOLD:AHW0677	legacy	misplaced	Eteone	keep	keep	False	0.9830	Syllis	0.8680	0.848	0.847	Nereiphylla	genus	
+Eubranchus	BOLD:ADR5292	default	outgroup_inside	Trinchesia	keep	keep	False	0.9360	Tenellia	0.8920	0.835			own_genus	0.936
+Eulalia	BOLD:AGU8460	legacy	outgroup_inside	Pseudomystides	keep	keep	False	0.8920	Eulalia	0.8680	0.868			own_genus	0.892
+Eumida	BOLD:ACM5370	default	outgroup_inside	Pterocirrus	other_genus	keep	True	0.8180	Eumida	0.8370	0.837			genus	0.818
+Euomphalia	BOLD:ACT8095	default	misplaced	Euomphalia	keep	keep	False	0.8270	Theba	0.8470	0.827	0.828	Ganula	outgroup	
+Facelina	BOLD:ACI0523	default	misplaced	Facelina	other_genus	keep	True	0.8260	Facelinopsis	0.8300	0.826	0.830	Facelinopsis	outgroup	
+Facelina	BOLD:ADZ2318	default	misplaced	Facelina	keep	keep	False	0.8280	Favorinus	0.8190	0.828	0.819	Favorinus	genus	
+Facelina	BOLD:AHU2775	default	misplaced	Facelina	other_genus	keep	True	0.8230	Doto	0.8370	0.823	0.822	Facelinopsis	genus	
+Favorinus	BOLD:AAF7070	default	outgroup_inside	Facelina	keep	keep	False	0.9160	Caloria	0.8180	0.824			own_genus	0.916
+Favorinus	BOLD:ACH5179	default	outgroup_inside	Dicata	keep	keep	False		Doto	0.8460	0.820			genus	
+Favorinus	BOLD:ACI1087	default	outgroup_inside	Anteaeolidiella	keep	keep	False	0.8350	Berghia	0.8390	0.824			own_genus	0.835
+Favorinus	BOLD:AHV2297	default	outgroup_inside	Caloria	keep	keep	False	0.9730	Flabellina	0.8370	0.829			own_genus	0.973
+Felimida	BOLD:ADR7906	legacy	outgroup_inside	Hypselodoris	keep	keep	False	0.9070	Felimare	0.8470	0.827			own_genus	0.907
+Felimida	BOLD:AEC1463	legacy	outgroup_inside	Felimare	keep	keep	False	0.8890	Hypselodoris	0.8330	0.822			own_genus	0.889
+Flabellina	BOLD:ACI2337	default	outgroup_inside	Paraflabellina	keep	keep	False	0.8740	Flabellina	0.8620	0.813			genus	
+Flabellina	BOLD:AGQ5417	default	outgroup_inside	Edmundsella	keep	keep	False	0.8380	Doto	0.8410	0.840			genus	0.836
+Gammaropsis	BOLD:ABW1982	default	outgroup_inside	Aora	keep	keep	False	0.8270	Aoroides	0.8420	0.834			genus	0.827
+Gammaropsis	BOLD:ACH8783	default	outgroup_inside	Aoroides	keep	keep	False	0.9710	Aora	0.8360	0.827			own_genus	0.971
+Haminoea	BOLD:AAO8837	default	misplaced	Haminoea	keep	keep	False	0.8470	Philine	0.8400	0.847	0.837	Hermania	genus	
+Haminoea	BOLD:AAO8838	default	misplaced	Haminoea	other_genus	keep	True	0.8440	Hermania	0.8500	0.831	0.850	Hermania	outgroup	
+Haminoea	BOLD:ADR6541	default	outgroup_inside	Weinkauffia	kept_whole_genus	kept_whole_genus	False		Haminoea	0.8420	0.842			genus	0.798
+Hediste	BOLD:AAA8306	default	misplaced	Hediste	other_genus	keep	True	0.8050	Nereis	0.8180	0.805	0.805	Neanthes	genus	
+Helix	BOLD:ACI2239	default	misplaced	Helix	other_genus	keep	True	0.8490	Candidula	0.8520	0.833	0.840	Cornu	outgroup	
+Henlea	BOLD:AAT8932	default	outgroup_inside	Enchytronia	keep	keep	False	0.9040	Marionina	0.8480	0.840			own_genus	0.904
+Henlea	BOLD:AAX7528	default	outgroup_inside	Enchylea	keep	keep	False		Enchytraeus	0.8380	0.809			genus	
+Jassa	BOLD:AAY5675	default	outgroup_inside	Parajassa	keep	keep	False		Podocerus	0.8090	0.802			genus	
+Jassa	BOLD:AGN5830	default	outgroup_inside	Caprella	keep	keep	False	0.9210	Gammaropsis	0.8020	0.794			own_genus	0.921
+Jassa	BOLD:AGN5831	default	outgroup_inside	Caprella	keep	keep	False	0.9000			0.794			own_genus	0.900
+Jassa	BOLD:AAH2666	legacy	misplaced	Jassa	keep	keep	False	0.8260	Gammaropsis	0.8140	0.805	0.794	Caprella	genus	
+Jassa	BOLD:ADM1346	legacy	misplaced	Jassa	keep	keep	False	0.8100	Gammaropsis	0.8090	0.808	0.809	Gammaropsis	outgroup	
+Jassa	BOLD:AEA1932	legacy	misplaced	Jassa	keep	keep	False	0.8260	Ampithoe	0.8260	0.817	0.809	Gammaropsis	genus	
+Lepidochitona	BOLD:ACQ0782	default	misplaced	Lepidochitona	keep	keep	False	0.8270	Acanthochitona	0.8250	0.827	0.821	Placiphorella	genus	
+Lumbricus	BOLD:AFA1426	default	misplaced	Lumbricus	other_genus	keep	True	0.8100	Allolobophora	0.8300	0.810	0.813	Eiseniona	outgroup	
+Lumbricus	BOLD:AHE8103	default	misplaced	Lumbricus	other_genus	keep	True	0.8390	Octolasion	0.8540	0.839	0.833	Aporrectodea	genus	
+Macrogastra	BOLD:ABV5061	default	outgroup_inside	Balea	keep	keep	False	0.9300	Suboestophora	0.8250	0.818			own_genus	0.930
+Macrogastra	BOLD:ADP4116	default	outgroup_inside	Clausilia	keep	keep	False	0.9760	Plagyrona	0.8080	0.800			own_genus	0.976
+Malacocephalus	BOLD:AAK1987	default	misplaced	Malacocephalus	other_genus	keep	True	0.8290	Nezumia	0.8440	0.829	0.832	Nezumia	outgroup	
+Marionina	BOLD:ADW0839	default	outgroup_inside	Buchholzia	keep	keep	False	0.9780	Fridericia	0.8340	0.803			own_genus	0.978
+Marionina	BOLD:AGK8033	default	outgroup_inside	Mesenchytraeus	keep	keep	False	0.9780	Fridericia	0.8350	0.824			own_genus	0.978
+Marionina	BOLD:ADK5471	legacy	outgroup_inside	Globulidrilus	keep	keep	False	0.9510	Enchytraeus	0.8460	0.820			own_genus	0.951
+Mesenchytraeus	BOLD:AAT8966	default	misplaced	Mesenchytraeus	keep	keep	False	0.8580	Fridericia	0.8480	0.858	0.825	Marionina	genus	
+Mesenchytraeus	BOLD:AAT8919	legacy	outgroup_inside	Marionina	keep	keep	False	0.8680	Enchytronia	0.8400	0.825			own_genus	0.868
+Mesenchytraeus	BOLD:AAT8932	legacy	outgroup_inside	Enchytronia	keep	keep	False	0.9040	Marionina	0.8480	0.824			own_genus	0.904
+Metapenaeus	BOLD:ADJ8050	default	misplaced	Metapenaeus	other_genus	keep	True	0.8320	Trachysalambria	0.8500	0.832	0.850	Trachysalambria	outgroup	
+Metapenaeus	BOLD:ADX2984	default	misplaced	Metapenaeus	other_genus	keep	True	0.8290	Penaeopsis	0.8420	0.829	0.842	Penaeopsis	outgroup	
+Mourgona	BOLD:ADK1683	legacy	outgroup_inside	Hermaea	keep	keep	False	0.8400	Caliphylla	0.8450	0.839			own_genus	0.840
+Munida	BOLD:ADE9875	default	outgroup_inside	Diogenes	keep	keep	False	0.8870	Pagurus	0.8260	0.833			own_genus	0.887
+Munida	BOLD:ADW1755	default	outgroup_inside	Calcinus	keep	keep	False	0.9240	Diogenes	0.8230	0.813			own_genus	0.924
+Munida	BOLD:AGM9553	default	outgroup_inside	Dardanus	keep	keep	False	0.8450	Galathea	0.8400	0.837			own_genus	0.849
+Munida	BOLD:AHU8789	default	outgroup_inside	Clibanarius	keep	keep	False	0.9680	Munida	0.8250	0.828			own_genus	0.968
+Neomerinthe	BOLD:AAE5913	default	misplaced	Neomerinthe	other_genus	keep	True	0.8630	Trachyscorpia	0.8700	0.863	0.865	Trachyscorpia	outgroup	
+Octodrilus	BOLD:AAI7114	default	outgroup_inside	Cernosvitovia	keep	keep	False		Bimastos	0.8360	0.821			genus	
+Octodrilus	BOLD:AED2501	default	outgroup_inside	Bimastos	keep	keep	False	0.8200	Hormogaster	0.8200	0.813			own_genus	0.820
+Odontosyllis	BOLD:AHT3431	default	misplaced	Odontosyllis	other_genus	keep	True	0.8090	Syllis	0.8280	0.729	0.762	Megasyllis	outgroup	
+Otala	BOLD:AHT2742	default	misplaced	Otala	other_genus	keep	True	0.8370	Pyrenaearia	0.8550	0.837	0.847	Cornu	outgroup	
+Palaemon	BOLD:ABV9748	default	misplaced	Palaemon	other_genus	keep	True	0.8070	Pandalus	0.8190	0.807	0.798	Periclimenes	genus	
+Palaemon	BOLD:AAC3832	legacy	outgroup_inside	Eualus	keep	keep	False	0.8570	Periclimenes	0.8240	0.818			own_genus	0.857
+Palaemon	BOLD:AAC9240	legacy	outgroup_inside	Eualus	keep	keep	False	0.8500	Pandalus	0.8530	0.819			own_genus	0.850
+Palaemon	BOLD:AAE4017	legacy	outgroup_inside	Hippolyte	keep	keep	False	0.8770	Cestopagurus	0.8250	0.845			own_genus	0.877
+Palaemon	BOLD:AAI2404	legacy	outgroup_inside	Periclimenes	keep	keep	False	0.8420	Plesionika	0.8330	0.826			own_genus	0.847
+Palaemon	BOLD:AAY8471	legacy	outgroup_inside	Periclimenes	keep	keep	False	0.8330	Munida	0.8330	0.829			own_genus	0.835
+Palaemon	BOLD:ACK9412	legacy	outgroup_inside	Hippolyte	keep	keep	False	0.9680	Galathea	0.8240	0.826			own_genus	0.968
+Parablennius	BOLD:ACG5017	default	misplaced	Parablennius	keep	keep	False	0.8420	Cottus	0.8540	0.849	0.842	Salaria	genus	
+Parablennius	BOLD:ACR6994	default	outgroup_inside	Hypleurochilus	keep	keep	False	0.9710	Parablennius	0.8860	0.886			own_genus	0.971
+Pegusa	BOLD:AAE1323	default	misplaced	Pegusa	keep	keep	False	0.9720	Solea	0.8860	0.837	0.885	Solea	outgroup	
+Pegusa	BOLD:AAU0486	default	misplaced	Pegusa	keep	keep	False	0.9720	Solea	0.8880	0.840	0.888	Solea	outgroup	
+Pegusa	BOLD:ADW4357	default	misplaced	Pegusa	keep	keep	False	0.9170	Solea	0.8730	0.843	0.873	Solea	outgroup	
+Pegusa	BOLD:AAC4898	legacy	outgroup_inside	Solea	keep	keep	False	0.9690	Pegusa	0.8880	0.888			own_genus	0.969
+Pegusa	BOLD:AET4762	legacy	outgroup_inside	Solea	keep	keep	False	0.9690	Pegusa	0.8880	0.888			own_genus	0.969
+Pelagia	BOLD:ACA9117	default	misplaced	Pelagia	keep	keep	False	0.9650	Aurelia	0.8060	0.795	0.789	Aurelia	genus	
+Pelagia	BOLD:ACA9624	default	misplaced	Pelagia	keep	keep	False	0.9730			0.810	0.788	Rhizostoma	genus	
+Pelagia	BOLD:ACH7777	default	misplaced	Pelagia	keep	keep	False	0.9740	Aurelia	0.8050	0.804	0.793	Aurelia	genus	
+Pelagia	BOLD:ACH7778	default	misplaced	Pelagia	keep	keep	False	0.9740			0.791	0.785	Rhizostoma	genus	
+Pelagia	BOLD:ADW0675	legacy	misplaced	Pelagia	keep	keep	False	0.9030	Blackfordia	0.8240	0.810	0.789	Aurelia	genus	
+Pelagia	BOLD:ADW3040	legacy	misplaced	Pelagia	keep	keep	False	0.9520	Blackfordia	0.8680	0.741	0.789	Rhizostoma	outgroup	
+Pelagia	BOLD:ADW4157	legacy	misplaced	Pelagia	keep	keep	False	0.9520	Blackfordia	0.8430	0.747	0.768	Aurelia	outgroup	
+Penares	BOLD:AEH5616	default	misplaced	Penares	keep	keep	False	0.9350	Geodia	0.9140	0.935	0.904	Geodia	genus	
+Penares	BOLD:AEM8984	legacy	outgroup_inside	Paratimea	keep	keep	False	0.9800	Tethya	0.8740	0.827			own_genus	0.980
+Periclimenes	BOLD:AEL3965	default	outgroup_inside	Athanas	other_genus	keep	True	0.8110	Processa	0.8150	0.814			genus	0.785
+Periclimenes	BOLD:AAU4644	legacy	outgroup_inside	Athanas	keep	keep	False	0.8470			0.783			own_genus	0.847
+Periclimenes	BOLD:ACH8715	legacy	outgroup_inside	Athanas	keep	keep	False	0.8470	Diogenes	0.8160	0.791			own_genus	0.847
+Periclimenes	BOLD:AEB4967	legacy	outgroup_inside	Alpheus	keep	keep	False	0.8580			0.806			own_genus	0.858
+Periclimenes	BOLD:AGK6093	legacy	outgroup_inside	Palaemon	keep	keep	False	0.9620	Alpheus	0.8330	0.818			own_genus	0.962
+Periclimenes	BOLD:AGN9016	legacy	outgroup_inside	Alpheus	keep	keep	False	0.8370	Plesionika	0.8220	0.816			own_genus	0.837
+Philine	BOLD:ACM2393	default	outgroup_inside	Aglaja	keep	keep	False	0.8410	Philinopsis	0.8560	0.812			own_genus	0.841
+Philine	BOLD:AGK8110	default	outgroup_inside	Melanochlamys	other_genus	keep	True	0.8450	Philine	0.8540	0.854			genus	0.845
+Phyllaplysia	BOLD:AHI2520	default	misplaced	Phyllaplysia	other_genus	keep	True	0.8470	Dolabrifera	0.8630	0.834	0.848	Stylocheilus	outgroup	
+Phyllaplysia	BOLD:AHO5715	default	misplaced	Phyllaplysia	other_genus	keep	True	0.8480	Dolabrifera	0.8530	0.848	0.850	Petalifera	outgroup	
+Phyllodoce	BOLD:AAY3574	default	outgroup_inside	Eumida	keep	keep	False	0.9590	Eteone	0.8180	0.812			own_genus	0.959
+Phyllodoce	BOLD:AGO6541	default	outgroup_inside	Mystides	keep	keep	False	0.8150			0.793			own_genus	0.815
+Phyllodoce	BOLD:ADP5815	legacy	outgroup_inside	Nereiphylla	keep	keep	False	0.9590	Eteone	0.8570	0.849			own_genus	0.959
+Phyllodoce	BOLD:AGQ0943	legacy	outgroup_inside	Pterocirrus	keep	keep	False	0.8420	Phyllodoce	0.8430	0.843			genus	0.842
+Phyllodoce	BOLD:AGU8460	legacy	outgroup_inside	Pseudomystides	keep	keep	False	0.8920	Eulalia	0.8680	0.843			own_genus	0.892
+Pisidia	BOLD:ADX5906	default	misplaced	Pisidia	other_genus	keep	True	0.8240	Lophozozymus	0.8400	0.818	0.821	Munida	outgroup	
+Pisione	BOLD:AAB0330	default	outgroup_inside	Lepidonotus	keep	keep	False	0.9590	Harmothoe	0.8220	0.813			own_genus	0.959
+Pisione	BOLD:AAB5090	default	outgroup_inside	Lepidonotus	keep	keep	False	0.9590	Harmothoe	0.8280	0.809			own_genus	0.959
+Pisione	BOLD:AAV8350	default	outgroup_inside	Sthenelais	keep	keep	False	0.8310	Harmothoe	0.8160	0.809			own_genus	0.831
+Pisione	BOLD:ABA1518	default	outgroup_inside	Sthenelais	keep	keep	False	0.8430			0.781			own_genus	0.843
+Pisione	BOLD:ACR3553	default	outgroup_inside	Labioleanira	keep	keep	False		Harmothoe	0.8230	0.809			genus	
+Pisione	BOLD:ADK6991	default	outgroup_inside	Gesiella	keep	keep	False		Harmothoe	0.8280	0.804			genus	
+Pisione	BOLD:ADW5072	legacy	misplaced	Pisione	keep	keep	False	0.8220	Harmothoe	0.8320	0.806	0.810	Lepidonotus	outgroup	
+Pisione	BOLD:AEE2654	legacy	misplaced	Pisione	keep	other_genus	False	0.8220	Harmothoe	0.8460	0.816	0.818	Harmothoe	outgroup	
+Pisione	BOLD:AHA9031	legacy	misplaced	Pisione	keep	keep	False	0.8590	Harmothoe	0.8200	0.814	0.797	Gesiella	genus	
+Pisione	BOLD:AHL9227	legacy	misplaced	Pisione	keep	keep	False	0.8590	Harmothoe	0.8330	0.813	0.804	Gesiella	genus	
+Pisione	BOLD:AHL9228	legacy	misplaced	Pisione	keep	keep	False	0.8140	Harmothoe	0.8210	0.806	0.809	Labioleanira	outgroup	
+Pleurobranchus	BOLD:ACV7991	default	misplaced	Pleurobranchus	other_genus	keep	True	0.8340	Pleurobranchaea	0.8320	0.834	0.814	Berthella	genus	
+Pleurobranchus	BOLD:ADE3614	legacy	outgroup_inside	Pleurobranchaea	keep	keep	False	0.9060	Berthellina	0.8240	0.834			own_genus	0.906
+Pleuroxus	BOLD:AAV1409	legacy	outgroup_inside	Bosmina	keep	keep	False	0.8460	Ceriodaphnia	0.8090	0.805			own_genus	0.846
+Pleuroxus	BOLD:AGO5171	legacy	outgroup_inside	Simocephalus	keep	keep	False	0.9850	Ceriodaphnia	0.8220	0.820			own_genus	0.985
+Podocerus	BOLD:AAY5675	legacy	outgroup_inside	Parajassa	keep	keep	False		Podocerus	0.8090	0.809			genus	
+Podocerus	BOLD:ACG5178	legacy	outgroup_inside	Jassa	keep	keep	False	0.9640			0.796			own_genus	0.964
+Pontinus	BOLD:AAC5020	default	misplaced	Pontinus	other_genus	keep	True	0.8390	Neomerinthe	0.8530	0.839	0.853	Neomerinthe	outgroup	
+Pontohedyle	BOLD:ACB8265	default	outgroup_inside	Microhedyle	other_genus	keep	True	0.8200	Radix	0.8310	0.806			own_genus	0.820
+Protohyale	BOLD:AAB5862	default	outgroup_inside	Apohyale	keep	keep	False	0.8290	Orchestia	0.8340	0.835			genus	0.829
+Protohyale	BOLD:AAC4712	default	outgroup_inside	Talitrus	keep	keep	False	0.9080	Apohyale	0.8250	0.802			own_genus	0.908
+Pseudomystides	BOLD:ADW0789	default	misplaced	Pseudomystides	other_genus	keep	True	0.8130	Eulalia	0.8280	0.813	0.816	Eumida	outgroup	
+Pterocirrus	BOLD:ACI1266	default	misplaced	Pterocirrus	other_genus	keep	True	0.8350	Eumida	0.8500	0.835	0.838	Pseudomystides	outgroup	
+Pterocirrus	BOLD:ADW0789	default	outgroup_inside	Pseudomystides	other_genus	keep	True	0.8130	Eulalia	0.8280	0.824			genus	0.813
+Rostanga	BOLD:AHK0152	default	misplaced	Rostanga	other_genus	keep	True	0.8290	Jorunna	0.8450	0.829	0.842	Jorunna	outgroup	
+Rostanga	BOLD:AAX8785	default	outgroup_inside	Peltodoris	keep	keep	False	0.8980	Jorunna	0.8500	0.837			own_genus	0.898
+Rostanga	BOLD:AEI3436	default	outgroup_inside	Baptodoris	keep	keep	False	0.8280	Paradoris	0.8410	0.823			genus	
+Rostanga	BOLD:AHJ8934	default	outgroup_inside	Tayuva	keep	keep	False		Jorunna	0.8470	0.844			genus	
+Rostanga	BOLD:ADE2576	legacy	misplaced	Rostanga	keep	keep	False	0.8690	Diaphorodoris	0.8410	0.831	0.834	Gargamella	outgroup	
+Rostanga	BOLD:AGQ0153	legacy	misplaced	Rostanga	keep	keep	False	0.8750	Diaphorodoris	0.8610	0.846	0.840	Geitodoris	genus	
+Rostanga	BOLD:AGQ0154	legacy	misplaced	Rostanga	keep	keep	False	0.9380	Tayuva	0.8350	0.838	0.835	Tayuva	genus	
+Rostanga	BOLD:AHK0151	legacy	misplaced	Rostanga	keep	keep	False	0.9380	Jorunna	0.8420	0.833	0.833	Tayuva	genus	
+Scapholeberis	BOLD:AAE0459	legacy	outgroup_inside	Macrothrix	keep	keep	False	0.8000	Simocephalus	0.8180	0.816			genus	0.805
+Schizoporella	BOLD:ADX5814	default	misplaced	Schizoporella	other_genus	keep	True	0.8360	Parasmittina	0.8420	0.771	0.813	Parasmittina	outgroup	
+Stelletta	BOLD:ACH5846	default	outgroup_inside	Paratimea	keep	keep	False	0.9820	Tethya	0.8720	0.833			own_genus	0.982
+Stiliger	BOLD:AHI8854	default	misplaced	Stiliger	other_genus	keep	True	0.8120	Thuridilla	0.8290	0.812	0.824	Ercolania	outgroup	
+Synodus	BOLD:AAF2335	default	misplaced	Synodus	other_genus	keep	True	0.8140	Lampanyctus	0.8320	0.814	0.810	Alepisaurus	genus	
+Synodus	BOLD:AAG2560	legacy	outgroup_inside	Anthias	keep	keep	False	0.9350	Synodus	0.8660	0.866			own_genus	0.935
+Trinchesia	BOLD:ACB8642	default	outgroup_inside	Zelentia	keep	keep	False	0.9560	Tenellia	0.9160	0.842			own_genus	0.956
+Trinchesia	BOLD:AHI8482	legacy	misplaced	Trinchesia	keep	keep	False	0.8530	Tenellia	0.8460	0.839	0.836	Zelentia	genus	
+Verruca	BOLD:ACH5756	default	misplaced	Verruca	other_genus	keep	True	0.8400	Chthamalus	0.8540	0.818	0.840	Amphibalanus	outgroup	
+Zophoscolex	BOLD:AHS2081	default	misplaced	Zophoscolex	other_genus	keep	True	0.8230	Hormogaster	0.8290	0.823	0.816	Cernosvitovia	genus	
+Zophoscolex	BOLD:AAB7509	default	outgroup_inside	Eiseniella	keep	keep	False	0.9730	Aporrectodea	0.8280	0.819			own_genus	0.973

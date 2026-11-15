@@ -246,3 +246,45 @@ The release gate of the whole layer ([#56](https://github.com/naturalis/timegraf
 
 In short: 25 of 28 must metrics pass. The real misplacement is fixed end to end; 118 of 120 injected merges are found and 117 placed back in their class, with no false flag; conflicts and extreme crown ages fall; the backbone moves less under noise in TimeTree (node ages that move by more than a factor 1.5: 21% to 9%) and when half the genera are dropped; sample rankings by PD are stable (0.97 to 0.99); the run takes 3% to 9% longer and is reproducible offline. The three failures: after an injected merge is corrected, the species of the wrong taxon still go to TimeTree and the genus returns to its family, not to its place in it (two metrics), and peak memory is 1.61 times that of `main` at 1.3 GB (one metric, with a threshold set too tight). The report recommends merging with the defaults on and lists the follow-ups.
 
+
+## `rooting/` (#75)
+
+Units on the wrong side of the root after the screening fix of #55 ([#75](https://github.com/naturalis/timegraft/issues/75)). The gate (#56) found 386 genera with such units in the default run against 366 with the consistency layer switched off, and 314 units of a genus among its outgroup against 276. This was not a gate metric.
+
+How it was made, on 14 November 2026: two runs of the workflow at `main` (`4721ea0`) through the genus stage, from `records.tsv.gz` with `config/config.yaml` and `config/iberia.yaml`. The legacy run adds `benchmark/legacy.yaml`, as `main` ran before the layer. Both use `timetree_cache.json`, OTT 3.7.3 and synthesis 16.1, VSEARCH 2.32.0 and MAFFT 7.505. The runs reproduce every count of `benchmark/results/end_to_end.tsv` on this topic: 1,036 and 1,039 genus subtrees, 1,294 and 1,139 units set aside by screening, 366 and 386 genera with units on the wrong side, 276 and 314 units among the outgroup, and 20 and 19 crown ages that depend strongly on the root. "Strongly" means that `crown_age_max` is at least 1.25 times `crown_age_min`; that is the definition that gives the gate's numbers. The runs themselves are not committed.
+
+- `rooting.py LEGACY DEFAULT OUT` compares the two runs. A unit is on the wrong side (`violations`) when it is a unit of the genus that the root puts among the outgroup (`misplaced`), or an outgroup unit that the root puts inside the genus. The provenance names only the first kind, so the script rebuilds the unrooted tree of every genus whose wrong-side count or misplaced units differ (79 genera). It builds it as `build_genus()` does: MAFFT, k2p, BIONJ. It then reads the minimum-violation edges of `root_genus()` from that tree, and checks that the rebuilt counts equal the recorded ones, which they do for every genus. Identities are VSEARCH global identities, as in the screening. It writes `summary.tsv`, `genera.tsv` (the 79 genera) and `units.tsv` (the 220 units on the wrong side in one run only).
+- `set_aside_effect.py RUN OUT` rebuilds each genus of the default run that has misplaced units (188) as `build_shard.py` does: once with all its units, which must reproduce the recorded crown age (it does), and once without the misplaced units. It writes `set_aside_effect.tsv`.
+
+**1. Are the newly misplaced units the ones the screening fix kept?** Mostly, yes. Of the 23 genera that have units on the wrong side in the default only (`wrong_side_only_in` in `genera.tsv`):
+
+- In 16, a unit that the fix kept is itself on the wrong side: its decision changed from `other_genus` to `keep`. 18 of the 20 misplaced units in these genera are such units.
+- In 6, the fix added units to the genus, and the wrong-side units are outgroup units that the changed tree now puts inside it (*Calanoides*, *Calanus*, *Cobitis*, *Euomphalia*, *Favorinus*, *Macrogastra*).
+- 1, *Caryophyllia*, has nothing to do with screening: four of its outgroup units changed with the backbone.
+
+The 3 genera with wrong-side units in the legacy run only (*Dendrophyllia*, *Felimida*, *Mourgona*) lost them when the fix changed their trees.
+
+**2. Are they genuine?** In the sense that the barcodes cannot place them, yes; they are not misidentifications.
+
+- The 20 misplaced units are 79 to 85% identical to their nearest congener and 80 to 85% to the nearest outgroup unit, a median of 1.2 points closer to the outgroup (at most 2.3). These are the units that screening used to set aside because their nearest hit was in another genus. They are about equally far from everything, at a depth where COI distances saturate; a misidentified record of an outgroup genus would be 95% identical or more to it. The root follows the slightly shorter distance, and the genus is no clade in these barcodes.
+- The 14 outgroup units inside a genus are mostly an artefact of the tree. 10 are much closer to their own genus (median 90.5%) than to the genus they were put in (about 82%). For example, a *Calanus* unit inside *Calanoides* is 97.8% identical to *Calanus*.
+- The one clear data error is unrelated to the fix: in *Caryophyllia*, a unit filed under *Stephanocyathus* is 95.9% identical to *Caryophyllia* and 82.3% to its own genus.
+
+**3. Does it matter for crown ages?** Little, overall:
+
+- Over the 22 genera of the 23 with a crown in both runs, the median change is a factor 1.03. Five change by more than 10%.
+- Two of those five do not come from the rooting. *Cobitis* (11.1 to 20.1 Ma) takes its TimeTree crown from the sampled species instead of the whole genus (#54). *Calanoides* (18.8 to 29.0 Ma) gained two deep units, and its crown does not depend on the root.
+- The other three come from misplaced units: *Athanas* (27.3 to 40.1 Ma, three units, one of them misplaced), *Phyllaplysia* (21.9 to 26.5 Ma) and *Hediste* (39.7 to 43.9 Ma). *Athanas* and *Phyllaplysia* now depend strongly on the root; no genus of the 23 did before.
+- Across the whole run, the number of crowns that depend strongly on the root went from 20 to 19.
+
+**What setting the misplaced units aside would do** (`set_aside_effect.tsv`, over the 188 genera of the default run with misplaced units):
+
+- 24 genera would be left with fewer than two units and keep them.
+- The other 164 change their crown by a median factor of 1.03. 37 change by more than 10% and 7 by more than a factor 1.5, mostly towards younger (129 of 164).
+- Only 1 of the 18 crowns among them that depend strongly on the root still would. This is partly by construction, since the genus without its misplaced units is one of the root positions behind that range.
+- For the 23 genera, it gives back the legacy crown almost exactly (*Phyllaplysia* 21.94, *Acanthochitona* 38.50, *Otala* 15.34 against 15.28). *Athanas* comes to 31.4 Ma instead of 27.3, and *Hediste* to 39.2 instead of 39.7.
+- In 6 genera, the rebuilt tree puts other units among the outgroup in their turn; those are kept.
+
+**Decision.** `rooting.misplaced_action` is now a setting: `keep` (the default, which changes nothing) or `set_aside`. With `set_aside`, the subtree is built once more without the misplaced units, and they are placed like units set aside by screening (reason `screen_root_misplaced`). It mirrors `screening.rate_outlier_action`.
+
+The misplaced units are genuine in the sense that the barcodes cannot place them, and they matter for the crown of a few small genera. But they are not wrong records, and leaving them in a subtree they do not resolve is what makes those crowns depend on the root. Whether `set_aside` should become the default changes 37 crown ages, so it should be decided on the gate with rooting as a metric (#74), not on this run alone. `mutual_pairs: further` (#73) addresses the screening side, and can be measured on the same gate.
