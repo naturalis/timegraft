@@ -127,7 +127,8 @@ try:
             conc_settings = dict(flag_level=cc.LEVELS[conc_cfg.get("flag_level", "class")],
                                  max_share=float(conc_cfg.get("max_share", 0.0)),
                                  min_hits=int(conc_cfg.get("min_hits", 5)),
-                                 min_flags=int(conc_cfg.get("min_flags", 2)))
+                                 min_flags=int(conc_cfg.get("min_flags", 2)),
+                                 lineage_alone=cc.level_setting(conc_cfg.get("lineage_alone_level", "class")))
             concordance = cc.assess(taxonomy, names, genera, matches, reference, merged, classifications, hits,
                                     cc.backbone_sisters(tree), phylum, lineage_names, **conc_settings)
 
@@ -247,7 +248,7 @@ write_tsv(snakemake.output.concordance, concordance, CONCORDANCE_COLUMNS)
 # what the backbone was built from, and in what format the outputs are (#47)
 entries = [v for k, v in cache.data.items() if k.startswith("mrca:") and isinstance(v, dict)]
 metadata = {
-    "output_format": {"genera.tsv": 7, "node_ages.tsv": 4, "crown_ages.tsv": 3, "concordance.tsv": 3,
+    "output_format": {"genera.tsv": 7, "node_ages.tsv": 4, "crown_ages.tsv": 3, "concordance.tsv": 4,
                       "timetree_cache": CACHE_VERSION},
     # which species the TimeTree crown ages are the crowns of (#54)
     "crowns": {"settings": settings.get("crown_query") or {},
@@ -261,6 +262,7 @@ metadata = {
     "concordance": {
         "settings": settings.get("concordance") or {},
         "genera_by_flag": dict(Counter(r["concordance_flag"] or "concordant" for r in concordance)),
+        "flagged_by_rule": dict(Counter(r["flag_rule"] for r in concordance if r.get("flag_rule"))),
     },
     "ages": {
         "settings": settings.get("ages") or {},

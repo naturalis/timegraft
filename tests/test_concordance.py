@@ -85,5 +85,40 @@ def test_aggregate_and_ranking():
     four = cc.aggregate({"genus": "D", "lineage_distance": "", "merged_id_distance": "",
                          "neighbour_concordance": ""}, level, 0.0)
     assert four["concordance_flag"] == "not_evaluable"
+    assert {r["flag_rule"] for r in (two, three, four)} == {""} and one["flag_rule"] == "two_checks"
     ranked = cc.rank_rows([four, three, two, one])
     assert [r["genus"] for r in ranked] == ["A", "B", "C", "D"] and ranked[0]["rank"] == "1"
+
+
+@pytest.mark.parametrize("distance, neighbour, alone, flag, rule", [
+    ("4", "", "class", "flag", "lineage_alone"),         # lineage alone at class flags (#71)
+    ("5", "0.900", "class", "flag", "lineage_alone"),    # ... and at phylum, with a passing neighbour check
+    ("3", "", "class", "", ""),                           # order: below flag_level, not even review
+    ("4", "", "phylum", "review", ""),                    # class, with the threshold at phylum: review
+    ("4", "", None, "review", ""),                        # off: the earlier result
+    ("4", "0.000", "class", "flag", "two_checks"),        # two checks fail: that rule wins
+    ("4", "0.000", None, "flag", "two_checks"),
+    ("0", "0.000", "class", "review", ""),                # the neighbour check alone never flags
+])
+def test_lineage_alone(distance, neighbour, alone, flag, rule):
+    row = cc.aggregate({"genus": "X", "lineage_distance": distance, "merged_id_distance": "",
+                        "neighbour_concordance": neighbour}, cc.LEVELS["class"], 0.0,
+                       lineage_alone=None if alone is None else cc.LEVELS[alone])
+    assert (row["concordance_flag"], row["flag_rule"]) == (flag, rule)
+
+
+def test_lineage_alone_at_order_gives_review():
+    # with flag_level at order, a lineage difference at order fails the check but flags only from class up
+    row = cc.aggregate({"genus": "X", "lineage_distance": "3", "merged_id_distance": "", "neighbour_concordance": ""},
+                       cc.LEVELS["order"], 0.0, lineage_alone=cc.LEVELS["class"])
+    assert row["lineage_flag"] == "yes" and row["concordance_flag"] == "review" and row["flag_rule"] == ""
+
+
+@pytest.mark.parametrize("value, level", [("class", 4), ("phylum", 5), ("off", None), (False, None), (None, None)])
+def test_level_setting(value, level):
+    assert cc.level_setting(value) == level
+
+
+def test_level_setting_rejects_unknown_rank():
+    with pytest.raises(ValueError):
+        cc.level_setting("clade")
