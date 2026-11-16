@@ -1,0 +1,13 @@
+experiment	seed	arm	genera_compared	crown_median_factor	crown_p90_factor	pd_150 units at random	pd_100 genera, one unit each	pd_100 genera, five units each
+inject	1	legacy	1036	1.000	1.046	0.9787	0.9602	0.9666
+inject	1	default	1039	1.000	1.000	1.0000	1.0000	1.0000
+inject	2	legacy	1036	1.000	1.006	0.9597	0.9444	0.9581
+inject	2	default	1039	1.000	1.000	0.9999	0.9997	0.9999
+noise	1	legacy	1036	1.158	1.471	0.9174	0.8730	0.8771
+noise	1	default	1039	1.080	1.341	0.9536	0.9499	0.9631
+noise	2	legacy	1036	1.096	1.481	0.8248	0.8282	0.8712
+noise	2	default	1039	1.081	1.396	0.9137	0.9327	0.9458
+sub	1	legacy	517	1.011	1.654	0.9767	0.9715	0.9312
+sub	1	default	518	1.014	1.593	0.9759	0.9785	0.9180
+sub	2	legacy	509	1.007	1.729	0.9673	0.9434	0.9379
+sub	2	default	511	1.008	1.672	0.9453	0.9247	0.9343

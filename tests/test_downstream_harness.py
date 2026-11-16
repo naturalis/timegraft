@@ -78,24 +78,3 @@ def test_memo_reuses_a_result_only_for_the_same_inputs(ds, tmp_path, monkeypatch
     build.build_genus(*args[:7], {"rule": "strict"}, *args[8:])
     assert len(calls) == 5 and stats["hits"] == 2
 
-
-def test_search_memo_keys_on_the_sequences_and_settings(ds, tmp_path, monkeypatch):
-    sys.path.insert(0, str(REPO / "src"))
-    import timegraft.placement as placement
-
-    calls = []
-
-    def fake(queries, refs, min_identity, query_cov=0.9, maxaccepts=20, threads=1):
-        calls.append(len(refs))
-        return {q: [(refs[0][0], 0.95)] for q, _ in queries}
-
-    monkeypatch.setattr(placement, "vsearch_hits", fake)
-    stats = ds.install_search_memo(str(REPO), tmp_path / "memo")
-    queries, refs = [("q1", "ACGT")], [("r1", "ACGA"), ("r2", "ACGG")]
-    first = placement.vsearch_hits(queries, refs, 0.8, threads=2)
-    # the number of threads does not change the hits; the references and the settings do
-    assert placement.vsearch_hits(queries, refs, 0.8, threads=4) == first and calls == [2]
-    placement.vsearch_hits(queries, refs[:1], 0.8)
-    placement.vsearch_hits(queries, [("r1", "ACGT"), ("r2", "ACGG")], 0.8)
-    placement.vsearch_hits(queries, refs, 0.9)
-    assert len(calls) == 4 and stats == {"hits": 1, "misses": 4}

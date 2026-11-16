@@ -1,0 +1,49 @@
+seed	genus	kind	flagged	corrected	legacy_crown_clean	legacy_crown_injected	legacy_crown_factor	default_crown_clean	default_crown_injected	default_crown_factor
+1	Ancylus	class	True	True	8.77	18.60	2.120	13.67	13.67	1.000
+1	Corophium	phylum	True	True	26.54	74.40	2.803	26.54	26.54	1.000
+1	Cuthona	phylum	True	True	17.09	20.62	1.207	17.10	17.10	1.000
+1	Eluma	phylum	True	True	12.12	31.57	2.605	12.12	12.12	1.000
+1	Haploginglymus	class	True	True	12.30	12.30	1.000	12.30	12.30	1.000
+1	Helicolenus	phylum	True	True						
+1	Hymenopenaeus	class	True	True	14.36	28.13	1.958	14.36	14.36	1.000
+1	Jujubinus	phylum	True	True	15.17	15.17	1.000	15.17	15.17	1.000
+1	Litophyton	class	True	True						
+1	Margaritifera	class	True	True	28.49	59.38	2.084	25.58	25.58	1.000
+1	Miktoniscus	phylum	True	True	33.75	62.91	1.864	33.75	33.75	1.000
+1	Myliobatis	class	True	True	15.64	39.76	2.542	15.64	15.64	1.000
+1	Neogammarus	phylum	True	True						
+1	Nephtys	phylum	True	True	36.93	24.41	1.513	33.99	33.99	1.000
+1	Placiphorella	phylum	True	True	31.75	49.30	1.553	31.54	31.54	1.000
+1	Pleoticus	class	True	True	14.73	33.69	2.286	14.73	14.73	1.000
+1	Pontophilus	class	True	True	27.92	63.02	2.257	29.97	29.97	1.000
+1	Rajella	phylum	True	True	8.20	19.74	2.407	8.34	8.34	1.000
+1	Remora	phylum	True	True	19.54	19.54	1.000	19.54	19.54	1.000
+1	Soteriscus	class	True	True						
+1	Thysanoteuthis	class	True	True	26.69	45.11	1.690	26.69	26.69	1.000
+1	Tripterygion	class	True	True	29.57	29.57	1.000	29.57	29.57	1.000
+1	Zenion	phylum	True	True	7.38	7.38	1.000	7.38	7.38	1.000
+1	Zu	class	True	True	11.32	11.32	1.000	11.32	11.32	1.000
+2	Beryx	phylum	True	True	12.42	12.42	1.000	12.42	12.42	1.000
+2	Botryphallus	class	True	True						
+2	Carcinus	class	True	True	8.45	8.45	1.000	8.45	8.45	1.000
+2	Ceriodaphnia	class	True	True	23.05	33.65	1.460	23.01	23.01	1.000
+2	Craspedacusta	class	True	True	60.31	34.81	1.732	60.27	60.27	1.000
+2	Cypridopsis	class	True	True	43.46	64.68	1.488	45.88	45.88	1.000
+2	Gadomus	phylum	True	True	0.07	0.07	1.000	12.45	12.45	1.000
+2	Gammarella	phylum	True	True	38.32	49.48	1.291	38.32	38.32	1.000
+2	Gammarus	class	True	True	47.78	61.00	1.277	47.78	47.78	1.000
+2	Glycera	phylum	True	True	52.13	62.16	1.193	51.88	51.89	1.000
+2	Hediste	class	True	True	39.68	25.56	1.552	39.16	39.16	1.000
+2	Hyale	phylum	True	True						
+2	Hygophum	class	True	True	17.00	17.00	1.000	17.00	17.00	1.000
+2	Idas	phylum	True	True	30.89	45.83	1.484	45.83	44.76	1.024
+2	Magelona	class	True	True	63.82	43.40	1.470	63.82	63.82	1.000
+2	Margaretta	phylum	True	True	57.19	34.94	1.637	56.65	56.65	1.000
+2	Orientogalba	phylum	True	True	7.29	14.15	1.940	12.11	12.11	1.000
+2	Pterocirrus	phylum	True	True	26.76	53.40	1.996	26.76	26.76	1.000
+2	Scaphander	class	True	True	19.57	41.88	2.140	19.45	19.45	1.000
+2	Schizoporella	class	True	True	37.36	37.36	1.000	37.36	37.36	1.000
+2	Sphincterochila	phylum	True	True	20.06	8.80	2.280	20.07	24.36	1.214
+2	Spicara	class	True	True	29.17	30.92	1.060	10.53	10.53	1.000
+2	Thalassoma	phylum	True	True	17.20	17.20	1.000	17.20	17.20	1.000
+2	Venerupis	phylum	True	True	55.30	95.15	1.721	41.86	41.86	1.000

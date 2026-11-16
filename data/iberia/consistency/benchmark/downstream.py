@@ -20,11 +20,9 @@ ingroup and outgroup sequences, its stem age, the marker and rooting settings, i
 tables, its rate, and the source of ``src/timegraft``. A later call with the same inputs takes the result from
 DIR instead of computing it again. ``build_genus()`` is deterministic (``evaluate.py`` checks that the harness
 reproduces the full runs), so this changes nothing but the time; it saves most of the genus stage where an
-experiment leaves most genera's inputs as they were, as an injected misplacement does. The search of
-``place_units.py`` (``vsearch_hits()``, the unplaced units against the records of the units in the tree) is kept
-in the same way, keyed on the query and reference sequences and the search settings: it is the same in every run
-with the same units in its tree. Both functions are wrapped from the outside; the workflow scripts are not
-changed.
+experiment leaves most genera's inputs as they were, as an injected misplacement does. The function is wrapped
+from the outside; the workflow script is not changed. ``place_units.py`` is not cached: its time goes into
+attaching the units to the tree, which differs from run to run.
 
 OUT gets ``provenance.tsv``, ``grafted.tre``, ``timegraft.tre``, ``units_placed.tsv``, ``subtrees/``, ``genera/``,
 ``units/representatives.tsv`` (the units of the run, for ``evaluate.py``), ``logs/``, ``steps.tsv`` (seconds per
@@ -129,41 +127,6 @@ def install_memo(repo, memo):
     return stats
 
 
-def install_search_memo(repo, memo):
-    """Wrap timegraft.placement.vsearch_hits in the same way: its result depends only on the query and reference
-    sequences and the search settings, which are the same in every run that has the same units in its tree (the
-    clean run, the injected errors and the perturbed ages of one setting)."""
-    import timegraft.placement as placement
-
-    original = placement.vsearch_hits
-    version = code_version(repo)
-    Path(memo).mkdir(parents=True, exist_ok=True)
-    stats = {"hits": 0, "misses": 0}
-
-    def memoised(queries, refs, min_identity, query_cov=0.9, maxaccepts=20, threads=1):
-        digest = hashlib.sha256()
-        for part in (version, json.dumps([list(map(list, queries)), repr(min_identity), repr(query_cov),
-                                          repr(maxaccepts)])):
-            digest.update(part.encode())
-        for name, seq in refs:
-            digest.update(f"{name}\t{seq}\n".encode())
-        path = Path(memo) / f"search_{digest.hexdigest()}.pickle"
-        if path.exists():
-            stats["hits"] += 1
-            with open(path, "rb") as handle:
-                return pickle.load(handle)
-        stats["misses"] += 1
-        result = original(queries, refs, min_identity, query_cov, maxaccepts, threads)
-        partial = path.with_suffix(f".{os.getpid()}.tmp")
-        with open(partial, "wb") as handle:
-            pickle.dump(dict(result), handle)
-        os.replace(partial, path)
-        return result
-
-    placement.vsearch_hits = memoised
-    return stats
-
-
 def run_shard(job):
     """One build_shard.py, in a process of its own (so its logging goes to its own log file)."""
     repo, sm, memo = job
@@ -245,7 +208,6 @@ def main():
         input=NS(backbone=str(backbone / "backbone.tre"), subtrees=subtrees, singles=str(out / "genera/singles.tsv")),
         output=NS(tree=str(out / "grafted.tre"), provenance=str(out / "provenance.tsv")),
         params=NS(src=src, prune_empty=cfg["prune_empty"]), log=[str(out / "logs/graft.log")]))
-    search = install_search_memo(repo, args.memo) if args.memo else {"hits": 0, "misses": 0}
     script("place_units", types.SimpleNamespace(
         input=NS(tree=str(out / "grafted.tre"), unassigned=units["screened_unassigned.tsv"],
                  records=units["filtered.tsv"], reps=units["screened_representatives.tsv"],
@@ -254,7 +216,6 @@ def main():
         params=NS(src=src, enabled=cfg.get("place_unassigned_units", True), settings=marker["placement"],
                   rate=marker["crown_age"].get("rate")),
         threads=args.threads, log=[str(out / "logs/place_units.log")]))
-    steps[-1].update(memo_hits=search["hits"], memo_misses=search["misses"])
     write(out / "steps.tsv", steps, ["step", "seconds", "memo_hits", "memo_misses"])
     (out / "seconds.txt").write_text(f"{time.time() - start:.1f}\n")
     shutil.rmtree(final, ignore_errors=True)

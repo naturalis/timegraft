@@ -148,7 +148,7 @@ Review of the pull request (#67) found three weaknesses in the harness. All are 
 
 - **One data set, one real error.** Everything is the Iberian COI run. The injected errors are of one kind, chosen to match that one real case, and the variants show how much the kind matters.
 - **TimeTree is the reference for ages.** The hold-out and the conflict metrics measure agreement with TimeTree, not with the truth. The robustness results do not have that weakness: they compare each setting with itself.
-- **The injections and perturbations stop at the backbone.** They were not carried through the genus subtrees (26 minutes per run). Stem ages bound crown ages, so the direction is clear, but the size of the effect on the final tree was not measured.
+- **The injections and perturbations stop at the backbone.** They were not carried through the genus subtrees (26 minutes per run). Stem ages bound crown ages, so the direction is clear, but the size of the effect on the final tree was not measured. (Measured since, in [#81](https://github.com/naturalis/timegraft/issues/81): see the last section.)
 - **Blind and known.** Nine of the thresholds were set knowing the stage-level result. The three failures and the robustness results were blind.
 - **Not tested per part**: which part produces the robustness, and the options left off at the default.
 
@@ -190,3 +190,21 @@ On 16 November 2026 the gate was run again on `issue-73-options`: `main` (`8e575
 | 7a wall time of the full run | 57.1 min | 56.7 min |
 
 The rooting measures of `../options/` are not gate metrics (#74). On the same runs they improve: 346 genera with units on the wrong side of the root instead of 386, 248 units of a genus among its outgroup instead of 314, and 11 crowns that depend strongly on the root instead of 19.
+
+## Carried through the genus stage (#81)
+
+The injection, the age perturbation and the subsampling were run through the genus stage, grafting and placement (two replicates each, both settings, 14 runs), with a harness that reproduces both full runs byte for byte. These are the downstream metrics that gate version 2 declares (`GATE.md`, #74). They are not a run of that gate: the other metrics need fresh full runs of the current `main`. Method and tables: `results_81/`.
+
+| # | Metric | Legacy | Default | Status |
+| --- | --- | --- | --- | --- |
+| 1n | Injection: corrected genera with a crown within 1.5 of the clean run | 21 of 42 | 42 of 42 | pass |
+| 1o | Injection: PD rank correlation with the clean final tree (three designs) | 0.95 to 0.97 | 1.000 | pass |
+| 5e | Ages perturbed: 90% quantile of crown-age changes | 1.48 | 1.36 | pass |
+| 5f | Half the genera dropped: the same | 1.68 | 1.65 | pass |
+| 6e | Ages perturbed: PD rank correlation with the clean final tree | 0.85 to 0.87 | 0.93 to 0.95 | pass |
+| 6f | Half the genera dropped: the same | 0.935 to 0.972 | 0.926 to 0.961 | **fail**, by 0.001 in one design |
+
+- **Corrected errors leave no trace in the final tree.** With the default, every corrected injected genus has its clean crown age, the crowns of other genera do not move (0 and 1 by more than 10%, against 26 and 42 with legacy), and PD rankings are those of the clean tree.
+- **The robustness of the backbone carries through.** Under perturbed TimeTree ages crowns move less and PD rankings hold up better with the default.
+- **6f fails on placement.** The default places more units by nearest neighbour, mostly the long branches it has set aside from their genus subtrees since #73, and where those land depends on which genera are sampled. Without the placed units the default is at least as robust as legacy in every design (0.985, 0.965, 0.963 against 0.973, 0.963, 0.956). By the rule of version 2, a failing metric of family 6 means *hold* when the full gate is run, unless this changes before then. Two directions: make the placement of set-aside units less dependent on what else is sampled, or weigh whether `rate_outlier_action: set_aside` (#73) earns that cost. Changing the threshold of 6f after seeing this is not one of them.
+
