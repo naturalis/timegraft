@@ -152,3 +152,43 @@ def test_compare_backbones_needs_the_new_columns(tmp_path):
         w.writerows(rows)
     with pytest.raises(SystemExit):
         cb.Backbone(tmp_path / "a")
+
+
+def _row(**kw):
+    row = {"query_ids": "", "query_genera": "", "timetree_attempt": "", "timetree_age": "", "source": "interpolated",
+           "precedence_source": ""}
+    row.update(kw)
+    return row
+
+
+def test_a_gained_calibration_states_why(tmp_path):
+    spec = importlib.util.spec_from_file_location("compare_backbones", COMPARE)
+    cb = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cb)
+    ages = {frozenset({1, 2, 4, 5}): 100.0, frozenset({1, 3, 4, 5}): 100.0, frozenset({1, 2, 3}): 60.0}
+    _write_backbone(tmp_path / "a", {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5}, ages)
+    a = b = cb.Backbone(tmp_path / "a")
+    node = b.stem("C")
+    cal = _row(query_ids="1+2+3", query_genera="A;B;C", timetree_attempt="0", timetree_age="60", source="timetree")
+    why = lambda without: cb._why_calibrated(a, b, cal, without, node, "A", a)[0]
+    # TimeTree had no age for the other run's picks, its identifiers unchanged
+    assert why(_row()) == ["no_answer"]
+    # the other run asked about other species
+    assert why(_row(query_ids="1+3", query_genera="A;C", timetree_attempt="0", timetree_age="60",
+                    source="interpolated_unresolved_in_timetree")) == ["picks", "unresolved"]
+    # or with enclosing taxa
+    assert why(_row(query_ids="11+13", timetree_attempt="higher_taxa", timetree_age="70")) == ["higher_taxa"]
+    # the same query, another answer from TimeTree
+    assert why(_row(query_ids="1+2+3", query_genera="A;B;C", timetree_attempt="0", timetree_age="")) == \
+        ["timetree_answer"]
+    # the same calibration, dropped by the precedence rule
+    assert why(_row(query_ids="1+2+3", query_genera="A;B;C", timetree_attempt="0", timetree_age="60",
+                    source="interpolated_after_drop")) == ["fit"]
+
+
+def test_a_bare_calibration_change_is_not_traced():
+    spec = importlib.util.spec_from_file_location("compare_backbones", COMPARE)
+    cb = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cb)
+    assert not cb.traced(["calibration_gained"]) and not cb.traced(["calibration_lost", "anchors"])
+    assert cb.traced(["calibration_gained", "no_answer"]) and cb.traced(["richness"])

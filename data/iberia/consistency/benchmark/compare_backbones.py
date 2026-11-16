@@ -13,9 +13,13 @@ followed back to what changed, node by node:
   (other genera or species were picked for the query), ``timetree_answer`` (the same query, another answer),
   or ``fit`` (the same calibration, but the fit moved it: in one run it is kept, in the other fitted, or fitted
   differently);
-- ``calibration_gained`` or ``calibration_lost``: the node is calibrated in one run only; with ``identifier`` if
-  the calibrated run's query sends a changed identifier, and with ``fit`` if the other run had the calibration
-  but its precedence rule dropped it as inconsistent with an ancestor (the fit keeps it);
+- ``calibration_gained`` or ``calibration_lost``: the node is calibrated in one run only. This says what happened,
+  not why, so a reason is added: ``no_answer`` (TimeTree has no age for any of the picks of the uncalibrated run;
+  ``identifier`` instead if a genus of the node was sent with another id), ``identifier``, ``higher_taxa`` or
+  ``picks`` (the two runs sent other queries), ``timetree_answer`` (the same query, another answer),
+  ``unresolved`` (TimeTree's age is that of an ancestor, because its MRCA lies above the node), or ``fit`` (the
+  other run had the calibration but its precedence rule dropped it as inconsistent with an ancestor; the fit
+  keeps it). A stem whose only causes are a gained or lost calibration counts as not traced;
 - for a node interpolated in both runs, what ``interpolate()`` places it by: its parent's age (followed if it
   changed, wherever the parent got it) and its floor, the oldest dated descendant in ``interpolated_from``
   (``anchors`` if it is another node, which is followed; followed too if only its age changed). If neither
@@ -127,6 +131,54 @@ def explain(a, b, node_b, depth=0, seen=None):
     return causes + more_causes, chain + more_chain
 
 
+def _why_calibrated(a, b, with_cal, without, node_without, run_without, backbone_without):
+    """(causes, notes) for why a node is calibrated in one run and not in the other.
+
+    The build leaves a node uncalibrated where TimeTree has no age for any of its picks (query_ids empty),
+    where TimeTree's age is that of an ancestor because its MRCA lies above the node (unresolved), or where
+    the precedence rule drops the age as inconsistent with an ancestor (the fit keeps it). Behind the first
+    two lies a query that differs between the runs: other identifiers, other picks or enclosing taxa.
+    """
+    causes, notes = [], []
+    if not without["query_ids"]:
+        # no query got an age; did the genera of the node send other identifiers?
+        genera = ";".join(backbone_without.clade[node_without])
+        changed = changed_identifiers(a, b, genera + ";" + with_cal["query_genera"])
+        if changed:
+            causes.append("identifier")
+            notes.append(f"another identifier for its genera: {changed}")
+        else:
+            causes.append("no_answer")
+            notes.append(f"TimeTree has no age for any of the picks of {run_without}")
+        return causes, notes
+    if without["query_ids"] != with_cal["query_ids"]:
+        if "higher_taxa" in (without["timetree_attempt"], with_cal["timetree_attempt"]):
+            causes.append("higher_taxa")
+            notes.append("queried with enclosing taxa in one run")
+        else:
+            changed = changed_identifiers(a, b, without["query_genera"] + ";" + with_cal["query_genera"])
+            if changed:
+                causes.append("identifier")
+                notes.append(f"its query sends another identifier: {changed}")
+            else:
+                causes.append("picks")
+                notes.append(f"other picks for its query ({without['query_genera'] or '-'} in {run_without}, "
+                             f"{with_cal['query_genera'] or '-'} in the other)")
+    elif without["timetree_age"] != with_cal["timetree_age"]:
+        causes.append("timetree_answer")
+        notes.append(f"the same query, TimeTree {without['timetree_age'] or '-'} in {run_without}, "
+                     f"{with_cal['timetree_age'] or '-'} in the other")
+    if "unresolved" in without["source"] or "same_as_ancestor" in without["source"]:
+        causes.append("unresolved")
+        notes.append(f"TimeTree's age in {run_without} ({without['timetree_age']}) is that of an ancestor: "
+                     f"its MRCA lies above the node")
+    if "drop" in without["source"] or (without["timetree_age"] and "dropped" in without["precedence_source"]):
+        causes.append("fit")
+        notes.append(f"{run_without} has the calibration ({without['timetree_age']}) but dropped it as "
+                     f"inconsistent with an ancestor ({without['source']})")
+    return causes, notes
+
+
 def _compare(a, b, node_a, node_b, here, depth, seen):
     """The causes of the age difference between node_a of A and node_b of B, as explained in the docstring."""
     clade = b.clade[node_b]
@@ -155,22 +207,11 @@ def _compare(a, b, node_a, node_b, here, depth, seen):
                          f"{rb['age_source']} in B"]
     if cal_a != cal_b:
         kind = "calibration_gained" if cal_b else "calibration_lost"
-        causes = [kind]
-        chain = [f"{step}; calibrated in {'B' if cal_b else 'A'} only (source {ra['source']} in A, "
-                 f"{rb['source']} in B)"]
-        # why: an identifier that changed in the calibrated run's query, or a calibration that the other run's
-        # precedence rule dropped as inconsistent where the fit keeps it
-        with_cal = rb if cal_b else ra
-        changed = changed_identifiers(a, b, with_cal["query_genera"])
-        if changed:
-            causes.append("identifier")
-            chain.append(f"  its query sends another identifier: {changed}")
-        without = ra if cal_b else rb
-        if "drop" in without["source"] or (without["timetree_age"] and "dropped" in without["precedence_source"]):
-            causes.append("fit")
-            chain.append(f"  {'A' if cal_b else 'B'} has the calibration ({without['timetree_age']}) but dropped it "
-                         f"as inconsistent with an ancestor ({without['source']})")
-        return causes, chain
+        causes, chain = [kind], [f"{step}; calibrated in {'B' if cal_b else 'A'} only (source {ra['source']} in A, "
+                                 f"{rb['source']} in B)"]
+        more, notes = _why_calibrated(a, b, rb if cal_b else ra, ra if cal_b else rb, node_a if cal_b else node_b,
+                                      "A" if cal_b else "B", a if cal_b else b)
+        return causes + more, chain + [f"  {n}" for n in notes]
     # interpolated in both. interpolate() places a node, from the root down, between the age of its parent
     # (itself perhaps interpolated) and that of its oldest dated descendant, its floor (or the tips), at a
     # fraction set by the richness of the node, its parent and its floor (or by the number of undated steps
@@ -217,8 +258,15 @@ def _compare(a, b, node_a, node_b, here, depth, seen):
     return causes, chain
 
 
-ROOT_CAUSES = ("topology", "identifier", "higher_taxa", "picks", "timetree_answer", "fit", "calibration_gained",
-               "calibration_lost", "richness", "root")
+ROOT_CAUSES = ("topology", "identifier", "higher_taxa", "picks", "timetree_answer", "unresolved", "no_answer", "fit",
+               "calibration_gained", "calibration_lost", "richness", "root")
+# a calibration gained or lost says what happened, not why: a stem is traced only with a cause besides these
+NOT_A_REASON = {"calibration_gained", "calibration_lost"}
+
+
+def traced(causes):
+    """Whether a stem's causes explain it: a known cause besides a gained or lost calibration."""
+    return bool(set(causes) & set(ROOT_CAUSES) - NOT_A_REASON)
 
 
 def main():
@@ -237,15 +285,15 @@ def main():
         causes, chain = explain(a, b, b.stem(g))
         found = sorted({c for c in causes if c in ROOT_CAUSES}, key=ROOT_CAUSES.index)
         rows.append({"genus": g, "stem_a": f"{sa:.2f}", "stem_b": f"{sb:.2f}", "factor": f"{factor(sa, sb):.3f}",
-                     "causes": ";".join(found), "traced": "yes" if found else "no", "chain": " | ".join(chain)})
+                     "causes": ";".join(found), "traced": "yes" if traced(found) else "no", "chain": " | ".join(chain)})
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     with open(out / "stem_causes.tsv", "w", newline="") as handle:
         w = csv.DictWriter(handle, list(rows[0]) if rows else ["genus"], delimiter="\t", lineterminator="\n")
         w.writeheader()
         w.writerows(rows)
-    traced = sum(1 for r in rows if r["traced"] == "yes")
-    print(f"{len(rows)} stems differ by more than a factor {args.factor}; {traced} traced to a cause")
+    n_traced = sum(1 for r in rows if r["traced"] == "yes")
+    print(f"{len(rows)} stems differ by more than a factor {args.factor}; {n_traced} traced to a cause")
     print("causes:", dict(Counter(c for r in rows for c in r["causes"].split(";") if c)))
     for r in rows:
         if r["traced"] != "yes":
