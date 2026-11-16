@@ -1,0 +1,6 @@
+switched_back	genera	clades_not_in_default	stems_moved_over_10pct	stems_moved_over_1.5	calibrations_off_by_1.5	weighted_rms	timetree_crowns_changed
+identifiers_from_ott	1186	0	10	2	5	0.3853	0
+no_reanchoring	1186	12	1	1	5	0.4289	0
+mrca_anchoring	1186	11	23	14	6	0.4359	0
+precedence_ages	1186	0	136	58	26	1.3222	0
+global_crowns	1186	0	0	0	5	0.3837	83

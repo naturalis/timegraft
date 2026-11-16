@@ -1,0 +1,70 @@
+run	genus	default_crown_age	crown_age	change	default_crown_source	crown_source	default_n_units	n_units	default_misplaced	misplaced	rate_outliers	misplaced_set_aside
+translation_set_aside	Oxynotus	28.5946	6.8853	-0.759	timetree	midpoint_timetree_demoted	5	3				
+translation_set_aside	Heptranchias	18.4999	16.4922	-0.109	midpoint	midpoint	5	4				
+mutual_pairs_further	Halichondria	27.5175	30.7498	+0.117	midpoint	midpoint	10	12	BOLD:ADC7176			
+rate_outlier_set_aside	Sphaerocoryne	45.0182	19.3897	-0.569	midpoint	midpoint	4	3			BOLD:AEK3364	
+rate_outlier_set_aside	Bathytoshia	16.3730	7.9112	-0.517	midpoint	midpoint	5	3	BOLD:AAA5610;BOLD:AAF0735		BOLD:AAA5610;BOLD:AAF0735	
+rate_outlier_set_aside	Myzobdella	31.6441	19.0105	-0.399	midpoint	midpoint	5	4			BOLD:AHK8053	
+rate_outlier_set_aside	Lepidopleurus	26.5448	16.9615	-0.361	midpoint	midpoint	7	5			BOLD:ACS4583;BOLD:AHW0876	
+rate_outlier_set_aside	Phacellophora	22.7812	14.8370	-0.349	midpoint	midpoint	4	3			BOLD:ACM3971	
+rate_outlier_set_aside	Cochlicella	49.1845	33.3195	-0.323	midpoint	midpoint	10	8	BOLD:ABW4670;BOLD:AEA7931		BOLD:ABW4670;BOLD:AEA7931	
+rate_outlier_set_aside	Asterina	57.1314	39.5868	-0.307	midpoint	midpoint	8	6	BOLD:AAD8544;BOLD:ABA3458		BOLD:AAD8544;BOLD:ABA3458	
+rate_outlier_set_aside	Notomastus	80.9709	59.4668	-0.266	midpoint	midpoint	14	10	BOLD:ACB7866;BOLD:ADL9889;BOLD:AHN5051;BOLD:AHT3639		BOLD:ACB7866;BOLD:ADL9889;BOLD:AHN5051;BOLD:AHT3639	
+rate_outlier_set_aside	Planorbella	26.1036	19.2219	-0.264	midpoint	midpoint	9	8			BOLD:AAH9428	
+rate_outlier_set_aside	Venerupis	56.6479	41.8567	-0.261	midpoint	midpoint	5	3	BOLD:AAH7873;BOLD:AAW7336		BOLD:AAH7873;BOLD:AAW7336	
+rate_outlier_set_aside	Salaria	14.7942	11.8709	-0.198	midpoint	midpoint	6	4	BOLD:ADW8901;BOLD:AEB2160		BOLD:ADW8901;BOLD:AEB2160	
+rate_outlier_set_aside	Euraphia	13.0760	10.5932	-0.190	midpoint	midpoint	5	3	BOLD:AAC0075;BOLD:AAY3000		BOLD:AAC0075;BOLD:AAY3000	
+rate_outlier_set_aside	Haliclona	72.8026	59.5959	-0.181	midpoint_timetree_demoted	midpoint_timetree_demoted	56	48		BOLD:ACD8113;BOLD:ADX1351;BOLD:AFT3622	BOLD:AAM1198;BOLD:ACH2276;BOLD:ADX0725;BOLD:ADX6953;BOLD:ADX6954;BOLD:ADX6955;BOLD:ADX6956;BOLD:AFT3623	
+rate_outlier_set_aside	Loligo	21.6484	18.2623	-0.156	midpoint	midpoint	5	4	BOLD:AGD4615		BOLD:AGD4615	
+rate_outlier_set_aside	Malacolimax	20.3491	17.3505	-0.147	midpoint	midpoint	5	3			BOLD:ABA4144;BOLD:AHM0816	
+rate_outlier_set_aside	Aoroides	32.8552	28.1514	-0.143	midpoint	midpoint	21	19	BOLD:AHI6764	BOLD:AHI6764;BOLD:AHY6429	BOLD:AEC8749;BOLD:AED8968	
+rate_outlier_set_aside	Pomatias	27.4150	23.6474	-0.137	midpoint	midpoint	4	3	BOLD:AAD6371		BOLD:AAD6371	
+rate_outlier_set_aside	Goneplax	32.0366	27.7442	-0.134	midpoint	midpoint	6	5	BOLD:ACI2562		BOLD:ACI2562	
+rate_outlier_set_aside	Leiochone	47.7545	41.3766	-0.134	midpoint	midpoint	5	3	BOLD:ADB2453;BOLD:ADW3071		BOLD:ADB2453;BOLD:ADW3071	
+rate_outlier_set_aside	Ambigolimax	23.2078	20.2324	-0.128	midpoint	midpoint	9	8	BOLD:AHN0678		BOLD:AHN0678	
+rate_outlier_set_aside	Euchone	66.3010	58.5391	-0.117	midpoint	midpoint	7	5		BOLD:AFK4458;BOLD:AGZ8832	BOLD:AHM3834;BOLD:AHM3835	
+rate_outlier_set_aside	Cirriformia	50.3707	44.5434	-0.116	midpoint	midpoint	26	25	BOLD:ACH1035		BOLD:ACH1035	
+rate_outlier_set_aside	Rhinoptera	11.4687	10.1708	-0.113	midpoint	midpoint	6	5	BOLD:ADZ8849		BOLD:ADZ8849	
+rate_outlier_set_aside	Dentex	12.1463	10.7980	-0.111	midpoint	midpoint	11	10	BOLD:AED5839	BOLD:ABV4021;BOLD:ACK3584	BOLD:AED5839	
+rate_outlier_set_aside	Hediste	43.9081	39.1614	-0.108	midpoint	midpoint	74	72	BOLD:AAA8306		BOLD:AAA8306;BOLD:AEE1424	
+rate_outlier_set_aside	Gammaropsis	37.9035	33.8571	-0.107	midpoint	midpoint	11	9	BOLD:ADR4145;BOLD:ADR7378	BOLD:AAU3888;BOLD:ACP9777;BOLD:ADV5082	BOLD:ADR4145;BOLD:ADR7378	
+rate_outlier_set_aside	Galeus	13.8939	12.4199	-0.106	midpoint	midpoint	8	7	BOLD:AAD3257;BOLD:AAI7055;BOLD:AGX7301	BOLD:AAD3257;BOLD:AGX7301	BOLD:AAI7055	
+rate_outlier_set_aside	Heptranchias	18.4999	16.5757	-0.104	midpoint	midpoint	5	4			BOLD:AEB3916	
+rate_outlier_set_aside	Aplysia	26.4777	23.7653	-0.102	midpoint	midpoint	30	27	BOLD:ABX1852		BOLD:AAJ8417;BOLD:ABX1852;BOLD:AHJ6160	
+rate_outlier_set_aside	Thermocyclops	17.6928	15.8816	-0.102	midpoint	midpoint	15	13			BOLD:AHS3846;BOLD:AHS3847	
+rate_outlier_set_aside	Penares	14.7438	13.2431	-0.102	midpoint	midpoint	9	8	BOLD:AEH5616		BOLD:AEH5616	
+misplaced_set_aside	Todarodes	62.2415	11.6268	-0.813	timetree	midpoint_timetree_demoted	5	3	BOLD:ABW8938;BOLD:ABW8939			BOLD:ABW8938;BOLD:ABW8939
+misplaced_set_aside	Myxilla	40.9216	16.8474	-0.588	midpoint	midpoint	4	2	BOLD:ADG6740;BOLD:AEG6325			BOLD:ADG6740;BOLD:AEG6325
+misplaced_set_aside	Petalifera	27.5389	12.6874	-0.539	midpoint	midpoint	4	2	BOLD:AHD0499;BOLD:AHK1527			BOLD:AHD0499;BOLD:AHK1527
+misplaced_set_aside	Bathytoshia	16.3730	7.9112	-0.517	midpoint	midpoint	5	3	BOLD:AAA5610;BOLD:AAF0735			BOLD:AAA5610;BOLD:AAF0735
+misplaced_set_aside	Ircinia	17.2064	8.9205	-0.482	midpoint_timetree_demoted	midpoint_timetree_demoted	6	2	BOLD:AAM4115;BOLD:AAM4601;BOLD:ABY9620;BOLD:ACF2236			BOLD:AAM4115;BOLD:AAM4601;BOLD:ABY9620;BOLD:ACF2236
+misplaced_set_aside	Pagellus	11.3471	7.0026	-0.383	midpoint	midpoint	3	2	BOLD:AAK4567			BOLD:AAK4567
+misplaced_set_aside	Caberea	37.6081	23.5271	-0.374	midpoint	midpoint	9	5	BOLD:AFE3681;BOLD:AFE9496;BOLD:AFI9697;BOLD:AFI9698			BOLD:AFE3681;BOLD:AFE9496;BOLD:AFI9697;BOLD:AFI9698
+misplaced_set_aside	Cochlicella	49.1845	33.3195	-0.323	midpoint	midpoint	10	8	BOLD:ABW4670;BOLD:AEA7931			BOLD:ABW4670;BOLD:AEA7931
+misplaced_set_aside	Bosellia	22.5682	15.4878	-0.314	midpoint	midpoint	3	2	BOLD:AHV3097			BOLD:AHV3097
+misplaced_set_aside	Asterina	57.1314	39.5868	-0.307	midpoint	midpoint	8	6	BOLD:AAD8544;BOLD:ABA3458			BOLD:AAD8544;BOLD:ABA3458
+misplaced_set_aside	Iphimedia	19.5802	14.0502	-0.282	midpoint	midpoint	4	2	BOLD:AAC8408;BOLD:AAC8409			BOLD:AAC8408;BOLD:AAC8409
+misplaced_set_aside	Notomastus	80.9709	59.4668	-0.266	midpoint	midpoint	14	10	BOLD:ACB7866;BOLD:ADL9889;BOLD:AHN5051;BOLD:AHT3639			BOLD:ACB7866;BOLD:ADL9889;BOLD:AHN5051;BOLD:AHT3639
+misplaced_set_aside	Venerupis	56.6479	41.8567	-0.261	midpoint	midpoint	5	3	BOLD:AAH7873;BOLD:AAW7336			BOLD:AAH7873;BOLD:AAW7336
+misplaced_set_aside	Leucoraja	13.3161	9.8501	-0.260	midpoint	midpoint	8	5	BOLD:AAA5283;BOLD:AAA5284;BOLD:AAF8472			BOLD:AAA5283;BOLD:AAA5284;BOLD:AAF8472
+misplaced_set_aside	Galeus	13.8939	10.7500	-0.226	midpoint	midpoint	8	5	BOLD:AAD3257;BOLD:AAI7055;BOLD:AGX7301			BOLD:AAD3257;BOLD:AAI7055;BOLD:AGX7301
+misplaced_set_aside	Athanas	40.1020	31.4333	-0.216	midpoint	midpoint	3	2	BOLD:AEL3965			BOLD:AEL3965
+misplaced_set_aside	Salaria	14.7942	11.8709	-0.198	midpoint	midpoint	6	4	BOLD:ADW8901;BOLD:AEB2160			BOLD:ADW8901;BOLD:AEB2160
+misplaced_set_aside	Euraphia	13.0760	10.5932	-0.190	midpoint	midpoint	5	3	BOLD:AAC0075;BOLD:AAY3000			BOLD:AAC0075;BOLD:AAY3000
+misplaced_set_aside	Solea	9.3261	7.7271	-0.171	midpoint	midpoint	5	3	BOLD:AAC4898;BOLD:AET4762			BOLD:AAC4898;BOLD:AET4762
+misplaced_set_aside	Phyllaplysia	26.4642	21.9433	-0.171	midpoint	midpoint	4	2	BOLD:AHI2520;BOLD:AHO5715			BOLD:AHI2520;BOLD:AHO5715
+misplaced_set_aside	Taringa	18.1353	15.1658	-0.164	midpoint	midpoint	4	3	BOLD:AHS4266			BOLD:AHS4266
+misplaced_set_aside	Pelagia	49.2179	41.3527	-0.160	midpoint	midpoint	8	4	BOLD:ACA9117;BOLD:ACA9624;BOLD:ACH7777;BOLD:ACH7778			BOLD:ACA9117;BOLD:ACA9624;BOLD:ACH7777;BOLD:ACH7778
+misplaced_set_aside	Loligo	21.6484	18.2623	-0.156	midpoint	midpoint	5	4	BOLD:AGD4615			BOLD:AGD4615
+misplaced_set_aside	Pomatias	27.4150	23.6474	-0.137	midpoint	midpoint	4	3	BOLD:AAD6371			BOLD:AAD6371
+misplaced_set_aside	Goneplax	32.0366	27.7442	-0.134	midpoint	midpoint	6	5	BOLD:ACI2562			BOLD:ACI2562
+misplaced_set_aside	Leiochone	47.7545	41.3766	-0.134	midpoint	midpoint	5	3	BOLD:ADB2453;BOLD:ADW3071			BOLD:ADB2453;BOLD:ADW3071
+misplaced_set_aside	Ambigolimax	23.2078	20.2324	-0.128	midpoint	midpoint	9	8	BOLD:AHN0678		BOLD:AAJ1995	BOLD:AHN0678
+misplaced_set_aside	Halichondria	27.5175	24.1045	-0.124	midpoint	midpoint	10	9	BOLD:ADC7176			BOLD:ADC7176
+misplaced_set_aside	Paracyclops	20.7653	18.3596	-0.116	midpoint	midpoint	5	3	BOLD:AHA9487;BOLD:AHD0739			BOLD:AHA9487;BOLD:AHD0739
+misplaced_set_aside	Cirriformia	50.3707	44.5434	-0.116	midpoint	midpoint	26	25	BOLD:ACH1035			BOLD:ACH1035
+misplaced_set_aside	Rhinoptera	11.4687	10.1708	-0.113	midpoint	midpoint	6	5	BOLD:ADZ8849			BOLD:ADZ8849
+misplaced_set_aside	Dentex	12.1463	10.7980	-0.111	midpoint	midpoint	11	10	BOLD:AED5839	BOLD:ABV4021;BOLD:ACK3584		BOLD:AED5839
+misplaced_set_aside	Hediste	43.9081	39.2023	-0.107	midpoint	midpoint	74	73	BOLD:AAA8306		BOLD:AEE1424	BOLD:AAA8306
+misplaced_set_aside	Gammaropsis	37.9035	33.8571	-0.107	midpoint	midpoint	11	9	BOLD:ADR4145;BOLD:ADR7378	BOLD:AAU3888;BOLD:ACP9777;BOLD:ADV5082		BOLD:ADR4145;BOLD:ADR7378
+misplaced_set_aside	Penares	14.7438	13.2431	-0.102	midpoint	midpoint	9	8	BOLD:AEH5616			BOLD:AEH5616

@@ -1,0 +1,9 @@
+{
+ "command": "snakemake --cores 2 --configfile config/config.yaml config/iberia.yaml",
+ "seconds": 3401.1,
+ "peak_tree_rss_mb": 1045,
+ "max_single_process_mb": 916,
+ "peak_rss_mb": 1045,
+ "sample_interval_s": 0.2,
+ "returncode": 0
+}

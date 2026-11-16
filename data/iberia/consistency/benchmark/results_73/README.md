@@ -1,0 +1,3 @@
+# The gate of #56, rerun with long branches set aside (#73)
+
+The tables of `evaluate.py` for the rerun of 16 November 2026 on `issue-73-options`: `main` (`8e57536`) with `markers.coi.screening.rate_outlier_action: set_aside` as the default. The baseline is `main` at `e20fdf6`; its full run is that of the rerun after #89 (`../results_89/legacy_run.json`, the same file here). Made as described in `../README.md`, and evaluated with `evaluate.py` as changed in #73: metric 1a leaves out units set aside in the genus stage as well as those set aside by screening ("Changes after review" in `../REPORT.md`). Outcome: the last section of `../REPORT.md`.
