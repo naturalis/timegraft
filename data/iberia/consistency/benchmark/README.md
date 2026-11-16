@@ -4,7 +4,7 @@ Whether `consistency-layer` should become the default: the metrics and threshold
 
 | File | Contents |
 | --- | --- |
-| `GATE.md` | The metrics, their thresholds and the decision rule, committed before anything was run |
+| `GATE.md` | The metrics, their thresholds and the decision rule, committed before anything was run: version 1 for #56, version 2 for later changes (see [below](#two-versions-of-the-gate)) |
 | `REPORT.md` | The outcome: status of every metric, what the numbers mean, and the recommendation |
 | `results/metrics.tsv` | The gate as a table: metric, legacy, default, threshold, status |
 | `results/*.tsv` | One table per experiment (see below) |
@@ -13,16 +13,33 @@ Whether `consistency-layer` should become the default: the metrics and threshold
 | `inject.py` | Merges genera of the run into taxa elsewhere in a copy of the OTT taxonomy, as OTT did with *Onchidella* |
 | `perturb_cache.py` | Multiplies every TimeTree age in a copy of the cache by a random factor |
 | `subsample.py` | Keeps a random half of the genera |
-| `run_experiments.sh` | All backbone builds of the gate: clean, injected, perturbed, subsampled, ablations, reproducibility. Exits non-zero if a build fails, and lists it in `exp/failed.txt`; running it again retries only the builds that are not complete. `evaluate.py` refuses to run while a build is missing or failed |
-| `run_posthoc.sh` | Two variants of the injection, added after the first results to explain them; not part of the gate |
+| `run_experiments.sh` | All backbone builds of the gate: clean, injected (with both variants since version 2), perturbed, subsampled, ablations, reproducibility. Exits non-zero if a build fails; rerunning it retries only the failed builds |
+| `run_posthoc.sh` | Two variants of the injection, added after the first results of #56 to explain them: not part of version 1, part of version 2, where `run_experiments.sh` builds them |
 | `run_injection.sh`, `evaluate_injection.py` | The injection part of the gate again, for [#69](https://github.com/naturalis/timegraft/issues/69): legacy, the default, and a control arm with `reanchor.check_ids: false`, each against its own clean build; metrics 1d, 1f and 1g, and why each other stem moves (`results/injection_69*.tsv`) |
 | `monitor.py` | Runs a command and records its wall time and peak memory: of the largest single process over its whole life, from the kernel, and of the whole process tree, sampled every 0.2 s |
 | `compare_backbones.py` | For [#84](https://github.com/naturalis/timegraft/issues/84): traces every stem age that differs by more than a factor between two backbones (format 5 `node_ages.tsv`) to its causes |
 | `results_84/` | The 175 changed stems of #56 traced with `compare_backbones.py`, and how they were obtained |
-| `evaluate.py`, `benchlib.py` | Compute every metric from the runs and write `results/` |
+| `evaluate.py`, `benchlib.py` | Compute every metric from the runs and write `results/`: `--version 2` (the default) or `--version 1` |
 | `run_lineage_alone.sh`, `evaluate_lineage_alone.py` | The detection metrics again, for [#71](https://github.com/naturalis/timegraft/issues/71): the default (`concordance.lineage_alone_level: class`) and a control with it `off`, on the clean run and on both injection variants (merged ids and name only); flagged by rule, back in their own class, false flags (`results/lineage_alone*.tsv`) |
 
 The pipeline is never patched for an experiment: errors and noise go into copies of its inputs (the taxonomy, the cache, the units), and the workflow scripts run as they are.
+
+## Two versions of the gate
+
+**Version 1** was declared for #56 and judged the layer as it was merged; the reruns after #89 (`results_89/`) and #73 (`results_73/`) used it too. Running it showed where its metrics were weak, so [#74](https://github.com/naturalis/timegraft/issues/74) declared **version 2** (section "Version 2" of `GATE.md`), committed on its own before any run that it judges. Version 2 is the gate for later changes to the layer. What it changes:
+
+| | Version 1 | Version 2 |
+| --- | --- | --- |
+| 6b, changed stems explained | any fitted age on the path to the root counts as a cause (175 of 175 in #56; 159 on a stricter reading) | each changed stem followed to the nodes that moved it with `compare_backbones.py` (#84), on the two clean backbones; at least 0.95 traced |
+| 7b, peak memory | at most 1.5 times legacy and below 7 GB | below 2,000 MB; the ratio is a report (7f) |
+| Rooting | not measured | 8a genera with units on the wrong side of the root and 8b units among the outgroup, not more than legacy (within 5%); 8c crowns that depend strongly on the root, a report |
+| Injection variants | `run_posthoc.sh`, not metrics | 1h to 1m: flagged, back in own class, stem within 1.5, for `inject_own` and `inject_name` (the stem share of `inject_name` is a report) |
+| Downstream | the experiments stop at the backbone | 1n, 1o, 5e, 5f, 6e, 6f: crown ages and PD of the injection, age noise and subsampling carried through the genus stage ([#81](https://github.com/naturalis/timegraft/issues/81)) |
+| Decision | must metrics of families 5 to 7 or metric 0 failing: hold | the same with family 8; must metrics not run are listed, and the decision says it was reached without them |
+
+`evaluate.py --version 1` reproduces the tables of `results_73/` (values and statuses; the order of rows in `holdout.tsv` and of the phyla in the note of 1a vary between runs). Version 2 needs `node_ages.tsv` format 5 in the two clean backbones (built by any checkout from #84 on) and the two variants in `exp/`, and writes `stem_causes.tsv` and `decision.txt` besides the tables of version 1.
+
+**The downstream metrics wait for #81.** Their runs go in `exp/downstream/`, laid out as `GATE.md` describes (`clean/{legacy,default}/` and `{inject,noise,sub}/s{1,2}/{legacy,default}/`, each with `provenance.tsv`, `timegraft.tre` and `units/representatives.tsv`). Without that folder `evaluate.py` reports them as *not run*; with a partly filled folder it refuses to evaluate. When #81 adds the harness, add its runs to the required builds at the top of `evaluate.py`, so that a missing run stops the evaluation, as `GATE.md` requires once the harness exists.
 
 ## Rerunning it
 
@@ -44,8 +61,8 @@ for w in main branch; do (
 ); done
 (cd $BENCH/branch && python -m pytest -q tests | tail -1 > $BENCH/tests.txt)
 ./run_experiments.sh $BENCH $BENCH/branch $BENCH/branch/resources/otol 2
-./run_posthoc.sh $BENCH $BENCH/branch $BENCH/branch/resources/otol 2    # optional: the two variants
-PYTHONPATH=$BENCH/branch/src python evaluate.py $BENCH results
+./run_posthoc.sh $BENCH $BENCH/branch $BENCH/branch/resources/otol 2    # version 1 only: run_experiments.sh builds them now
+PYTHONPATH=$BENCH/branch/src python evaluate.py $BENCH results               # version 2; add --version 1 for #56
 ```
 
 The two full runs must not overlap with each other or with anything else, or the time comparison (metric 7a) is void.
@@ -72,4 +89,7 @@ The two full runs must not overlap with each other or with anything else, or the
 | `ablation.tsv` | The default backbone with one feature switched back at a time |
 | `runtime.tsv` | Seconds per workflow rule, wall time and peak memory of the two full runs |
 | `memory.tsv` | Peak memory of the backbone and screening steps on their own, measured with `monitor.py` around `backbone.py` and `screen.py`; made by hand, not by `evaluate.py` |
+| `stem_causes.tsv` | Version 2: each stem that differs by more than 10% between the clean backbones, its causes and the chain behind them (`compare_backbones.py`) |
+| `downstream.tsv` | Version 2, once #81 exists: per downstream run, how far crown ages move and the PD rank correlation per design, against the clean run of the same setting |
+| `decision.txt` | Version 2: the decision of the rule in `GATE.md`, and what it was reached without |
 | `end_to_end.tsv` | The two full runs side by side: genera, units set aside, rooting, crown ages, placement, tree length |

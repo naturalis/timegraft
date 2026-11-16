@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # The backbone experiments of the gate (#56): clean builds, injected misplacements, perturbed ages,
 # dropped genera, and the reproducibility builds. Run after the two full runs (see README.md).
+# Since version 2 of the gate (#74) this includes the two injection variants, which version 1 ran
+# separately (run_posthoc.sh); builds that already exist are not repeated.
 # Exits non-zero if any build failed (listed in exp/failed.txt); rerunning it retries only those.
 #
 #   run_experiments.sh BENCH REPO OTOL [JOBS]
@@ -60,6 +62,12 @@ for s in $SEEDS; do
       "$E/inject/s$s/taxonomy.tsv" "$E/inject/s$s/manifest.tsv"
   [ -s "$E/noise/s$s/cache.json" ] || python "$H/perturb_cache.py" "$E/union_cache.json" "$s" "$E/noise/s$s/cache.json"
   [ -s "$E/sub/s$s/units/genera.txt" ] || python "$H/subsample.py" "$U" "$s" "$E/sub/s$s/units"
+  for mode in name own; do  # the two injection variants (metrics 1h to 1m of version 2)
+    mkdir -p "$E/inject_$mode/s$s"
+    [ -s "$E/inject_$mode/s$s/manifest.tsv" ] || python "$H/inject.py" "$OTOL/ott3.7.3/taxonomy.tsv" \
+        "$OTOL/opentree16.1/labelled_supertree.tre" "$E/default_clean/genera.tsv" "$s" \
+        "$E/inject_$mode/s$s/taxonomy.tsv" "$E/inject_$mode/s$s/manifest.tsv" 12 "$mode"
+  done
 done
 
 # 2. the builds, JOBS at a time
@@ -71,6 +79,10 @@ done
     echo "bb noise/s$s/default $U $E/noise/s$s/cache.json --set backbone_build.ages.requery.mode=off --offline"
     echo "bb sub/s$s/legacy $E/sub/s$s/units $CACHE --overlay $H/legacy.yaml"
     echo "bb sub/s$s/default $E/sub/s$s/units $CACHE"
+    for mode in name own; do
+      echo "bb inject_$mode/s$s/default $U $CACHE --taxonomy $E/inject_$mode/s$s/taxonomy.tsv"
+      echo "bb inject_$mode/s$s/legacy $E/legacy_units $CACHE --overlay $H/legacy.yaml --taxonomy $E/inject_$mode/s$s/taxonomy.tsv"
+    done
   done
   # one feature of the layer switched back at a time (report only)
   echo "bb ablate/identifiers_from_ott $U $CACHE --set backbone_build.col.join=ott"

@@ -1,12 +1,16 @@
 """Evaluate the release gate of the consistency layer (#56): every metric of GATE.md, with its status.
 
-    python evaluate.py BENCH OUT
+    python evaluate.py BENCH OUT [--version 2]
+
+``--version 1`` evaluates the gate as declared for #56 (and as rerun for #89 and #73); ``--version 2`` (the default)
+the second version of #74, section "Version 2" of GATE.md.
 
 BENCH holds ``main/results/iberia`` and ``branch/results/iberia`` (the two full runs), ``main_run.json`` and
 ``branch_run.json`` (time and memory), ``tests.txt`` (the last line of pytest) and ``exp/`` as
 ``run_experiments.sh`` leaves it. OUT gets ``metrics.tsv`` (the gate) and a table per experiment.
 """
 
+import argparse
 import csv
 import filecmp
 import json
@@ -19,7 +23,12 @@ from pathlib import Path
 
 from benchlib import Backbone, PDTree, factor, quantile, read, spearman, write
 
-BENCH, OUT = Path(sys.argv[1]), Path(sys.argv[2])
+ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+ap.add_argument("bench")
+ap.add_argument("out")
+ap.add_argument("--version", type=int, choices=(1, 2), default=2)
+ARGS = ap.parse_args()
+BENCH, OUT, VERSION = Path(ARGS.bench), Path(ARGS.out), ARGS.version
 MAIN, BRANCH, EXP = BENCH / "main/results/iberia", BENCH / "branch/results/iberia", BENCH / "exp"
 SEEDS = [1, 2, 3, 4, 5]
 HERE = Path(__file__).resolve().parent
@@ -35,13 +44,18 @@ for run in ("main", "branch"):
         sys.exit(f"the full run of {run} failed (return code {meta.get('returncode')})")
 REQUIRED = ["legacy_clean", "default_clean", "default_norequery", "repro/again", "repro/offline"] + [
     f"{kind}/s{seed}/{arm}" for kind in ("inject", "noise", "sub") for seed in SEEDS for arm in ("legacy", "default")]
+if VERSION >= 2:  # the two injection variants are metrics from version 2 on (run_experiments.sh builds them)
+    REQUIRED += [f"{kind}/s{seed}/{arm}" for kind in ("inject_own", "inject_name") for seed in SEEDS
+                 for arm in ("legacy", "default")]
 missing = [name for name in REQUIRED if not (EXP / name / "seconds.txt").exists()]
 if missing:
     sys.exit(f"{len(missing)} builds are missing or incomplete, e.g. {missing[:3]}; rerun run_experiments.sh first")
 
 
 def gate(number, name, legacy, default, threshold, passed, note=""):
-    status = "report" if passed is None else ("pass" if passed else "FAIL")
+    """Record a metric. passed: True or False for a must metric, None for a report, "not run" for a must
+    metric whose experiment has not been run (version 2; see the decision rule in GATE.md)."""
+    status = "report" if passed is None else ("not run" if passed == "not run" else ("pass" if passed else "FAIL"))
     metrics.append({"metric": number, "name": name, "legacy": legacy, "default": default, "threshold": threshold,
                     "status": status, "note": note})
     print(f"{number:>3} {status:6} {name}: legacy {legacy}; default {default}; threshold {threshold} {note}")
@@ -251,6 +265,28 @@ write(OUT / "injection_variants.tsv", variants)
 for v in variants:
     print("   ", v)
 
+if VERSION >= 2:
+    # 1h-1m: the two variants as metrics (GATE.md, version 2). Same definitions as 1b/1c, 1d and 1f.
+    summary = {v["injection"]: v for v in variants}
+
+    def ratio(a, b):
+        return (a / b if b else 0.0), f"{a / b if b else 0.0:.3f} ({a} of {b})"
+
+    for (flag_no, back_no, stem_no), label, short, flag_min, stem_kind in (
+            (("1h", "1i", "1j"), "merge, the host's own species left out of the merged taxon", "inject_own", 0.90, "must"),
+            (("1k", "1l", "1m"), "name only: no merged NCBI ids, no species moved", "inject_name", 0.50, "report")):
+        v = summary[label]
+        share, text = ratio(v["flagged"], v["injected"])
+        gate(flag_no, f"{short}: injected misplacements flagged", "0 (no check)", text, f">= {flag_min:.2f}", share >= flag_min, f"{v['two_checks_evaluable']} with two checks that can be evaluated")
+        share, text = ratio(v["back_in_own_class"], v["flagged"])
+        gate(back_no, f"{short}: flagged genera back in their own class",
+             f"{v['legacy_in_own_class']} of {v['injected']} in own class", text, ">= 0.90", share >= 0.90)
+        share, text = ratio(v["stem_within_1.5"], v["back_in_own_class"])
+        gate(stem_no, f"{short}: corrected genera with a stem age within 1.5 of the one without the error",
+             f"{v['legacy_stem_within_1.5']} of {v['injected']} injected within 1.5", text,
+             ">= 0.80" if stem_kind == "must" else "none", share >= 0.80 if stem_kind == "must" else None,
+             f"other stems moved: legacy {v['other_stems_moved_legacy']}, default {v['other_stems_moved_default']}")
+
 # 2. Backbone conflicts ----------------------------------------------------------------------------------
 lmeta = json.load(open(EXP / "legacy_clean/metadata.json"))["ages"]
 dmeta = json.load(open(EXP / "default_clean/metadata.json"))["ages"]
@@ -444,10 +480,25 @@ n_changed = len(cause_rows)
 with_cause = sum(1 for r in cause_rows if r["causes"])
 strict = sum(1 for r in cause_rows if r["causes"].replace("fit_on_path", "").strip(";") or r["fit_at_nearest_dated_ancestor"])
 share = with_cause / n_changed if n_changed else 1.0
-gate("6b", "stem ages that differ by more than 10%: share with a recorded cause", "",
-     f"{share:.3f} ({with_cause} of {n_changed})", ">= 0.90", share >= 0.90,
-     f"counting a fitted age only at the nearest dated ancestor: {strict} of {n_changed}; "
-     f"causes: {dict(Counter(c for r in cause_rows for c in r['causes'].split(';') if c))}")
+if VERSION == 1:
+    gate("6b", "stem ages that differ by more than 10%: share with a recorded cause", "",
+         f"{share:.3f} ({with_cause} of {n_changed})", ">= 0.90", share >= 0.90,
+         f"counting a fitted age only at the nearest dated ancestor: {strict} of {n_changed}; "
+         f"causes: {dict(Counter(c for r in cause_rows for c in r['causes'].split(';') if c))}")
+else:
+    # version 2: each changed stem followed to the nodes that moved it (#84), on the two clean backbones of the
+    # harness (the full run of legacy predates the columns this needs; metric 0 and 7c tie the clean backbones
+    # to the full runs)
+    import compare_backbones as cb
+
+    traced_rows = cb.compare(cb.Backbone(EXP / "legacy_clean"), cb.Backbone(EXP / "default_clean"), 1.10)
+    write(OUT / "stem_causes.tsv", traced_rows)
+    n_traced = sum(1 for r in traced_rows if r["traced"] == "yes")
+    share = n_traced / len(traced_rows) if traced_rows else 1.0
+    gate("6b", "stem ages that differ by more than 10% (clean backbones): share traced to a cause", "",
+         f"{share:.3f} ({n_traced} of {len(traced_rows)})", ">= 0.95", share >= 0.95,
+         f"causes: {dict(Counter(c for r in traced_rows for c in r['causes'].split(';') if c))}; "
+         f"untraced: {';'.join(r['genus'] for r in traced_rows if r['traced'] != 'yes') or 'none'}")
 l, d = statistics.mean(pd_rho["legacy"]), statistics.mean(pd_rho["default"])
 gate("6c", "backbone PD of genus samples: rank correlation with and without perturbed ages", fmt(l, 4), fmt(d, 4),
      ">= legacy - 0.01", d >= l - 0.01)
@@ -547,10 +598,14 @@ write(OUT / "runtime.tsv", [{"rule": rule, "legacy_seconds": lsec.get(rule, ""),
 ratio = drun["seconds"] / lrun["seconds"]
 gate("7a", "wall time of the full run (minutes)", fmt(lrun["seconds"] / 60, 1), fmt(drun["seconds"] / 60, 1),
      "<= 1.5 x legacy", ratio <= 1.5 and drun["returncode"] == 0 and lrun["returncode"] == 0, f"ratio {ratio:.2f}")
-gate("7b", "peak memory of the full run (MB)", lrun["peak_rss_mb"], drun["peak_rss_mb"], "<= 1.5 x legacy and < 7000",
-     drun["peak_rss_mb"] <= 1.5 * lrun["peak_rss_mb"] and drun["peak_rss_mb"] < 7000,
-     f"largest single process {lrun.get('max_single_process_mb')} and {drun.get('max_single_process_mb')}; "
-     f"process tree sampled every 0.2 s {lrun.get('peak_tree_rss_mb')} and {drun.get('peak_tree_rss_mb')}")
+memory_note = (f"largest single process {lrun.get('max_single_process_mb')} and {drun.get('max_single_process_mb')}; "
+               f"process tree sampled every 0.2 s {lrun.get('peak_tree_rss_mb')} and {drun.get('peak_tree_rss_mb')}")
+if VERSION == 1:
+    gate("7b", "peak memory of the full run (MB)", lrun["peak_rss_mb"], drun["peak_rss_mb"], "<= 1.5 x legacy and < 7000",
+         drun["peak_rss_mb"] <= 1.5 * lrun["peak_rss_mb"] and drun["peak_rss_mb"] < 7000, memory_note)
+else:
+    gate("7b", "peak memory of the full run (MB)", lrun["peak_rss_mb"], drun["peak_rss_mb"], "< 2000",
+         drun["peak_rss_mb"] < 2000, memory_note)
 FILES = ("backbone.tre", "node_ages.tsv", "genera.tsv", "crown_ages.tsv", "concordance.tsv")
 again = {f: filecmp.cmp(EXP / "default_clean" / f, EXP / "repro/again" / f, False) for f in FILES}
 workflow = {f: filecmp.cmp(EXP / "default_clean" / f, BRANCH / "backbone" / f, False) for f in FILES}
@@ -567,8 +622,144 @@ gate("7d", "backbone rebuilt with the network blocked", "",
      "succeeds, identical", offline_ok and all(offline.values()))
 tests = (BENCH / "tests.txt").read_text().strip() if (BENCH / "tests.txt").exists() else "not run"
 gate("7e", "test suite", "", tests, "passes", "passed" in tests and "failed" not in tests and "error" not in tests)
+if VERSION >= 2:
+    gate("7f", "peak memory of the full run, default over legacy", "", f"{drun['peak_rss_mb'] / lrun['peak_rss_mb']:.2f}",
+         "none", None)
+
+if VERSION >= 2:
+    # 8. Rooting (version 2) -----------------------------------------------------------------------------
+    def rooting(rows):
+        wrong = sum(1 for r in rows.values() if r.get("violations") and int(r["violations"]) > 0)
+        outgroup = sum(len(r["misplaced"].split(";")) for r in rows.values() if r.get("misplaced"))
+        strong = 0
+        for r in rows.values():
+            lo, hi = r.get("crown_age_min", ""), r.get("crown_age_max", "")
+            strong += bool(lo and hi and float(lo) > 0 and float(hi) / float(lo) >= 1.25)
+        return wrong, outgroup, strong
+
+    lr, dr = rooting(prov["legacy"]), rooting(prov["default"])
+    gate("8a", "genera with units on the wrong side of the root", lr[0], dr[0], "<= legacy x 1.05", dr[0] <= lr[0] * 1.05)
+    gate("8b", "units of a genus among its outgroup", lr[1], dr[1], "<= legacy x 1.05", dr[1] <= lr[1] * 1.05)
+    gate("8c", "crowns that depend strongly on the root (range of 1.25 or more)", lr[2], dr[2], "none", None)
+
+    # Downstream: the experiments carried through the genus stage (#81; version 2) ---------------------------
+    DOWN, DOWN_SEEDS = EXP / "downstream", [1, 2]
+    needed = [DOWN / "clean" / arm for arm in ("legacy", "default")] + [
+        DOWN / kind / f"s{seed}" / arm for kind in ("inject", "noise", "sub") for seed in DOWN_SEEDS
+        for arm in ("legacy", "default")]
+    DOWN_FILES = ("provenance.tsv", "timegraft.tre", "units/representatives.tsv")  # per run, as GATE.md lays out
+    ready = all((d / f).exists() for d in needed for f in DOWN_FILES)
+    if DOWN.exists() and not ready:  # begun but not finished: refuse, as for the backbone experiments
+        sys.exit(f"the downstream runs in {DOWN} are incomplete; finish them first")
+    DOWN_METRICS = [
+        ("1n", "injection carried through: corrected genera with a crown age within 1.5 of the clean run", ">= 0.80"),
+        ("1o", "injection carried through: PD rank correlation with the clean final tree", ">= legacy - 0.01 per design"),
+        ("5e", "ages perturbed, carried through: 90% quantile of the factor by which crown ages move", "<= legacy x 1.05"),
+        ("5f", "half the genera dropped, carried through: the same", "<= legacy x 1.05"),
+        ("6e", "ages perturbed, carried through: PD rank correlation with the clean final tree",
+         ">= legacy - 0.01 per design"),
+        ("6f", "half the genera dropped, carried through: the same", ">= legacy - 0.01 per design"),
+    ]
+    if not ready:
+        for number, name, threshold in DOWN_METRICS:
+            gate(number, name, "", "", threshold, "not run", f"needs the downstream harness of #81 ({DOWN} is absent)")
+    else:
+        def crowns(folder):
+            return {r["genus"]: float(r["crown_age"]) for r in read(folder / "provenance.tsv")
+                    if r.get("status") == "subtree" and r.get("crown_age")}
+
+        down_units = {}
+        for arm in ("legacy", "default"):
+            down_units.update({r["unit_id"]: r["genus"] for r in read(DOWN / "clean" / arm / "units/representatives.tsv")})
+
+        def pd_designs(path_a, path_b):
+            """Rank correlation of PD on two final trees for the three designs of 6a, drawn as 6a draws them
+            from the units in both trees (seed 6)."""
+            ta, tb = PDTree(path_a), PDTree(path_b)
+            both = sorted(set(ta.tip) & set(tb.tip))
+            genus_units = defaultdict(list)
+            for u in both:
+                if u in down_units:
+                    genus_units[down_units[u]].append(u)
+            r = random.Random(6)
+            names, many = sorted(genus_units), sorted(g for g, us in genus_units.items() if len(us) >= 5)
+            draws = {
+                "150 units at random": [r.sample(both, 150) for _ in range(200)],
+                "100 genera, one unit each": [[r.choice(genus_units[g]) for g in r.sample(names, 100)]
+                                              for _ in range(200)],
+                "100 genera, five units each": [[u for g in r.sample(many, 100) for u in r.sample(genus_units[g], 5)]
+                                                for _ in range(200)],
+            }
+            return {name: spearman([ta.pd(x) for x in samples], [tb.pd(x) for x in samples])
+                    for name, samples in draws.items()}
+
+        down_rows = []
+        crown_moves = {kind: {arm: [] for arm in ("legacy", "default")} for kind in ("inject", "noise", "sub")}
+        pd_by = {kind: {arm: defaultdict(list) for arm in ("legacy", "default")} for kind in ("inject", "noise", "sub")}
+        corrected_crowns = []
+        for kind in ("inject", "noise", "sub"):
+            for seed in DOWN_SEEDS:
+                for arm in ("legacy", "default"):
+                    run, clean = DOWN / kind / f"s{seed}" / arm, DOWN / "clean" / arm
+                    a, b = crowns(clean), crowns(run)
+                    f = [factor(b[g], a[g]) for g in a if g in b and a[g] > 0 and b[g] > 0]
+                    crown_moves[kind][arm] += f
+                    rhos = pd_designs(clean / "timegraft.tre", run / "timegraft.tre")
+                    for design, rho in rhos.items():
+                        pd_by[kind][arm][design].append(rho)
+                    if kind == "inject" and arm == "default":
+                        for r in rows:
+                            if str(r["seed"]) == str(seed) and r["concordance_flag"] == "flag" and r["default_own_class"]:
+                                g = r["genus"]
+                                corrected_crowns.append(factor(b[g], a[g]) if g in a and g in b else None)
+                    down_rows.append({"experiment": kind, "seed": seed, "arm": arm, "genera_compared": len(f),
+                                      "crown_median_factor": fmt(statistics.median(f)) if f else "",
+                                      "crown_p90_factor": fmt(quantile(f, 0.9)) if f else "",
+                                      **{f"pd_{d}": fmt(rho, 4) for d, rho in rhos.items()}})
+        write(OUT / "downstream.tsv", down_rows)
+        known = [x for x in corrected_crowns if x is not None]
+        near = sum(1 for x in known if x <= 1.5)
+        share = near / len(known) if known else 0.0
+        gate("1n", DOWN_METRICS[0][1], "", f"{share:.3f} ({near} of {len(known)})", ">= 0.80", share >= 0.80,
+             f"{len(corrected_crowns) - len(known)} corrected genera without a crown age in both runs")
+
+        def pd_gate(number, name, kind):
+            means = {arm: {d: statistics.mean(v) for d, v in pd_by[kind][arm].items()} for arm in ("legacy", "default")}
+            gate(number, name, "; ".join(f"{d}: {fmt(v, 4)}" for d, v in means["legacy"].items()),
+                 "; ".join(f"{d}: {fmt(v, 4)}" for d, v in means["default"].items()), ">= legacy - 0.01 per design",
+                 all(means["default"][d] >= means["legacy"][d] - 0.01 for d in means["legacy"]))
+
+        def crown_gate(number, name, kind):
+            l, d = quantile(crown_moves[kind]["legacy"], 0.9), quantile(crown_moves[kind]["default"], 0.9)
+            gate(number, name, fmt(l), fmt(d), "<= legacy x 1.05", d <= l * 1.05)
+
+        pd_gate("1o", DOWN_METRICS[1][1], "inject")
+        crown_gate("5e", DOWN_METRICS[2][1], "noise")
+        crown_gate("5f", DOWN_METRICS[3][1], "sub")
+        pd_gate("6e", DOWN_METRICS[4][1], "noise")
+        pd_gate("6f", DOWN_METRICS[5][1], "sub")
+
+    def order(m):
+        number = m["metric"]
+        return int(number[0]), number[1:]
+
+    metrics.sort(key=order)
 
 write(OUT / "metrics.tsv", metrics)
 must = [m for m in metrics if m["status"] != "report"]
 failed = [m["metric"] for m in must if m["status"] == "FAIL"]
-print(f"\n{len(must) - len(failed)} of {len(must)} must metrics pass; failed: {failed or 'none'}")
+passing = sum(1 for m in must if m["status"] == "pass")
+not_run_note = "" if passing + len(failed) == len(must) else f"; not run: {len(must) - passing - len(failed)}"
+print(f"\n{passing} of {len(must)} must metrics pass; failed: {failed or 'none'}{not_run_note}")
+if VERSION >= 2:
+    # the decision rule of version 2: families 0 and 5 to 8 guard against harm, 1 to 4 test what the layer is for
+    not_run = [m["metric"] for m in must if m["status"] == "not run"]
+    guard = [n for n in failed if int(n[0]) == 0 or int(n[0]) >= 5]
+    decision = "hold" if guard else ("ship as an option" if failed else "ship as default")
+    because = (f"failed: {', '.join(guard)}" if guard else f"failed: {', '.join(failed)}" if failed
+               else "every must metric that was run passes")
+    if not_run:
+        because += f"; reached without {', '.join(not_run)} (not run)"
+    line = f"decision (version 2): {decision} ({because})"
+    print(line)
+    (OUT / "decision.txt").write_text(line + "\n")
