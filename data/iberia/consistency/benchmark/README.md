@@ -17,6 +17,8 @@ Whether `consistency-layer` should become the default: the metrics and threshold
 | `run_posthoc.sh` | Two variants of the injection, added after the first results to explain them; not part of the gate |
 | `run_injection.sh`, `evaluate_injection.py` | The injection part of the gate again, for [#69](https://github.com/naturalis/timegraft/issues/69): legacy, the default, and a control arm with `reanchor.check_ids: false`, each against its own clean build; metrics 1d, 1f and 1g, and why each other stem moves (`results/injection_69*.tsv`) |
 | `monitor.py` | Runs a command and records its wall time and peak memory: of the largest single process over its whole life, from the kernel, and of the whole process tree, sampled every 0.2 s |
+| `compare_backbones.py` | For [#84](https://github.com/naturalis/timegraft/issues/84): traces every stem age that differs by more than a factor between two backbones (format 5 `node_ages.tsv`) to its causes |
+| `results_84/` | The 175 changed stems of #56 traced with `compare_backbones.py`, and how they were obtained |
 | `evaluate.py`, `benchlib.py` | Compute every metric from the runs and write `results/` |
 | `run_lineage_alone.sh`, `evaluate_lineage_alone.py` | The detection metrics again, for [#71](https://github.com/naturalis/timegraft/issues/71): the default (`concordance.lineage_alone_level: class`) and a control with it `off`, on the clean run and on both injection variants (merged ids and name only); flagged by rule, back in their own class, false flags (`results/lineage_alone*.tsv`) |
 
