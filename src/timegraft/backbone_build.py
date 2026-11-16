@@ -701,6 +701,8 @@ GENERA_COLUMNS = (
     "lineage_distance", "merged_id_distance", "neighbour_concordance", "concordance_flag",
     # re-anchoring of flagged genera (#50): what was done, from where to where, why, on whose authority
     "placement_action", "original_status", "original_anchor", "reanchor_target", "reanchor_how",
+    # where within the target the genus was attached, and on how many of its species inside the target (#70)
+    "reanchor_species_inside",
     "reanchor_trigger", "reanchor_source", "reanchor_note",
     # NCBI ids of a re-anchored genus checked against its new place, and dropped (#69; which, in concordance.tsv)
     "reanchor_ids_checked", "reanchor_ids_dropped",
