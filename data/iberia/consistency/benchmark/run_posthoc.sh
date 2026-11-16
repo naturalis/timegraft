@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Experiments added after the first results of the gate, to explain them (#56). Not part of the gate.
+# Experiments added after the first results of the gate, to explain them (#56). Not part of version 1 of
+# the gate; part of version 2 (#74), where run_experiments.sh builds them too. Kept to reproduce #56.
 # Exits non-zero if any build failed (listed in exp/failed.txt); rerunning it retries only those.
 #   run_posthoc.sh BENCH REPO OTOL [JOBS]
 set -euo pipefail

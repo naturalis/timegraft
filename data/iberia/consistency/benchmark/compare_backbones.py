@@ -269,6 +269,20 @@ def traced(causes):
     return bool(set(causes) & set(ROOT_CAUSES) - NOT_A_REASON)
 
 
+def compare(a, b, threshold=1.10):
+    """One row per genus whose stem age differs by more than threshold between backbones a and b."""
+    rows = []
+    for g in sorted(set(a.leaf) & set(b.leaf)):
+        sa, sb = a.age(a.stem(g)), b.age(b.stem(g))
+        if factor(sa, sb) <= threshold:
+            continue
+        causes, chain = explain(a, b, b.stem(g))
+        found = sorted({c for c in causes if c in ROOT_CAUSES}, key=ROOT_CAUSES.index)
+        rows.append({"genus": g, "stem_a": f"{sa:.2f}", "stem_b": f"{sb:.2f}", "factor": f"{factor(sa, sb):.3f}",
+                     "causes": ";".join(found), "traced": "yes" if traced(found) else "no", "chain": " | ".join(chain)})
+    return rows
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("a")
@@ -276,16 +290,7 @@ def main():
     ap.add_argument("out")
     ap.add_argument("--factor", type=float, default=1.10)
     args = ap.parse_args()
-    a, b = Backbone(args.a), Backbone(args.b)
-    rows = []
-    for g in sorted(set(a.leaf) & set(b.leaf)):
-        sa, sb = a.age(a.stem(g)), b.age(b.stem(g))
-        if factor(sa, sb) <= args.factor:
-            continue
-        causes, chain = explain(a, b, b.stem(g))
-        found = sorted({c for c in causes if c in ROOT_CAUSES}, key=ROOT_CAUSES.index)
-        rows.append({"genus": g, "stem_a": f"{sa:.2f}", "stem_b": f"{sb:.2f}", "factor": f"{factor(sa, sb):.3f}",
-                     "causes": ";".join(found), "traced": "yes" if traced(found) else "no", "chain": " | ".join(chain)})
+    rows = compare(Backbone(args.a), Backbone(args.b), args.factor)
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     with open(out / "stem_causes.tsv", "w", newline="") as handle:
