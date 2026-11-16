@@ -117,7 +117,7 @@ def build_genus(
     root_to_tip = mean_root_to_tip(tree)
     screening = marker_cfg.get("screening") or {}
     outliers = rate_outliers(tree, float(screening.get("rate_outlier_z", 3.5)), labels=in_names)
-    action = screening.get("rate_outlier_action", "flag")
+    action = screening.get("rate_outlier_action", "set_aside")
     if action not in ("flag", "set_aside"):
         raise ValueError(f"screening.rate_outlier_action must be flag or set_aside, not {action!r}")
     if action == "set_aside" and outliers["units"]:

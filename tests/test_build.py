@@ -106,7 +106,7 @@ def long_branch():
 
 def test_rate_outliers_are_listed_or_set_aside(long_branch):
     ingroup, outgroup = long_branch
-    marker = {**MARKER, "screening": {"rate_outlier_z": 3.5}}
+    marker = {**MARKER, "screening": {"rate_outlier_z": 3.5, "rate_outlier_action": "flag"}}
     _, flagged = build_genus("Genus", ingroup, outgroup, 40.0, marker, {})
     assert flagged["rate_outliers"] == "G_long" and flagged["rate_outlier_action"] == "flag"
     assert flagged["n_units"] == 9
