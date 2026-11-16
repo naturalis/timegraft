@@ -125,6 +125,26 @@ def leaf_labels(tree):
     return {leaf.taxon.label for leaf in tree.leaf_node_iter()}
 
 
+@pytest.mark.parametrize("screening, action", [
+    ({"enabled": True, "rate_outlier_z": 3.5}, "set_aside"),   # action left out, screening on (COI): set aside (#73)
+    ({"enabled": False, "rate_outlier_z": 3.5}, "flag"),       # screening off (ITS): listed only
+    ({"rate_outlier_z": 3.5}, "flag"),                         # enabled left out: off, as in screen_units.py
+    (None, "flag"),                                            # no screening mapping at all
+])
+def test_rate_outlier_action_when_left_out(long_branch, screening, action):
+    ingroup, outgroup = long_branch
+    marker = {**MARKER, "screening": screening} if screening is not None else dict(MARKER)
+    if screening is None:
+        marker.pop("screening", None)
+    tree, prov = build_genus("Genus", ingroup, outgroup, 40.0, marker, {})
+    assert prov["rate_outliers"] == "G_long" and prov["rate_outlier_action"] == action
+    labels = {leaf.taxon.label for leaf in tree.leaf_node_iter()}
+    if action == "set_aside":
+        assert prov["n_units"] == 8 and "G_long" not in labels
+    else:
+        assert prov["n_units"] == 9 and "G_long" in labels
+
+
 def test_misplaced_units_are_kept_by_default(genus):
     ingroup, outgroup = genus
     tree, prov = build_genus("Genus", ingroup, outgroup, 40.0, MARKER, {})

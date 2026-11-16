@@ -124,7 +124,7 @@ Everything that differs between markers sits in `markers.<name>`:
 | `screening.translation.max_nonsynonymous_share` | 0.5 | | ... of which more than this share change the amino acid |
 | `screening.translation.action` | `flag` | | `flag`: report only; `set_aside`: set `numt_like` units aside like the others |
 | `screening.rate_outlier_z` | 3.5 | | Genus subtrees: list units whose root-to-tip distance lies this many robust standard deviations above the median (`rate_outliers` in `provenance.tsv`); 0 turns it off |
-| `screening.rate_outlier_action` | `set_aside` | | `set_aside`: leave them out of the genus subtree and place them like units set aside by screening; `flag`: list only (the default before [#73](https://github.com/naturalis/timegraft/issues/73)); see [relative rates](#relative-rates-within-a-genus) |
+| `screening.rate_outlier_action` | `set_aside` (COI); `flag` (ITS) | | `set_aside`: leave them out of the genus subtree and place them like units set aside by screening; `flag`: list only (the default before [#73](https://github.com/naturalis/timegraft/issues/73), and still for ITS, whose screening is off). Where the setting is left out, it is `set_aside` if `screening.enabled` is true for the marker and `flag` otherwise; see [relative rates](#relative-rates-within-a-genus) |
 | `crown_age.method` | `rate` | `fraction` | How to set a genus crown age when no better source exists |
 | `crown_age.rate` | 0.0115 | | Default substitution rate, per site per Myr, per lineage; sets the lower bound of the crown age, see [crown ages and rates](#crown-ages-and-rates) |
 | `crown_age.rates` | `{}` | | Rate per taxon, `rank: {name: rate}` |
