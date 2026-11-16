@@ -647,7 +647,8 @@ if VERSION >= 2:
     needed = [DOWN / "clean" / arm for arm in ("legacy", "default")] + [
         DOWN / kind / f"s{seed}" / arm for kind in ("inject", "noise", "sub") for seed in DOWN_SEEDS
         for arm in ("legacy", "default")]
-    ready = all((d / "provenance.tsv").exists() and (d / "timegraft.tre").exists() for d in needed)
+    DOWN_FILES = ("provenance.tsv", "timegraft.tre", "units/representatives.tsv")  # per run, as GATE.md lays out
+    ready = all((d / f).exists() for d in needed for f in DOWN_FILES)
     if DOWN.exists() and not ready:  # begun but not finished: refuse, as for the backbone experiments
         sys.exit(f"the downstream runs in {DOWN} are incomplete; finish them first")
     DOWN_METRICS = [
