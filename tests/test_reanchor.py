@@ -167,9 +167,9 @@ def test_misplaced_genus_is_flagged_and_moved(tmp_path, mode):
     row = provenance["Mytilus"]
     assert row["original_anchor"] == "ott5" and row["reanchor_source"] == "auto"
     assert row["reanchor_target"] == "family:Mytilidae (ott4)"
-    # none of its species is inside the target in the synthesis (they sit with the starfish): the target node (#70)
-    assert row["reanchor_how"] == "reference_lineage;ancestor_in_synthesis;target_node"
-    assert row["reanchor_species_inside"] == "0"
+    # Mytilidae is not in this synthesis: the genus goes to the enclosing node and is not placed within it (#70)
+    assert row["reanchor_how"] == "reference_lineage;ancestor_in_synthesis;enclosing_node"
+    assert row["reanchor_species_inside"] == ""
     assert "severity=5" in row["reanchor_trigger"]
     assert set(provenance) == {"Mytilus"}  # nothing else is touched
     if mode == "report":
@@ -331,3 +331,24 @@ def test_within_target_prefers_the_sampled_species(tmp_path):
 def test_within_target_must_be_known():
     with pytest.raises(ValueError, match="within_target"):
         ra.plan(None, None, {}, {}, {}, [], {}, {}, "apply", 3, within="family")
+
+
+def test_target_not_in_the_synthesis_is_not_searched(tmp_path):
+    # Mytilidae has no node and no members in the synthesis: the mussels hang directly below Bivalvia. The genus
+    # goes to the enclosing node, as before #70, and is not placed among the mussel species inside it
+    taxonomy, synth, anchors, status = _resolved(tmp_path)
+    (tmp_path / "synth.tre").write_text("(((ott6,ott7)mrcaott6ott7,ott8,(ott50,ott51)other)ott3,"
+                                        "(((ott30,ott31,ott32,ott33)starfish,(ott15)ott14)ott13)ott12)ott2;")
+    synth = SynthTree(tmp_path / "synth.tre")
+    for g in ("Perna", "Modiolus"):
+        anchors.pop(g, None)
+    anchors.update(genus_anchors(synth, taxonomy, ["Mytilus", "Asterias"], rule="majority")[0])
+    matches = {g: {**taxonomy.genus[g], "status": status[g]} for g in ("Mytilus", "Asterias")}
+    flag = [{"genus": "Mytilus", "concordance_flag": "flag", "severity": str(cc.LEVELS["phylum"])}]
+    mussel = {"Mytilus": {"family": "Mytilidae", "class": "Bivalvia", "phylum": "Mollusca"}}
+    provenance, moved = ra.plan(synth, taxonomy, cc.name_index(taxonomy), matches, anchors, flag, mussel, {},
+                                "apply", cc.LEVELS["class"])
+    row = provenance["Mytilus"]
+    assert synth.label[moved["Mytilus"][0]] == "ott3"
+    assert row["reanchor_how"] == "reference_lineage;ancestor_in_synthesis;enclosing_node"
+    assert row["reanchor_species_inside"] == ""

@@ -21,7 +21,10 @@ stem would become the family's crown, and the genus that used to be its
 sister would lose its sister. So the genus is attached within the target, at
 the majority clade of its own species that the synthesis places inside the
 target (the rule of #51 for anchoring genera on their species), and only at
-the target's node where none of them is inside it (#70).
+the target's node where none of them is inside it (#70). Where the target is
+not in the synthesis at all (neither as a node nor through members), the
+genus goes to the nearest enclosing node as before: that clade is larger than
+the target, and the genus is not placed within it.
 
 A curated table can force a correction (``reanchor``) or prevent one
 (``keep``). Every decision is recorded in ``genera.tsv`` and
@@ -299,7 +302,11 @@ def plan(synth, taxonomy, names, matches: Mapping[str, dict], anchors: Mapping[s
         node, where = (synthesis_node(synth, taxonomy, uid, exclude=matches[genus]["ott_id"])
                        if uid is not None else (None, how))
         inside = ""
-        if node is not None and within == "majority":
+        if node is not None and within == "majority" and where == "ancestor_in_synthesis":
+            # the target has no node and no members in the synthesis: the node is an enclosing clade, not the
+            # target, so the genus is not placed within it; it stays at that node, as before #70
+            where = f"{where};enclosing_node"
+        elif node is not None and within == "majority":
             node, place, n_inside = within_target(synth, taxonomy, genus, node, (sampled or {}).get(genus),
                                                   share, min_species, min_sampled)
             where, inside = f"{where};{place}", str(n_inside)
