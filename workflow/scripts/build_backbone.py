@@ -141,7 +141,12 @@ try:
                 overrides = ra.read_overrides(snakemake.input.overrides if snakemake.input.overrides else None)
                 provenance, moved = ra.plan(synth, taxonomy, names, matches, anchors, concordance,
                                             {g: ref for g, (_, ref) in reference.items()}, overrides, mode,
-                                            cc.LEVELS[re_cfg.get("min_severity", "class")])
+                                            cc.LEVELS[re_cfg.get("min_severity", "class")],
+                                            within=re_cfg.get("within_target", "majority"),
+                                            sampled=sampled if an_cfg.get("prefer_sampled", True) else None,
+                                            share=float(an_cfg.get("share", 0.5)),
+                                            min_species=int(an_cfg.get("min_species", 3)),
+                                            min_sampled=int(an_cfg.get("min_sampled", 2)))
                 if moved:
                     for g, (node, uid) in moved.items():
                         anchors[g], placed[g] = node, f"reanchored:{synth.label[node]}"
@@ -159,7 +164,8 @@ try:
                                 row["genus"], hits.get(row["genus"], []), after[row["genus"]], phylum,
                                 min_hits=conc_settings["min_hits"])["neighbour_concordance"]
                 for row in concordance:
-                    row["placement_action"] = provenance.get(row["genus"], {}).get("placement_action", "")
+                    for key in ("placement_action", "reanchor_how", "reanchor_species_inside"):
+                        row[key] = provenance.get(row["genus"], {}).get(key, "")
                 extra.append(provenance)
                 # the ids a moved genus is dated with: only those whose NCBI lineage agrees with its new place,
                 # so no species of another animal merged into it by OTT reaches TimeTree (#69)
@@ -248,7 +254,7 @@ write_tsv(snakemake.output.concordance, concordance, CONCORDANCE_COLUMNS)
 # what the backbone was built from, and in what format the outputs are (#47)
 entries = [v for k, v in cache.data.items() if k.startswith("mrca:") and isinstance(v, dict)]
 metadata = {
-    "output_format": {"genera.tsv": 7, "node_ages.tsv": 5, "crown_ages.tsv": 3, "concordance.tsv": 4,
+    "output_format": {"genera.tsv": 8, "node_ages.tsv": 5, "crown_ages.tsv": 3, "concordance.tsv": 5,
                       "timetree_cache": CACHE_VERSION},
     # which species the TimeTree crown ages are the crowns of (#54)
     "crowns": {"settings": settings.get("crown_query") or {},

@@ -15,6 +15,17 @@ genus's own synthesis node and species are left out of that search, since
 they are what is misplaced. TimeTree queries and outgroups are then built
 from the corrected backbone as for any other genus.
 
+Where the target taxon is resolved in the synthesis, its node is the crown
+of the family, not the genus's place in it: attached there, the genus's
+stem would become the family's crown, and the genus that used to be its
+sister would lose its sister. So the genus is attached within the target, at
+the majority clade of its own species that the synthesis places inside the
+target (the rule of #51 for anchoring genera on their species), and only at
+the target's node where none of them is inside it (#70). Where the target is
+not in the synthesis at all (neither as a node nor through members), the
+genus goes to the nearest enclosing node as before: that clade is larger than
+the target, and the genus is not placed within it.
+
 A curated table can force a correction (``reanchor``) or prevent one
 (``keep``). Every decision is recorded in ``genera.tsv`` and
 ``concordance.tsv``.
@@ -43,7 +54,10 @@ OVERRIDE_ACTIONS = ("reanchor", "keep")
 OVERRIDE_COLUMNS = ("genus", "action", "target", "source", "note")
 # genera.tsv columns (#50)
 COLUMNS = ("placement_action", "original_status", "original_anchor", "reanchor_target", "reanchor_how",
-           "reanchor_trigger", "reanchor_source", "reanchor_note")
+           "reanchor_species_inside", "reanchor_trigger", "reanchor_source", "reanchor_note")
+# where within the target a moved genus is attached (#70): majority clade of its species inside the target,
+# or the target's node (as before #70)
+WITHIN_TARGET = ("majority", "off")
 # genera.tsv columns of the identifier check (#69): NCBI ids checked and dropped (the genus id among them)
 ID_COLUMNS = ("reanchor_ids_checked", "reanchor_ids_dropped")
 # concordance.tsv columns of the same check: the lineage checked against, and the ids kept and dropped
@@ -162,6 +176,43 @@ def _synth_ott_nodes(synth) -> tuple[np.ndarray, np.ndarray]:
     return synth._ott_nodes
 
 
+def within_target(synth, taxonomy, genus: str, target_node: int, sampled: set[str] | None = None,
+                  share: float = 0.5, min_species: int = 3, min_sampled: int = 2) -> tuple[int, str, int]:
+    """Where inside the target node a moved genus belongs (#70): the node, how it was found, and how many
+    species of the genus the synthesis places inside the target.
+
+    The genus's species (OTT ids under its matched taxon) whose synthesis
+    nodes lie inside ``target_node``, preferably those ``sampled`` in the run
+    where at least ``min_sampled`` of them are inside; species of the other
+    animal that OTT merged into the genus lie elsewhere, so this keeps them
+    out. As in :func:`timegraft.otol_static.genus_anchors`: with at least
+    ``min_species`` of them, their majority clade (``majority_clade_in_target``);
+    with fewer, their MRCA (``mrca_in_target``), or the parent of a single
+    one (``species_in_target``); with none, the target node itself
+    (``target_node``), as before #70.
+    """
+    from .otol_static import majority_clade
+
+    sizes = synth.subtree_sizes()
+    end = target_node + int(sizes[target_node])
+    inside = {uid: synth.index[f"ott{uid}"] for uid, _ in taxonomy.species.get(genus, [])
+              if f"ott{uid}" in synth.index and target_node < synth.index[f"ott{uid}"] < end}
+    if sampled:
+        mine = {taxonomy.species_uid[n] for n in sampled if n in taxonomy.species_uid} & set(inside)
+        if len(mine) >= min_sampled:
+            inside = {uid: inside[uid] for uid in mine}
+    nodes = sorted(inside.values())
+    if not nodes:
+        return target_node, "target_node", 0
+    if len(nodes) >= min_species:
+        node, how = majority_clade(synth, nodes, share)[0], "majority_clade_in_target"
+    elif len(nodes) > 1:
+        node, how = synth.mrca(nodes), "mrca_in_target"
+    else:
+        node, how = int(synth.parent[nodes[0]]), "species_in_target"
+    return node, how, len(nodes)
+
+
 def decide(concordance: list[dict], overrides: Mapping[str, dict], min_severity: int,
            genera_in_ott: Mapping[str, int]) -> dict[str, dict[str, str]]:
     """Which genera to move, and why: flagged by concordance with ``severity`` at least ``min_severity``,
@@ -206,8 +257,15 @@ def normalise_mode(mode) -> str:
 
 def plan(synth, taxonomy, names, matches: Mapping[str, dict], anchors: Mapping[str, int], concordance: list[dict],
          reference: Mapping[str, Mapping[str, str]], overrides: Mapping[str, dict], mode: str,
-         min_severity: int) -> tuple[dict[str, dict], dict[str, tuple[int, int]]]:
+         min_severity: int, within: str = "majority", sampled: Mapping[str, set[str]] | None = None,
+         share: float = 0.5, min_species: int = 3,
+         min_sampled: int = 2) -> tuple[dict[str, dict], dict[str, tuple[int, int]]]:
     """Decide and locate every correction.
+
+    ``within`` (``WITHIN_TARGET``) says where in the target taxon a moved
+    genus is attached: ``majority`` places it with :func:`within_target`,
+    ``off`` at the target's node; ``sampled``, ``share``, ``min_species`` and
+    ``min_sampled`` are the anchoring settings of #51.
 
     Returns the genera.tsv columns (``COLUMNS``) per genus decided on, and,
     with ``mode`` ``apply``, the genera to move with their new synthesis node
@@ -216,6 +274,9 @@ def plan(synth, taxonomy, names, matches: Mapping[str, dict], anchors: Mapping[s
     ``flagged_no_target`` (no taxon of the reference lineage could be found).
     """
     mode = normalise_mode(mode)
+    within = normalise_mode(within) if within is False else within
+    if within not in WITHIN_TARGET:
+        raise ValueError(f"reanchor.within_target must be one of {WITHIN_TARGET}, not {within!r}")
     if mode not in MODES:
         raise ValueError(f"reanchor.mode must be one of {MODES}, not {mode!r}")
     if mode == "off":
@@ -240,8 +301,17 @@ def plan(synth, taxonomy, names, matches: Mapping[str, dict], anchors: Mapping[s
         uid, taxon, how = find_target(taxonomy, names, reference.get(genus) or {}, target)
         node, where = (synthesis_node(synth, taxonomy, uid, exclude=matches[genus]["ott_id"])
                        if uid is not None else (None, how))
+        inside = ""
+        if node is not None and within == "majority" and where == "ancestor_in_synthesis":
+            # the target has no node and no members in the synthesis: the node is an enclosing clade, not the
+            # target, so the genus is not placed within it; it stays at that node, as before #70
+            where = f"{where};enclosing_node"
+        elif node is not None and within == "majority":
+            node, place, n_inside = within_target(synth, taxonomy, genus, node, (sampled or {}).get(genus),
+                                                  share, min_species, min_sampled)
+            where, inside = f"{where};{place}", str(n_inside)
         row.update(reanchor_target=f"{taxon} (ott{uid})" if uid is not None else taxon,
-                   reanchor_how=f"{how};{where}" if uid is not None else how)
+                   reanchor_how=f"{how};{where}" if uid is not None else how, reanchor_species_inside=inside)
         if node is None:
             row["placement_action"] = "flagged_no_target"
         elif mode == "report":

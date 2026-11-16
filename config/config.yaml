@@ -98,6 +98,8 @@ backbone_build:
     min_severity: class      # only flags whose lineages part at this rank or higher
     check_ids: true          # send a moved genus to TimeTree only with NCBI ids whose lineage agrees with
                              # its new place below min_severity; the others are dropped (#69)
+    within_target: majority  # attach a moved genus at the majority clade of its species inside the target
+                             # (anchoring settings above); off: at the target's own node, as before (#70)
     overrides:               # optional curated table: genus, action (reanchor or keep), target
                              # (rank:name or ott:<id>), source, note; e.g. config/placement_overrides.tsv
   cache: resources/api_cache.json

@@ -167,7 +167,9 @@ def test_misplaced_genus_is_flagged_and_moved(tmp_path, mode):
     row = provenance["Mytilus"]
     assert row["original_anchor"] == "ott5" and row["reanchor_source"] == "auto"
     assert row["reanchor_target"] == "family:Mytilidae (ott4)"
-    assert row["reanchor_how"] == "reference_lineage;ancestor_in_synthesis"
+    # Mytilidae is not in this synthesis: the genus goes to the enclosing node and is not placed within it (#70)
+    assert row["reanchor_how"] == "reference_lineage;ancestor_in_synthesis;enclosing_node"
+    assert row["reanchor_species_inside"] == ""
     assert "severity=5" in row["reanchor_trigger"]
     assert set(provenance) == {"Mytilus"}  # nothing else is touched
     if mode == "report":
@@ -224,3 +226,129 @@ def test_override_keeps_a_flagged_genus(tmp_path):
     assert provenance["Mytilus"]["reanchor_source"] == "override:RV"
     assert ra.plan(synth, taxonomy, names, matches, anchors, rows, {}, {}, "off", 4) == ({}, {})
     assert ra.plan(synth, taxonomy, names, matches, anchors, rows, {}, {}, False, 4) == ({}, {})
+
+
+# A resolved family (#70). OTT merged the mussel Mytilus into a starfish genus of the same name: the merged
+# taxon sits in Asteroidea and holds the mussels' species (6, 7, 8) and more starfish species (30, 31, 32 and
+# 33). The synthesis, built from trees, puts the mussels inside Mytilidae, sister to Perna.
+RESOLVED_TAXONOMY = """uid	|	parent_uid	|	name	|	rank	|	sourceinfo	|	uniqname	|	flags	|
+1	|		|	life	|	no rank	|	ncbi:1	|		|		|
+2	|	1	|	Metazoa	|	kingdom	|	ncbi:33208	|		|		|
+3	|	2	|	Bivalvia	|	class	|	ncbi:6544	|		|		|
+4	|	3	|	Mytilidae	|	family	|	ncbi:6545	|		|		|
+20	|	4	|	Perna	|	genus	|	ncbi:6549	|		|		|
+21	|	20	|	Perna viridis	|	species	|	ncbi:73031	|		|		|
+22	|	20	|	Perna perna	|	species	|	ncbi:73032	|		|		|
+23	|	4	|	Modiolus	|	genus	|	ncbi:6560	|		|		|
+24	|	23	|	Modiolus modiolus	|	species	|	ncbi:6561	|		|		|
+13	|	2	|	Asteroidea	|	class	|	ncbi:7588	|		|		|
+5	|	13	|	Mytilus	|	genus	|	ncbi:6548	|		|		|
+6	|	5	|	Mytilus edulis	|	species	|	ncbi:6550	|		|		|
+7	|	5	|	Mytilus trossulus	|	species	|	ncbi:6551	|		|		|
+8	|	5	|	Mytilus galloprovincialis	|	species	|	ncbi:29158	|		|		|
+30	|	5	|	Mytilus stella	|	species	|		|		|		|
+31	|	5	|	Mytilus astra	|	species	|		|		|		|
+32	|	5	|	Mytilus radiata	|	species	|		|		|		|
+33	|	5	|	Mytilus spina	|	species	|		|		|		|
+14	|	13	|	Asterias	|	genus	|	ncbi:7601	|		|		|
+15	|	14	|	Asterias rubens	|	species	|	ncbi:7604	|		|		|
+"""
+RESOLVED_SYNTH = ("((((((ott6,ott7)mrcaott6ott7,ott8)mrcaott6ott8,(ott21,ott22)ott20)mrcaott6ott21,(ott24)ott23)ott4)ott3,"
+                  "(((ott30,ott31,ott32,ott33)starfish,(ott15)ott14)ott13)ott12)ott2;")
+RESOLVED_GENERA = ["Mytilus", "Perna", "Modiolus", "Asterias"]
+
+
+def _resolved(tmp_path, species=(6, 7, 8)):
+    text = "\n".join(line for line in RESOLVED_TAXONOMY.splitlines()
+                     if not (line.split("\t|\t")[0].isdigit() and int(line.split("\t|\t")[0]) in {6, 7, 8} - set(species)))
+    (tmp_path / "taxonomy.tsv").write_text(text + "\n")
+    (tmp_path / "synth.tre").write_text(RESOLVED_SYNTH)
+    taxonomy = Taxonomy(tmp_path / "taxonomy.tsv", set(RESOLVED_GENERA), context="Metazoa")
+    synth = SynthTree(tmp_path / "synth.tre")
+    anchors, status = genus_anchors(synth, taxonomy, RESOLVED_GENERA, rule="majority")
+    return taxonomy, synth, anchors, status
+
+
+def _move(taxonomy, synth, anchors, status, within):
+    matches = {g: {**taxonomy.genus[g], "status": status[g]} for g in RESOLVED_GENERA}
+    flag = [{"genus": "Mytilus", "concordance_flag": "flag", "severity": str(cc.LEVELS["phylum"])}]
+    mussel = {"Mytilus": {"family": "Mytilidae", "class": "Bivalvia", "phylum": "Mollusca"}}
+    provenance, moved = ra.plan(synth, taxonomy, cc.name_index(taxonomy), matches, anchors, flag, mussel, {},
+                                "apply", cc.LEVELS["class"], within=within)
+    anchors, status = dict(anchors), dict(status)
+    anchors["Mytilus"], status["Mytilus"] = moved["Mytilus"][0], f"reanchored:{synth.label[moved['Mytilus'][0]]}"
+    newick, _ = genus_topology_newick(synth, taxonomy, RESOLVED_GENERA, (anchors, status))
+    tree = dendropy.Tree.get(data=newick, schema="newick", rooting="force-rooted", preserve_underscores=True)
+    return provenance["Mytilus"], synth.label[moved["Mytilus"][0]], cc.backbone_sisters(tree)
+
+
+def test_reanchored_within_a_resolved_family(tmp_path):
+    taxonomy, synth, anchors, status = _resolved(tmp_path)
+    # the starfish species are the majority of the merged taxon: anchored among the starfish
+    assert synth.label[anchors["Mytilus"]] == "starfish"
+    row, node, sisters = _move(taxonomy, synth, anchors, status, "majority")
+    # attached within Mytilidae at the majority clade of its three species there (two of them, as #51 has it),
+    # so Perna keeps Mytilus as its sister
+    assert node == "mrcaott6ott7" and row["reanchor_species_inside"] == "3"
+    assert row["reanchor_how"] == "reference_lineage;taxon_in_synthesis;majority_clade_in_target"
+    assert sisters["Perna"] == ["Mytilus"] and sisters["Mytilus"] == ["Perna"]
+    assert set(sisters["Modiolus"]) == {"Mytilus", "Perna"}
+
+
+def test_reanchored_at_the_family_node_as_before(tmp_path):
+    taxonomy, synth, anchors, status = _resolved(tmp_path)
+    row, node, sisters = _move(taxonomy, synth, anchors, status, "off")
+    # within_target off: at the family's node, the genus's stem becomes the family's crown, and Perna loses
+    # Mytilus as its only sister: the family becomes a polytomy of the three genera
+    assert node == "ott4" and row["reanchor_species_inside"] == ""
+    assert row["reanchor_how"] == "reference_lineage;taxon_in_synthesis"
+    assert set(sisters["Mytilus"]) == {"Modiolus", "Perna"} and set(sisters["Perna"]) == {"Modiolus", "Mytilus"}
+
+
+@pytest.mark.parametrize("species,node,how", [((6, 7), "mrcaott6ott7", "mrca_in_target"),
+                                              ((8,), "mrcaott6ott8", "species_in_target")])
+def test_few_species_inside_the_target(tmp_path, species, node, how):
+    # fewer than min_species inside the target: their MRCA, or the parent of a single one, as for anchoring (#51)
+    taxonomy, synth, anchors, status = _resolved(tmp_path, species)
+    row, moved_to, _ = _move(taxonomy, synth, anchors, status, "majority")
+    assert moved_to == node and row["reanchor_how"].endswith(how)
+    assert row["reanchor_species_inside"] == str(len(species))
+
+
+def test_within_target_prefers_the_sampled_species(tmp_path):
+    taxonomy, synth, *_ = _resolved(tmp_path)
+    target = synth.index["ott4"]
+    node, how, n = ra.within_target(synth, taxonomy, "Mytilus", target, sampled={"Mytilus edulis", "Mytilus trossulus"})
+    assert synth.label[node] == "mrcaott6ott7" and how == "mrca_in_target" and n == 2
+    # one sampled species is too few (min_sampled 2): all three species inside the target
+    node, how, n = ra.within_target(synth, taxonomy, "Mytilus", target, sampled={"Mytilus edulis"})
+    assert how == "majority_clade_in_target" and n == 3
+    # the starfish species of the merged taxon are never counted: they are outside the target
+    node, how, n = ra.within_target(synth, taxonomy, "Mytilus", synth.index["ott13"])
+    assert how == "majority_clade_in_target" and synth.label[node] == "starfish" and n == 4
+
+
+def test_within_target_must_be_known():
+    with pytest.raises(ValueError, match="within_target"):
+        ra.plan(None, None, {}, {}, {}, [], {}, {}, "apply", 3, within="family")
+
+
+def test_target_not_in_the_synthesis_is_not_searched(tmp_path):
+    # Mytilidae has no node and no members in the synthesis: the mussels hang directly below Bivalvia. The genus
+    # goes to the enclosing node, as before #70, and is not placed among the mussel species inside it
+    taxonomy, synth, anchors, status = _resolved(tmp_path)
+    (tmp_path / "synth.tre").write_text("(((ott6,ott7)mrcaott6ott7,ott8,(ott50,ott51)other)ott3,"
+                                        "(((ott30,ott31,ott32,ott33)starfish,(ott15)ott14)ott13)ott12)ott2;")
+    synth = SynthTree(tmp_path / "synth.tre")
+    for g in ("Perna", "Modiolus"):
+        anchors.pop(g, None)
+    anchors.update(genus_anchors(synth, taxonomy, ["Mytilus", "Asterias"], rule="majority")[0])
+    matches = {g: {**taxonomy.genus[g], "status": status[g]} for g in ("Mytilus", "Asterias")}
+    flag = [{"genus": "Mytilus", "concordance_flag": "flag", "severity": str(cc.LEVELS["phylum"])}]
+    mussel = {"Mytilus": {"family": "Mytilidae", "class": "Bivalvia", "phylum": "Mollusca"}}
+    provenance, moved = ra.plan(synth, taxonomy, cc.name_index(taxonomy), matches, anchors, flag, mussel, {},
+                                "apply", cc.LEVELS["class"])
+    row = provenance["Mytilus"]
+    assert synth.label[moved["Mytilus"][0]] == "ott3"
+    assert row["reanchor_how"] == "reference_lineage;ancestor_in_synthesis;enclosing_node"
+    assert row["reanchor_species_inside"] == ""
