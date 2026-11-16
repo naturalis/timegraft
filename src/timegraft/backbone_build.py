@@ -40,6 +40,9 @@ REPORT_COLUMNS = (
     "calibration_outlier", "precedence_age", "precedence_source",
     # re-query of conflicting nodes with disjoint picks, and what it says about the cause (#53)
     *REQUERY_COLUMNS,
+    # where the final age comes from (#84): its own calibration, the fit, interpolation (between which dated
+    # nodes) or the root; and the genera whose identifiers were sent to TimeTree for it
+    "age_source", "interpolated_from", "query_genera",
 )
 # columns reserved for later issues, written empty until those land
 RESERVED_COLUMNS = ()
@@ -128,6 +131,7 @@ def interpolate(
     age: dict[dendropy.Node, float],
     method: str = "pure_birth",
     richness: dict[dendropy.Node, int] | None = None,
+    anchors: dict | None = None,
 ) -> dict[dendropy.Node, float]:
     """Ages for the internal nodes missing from ``age``; the root must be dated.
 
@@ -150,6 +154,10 @@ def interpolate(
     makes shallow nodes far too young (see ``data/iberia/backbone-interpolation``).
     Where the heights do not increase strictly towards the root, the node is
     spaced evenly instead.
+
+    Given a dict as ``anchors``, it gets for each interpolated node the two
+    dated nodes its age is placed between: its nearest dated ancestor and its
+    oldest dated descendant (a leaf when there is none, at age 0) (#84).
     """
     if method not in INTERPOLATION_METHODS:
         raise ValueError(f"unknown interpolation method {method!r}; use one of {', '.join(INTERPOLATION_METHODS)}")
@@ -193,6 +201,11 @@ def interpolate(
             if h_parent > h_node > h_floor:
                 fraction = (h_parent - h_node) / (h_parent - h_floor)
         out[node] = parent_age - (parent_age - floor) * fraction
+        if anchors is not None:
+            up = parent
+            while up not in age:
+                up = up.parent_node
+            anchors[node] = (up, floor_node)
     return out
 
 
@@ -307,7 +320,8 @@ def date_topology(
 
     # the precedence rule (before #52), kept for comparison and as a fallback
     p_age, p_source, conflict, conflict_with = _precedence(tree, dict(age), dict(source))
-    for node, value in interpolate(tree, p_age, method=interpolation, richness=richness).items():
+    p_anchors: dict = {}
+    for node, value in interpolate(tree, p_age, method=interpolation, richness=richness, anchors=p_anchors).items():
         p_age[node] = value
         p_source[node] = {
             "dropped_inconsistent": "interpolated_after_drop",
@@ -327,7 +341,7 @@ def date_topology(
     if method == "precedence":
         if rq_mode == "apply":
             raise ValueError("requery mode 'apply' requires age method 'fit'")
-        age, source = p_age, p_source
+        age, source, anchors = p_age, p_source, p_anchors
         if rq_mode != "off":
             requery_rows, _ = _requery(tree, calibrations, {}, set(), conflict, conflict_with, p_age, used, ncbi,
                                        timetree, per_side, per_genus, requery, fit, synth_nodes, support)
@@ -346,7 +360,8 @@ def date_topology(
                 age, source, fitted_rows, result = _fit(tree, calibrations, cal_parent, unresolved, source, fit)
         for node, row in fitted_rows.items():
             calibration_rows[node].update(row)
-        for node, value in interpolate(tree, age, method=interpolation, richness=richness).items():
+        anchors = {}
+        for node, value in interpolate(tree, age, method=interpolation, richness=richness, anchors=anchors).items():
             age[node] = value
             source[node] = ("interpolated_unresolved_in_timetree" if source.get(node) == "timetree_same_as_ancestor"
                             else "interpolated")
@@ -356,6 +371,26 @@ def date_topology(
             node.edge.length = None
         else:
             node.edge.length = age[node.parent_node] - age[node]
+
+    # the genera whose own identifiers (genus or species NCBI ids) were sent for a node (#84); empty for a
+    # query with enclosing taxa, which depends on no genus's identifiers (query_ids has the taxa)
+    own_ids = {g: set(_ids(v)) for g, v in ncbi.items()}
+
+    def query_genera(node):
+        if node not in used or attempt_of.get(node) == "higher_taxa":
+            return ""
+        ids = set(used[node])
+        return ";".join(sorted(g for g in {leaf.taxon.label for leaf in node.leaf_iter()}
+                               if own_ids.get(g, set()) & ids))
+
+    def age_source(node):
+        if node is root:
+            return "root"
+        if node in anchors:
+            return "interpolated"
+        if node in raw and abs(age[node] - raw[node]) <= 1e-6 * max(1.0, raw[node]):
+            return "timetree"
+        return "fit"
 
     report = []
     names = {node: f"n{i}" for i, node in enumerate(tree.preorder_node_iter())}
@@ -397,6 +432,11 @@ def date_topology(
         row.update({c: "" for c in REQUERY_COLUMNS})
         row.update(requery_rows.get(node, {}))
         row.update({c: "" for c in RESERVED_COLUMNS})
+        row["age_source"] = age_source(node)
+        row["interpolated_from"] = (
+            f"{names[anchors[node][0]]};{'tips' if anchors[node][1].is_leaf() else names[anchors[node][1]]}"
+            if node in anchors else "")
+        row["query_genera"] = query_genera(node)
     return tree, report
 
 
