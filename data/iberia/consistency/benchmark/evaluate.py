@@ -662,7 +662,11 @@ if VERSION >= 2:
     ]
     if not ready:
         for number, name, threshold in DOWN_METRICS:
-            gate(number, name, "", "", threshold, "not run", f"needs the downstream harness of #81 ({DOWN} is absent)")
+            # GATE.md: once the harness exists (downstream.py, #81), a downstream metric that was not run fails
+            if (HERE / "downstream.py").exists():
+                gate(number, name, "", "", threshold, False, f"not run: {DOWN} is absent; run run_downstream.sh")
+            else:
+                gate(number, name, "", "", threshold, "not run", f"needs the downstream harness of #81 ({DOWN} is absent)")
     else:
         def crowns(folder):
             return {r["genus"]: float(r["crown_age"]) for r in read(folder / "provenance.tsv")

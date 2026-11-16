@@ -10,6 +10,7 @@ Whether `consistency-layer` should become the default: the metrics and threshold
 | `results/*.tsv` | One table per experiment (see below) |
 | `legacy.yaml` | Settings that switch the layer off: `consistency-layer` run as `main` ran |
 | `backbone.py`, `screen.py` | Run the unchanged workflow scripts for the backbone and the screening outside Snakemake, with settings from the configuration files plus overlays |
+| `downstream.py`, `run_downstream.sh` | The genus stage, grafting and placement on a backbone outside Snakemake, with the unchanged workflow scripts, and the runs of the downstream metrics of version 2 (#81; see [below](#the-downstream-runs)) |
 | `inject.py` | Merges genera of the run into taxa elsewhere in a copy of the OTT taxonomy, as OTT did with *Onchidella* |
 | `perturb_cache.py` | Multiplies every TimeTree age in a copy of the cache by a random factor |
 | `subsample.py` | Keeps a random half of the genera |
@@ -40,7 +41,15 @@ The pipeline is never patched for an experiment: errors and noise go into copies
 
 `evaluate.py --version 1` reproduces the tables of `results_73/` (values and statuses; the order of rows in `holdout.tsv` and of the phyla in the note of 1a vary between runs). Version 2 needs `node_ages.tsv` format 5 in the two clean backbones (built by any checkout from #84 on) and the two variants in `exp/`, and writes `stem_causes.tsv` and `decision.txt` besides the tables of version 1.
 
-**The downstream metrics wait for #81.** Their runs go in `exp/downstream/`, laid out as `GATE.md` describes (`clean/{legacy,default}/` and `{inject,noise,sub}/s{1,2}/{legacy,default}/`, each with `provenance.tsv`, `timegraft.tre` and `units/representatives.tsv`). Without that folder `evaluate.py` reports them as *not run*; with a partly filled folder it refuses to evaluate. When #81 adds the harness, add its runs to the required builds at the top of `evaluate.py`, so that a missing run stops the evaluation, as `GATE.md` requires once the harness exists.
+### The downstream runs
+
+[#81](https://github.com/naturalis/timegraft/issues/81) carries the injection, the age perturbation and the subsampling through the genus stage, so that version 2 can measure what they do to crown ages and PD (1n, 1o, 5e, 5f, 6e, 6f). `run_downstream.sh` runs `downstream.py` on the clean backbones and on replicates 1 and 2 of the three experiments, for both settings: 14 runs, in `exp/downstream/` as `GATE.md` lays out (`clean/{legacy,default}/` and `{inject,noise,sub}/s{1,2}/{legacy,default}/`, each with `provenance.tsv`, `timegraft.tre` and `units/representatives.tsv`).
+
+`downstream.py` runs `shard_genera.py`, `build_shard.py` (one process per shard), `graft.py` and `place_units.py` as the workflow does, on the units of the full run of the same setting (`exp/legacy_units` for legacy). For the subsampling it keeps only the genera of `genera.txt`, their units and records, and the unassigned units whose genera are all kept. It keeps every `build_genus()` result in `exp/downstream/memo`, keyed on everything the function reads, and takes it from there when a later run calls it with the same inputs: the clean runs go first, and the experiments then rebuild only the genera whose inputs they changed. `build_genus()` is deterministic, so the cache changes the time and nothing else. A run is made in a `.partial` folder and moved into place when it has finished.
+
+`legacy.yaml` gains `rate_outlier_action: flag` for the legacy arm: `main` at `e20fdf6` did not set long branches aside from their subtrees. The setting is read in the genus stage only, so the backbone and the screening of the legacy arm (metric 0) are unaffected.
+
+Since the harness exists, `evaluate.py` (version 2) counts a downstream metric whose runs are missing as failed, as `GATE.md` requires; with a partly filled `exp/downstream/` it refuses to evaluate.
 
 ## Rerunning it
 
@@ -63,6 +72,7 @@ for w in main branch; do (
 (cd $BENCH/branch && python -m pytest -q tests | tail -1 > $BENCH/tests.txt)
 ./run_experiments.sh $BENCH $BENCH/branch $BENCH/branch/resources/otol 2
 ./run_posthoc.sh $BENCH $BENCH/branch $BENCH/branch/resources/otol 2    # version 1 only: run_experiments.sh builds them now
+./run_downstream.sh $BENCH $BENCH/branch 2                                # version 2: the downstream runs (#81)
 PYTHONPATH=$BENCH/branch/src python evaluate.py $BENCH results               # version 2; add --version 1 for #56
 ```
 
@@ -91,6 +101,6 @@ The two full runs must not overlap with each other or with anything else, or the
 | `runtime.tsv` | Seconds per workflow rule, wall time and peak memory of the two full runs |
 | `memory.tsv` | Peak memory of the backbone and screening steps on their own, measured with `monitor.py` around `backbone.py` and `screen.py`; made by hand, not by `evaluate.py` |
 | `stem_causes.tsv` | Version 2: each stem that differs by more than 10% between the clean backbones, its causes and the chain behind them (`compare_backbones.py`) |
-| `downstream.tsv` | Version 2, once #81 exists: per downstream run, how far crown ages move and the PD rank correlation per design, against the clean run of the same setting |
+| `downstream.tsv` | Version 2: per downstream run, how far crown ages move and the PD rank correlation per design, against the clean run of the same setting |
 | `decision.txt` | Version 2: the decision of the rule in `GATE.md`, and what it was reached without |
 | `end_to_end.tsv` | The two full runs side by side: genera, units set aside, rooting, crown ages, placement, tree length |
