@@ -96,15 +96,19 @@ def unit_company(root, genus, all_units=False):
     units were taken. Every unit is taken, not one, so a genus whose units are split over the tree
     cannot pass on one of them. By default "the units of a genus" are those of its subtree, and the
     company is counted among units of other genera's subtrees: units set aside by screening are, by
-    definition, not taken to belong to their genus, and are placed by nearest neighbour. With
-    ``all_units``, set-aside units count too.
+    definition, not taken to belong to their genus, and are placed by nearest neighbour. The same holds for
+    units set aside from their genus subtree in the genus stage (``subtrees/set_aside_*.tsv``: long branches,
+    or units the root puts among the outgroup), which are placed the same way; they were left out from #73
+    on, when ``rate_outlier_action: set_aside`` became the default (see "Changes after review" in REPORT.md).
+    With ``all_units``, set-aside units count too.
     """
     import dendropy
 
     unit_genus = {r["unit_id"]: r["genus"] for r in read(root / "units/representatives.tsv")}
     decision = {r["unit_id"]: r["decision"] for r in read(root / "units/screened.tsv")}
     if not all_units:
-        unit_genus = {u: g for u, g in unit_genus.items() if decision.get(u) not in SET_ASIDE}
+        later = {r["unit_id"] for f in sorted((root / "subtrees").glob("set_aside_*.tsv")) for r in read(f)}
+        unit_genus = {u: g for u, g in unit_genus.items() if decision.get(u) not in SET_ASIDE and u not in later}
     tree = dendropy.Tree.get(path=str(root / "timegraft.tre"), schema="newick", preserve_underscores=True,
                              rooting="force-rooted")
     present = {leaf.taxon.label for leaf in tree.leaf_node_iter() if unit_genus.get(leaf.taxon.label) == genus}

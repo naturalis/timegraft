@@ -1,0 +1,11 @@
+seed	arm	nodes	same_clades	median_factor	p90_factor	share_over_1.5	stem_p90_factor	pd_rank_correlation
+1	legacy	779	True	1.281	1.804	0.216	1.752	0.9062
+1	default	784	True	1.165	1.467	0.087	1.472	0.9451
+2	legacy	779	True	1.213	1.785	0.249	1.720	0.8447
+2	default	784	True	1.161	1.469	0.099	1.469	0.9133
+3	legacy	779	True	1.199	1.722	0.190	1.729	0.9302
+3	default	784	True	1.163	1.517	0.106	1.537	0.9627
+4	legacy	779	True	1.205	1.915	0.235	1.849	0.9344
+4	default	784	True	1.157	1.486	0.098	1.514	0.9606
+5	legacy	779	True	1.203	1.668	0.159	1.663	0.9436
+5	default	784	True	1.184	1.482	0.074	1.483	0.9302

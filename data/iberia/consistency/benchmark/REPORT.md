@@ -142,6 +142,7 @@ Review of the pull request (#67) found three weaknesses in the harness. All are 
 - **Metric 1a looked at one unit.** It took the first unit of *Onchidella* in the tree and the genera nearest to it. It now takes the clade of all units of the genus's subtree, and reports the view with the set-aside units as well (above). The result is the same.
 - **Peak memory was sampled every 2 s.** A short peak could be missed. `monitor.py` now records the largest single process over its whole life from the kernel, and samples the process tree every 0.2 s; both full runs were repeated with it. Both peaks came out higher (820 and 1,321 MB instead of 758 and 1,277), and the ratio lower (1.61 instead of 1.68): 7b still fails. Wall time and outputs of the repeated runs are above.
 - **A failed build counted as done.** In `run_experiments.sh` and `run_posthoc.sh` a failed build was written to `failed.txt` but the scripts still succeeded, and `evaluate.py` would have read whatever was there. Now a build counts as done only when it has finished, a failed one is removed and makes the script fail, and `evaluate.py` refuses incomplete experiments. No build of this benchmark had failed.
+- **Metric 1a and units set aside in the genus stage** ([#73](https://github.com/naturalis/timegraft/issues/73)). 1a leaves out units set aside by screening, because they are placed by their nearest neighbour and not taken to belong to their genus. When `rate_outlier_action: set_aside` became the default, units set aside from their genus subtree were placed the same way, but 1a still counted them by their genus. In the rerun of #73, two *Nephtys* units set aside as long branches were placed among the gastropods: each is the other's only congener (90.2%), and their nearest other genus is a gastropod at 81%. So 1a counted an annelid next to *Onchidella* and failed. `evaluate.py` now leaves out every unit in `subtrees/set_aside_*.tsv` as well. 1a then passes (325 mollusc genera, as before), and the view with all set-aside units still reports them (`Annelida: 1`). Decided by Rutger Vos after seeing the result; no other metric changes.
 
 ## What this benchmark cannot tell
 
@@ -174,3 +175,18 @@ Every other metric has the same value as in the first gate (0, 1a, 1b, 1e, 2a to
 - **Name-only errors** (`run_posthoc.sh`; `injection_variants.tsv`): all 120 are flagged and placed back in their class (29 and 28 in the first gate). 86 have a stem within 1.5 (15 before), and 98 other stems move (177 before; legacy 184). These are the figures #94 measured on a local merge with #69.
 
 **Recommendation.** Merge the five PRs, in the order above (#71 after #69). Then do #70 on the merged `main` and rerun the gate once more for 1g. After that, #74 tightens the gate before it is used for anything else.
+
+## Rerun with long branches set aside (#73)
+
+On 16 November 2026 the gate was run again on `issue-73-options`: `main` (`8e57536`, with the five follow-ups of #89 merged) and `markers.coi.screening.rate_outlier_action: set_aside` as the default ([#73](https://github.com/naturalis/timegraft/issues/73)). The baseline full run is that of the previous rerun; everything on the branch side was run again: the full run, the tests, all 42 builds of `run_experiments.sh` and the variants. None of the 65 caches of the builds holds a failed answer. Tables: `results_73/`.
+
+**27 of 28 must metrics pass**, the same as after #89, with 1g still failing (142 against 248; #70). That count uses the change to 1a described under "Changes after review": evaluated as before, 1a failed, on two *Nephtys* units set aside as long branches and placed among the gastropods by their barcodes. Against the rerun after #89, five values move and no status changes:
+
+| Metric | After #89 | With long branches set aside |
+| --- | --- | --- |
+| 3b crowns above 10 times the barcode age | 25 | 26 (*Sphaerocoryne*: its barcode age falls more than its crown) |
+| 6a PD rank correlation with legacy (150 units; 100 genera × 1; 100 genera × 5) | 0.989; 0.990; 0.972 | 0.981; 0.988; 0.958 (threshold 0.90) |
+| 6d total tree length against legacy | −1.1% | +0.2%: the 432 long branches are placed by their barcodes rather than kept within their genus |
+| 7a wall time of the full run | 57.1 min | 56.7 min |
+
+The rooting measures of `../options/` are not gate metrics (#74). On the same runs they improve: 346 genera with units on the wrong side of the root instead of 386, 248 units of a genus among its outgroup instead of 314, and 11 crowns that depend strongly on the root instead of 19.
