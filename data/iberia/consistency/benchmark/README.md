@@ -21,7 +21,7 @@ Whether `consistency-layer` should become the default: the metrics and threshold
 | `compare_backbones.py` | For [#84](https://github.com/naturalis/timegraft/issues/84): traces every stem age that differs by more than a factor between two backbones (format 5 `node_ages.tsv`) to its causes |
 | `results_84/` | The 175 changed stems of #56 traced with `compare_backbones.py`, and how they were obtained |
 | `results_70/` | The injection metrics (1a to 1m of version 2) after re-anchoring within the target family, [#70](https://github.com/naturalis/timegraft/issues/70), against #69 alone, and how they were obtained |
-| `results_81/` | The injection, age perturbation and subsampling carried through the genus stage with `run_downstream.sh` ([#81](https://github.com/naturalis/timegraft/issues/81)): the downstream metrics of version 2, details per run and per injected genus, and why 6f fails |
+| `results_81/` | The injection, age perturbation and subsampling carried through the genus stage with `run_downstream.sh` ([#81](https://github.com/naturalis/timegraft/issues/81)): the downstream metrics of version 2, details per run and per injected genus, and why 6f fails (sampling noise; #104) |
 | `evaluate.py`, `benchlib.py` | Compute every metric from the runs and write `results/`: `--version 2` (the default) or `--version 1` |
 | `run_lineage_alone.sh`, `evaluate_lineage_alone.py` | The detection metrics again, for [#71](https://github.com/naturalis/timegraft/issues/71): the default (`concordance.lineage_alone_level: class`) and a control with it `off`, on the clean run and on both injection variants (merged ids and name only); flagged by rule, back in their own class, false flags (`results/lineage_alone*.tsv`) |
 

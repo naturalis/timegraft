@@ -12,7 +12,7 @@ The backbones and units are those of the injection rerun of #70 (`../results_70/
 PATH=/path/to/vsearch:$PATH $B/run_downstream.sh $BENCH70 . 2
 PYTHONPATH=src python $B/evaluate.py $BENCH70 out                       # the gate metrics, downstream.tsv
 PYTHONPATH=$B python $B/analyse_downstream.py $BENCH70/exp out/injection_genera.tsv out
-python $B/results_81/pd_without_placed.py $BENCH70/exp/downstream subsample_pd_by_units.tsv
+python $B/results_81/pd_seed_variation.py $BENCH70/exp/downstream pd_seed_variation.tsv
 ```
 
 **The harness reproduces the full runs.** The clean default run is byte-identical to the default full run of #73 in every shard, `provenance.tsv`, `grafted.tre`, `timegraft.tre` and `units_placed.tsv`. The clean legacy run gives the same 1,183 genera as the full run of `main` at `e20fdf6`, with every column the two `provenance.tsv` share equal, and byte-identical `grafted.tre`, `timegraft.tre` and placements. For that, `legacy.yaml` gains `rate_outlier_action: flag`: `main` did not set long branches aside, and the setting is read in the genus stage only, so the backbone and the screening of the legacy arm are unaffected.
@@ -30,27 +30,29 @@ python $B/results_81/pd_without_placed.py $BENCH70/exp/downstream subsample_pd_b
 | 5e | Ages perturbed: 90% quantile of the factor by which crown ages move | 1.479 | 1.364 | at most legacy × 1.05 | pass |
 | 5f | Half the genera dropped: the same | 1.677 | 1.653 | at most legacy × 1.05 | pass |
 | 6e | Ages perturbed: PD rank correlation with the clean final tree | 0.871; 0.851; 0.874 | 0.934; 0.941; 0.955 | not lower than legacy (0.01) | pass |
-| 6f | Half the genera dropped: the same | 0.972; 0.958; 0.935 | 0.961; 0.952; 0.926 | not lower than legacy (0.01) | **fail** (150 units at random: 0.011 below) |
+| 6f | Half the genera dropped: the same | 0.972; 0.958; 0.935 | 0.961; 0.952; 0.926 | not lower than legacy (0.01) | **fail** (150 units at random: 0.011 below; sampling noise, see below) |
 
 **Injected errors hardly reach the final tree.** Of the 48 genera injected in replicates 1 and 2, 42 have a crown age in both runs (the others are single-unit genera). With the default all 42 are within a factor 1.5 of their crown age in the clean run: 40 unchanged, *Idas* 45.8 against 44.8 Ma (factor 1.02) and *Sphincterochila* 24.4 against 20.1 Ma (1.21). With legacy 21 are within 1.5 (12 unchanged), and the median factor is 1.50 (`downstream_injected.tsv`). The errors also move the crowns of other genera with legacy, 26 and 42 by more than 10%, nearly all through their stems, and with the default 0 and 1 (`downstream_collateral.tsv`). The default's final tree with the errors gives nearly the same PD ranking as without them (1o: rank correlation 0.9997 to 1.0000 per replicate and design).
 
 **Noisy TimeTree ages move crowns less.** With every cached age multiplied by a random factor, the 90% quantile of the crown age changes is 1.34 and 1.40 for the default against 1.47 and 1.48 for legacy, and a crown moves by more than 10% in 46% and 43% of genera against 71% and 49% (`downstream_runs.tsv`). PD rankings hold up better (6e: 0.93 to 0.95 against 0.85 to 0.87). This carries the gain on the backbone (5a, 5b) through to what the pipeline is for.
 
-**Half the genera dropped: crowns as robust, PD rankings slightly less.** Crown ages move about as much with either setting (5f). The PD rank correlation is lower for the default in all three designs, by 0.011, 0.006 and 0.009, so 6f fails on the first.
+**Half the genera dropped: crowns as robust; PD rankings no different, though 6f fails.** Crown ages move about as much with either setting (5f). With the gate's sample seed the PD rank correlation is lower for the default in all three designs, by 0.011, 0.006 and 0.009, so 6f fails on the first. That difference is sampling noise (next section).
 
-## Why 6f fails
+## Why 6f fails: sampling noise
 
-The default places more units by their nearest neighbour than legacy: 1,256 against 1,029 in the clean runs, and 521 against 474 on the stem of their genus, mostly the long branches that it sets aside from their genus subtrees since #73 (`rate_outlier_action: set_aside`). Where a unit is placed depends on which records are in the tree, so dropping half the genera moves placed units more than units in their genus's subtree. Drawing the samples only from units that neither run placed (`subsample_pd_by_units.tsv`, `pd_without_placed.py`):
+`evaluate.py` draws the samples of 6f for each setting separately, from the units in that setting's own trees, so legacy and default are judged on different samples. `pd_seed_variation.py` recomputes 6f exactly as `evaluate.py` does for the sample seeds 6 to 25 (`pd_seed_variation.tsv`; the gate uses 6):
 
-| Design | Legacy, all units | Default, all units | Legacy, without placed units | Default, without placed units |
-| --- | --- | --- | --- | --- |
-| 150 units at random | 0.972 | 0.961 | 0.973 | **0.985** |
-| 100 genera, one unit each | 0.958 | 0.952 | 0.963 | **0.965** |
-| 100 genera, five units each | 0.935 | 0.926 | 0.956 | **0.963** |
+| Design | Mean difference (default − legacy) | Standard deviation across seeds | Seeds where the design fails |
+| --- | --- | --- | --- |
+| 150 units at random | −0.0004 | 0.0069 | 2 of 20 |
+| 100 genera, one unit each | +0.0024 | 0.0095 | 2 of 20 |
+| 100 genera, five units each | −0.0028 | 0.0107 | 3 of 20 |
 
-Without the placed units the default is at least as robust as legacy in every design. The set-aside units are not placed worse than other placed units: among units placed in both the clean and the subsampled runs, the nearest unit changes for 20 to 25% of them against 33 to 48% of the others, and the attachment age by more than a factor 1.5 for 9 to 11% against 9 to 15%. The cost is that #73 moved 430 units from their genus subtree, which a subsample keeps or drops whole, to a place that depends on what else was sampled.
+Averaged over seeds, the default is as robust to subsampling as legacy in every design. The difference varies with the seed by about as much as the threshold allows, and 6f as declared, with all three designs required to pass, fails for 7 of the 20 seeds, seed 6 among them. 6f as declared cannot tell the two settings apart, and its failure says nothing about the default. 1o and 6e are measured in the same way but pass by margins (0.03 to 0.08) well beyond this noise.
 
-Going back to `rate_outlier_action: flag` is not the way out: setting long branches aside is what improved rooting in #73, and with `flag` (the rerun after #89: 386 genera with units on the wrong side of the root, 314 units among their outgroup) metrics 8a and 8b of version 2 would fail against legacy plus 5% (384 and 290). [#103](https://github.com/naturalis/timegraft/issues/103) proposes placing set-aside units within their own genus where their barcode supports it.
+[#104](https://github.com/naturalis/timegraft/issues/104) proposes a gate version 3 that measures 1o, 6e and 6f on paired samples (the same samples for both settings, drawn from units in all the trees compared) with more draws, leaving their thresholds as they are.
+
+**Corrected.** An earlier version of this section explained the failure by the placement of the long branches set aside since #73, from a comparison of PD with and without placed units. That comparison drew different samples too, and its differences are within the same noise; it is withdrawn, and [#103](https://github.com/naturalis/timegraft/issues/103), which built on it, is closed. Most set-aside units are placed within their own genus already (308 of the 313 whose nearest unit is in their genus, in the clean default run).
 
 ## What this is not
 
