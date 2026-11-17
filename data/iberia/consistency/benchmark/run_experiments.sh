@@ -22,7 +22,8 @@ mkdir -p "$E"
 rm -f "$E/failed.txt"  # failures of an earlier attempt are retried below
 export PYTHONPATH=$H:$REPO/src
 CACHE=$E/start_cache.json
-[ -s "$CACHE" ] || python "$H/merge_caches.py" "$CACHE" "$H/timetree_cache.json.gz" "$BENCH/branch/resources/api_cache.json"
+# made again on every invocation, so that answers added to the benchmark cache since the last one are used
+python "$H/merge_caches.py" "$CACHE" "$H/timetree_cache.json.gz" "$BENCH/branch/resources/api_cache.json"
 case "$OFFLINE" in ""|offline) ;; *) echo "the fifth argument is 'offline' or nothing, not '$OFFLINE'" >&2; exit 2;; esac
 
 bb() {  # bb NAME UNITS CACHE_SOURCE [backbone.py options]: build one backbone with its own copy of the cache
