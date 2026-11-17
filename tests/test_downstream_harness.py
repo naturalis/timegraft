@@ -37,19 +37,25 @@ def _read(path):
 def test_subset_keeps_the_genera_and_their_unassigned_units(ds, tmp_path):
     units = tmp_path / "units"
     units.mkdir()
-    for name in ("screened_representatives.tsv", "representatives.tsv", "filtered.tsv"):
+    for name in ("screened_representatives.tsv", "representatives.tsv"):
         _table(units / name, ["unit_id", "genus"], [["u1", "A"], ["u2", "B"], ["u3", "C"]])
+    # records: u1 holds one record of genus C, u3 one of genus A; x1 is an unassigned unit
+    _table(units / "filtered.tsv", ["record_id", "unit_id", "genus"],
+           [["r1", "u1", "A"], ["r2", "u1", "C"], ["r3", "u2", "B"], ["r4", "u3", "C"], ["r5", "u3", "A"],
+            ["r6", "x1", "A"], ["r7", "x2", "C"]])
     _table(units / "screened_unassigned.tsv", ["unit_id", "reason", "genera"],
            [["x1", "genus_conflict", "A:3;B:2"], ["x2", "genus_conflict", "A:1;C:4"], ["x3", "other_genus", "B:"],
             ["x4", "unknown", ""]])
     paths = ds.subset_units(units, {"A", "B"}, tmp_path / "out")
     assert [r["unit_id"] for r in _read(paths["screened_representatives.tsv"])] == ["u1", "u2"]
-    assert [r["unit_id"] for r in _read(paths["filtered.tsv"])] == ["u1", "u2"]
+    # records go with their unit, whatever their own genus: r2 (genus C) stays in u1, r5 (genus A) goes with u3
+    assert [r["record_id"] for r in _read(paths["filtered.tsv"])] == ["r1", "r2", "r3", "r6"]
     # an unassigned unit stays only if all the genera of its records are kept; one with no genus goes
     assert [r["unit_id"] for r in _read(paths["screened_unassigned.tsv"])] == ["x1", "x3"]
     # without a subset the files are linked, not copied
     paths = ds.subset_units(units, None, tmp_path / "all")
     assert Path(paths["filtered.tsv"]).is_symlink() and len(_read(paths["screened_unassigned.tsv"])) == 4
+    assert len(_read(paths["filtered.tsv"])) == 7
 
 
 def test_memo_reuses_a_result_only_for_the_same_inputs(ds, tmp_path, monkeypatch):

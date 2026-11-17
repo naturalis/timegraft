@@ -62,29 +62,37 @@ def write(path, rows, columns):
 
 
 def subset_units(units, genera, out):
-    """The units of ``units`` restricted to ``genera`` (None: all), written to ``out``; returns the paths."""
+    """The units of ``units`` restricted to ``genera`` (None: all), written to ``out``; returns the paths.
+
+    Units are kept by the genus of the unit (representatives) or of all their records (unassigned units, whose
+    ``genera`` lists them as genus:count); records are then kept by the unit they belong to, not by their own
+    genus, since a unit can hold a few records of another genus (``representatives()``, genus_share)."""
     out.mkdir(parents=True, exist_ok=True)
-    paths = {}
-    for name in ("screened_representatives.tsv", "screened_unassigned.tsv", "filtered.tsv", "representatives.tsv"):
-        source = units / name
-        if genera is None:
-            os.symlink(source.resolve(), out / name)
+    names = ("screened_representatives.tsv", "screened_unassigned.tsv", "representatives.tsv", "filtered.tsv")
+    if genera is None:
+        for name in names:
+            os.symlink((units / name).resolve(), out / name)
+        return {name: str(out / name) for name in names}
+
+    def unassigned_kept(r):
+        found = {g.split(":")[0] for g in (r.get("genera") or "").split(";") if g}
+        return bool(found) and found <= genera
+
+    kept_units = set()
+    for name in names:
+        with open(units / name, newline="") as handle:
+            reader = csv.DictReader(handle, delimiter="\t")
+            rows, columns = list(reader), reader.fieldnames
+        if name == "screened_unassigned.tsv":
+            rows = [r for r in rows if unassigned_kept(r)]
+        elif name == "filtered.tsv":
+            rows = [r for r in rows if r["unit_id"] in kept_units]
         else:
-            with open(source, newline="") as handle:
-                reader = csv.DictReader(handle, delimiter="\t")
-                rows = list(reader)
-                columns = reader.fieldnames
-            if name == "screened_unassigned.tsv":
-                # "genera" lists the genera of the unit's records as genus:count; keep a unit only if all are kept
-                def keep(r):
-                    names = {g.split(":")[0] for g in (r.get("genera") or "").split(";") if g}
-                    return bool(names) and names <= genera
-            else:
-                def keep(r):
-                    return r.get("genus") in genera
-            write(out / name, [r for r in rows if keep(r)], columns)
-        paths[name] = str(out / name)
-    return paths
+            rows = [r for r in rows if r.get("genus") in genera]
+        if name != "filtered.tsv":
+            kept_units |= {r["unit_id"] for r in rows}
+        write(out / name, rows, columns)
+    return {name: str(out / name) for name in names}
 
 
 def code_version(repo):
