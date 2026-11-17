@@ -5,20 +5,25 @@
 # separately (run_posthoc.sh); builds that already exist are not repeated.
 # Exits non-zero if any build failed (listed in exp/failed.txt); rerunning it retries only those.
 #
-#   run_experiments.sh BENCH REPO OTOL [JOBS]
+#   run_experiments.sh BENCH REPO OTOL [JOBS] [offline]
 #
 # BENCH: working folder; holds branch/results/iberia (the full default run) and gets exp/.
 # REPO:  checkout of consistency-layer whose pipeline is run. OTOL: folder with the OTT and synthesis files.
+# Every build starts from the benchmark cache (timetree_cache.json.gz: the TimeTree and ChecklistBank answers
+# of all earlier builds, #87) together with the cache of the full run. With "offline", no build may ask
+# TimeTree or ChecklistBank anything: a question the caches cannot answer makes the build fail.
 set -euo pipefail
-BENCH=$1; REPO=$2; OTOL=$3; JOBS=${4:-2}
+BENCH=$1; REPO=$2; OTOL=$3; JOBS=${4:-2}; OFFLINE=${5:-}
 H=$(cd "$(dirname "$0")" && pwd)
 U=$BENCH/branch/results/iberia/units
 E=$BENCH/exp
-CACHE=$BENCH/branch/resources/api_cache.json
 SEEDS="1 2 3 4 5"
 mkdir -p "$E"
 rm -f "$E/failed.txt"  # failures of an earlier attempt are retried below
 export PYTHONPATH=$H:$REPO/src
+CACHE=$E/start_cache.json
+[ -s "$CACHE" ] || python "$H/merge_caches.py" "$CACHE" "$H/timetree_cache.json.gz" "$BENCH/branch/resources/api_cache.json"
+case "$OFFLINE" in ""|offline) ;; *) echo "the fifth argument is 'offline' or nothing, not '$OFFLINE'" >&2; exit 2;; esac
 
 bb() {  # bb NAME UNITS CACHE_SOURCE [backbone.py options]: build one backbone with its own copy of the cache
   # A build counts as done only when backbone.py has written seconds.txt, its last step. A failed build
@@ -28,14 +33,14 @@ bb() {  # bb NAME UNITS CACHE_SOURCE [backbone.py options]: build one backbone w
   rm -rf "$E/$name"; mkdir -p "$E/$name"
   cp "$cache" "$E/$name/cache.json"
   if ! python "$H/backbone.py" --repo "$REPO" --units "$units" --otol "$OTOL" --cache "$E/$name/cache.json" \
-      --out "$E/$name" "$@" > "$E/$name.log" 2>&1; then
+      --out "$E/$name" ${OFFLINE:+--offline} "$@" > "$E/$name.log" 2>&1; then
     echo "FAILED $name (log: $E/$name.log)" >> "$E/failed.txt"
     rm -rf "$E/$name"
     return 1
   fi
   mv "$E/$name.log" "$E/$name/stdout.log"
 }
-export -f bb; export E H REPO OTOL U CACHE
+export -f bb; export E H REPO OTOL U CACHE OFFLINE
 
 # 0. the screening with the layer off, and the two clean backbones
 [ -s "$E/legacy_units/screened.tsv" ] || python "$H/screen.py" --repo "$REPO" --units "$U" --out "$E/legacy_units" --overlay "$H/legacy.yaml"

@@ -13,6 +13,7 @@ Whether `consistency-layer` should become the default: the metrics and threshold
 | `downstream.py`, `run_downstream.sh` | The genus stage, grafting and placement on a backbone outside Snakemake, with the unchanged workflow scripts, and the runs of the downstream metrics of version 2 (#81; see [below](#the-downstream-runs)) |
 | `inject.py` | Merges genera of the run into taxa elsewhere in a copy of the OTT taxonomy, as OTT did with *Onchidella* |
 | `perturb_cache.py` | Multiplies every TimeTree age in a copy of the cache by a random factor |
+| `timetree_cache.json.gz`, `merge_caches.py` | The benchmark cache: every TimeTree and ChecklistBank answer of the benchmark builds and full runs (#87; see [below](#seeds-and-inputs)), and the script that merges caches into it |
 | `subsample.py` | Keeps a random half of the genera |
 | `run_experiments.sh` | All backbone builds of the gate: clean, injected (with both variants since version 2), perturbed, subsampled, ablations, reproducibility. Exits non-zero if a build fails; rerunning it retries only the failed builds |
 | `run_posthoc.sh` | Two variants of the injection, added after the first results of #56 to explain them: not part of version 1, part of version 2, where `run_experiments.sh` builds them |
@@ -71,7 +72,7 @@ for w in main branch; do (
       snakemake --cores 2 --configfile config/config.yaml config/iberia.yaml
 ); done
 (cd $BENCH/branch && python -m pytest -q tests | tail -1 > $BENCH/tests.txt)
-./run_experiments.sh $BENCH $BENCH/branch $BENCH/branch/resources/otol 2
+./run_experiments.sh $BENCH $BENCH/branch $BENCH/branch/resources/otol 2    # add "offline" to forbid any API request
 ./run_posthoc.sh $BENCH $BENCH/branch $BENCH/branch/resources/otol 2    # version 1 only: run_experiments.sh builds them now
 ./run_downstream.sh $BENCH $BENCH/branch 2                                # version 2: the downstream runs (#81)
 PYTHONPATH=$BENCH/branch/src python evaluate.py $BENCH results               # version 2; add --version 1 for #56
@@ -82,7 +83,7 @@ The two full runs must not overlap with each other or with anything else, or the
 ## Seeds and inputs
 
 - Records: `data/iberia/records.tsv.gz`. Configuration: `config/config.yaml` with `config/iberia.yaml`.
-- TimeTree and ChecklistBank answers: `data/iberia/timetree_cache.json` of each branch. The cache after the benchmark, with the queries of the injected and subsampled builds, is not kept: those builds ask TimeTree again.
+- TimeTree and ChecklistBank answers: `data/iberia/timetree_cache.json` of each branch for the full runs, and `timetree_cache.json.gz` in this folder for the builds of `run_experiments.sh` ([#87](https://github.com/naturalis/timegraft/issues/87)). The benchmark cache holds every answer that the builds of the gate and the full default run asked for: 19,084 (9,053 TimeTree, 10,031 ChecklistBank), 0.78 MB gzipped, 8.9 MB unpacked. It was merged by `merge_caches.py` from 101 caches: those of all builds of the reruns of #73 and #70, the clean builds of #84, and the full default run; not the perturbed copies of the noise runs, and not the run of `main` at `e20fdf6`, whose cache predates cache format 2 (#47) and which is only ever reused. No two caches answered a question differently. `run_experiments.sh` starts every build from it together with the cache of the full run (`exp/start_cache.json`). With `offline` as its fifth argument, any request to TimeTree or ChecklistBank fails the build: on 17 November 2026 all 62 builds ran that way, with the network also blocked, and every backbone (tree, crown ages and every column of `node_ages.tsv`) and the default screening came out identical to the builds made online; `evaluate.py` gave the same value for every metric. A change to the pipeline that asks new questions needs the network once; add its answers afterwards with `python merge_caches.py timetree_cache.json.gz timetree_cache.json.gz $BENCH/exp/*/cache.json ...` (leave out `exp/noise/`, which the script refuses).
 - Replicates 1 to 5 everywhere; the seed of a replicate is its number. Injection: `inject.py` (which genera, which hosts). Noise: `perturb_cache.py` (factor per query from the seed and the query key). Subsampling: `subsample.py`. Sample draws for PD: seeds 6 and 56 in `evaluate.py`. Hold-out: seed 52 in `../agefit/holdout.py`.
 
 ## Tables in `results/`
