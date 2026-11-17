@@ -1,0 +1,7 @@
+metric	name	legacy	default	threshold	status	note
+1n	injection carried through: corrected genera with a crown age within 1.5 of the clean run		1.000 (42 of 42)	>= 0.80	pass	6 corrected genera without a crown age in both runs
+1o	injection carried through: PD rank correlation with the clean final tree	150 units at random: 0.9692; 100 genera, one unit each: 0.9523; 100 genera, five units each: 0.9623	150 units at random: 1.0000; 100 genera, one unit each: 0.9998; 100 genera, five units each: 0.9999	>= legacy - 0.01 per design	pass	
+5e	ages perturbed, carried through: 90% quantile of the factor by which crown ages move	1.479	1.364	<= legacy x 1.05	pass	
+5f	half the genera dropped, carried through: the same	1.677	1.653	<= legacy x 1.05	pass	
+6e	ages perturbed, carried through: PD rank correlation with the clean final tree	150 units at random: 0.8711; 100 genera, one unit each: 0.8506; 100 genera, five units each: 0.8741	150 units at random: 0.9336; 100 genera, one unit each: 0.9413; 100 genera, five units each: 0.9545	>= legacy - 0.01 per design	pass	
+6f	half the genera dropped, carried through: the same	150 units at random: 0.9720; 100 genera, one unit each: 0.9575; 100 genera, five units each: 0.9346	150 units at random: 0.9606; 100 genera, one unit each: 0.9517; 100 genera, five units each: 0.9261	>= legacy - 0.01 per design	FAIL	

@@ -22,6 +22,8 @@ markers:
   coi:
     screening:
       deep_maxaccepts: 0     # first ten hits only (#55)
+      rate_outlier_action: flag  # long branches listed, not set aside from their subtree (#55, #73); read in
+                                 # the genus stage only, so the backbone and the screening are unaffected (#81)
       translation:
         enabled: false
     crown_age:
