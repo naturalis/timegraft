@@ -48,7 +48,9 @@ The default places more units by their nearest neighbour than legacy: 1,256 agai
 | 100 genera, one unit each | 0.958 | 0.952 | 0.963 | **0.965** |
 | 100 genera, five units each | 0.935 | 0.926 | 0.956 | **0.963** |
 
-Without the placed units the default is at least as robust as legacy in every design. 6f measures a real cost of setting long branches aside: where a set-aside unit lands depends on what else was sampled. Whether that cost is worth the gain of #73 (fewer crowns inflated by long branches) is a decision for the defaults, not for the harness; see the report.
+Without the placed units the default is at least as robust as legacy in every design. The set-aside units are not placed worse than other placed units: among units placed in both the clean and the subsampled runs, the nearest unit changes for 20 to 25% of them against 33 to 48% of the others, and the attachment age by more than a factor 1.5 for 9 to 11% against 9 to 15%. The cost is that #73 moved 430 units from their genus subtree, which a subsample keeps or drops whole, to a place that depends on what else was sampled.
+
+Going back to `rate_outlier_action: flag` is not the way out: setting long branches aside is what improved rooting in #73, and with `flag` (the rerun after #89: 386 genera with units on the wrong side of the root, 314 units among their outgroup) metrics 8a and 8b of version 2 would fail against legacy plus 5% (384 and 290). [#103](https://github.com/naturalis/timegraft/issues/103) proposes placing set-aside units within their own genus where their barcode supports it.
 
 ## What this is not
 
