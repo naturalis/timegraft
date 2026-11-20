@@ -153,7 +153,7 @@ For the crab clade, the fit comes out as the analysis argued: it trusts the desc
 Conflicting nodes re-queried with disjoint picks and classified ([#53](https://github.com/naturalis/timegraft/issues/53)), at the defaults (`requery.mode: classify`, `z_trigger: 2`, `ratio_trigger: 1.5`, `move: 1.25`, `attempts: 3`), on top of `agefit/`.
 
 - `node_ages.tsv` and `metadata.json` are from that run. The backbone itself is identical to `agefit/`, since classification changes no age.
-- `node_ages_apply.tsv` is from the same run with `mode: apply`.
+- `node_ages_apply.tsv` is from the same run with `mode: apply`. That mode was removed in [#86](https://github.com/naturalis/timegraft/issues/86) (see below); the file is kept as the record of what it did.
 - The re-queries are in `timetree_cache.json`. Rebuilding from it asks TimeTree nothing and gives the same classes.
 
 **22 nodes were re-queried**: 21 as one of the two nodes of a precedence conflict of 1.5 or more (among them the crab clade, which is also the fit's outlier, 3.6 sigma off), and one gadiform node for a fit residual of 2.4 sigma alone (unresolved).
@@ -168,6 +168,8 @@ Conflicting nodes re-queried with disjoint picks and classified ([#53](https://g
 So the analysis's two readings are both seen. The crab clade is confirmed as under-spanning. Where TimeTree repeats its age with other picks, the conflict lies between OToL's and TimeTree's trees; these are the nodes to look at for topology. The 13 unresolved cases are what the method cannot reach with the taxa in the run.
 
 **With `mode: apply`**, the crab clade's calibration becomes 156.8 Ma with its own uncertainty. The node is no longer an outlier, and its fitted age moves from 168.6 to 167.7 Ma: the fit had already set the first age aside. No other node moves by more than 1%. Against the calibrations as replaced, calibrations off by more than a factor 1.5 go from 5 to 4.
+
+**Removed in #86.** Measured end to end in #73 (below), `apply` changed nothing that matters: the one calibration it replaced was the fit's outlier already, dated near the re-query's answer. `mode: apply` is now refused; `classify` stays, as a diagnostic on which no age depends.
 
 ## `crowns/` (#54)
 
@@ -328,6 +330,6 @@ What the numbers say:
 
 - **`rate_outlier_action` becomes `set_aside`.** Rooting improves on every measure, the crowns that change get younger, and PD hardly moves.
 - **`misplaced_action` stays `keep`** for now. Rooting improves most, but 220 of the units placed go into another genus on 84% identity. To be revisited once set-aside units can be placed within their own genus.
-- **`requery.mode` stays `classify`** (no effect), **`translation.action` stays `flag`** (rooting slightly worse), and **`mutual_pairs` stays `both`** (rooting mixed).
+- **`requery.mode` stays `classify`** (no effect), **`translation.action` stays `flag`** (rooting slightly worse), and **`mutual_pairs` stays `both`** (rooting mixed). (`apply` itself was removed afterwards, in #86.)
 
 The gate was rerun with the new default; see `benchmark/REPORT.md`.

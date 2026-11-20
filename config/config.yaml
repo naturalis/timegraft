@@ -66,8 +66,8 @@ backbone_build:
       outlier_z: 3.0         # and reported as outliers beyond this
       min_gap: 0.01          # each edge between calibrated nodes at least 1% of the older age
     requery:                 # re-ask TimeTree about conflicting nodes with disjoint picks (#53)
-      mode: classify         # classify (report the likely cause); apply (fit only: use the re-query age
-                             # where the first age was the picks' doing, and fit again); off
+      mode: classify         # classify (report the likely cause; a diagnostic, no age depends on it); off.
+                             # apply was removed in #86: the fit already discounts what it replaced
       z_trigger: 2.0         # re-query calibrations this many sigma or more from the fit,
       ratio_trigger: 1.5     # and both nodes of a precedence conflict this large or larger
       move: 1.25             # a re-query age within this factor of the first counts as the same

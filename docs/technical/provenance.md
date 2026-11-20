@@ -149,7 +149,9 @@ A TimeTree age in conflict with the rest of the tree has two common causes, whic
 
 `conflict_confidence` is `high` when the move is decisive (by 1.5 or more, or within 1.1 for `topology`) and both ages rest on two or more usable estimates (positive ones; TimeTree can return sentinels such as -1), `medium` when one of those holds, `low` when neither does; empty for `unresolved`.
 
-**Using the result.** With `requery.mode: classify` (the default) nothing changes: the classes are diagnostics, for topology correction and for the age fit. With `mode: apply` (only with `ages.method: fit`; with `precedence` it is refused), the re-query age, with its own uncertainty, replaces the first for `under_spanning` and `pick_specific` nodes, and the ages are fitted again (`requery_applied`). That uncertainty follows the same rules and settings as the first age's, including the node's synthesis support. `mode: off` skips the re-query. Every re-query is cached like any other TimeTree query, so the classes are reproducible on a fixed cache.
+**Using the result.** The classes are a diagnostic, for reviewers: they say whether a conflicting TimeTree age is likely the picks' doing or a difference of topology between OToL and TimeTree, which helps when a node age is checked by hand (for example the expert checks #78 and #79). No age depends on them: the backbone is the same with `requery.mode: off`. On the Iberian run 22 of 784 backbone nodes are re-queried, at about 3 seconds of a 30-second backbone build: 13 get no usable answer (`unresolved`), 4 are `topology`, 4 `consistent` and 1 `under_spanning`.
+
+**Why there is no `apply` mode.** Until [#86](https://github.com/naturalis/timegraft/issues/86), `mode: apply` let the re-query age replace the first for `under_spanning` and `pick_specific` nodes, and fitted again. It was measured end to end in #73 and removed in #86, because the fit already does what it would: on the Iberian run it replaced one calibration (54.9 Ma, re-query 156.8 Ma), which the fit had already flagged as an outlier (`timetree_fit_outlier`) and dated at 168.6 Ma; replacing it moved 9 node ages by at most 0.52% and no crown age by 10% or more.
 
 | Column | Meaning |
 | --- | --- |
@@ -157,10 +159,8 @@ A TimeTree age in conflict with the rest of the tree has two common causes, whic
 | `requery_ids`, `requery_age` | The NCBI ids of the re-query that gave an answer (or of the last tried) and TimeTree's age for them |
 | `requery_mrca_ncbi`, `requery_n_estimates` | The node TimeTree dated and the usable estimates behind it, to compare with `timetree_mrca_ncbi` and `timetree_n_estimates` of the first query |
 | `conflict_class`, `conflict_detail`, `conflict_confidence` | As above |
-| `requery_sigma` | Uncertainty of the re-query age, for `under_spanning` and `pick_specific` nodes. `calibration_sigma` keeps describing the first age (`timetree_age`), also under `apply`, so that every metric pairs an age with its own uncertainty |
-| `requery_applied` | `yes` where the re-query age replaced the first (mode `apply`) |
 
-In `metadata.json`, `ages.requery` counts the re-queried nodes by class, detail and confidence; with `apply`, `ages.final_against_requery` gives the conflict metrics against the calibrations as replaced.
+In `metadata.json`, `ages.requery` counts the re-queried nodes by class, detail and confidence.
 
 ## Catalogue of Life as identifier hub
 
@@ -310,6 +310,7 @@ New. What the backbone was built from: the format version of each output and of 
 - **`node_ages.tsv` format 3** (#52) fills the calibration columns and adds `calibration_sigma`, `calibration_z`, `calibration_outlier`, `precedence_age` and `precedence_source`. With the default `ages.method: fit`, `source` takes new values (`timetree_fit`, `timetree_higher_taxa_fit`, with `_outlier`), `dropped_inconsistent` and `interpolated_after_drop` no longer occur, and backbone ages change wherever TimeTree ages conflicted. Code that selected TimeTree-dated nodes by `source in ("timetree", "timetree_higher_taxa")` should accept the `_fit` forms too.
 - **`node_ages.tsv` format 4** (#53) fills `conflict_class` and `requery_age` and adds the other `requery_*` and `conflict_*` columns. With the default `requery.mode: classify` no age changes; the first run on a cache asks TimeTree again for the re-queried nodes.
 - **`node_ages.tsv` format 5** (#84) adds `age_source`, `interpolated_from` and `query_genera`. No age changes: every other column and every other output is byte-identical. `data/iberia/consistency/benchmark/compare_backbones.py` reads these columns to trace why a stem age differs between two runs; it refuses format 4 files.
+- **`node_ages.tsv` format 6** (#86) drops `requery_sigma` and `requery_applied`, which only the removed `requery.mode: apply` used, and `metadata.json` drops `ages.final_against_requery`. A configuration with `mode: apply` is refused with a message. No age changes: with the default `classify`, every other column and output is as before.
 - **`crown_ages.tsv` format 3** (#54) adds the basis columns and rows with an empty `crown_age` for genera sampled with one species; code that reads `crown_age` as a number must skip those (the genus step does). With the defaults, TimeTree crowns are those of the sampled species, and an implausible one is demoted to an upper bound, so crown ages change. `crown_query.basis: global` and `crown_age.plausibility.enabled: false` give the earlier behaviour. `provenance.tsv` gains `crown_basis`, `crown_plausibility`, `timetree_ratio`, `ratio_allowed` and `crown_decision`, after `timetree_crown`.
 - **The build reads the filtered records** (`units/filtered.tsv`) for the reference lineage, besides the representatives, so it runs again when the records change.
 - **`provenance.tsv`** (#75) gains `misplaced_set_aside` and `misplaced_action`, empty unless `rooting.misplaced_action: set_aside` (the default `keep` changes nothing).
