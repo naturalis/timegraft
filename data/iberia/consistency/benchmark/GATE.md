@@ -184,7 +184,7 @@ On the downstream runs of #81, `results_81/pd_paired_noise.py` measured the stan
 | 6e | | 0.0109 to 0.0129 | 0.0043 to 0.0060 |
 | 6f | 0.0069 to 0.0107 | 0.0020 to 0.0058 | 0.0008 to 0.0020 |
 
-With 1,000 paired draws, the noise of 6f is a fifth of the threshold or less, and that of 1o and 6e a third or less. Each evaluation takes about a minute.
+With 1,000 paired draws, the noise of 6f is a fifth of the threshold or less, and that of 1o a third or less. The noise of 6e is larger, up to 0.0060, or 60% of the threshold. That is acceptable only because of its margin: on these runs the default is 0.073 to 0.083 above legacy, more than ten times that noise, so the seed cannot decide 6e. Should a later change bring 6e near its threshold, its noise would have to be measured again before its result is trusted. Each evaluation takes about a minute.
 
 ### Known when declared
 
