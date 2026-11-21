@@ -141,3 +141,61 @@ exp/downstream/{inject,noise,sub}/s{1,2}/{legacy,default}/   the same
 ```
 
 Each experiment is compared with the clean run of the same setting, as the backbone experiments are. Crown ages are compared for genera with a subtree in both; for the injection, over the corrected injected genera (flagged and back in their own class on the backbone). PD uses the three designs of 6a (seed 6), drawn from the units in both final trees, and for 6f from the units of the remaining genera. The correlations of 1o, 6e and 6f are the means over the replicates.
+
+## Version 3
+
+Declared on 21 November 2026 for [#104](https://github.com/naturalis/timegraft/issues/104), before any run that it judges, and committed on its own like versions 1 and 2. Versions 1 and 2 above stay as they were (`evaluate.py --version 1` and `--version 2`). Version 3 is the gate from now on (`evaluate.py --version 3`, the default).
+
+### What changes, and why after a result
+
+Version 3 changes **how** the three PD metrics of the downstream experiments are measured: **1o** (injection), **6e** (perturbed ages) and **6f** (half the genera dropped). It does not change what they compare, their thresholds, or any other metric.
+
+In version 2 each setting drew its own samples, from the units in its own clean and experiment trees, so legacy and default were judged on different samples. The first downstream runs (#81) showed what that does. Recomputed for the 20 sample seeds 6 to 25 (`results_81/pd_seed_variation.tsv`):
+
+- the difference between the settings in 6f varies with the seed alone by a standard deviation of 0.007 to 0.011, as much as the threshold of 0.01;
+- its mean is about zero in every design (−0.0004, +0.0024, −0.0028);
+- 6f as declared fails for 7 of the 20 seeds, the gate's seed 6 among them.
+
+A metric that fails a third of the time when the settings do not differ cannot decide *hold*. The change is made after seeing that result, and the reason is the measured noise, which is centred on zero and favours neither setting. The thresholds stay as they are.
+
+### The PD metrics in version 3
+
+For each experiment (injection, age perturbation, subsampling) and each replicate (1 and 2):
+
+1. **The units:** those present in all four trees compared, the clean final trees of both settings and the replicate's final trees of both settings.
+2. **The samples:** the three designs of 6a drawn from those units with seed 6, **1,000 samples per design** instead of 200, the same samples for both settings (`benchlib.paired_pd`).
+3. **The metric:** for each setting, the Spearman rank correlation between PD on its clean final tree and PD on the replicate's final tree, over those samples.
+
+Per design, the value is the mean over the two replicates. As in version 2, a metric passes if in **every design** the default's value is not more than **0.01** below legacy's.
+
+| # | Metric | Threshold | Kind |
+| --- | --- | --- | --- |
+| 1o | Injection carried through: PD rank correlation with the clean final tree, paired samples | not lower than legacy (within 0.01) in every design | must |
+| 6e | Ages perturbed, carried through: the same | not lower than legacy (within 0.01) in every design | must |
+| 6f | Half the genera dropped, carried through: the same, for samples drawn from the remaining genera's units in all four trees | not lower than legacy (within 0.01) in every design | must |
+
+### Why 1,000 draws
+
+On the downstream runs of #81, `results_81/pd_paired_noise.py` measured the standard deviation, across sample seeds, of the difference default minus legacy:
+
+| Metric | Unpaired, 200 draws (version 2) | Paired, 200 draws (20 seeds) | Paired, 1,000 draws (10 seeds) |
+| --- | --- | --- | --- |
+| 1o | | 0.0049 to 0.0063 | 0.0020 to 0.0032 |
+| 6e | | 0.0109 to 0.0129 | 0.0043 to 0.0060 |
+| 6f | 0.0069 to 0.0107 | 0.0020 to 0.0058 | 0.0008 to 0.0020 |
+
+With 1,000 paired draws, the noise of 6f is a fifth of the threshold or less, and that of 1o a third or less. The noise of 6e is larger, up to 0.0060, or 60% of the threshold. That is acceptable only because of its margin: on these runs the default is 0.073 to 0.083 above legacy, more than ten times that noise, so the seed cannot decide 6e. Should a later change bring 6e near its threshold, its noise would have to be measured again before its result is trusted. Each evaluation takes about a minute.
+
+### Known when declared
+
+The paired values on the runs of #81 were seen before this version was written. With 1,000 draws, the mean differences across seeds are:
+
+- **1o:** +0.035 to +0.055;
+- **6e:** +0.073 to +0.083;
+- **6f:** +0.0012 (150 units at random), +0.0029 (100 genera, one unit each) and **−0.0048** (100 genera, five units each).
+
+The last is a small difference that the unpaired measure hid in its noise. It is within the threshold, and the threshold is not adjusted to it.
+
+### Decision rule
+
+As in version 2.

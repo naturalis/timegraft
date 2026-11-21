@@ -1,9 +1,10 @@
 """Evaluate the release gate of the consistency layer (#56): every metric of GATE.md, with its status.
 
-    python evaluate.py BENCH OUT [--version 2]
+    python evaluate.py BENCH OUT [--version 3]
 
-``--version 1`` evaluates the gate as declared for #56 (and as rerun for #89 and #73); ``--version 2`` (the default)
-the second version of #74, section "Version 2" of GATE.md.
+``--version 1`` evaluates the gate as declared for #56 (and as rerun for #89 and #73); ``--version 2`` the second
+version of #74; ``--version 3`` (the default) the third of #104, which measures the PD metrics 1o, 6e and 6f on
+paired samples (sections "Version 2" and "Version 3" of GATE.md).
 
 BENCH holds ``main/results/iberia`` and ``branch/results/iberia`` (the two full runs), ``main_run.json`` and
 ``branch_run.json`` (time and memory), ``tests.txt`` (the last line of pytest) and ``exp/`` as
@@ -21,12 +22,12 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from benchlib import Backbone, PDTree, factor, quantile, read, spearman, write
+from benchlib import Backbone, PDTree, factor, paired_pd, quantile, read, spearman, write
 
 ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
 ap.add_argument("bench")
 ap.add_argument("out")
-ap.add_argument("--version", type=int, choices=(1, 2), default=2)
+ap.add_argument("--version", type=int, choices=(1, 2, 3), default=3)
 ARGS = ap.parse_args()
 BENCH, OUT, VERSION = Path(ARGS.bench), Path(ARGS.out), ARGS.version
 MAIN, BRANCH, EXP = BENCH / "main/results/iberia", BENCH / "branch/results/iberia", BENCH / "exp"
@@ -727,8 +728,19 @@ if VERSION >= 2:
         gate("1n", DOWN_METRICS[0][1], "", f"{share:.3f} ({near} of {len(known)})", ">= 0.80", share >= 0.80,
              f"{len(corrected_crowns) - len(known)} corrected genera without a crown age in both runs")
 
+        PAIRED_DRAWS = 1000  # GATE.md, version 3
+
         def pd_gate(number, name, kind):
-            means = {arm: {d: statistics.mean(v) for d, v in pd_by[kind][arm].items()} for arm in ("legacy", "default")}
+            if VERSION >= 3:
+                # the same samples for both settings, from the units in all four trees (#104)
+                clean_trees = {arm: PDTree(DOWN / "clean" / arm / "timegraft.tre") for arm in ("legacy", "default")}
+                replicates = [{arm: PDTree(DOWN / kind / f"s{seed}" / arm / "timegraft.tre")
+                               for arm in ("legacy", "default")} for seed in DOWN_SEEDS]
+                means = paired_pd(clean_trees, replicates, down_units, 6, PAIRED_DRAWS)
+                name = f"{name} (paired samples, {PAIRED_DRAWS} per design)"
+            else:
+                means = {arm: {d: statistics.mean(v) for d, v in pd_by[kind][arm].items()}
+                         for arm in ("legacy", "default")}
             gate(number, name, "; ".join(f"{d}: {fmt(v, 4)}" for d, v in means["legacy"].items()),
                  "; ".join(f"{d}: {fmt(v, 4)}" for d, v in means["default"].items()), ">= legacy - 0.01 per design",
                  all(means["default"][d] >= means["legacy"][d] - 0.01 for d in means["legacy"]))
@@ -764,6 +776,6 @@ if VERSION >= 2:
                else "every must metric that was run passes")
     if not_run:
         because += f"; reached without {', '.join(not_run)} (not run)"
-    line = f"decision (version 2): {decision} ({because})"
+    line = f"decision (version {VERSION}): {decision} ({because})"
     print(line)
     (OUT / "decision.txt").write_text(line + "\n")

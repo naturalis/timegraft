@@ -4,7 +4,7 @@ Whether `consistency-layer` should become the default: the metrics and threshold
 
 | File | Contents |
 | --- | --- |
-| `GATE.md` | The metrics, their thresholds and the decision rule, committed before anything was run: version 1 for #56, version 2 for later changes (see [below](#two-versions-of-the-gate)) |
+| `GATE.md` | The metrics, their thresholds and the decision rule, committed before anything was run: version 1 for #56, version 2 (#74), version 3 for later changes (#104; see [below](#three-versions-of-the-gate)) |
 | `REPORT.md` | The outcome: status of every metric, what the numbers mean, and the recommendation |
 | `results/metrics.tsv` | The gate as a table: metric, legacy, default, threshold, status |
 | `results/*.tsv` | One table per experiment (see below) |
@@ -23,12 +23,12 @@ Whether `consistency-layer` should become the default: the metrics and threshold
 | `results_84/` | The 175 changed stems of #56 traced with `compare_backbones.py`, and how they were obtained |
 | `results_70/` | The injection metrics (1a to 1m of version 2) after re-anchoring within the target family, [#70](https://github.com/naturalis/timegraft/issues/70), against #69 alone, and how they were obtained |
 | `results_81/` | The injection, age perturbation and subsampling carried through the genus stage with `run_downstream.sh` ([#81](https://github.com/naturalis/timegraft/issues/81)): the downstream metrics of version 2, details per run and per injected genus, and why 6f fails (sampling noise; #104) |
-| `evaluate.py`, `benchlib.py` | Compute every metric from the runs and write `results/`: `--version 2` (the default) or `--version 1` |
+| `evaluate.py`, `benchlib.py` | Compute every metric from the runs and write `results/`: `--version 3` (the default), `--version 2` or `--version 1` |
 | `run_lineage_alone.sh`, `evaluate_lineage_alone.py` | The detection metrics again, for [#71](https://github.com/naturalis/timegraft/issues/71): the default (`concordance.lineage_alone_level: class`) and a control with it `off`, on the clean run and on both injection variants (merged ids and name only); flagged by rule, back in their own class, false flags (`results/lineage_alone*.tsv`) |
 
 The pipeline is never patched for an experiment: errors and noise go into copies of its inputs (the taxonomy, the cache, the units), and the workflow scripts run as they are.
 
-## Two versions of the gate
+## Three versions of the gate
 
 **Version 1** was declared for #56 and judged the layer as it was merged; the reruns after #89 (`results_89/`) and #73 (`results_73/`) used it too. Running it showed where its metrics were weak, so [#74](https://github.com/naturalis/timegraft/issues/74) declared **version 2** (section "Version 2" of `GATE.md`), committed on its own before any run that it judges. Version 2 is the gate for later changes to the layer. What it changes:
 
@@ -42,6 +42,8 @@ The pipeline is never patched for an experiment: errors and noise go into copies
 | Decision | must metrics of families 5 to 7 or metric 0 failing: hold | the same with family 8; must metrics not run are listed, and the decision says it was reached without them |
 
 `evaluate.py --version 1` reproduces the tables of `results_73/` (values and statuses; the order of rows in `holdout.tsv` and of the phyla in the note of 1a vary between runs). Version 2 needs `node_ages.tsv` format 5 in the two clean backbones (built by any checkout from #84 on) and the two variants in `exp/`, and writes `stem_causes.tsv` and `decision.txt` besides the tables of version 1.
+
+**Version 3** ([#104](https://github.com/naturalis/timegraft/issues/104)) changes only how the PD metrics of the downstream experiments, 1o, 6e and 6f, are measured. In version 2 each setting drew its own samples, so the two were judged on different samples, and 6f varied with the sample seed by as much as its threshold: it failed for 7 of 20 seeds although the settings did not differ on average (`results_81/pd_seed_variation.tsv`). Version 3 draws each replicate's samples once, from the units in all four trees compared, uses them for both settings, and takes 1,000 samples per design instead of 200 (`benchlib.paired_pd`). The noise of 6f falls to a standard deviation of 0.001 to 0.002 (`results_81/pd_paired_noise_1000.tsv`). The thresholds and every other metric are those of version 2; `GATE.md` gives the reason for changing a metric after a result, and the values already known on the runs of #81. `evaluate.py --version 2` gives what it gave before.
 
 ### The downstream runs
 
@@ -75,7 +77,7 @@ for w in main branch; do (
 ./run_experiments.sh $BENCH $BENCH/branch $BENCH/branch/resources/otol 2    # add "offline" to forbid any API request
 ./run_posthoc.sh $BENCH $BENCH/branch $BENCH/branch/resources/otol 2    # version 1 only: run_experiments.sh builds them now
 ./run_downstream.sh $BENCH $BENCH/branch 2                                # version 2: the downstream runs (#81)
-PYTHONPATH=$BENCH/branch/src python evaluate.py $BENCH results               # version 2; add --version 1 for #56
+PYTHONPATH=$BENCH/branch/src python evaluate.py $BENCH results               # version 3; --version 2 for #74, --version 1 for #56
 ```
 
 The two full runs must not overlap with each other or with anything else, or the time comparison (metric 7a) is void.
