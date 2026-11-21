@@ -56,9 +56,13 @@ class Taxonomy:
     """The parts of OTT needed to match genera and find their species."""
 
     def __init__(self, path: str | Path, genera: set[str], context: str | None = None,
-                 prefer: dict[str, int] | None = None):
+                 prefer: dict[str, int] | None = None, species_by_name: bool = True):
         """``prefer`` maps a genus name to the OTT id to take when the name is otherwise ambiguous
-        (for example from COL, #48); it is used only if that id is one of the candidates."""
+        (for example from COL, #48); it is used only if that id is one of the candidates.
+
+        With ``species_by_name``, the species whose name starts with the name of one of ``genera``
+        but that do not hang under the taxon matched for it are indexed too (``species_named``), so
+        that a re-anchored genus can find its species by name inside its target (#101)."""
         uids, parents, genus_uids = [], [], []
         self.ncbi_of: dict[int, int] = {}
         self.rank_name: dict[int, tuple[str, str]] = {}  # rank and name of taxa above genus
@@ -135,6 +139,9 @@ class Taxonomy:
         self.species_ncbi: dict[str, int | None] = {}  # species name to its NCBI id, for comparison with COL
         self.species_uid: dict[str, int] = {}  # species name to its OTT id, for the species sampled in a run (#51)
         self.species_name: dict[int, str] = {}
+        # species named after one of the genera but outside the taxon matched for it: OTT id, name and NCBI id
+        # (#101)
+        self.species_named: dict[str, list[tuple[int, str, int | None]]] = defaultdict(list)
         for uid, _parent, _name, rank, sourceinfo, _uniq, flags, *_ in _rows(path):
             if rank != "species" or "extinct" in flags:
                 continue
@@ -144,6 +151,10 @@ class Taxonomy:
                 self.species_ncbi.setdefault(_name, _ncbi(sourceinfo))
                 self.species_uid.setdefault(_name, int(uid))
                 self.species_name[int(uid)] = _name
+            if species_by_name:
+                first = _name.split(" ", 1)[0]
+                if first != genus and first in genera and " " in _name:
+                    self.species_named[first].append((int(uid), _name, _ncbi(sourceinfo)))
 
     def _within_context(self, uid: int) -> bool:
         if self.context_uid is None:
@@ -167,14 +178,17 @@ class Taxonomy:
         return None
 
 
-def lookup_ids(taxonomy: "Taxonomy", genus: str, n_species: int = 12, keep=None) -> list:
+def lookup_ids(taxonomy: "Taxonomy", genus: str, n_species: int = 12, keep=None, species=None) -> list:
     """The genus's NCBI id (or None) followed by up to ``n_species`` species ids, spread over the list.
 
     With ``keep`` (NCBI id to bool) only the species ids it accepts are spread
     over; the genus id is returned as it is (for re-anchored genera, #69).
+    ``species`` ((OTT id, NCBI id) pairs) replaces the species of the matched
+    taxon, for a genus whose species were found by name (#101).
     """
     match = taxonomy.genus.get(genus) or {}
-    species = sorted(n for _, n in taxonomy.species.get(genus, []) if n and (keep is None or keep(n)))
+    pairs = taxonomy.species.get(genus, []) if species is None else species
+    species = sorted(n for _, n in pairs if n and (keep is None or keep(n)))
     if len(species) > n_species:
         step = len(species) / n_species
         species = [species[int(i * step)] for i in range(n_species)]

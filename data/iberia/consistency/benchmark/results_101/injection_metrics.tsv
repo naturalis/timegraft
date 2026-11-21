@@ -1,0 +1,14 @@
+metric	name	legacy	with_70	placement_by_name	with_101	threshold	status	note
+1a	Onchidella: genera next to the clade of all units of its subtree, in the final tree	{'Echinodermata': 1} (26 units, a clade)	{'Mollusca': 325} (26 units, a clade)	{'Mollusca': 325} (26 units, a clade)	{'Mollusca': 325} (26 units, a clade)	all Mollusca	pass	with the units set aside by screening too: legacy {'Arthropoda': 282, 'Chordata': 255, 'Mollusca': 389, 'Annelida': 166, 'Echinodermata': 11, 'Bryozoa': 25, 'Cnidaria': 1} (28 units, not a clade), default {'Mollusca': 332, 'Annelida': 1, 'Echinodermata': 1} (28 units, not a clade); backbone: legacy {'Echinodermata': 1}, default {'Mollusca': 325}
+1b	injected misplacements with two checks: flagged	0 (no check)	1.000 (118 of 118)	1.000 (118 of 118)	1.000 (118 of 118)	>= 0.90	pass	
+1c	injected misplacements, all: flagged	0 (no check)	1.000 (120 of 120)	1.000 (120 of 120)	1.000 (120 of 120)	>= 0.50	pass	
+1d	flagged injected genera back in their own class	16 of 120 in own class	1.000 (120 of 120)	1.000 (120 of 120)	1.000 (120 of 120)	>= 0.90	pass	
+1e	genera without an injected error flagged, per replicate		0.0 ([0, 0, 0, 0, 0])	0.0 ([0, 0, 0, 0, 0])	0.0 ([0, 0, 0, 0, 0])	<= 1	pass	
+1f	corrected genera with a stem age within 1.5 of the one without the error	21 of 120 injected within 1.5	0.992 (119 of 120)	1.000 (120 of 120)	1.000 (120 of 120)	>= 0.80	pass	
+1g	other genera whose stem age moves by more than 10%, five replicates together	248	4	3	3	<= half of legacy	pass	
+1h	inject_own: injected misplacements flagged	0 (no check)	1.000 (120 of 120)	1.000 (120 of 120)	1.000 (120 of 120)	>= 0.90	pass	118 with two checks that can be evaluated
+1i	inject_own: flagged genera back in their own class	16 of 120 in own class	1.000 (120 of 120)	1.000 (120 of 120)	1.000 (120 of 120)	>= 0.90	pass	
+1j	inject_own: corrected genera with a stem age within 1.5 of the one without the error	19 of 120 injected within 1.5	0.992 (119 of 120)	1.000 (120 of 120)	1.000 (120 of 120)	>= 0.80	pass	other stems moved: legacy 251, default 3
+1k	inject_name: injected misplacements flagged	0 (no check)	1.000 (120 of 120)	1.000 (120 of 120)	1.000 (120 of 120)	>= 0.50	pass	69 with two checks that can be evaluated
+1l	inject_name: flagged genera back in their own class	16 of 120 in own class	1.000 (120 of 120)	1.000 (120 of 120)	1.000 (120 of 120)	>= 0.90	pass	
+1m	inject_name: corrected genera with a stem age within 1.5 of the one without the error	15 of 120 injected within 1.5	0.717 (86 of 120)	0.883 (106 of 120)	0.967 (116 of 120)	none	report	other stems moved: legacy 184, default 16

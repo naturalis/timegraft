@@ -21,7 +21,10 @@ stem would become the family's crown, and the genus that used to be its
 sister would lose its sister. So the genus is attached within the target, at
 the majority clade of its own species that the synthesis places inside the
 target (the rule of #51 for anchoring genera on their species), and only at
-the target's node where none of them is inside it (#70). Where the target is
+the target's node where none of them is inside it (#70). Where OTT gave the
+genus's name to another taxon without its species, the matched taxon holds
+none of them; the species named after the genus that OTT places within the
+target are then used instead (#101). Where the target is
 not in the synthesis at all (neither as a node nor through members), the
 genus goes to the nearest enclosing node as before: that clade is larger than
 the target, and the genus is not placed within it.
@@ -56,7 +59,8 @@ OVERRIDE_COLUMNS = ("genus", "action", "target", "source", "note")
 COLUMNS = ("placement_action", "original_status", "original_anchor", "reanchor_target", "reanchor_how",
            "reanchor_species_inside", "reanchor_trigger", "reanchor_source", "reanchor_note")
 # where within the target a moved genus is attached (#70): majority clade of its species inside the target,
-# or the target's node (as before #70)
+# or the target's node (as before #70); its species are found by OTT id under its matched taxon and, failing
+# that, by name inside the target (#101)
 WITHIN_TARGET = ("majority", "off")
 # genera.tsv columns of the identifier check (#69): NCBI ids checked and dropped (the genus id among them)
 ID_COLUMNS = ("reanchor_ids_checked", "reanchor_ids_dropped")
@@ -176,8 +180,28 @@ def _synth_ott_nodes(synth) -> tuple[np.ndarray, np.ndarray]:
     return synth._ott_nodes
 
 
+def _in_taxon(taxonomy, uid: int, taxon: int, max_steps: int = 200) -> bool:
+    """Whether OTT taxon ``uid`` lies within OTT taxon ``taxon``."""
+    node = int(taxonomy.parent[uid]) if 0 <= uid < len(taxonomy.parent) else -1
+    for _ in range(max_steps):
+        if node < 0:
+            return False
+        if node == taxon:
+            return True
+        node = int(taxonomy.parent[node])
+    return False
+
+
+def named_species(taxonomy, genus: str, target_uid: int | None) -> list[tuple[int, str, int | None]]:
+    """The species named after ``genus`` outside its matched taxon (``Taxonomy.species_named``) that OTT
+    places within taxon ``target_uid`` (all of them without one): OTT id, name and NCBI id (#101)."""
+    return [s for s in getattr(taxonomy, "species_named", {}).get(genus, [])
+            if target_uid is None or _in_taxon(taxonomy, s[0], target_uid)]
+
+
 def within_target(synth, taxonomy, genus: str, target_node: int, sampled: set[str] | None = None,
-                  share: float = 0.5, min_species: int = 3, min_sampled: int = 2) -> tuple[int, str, int]:
+                  share: float = 0.5, min_species: int = 3, min_sampled: int = 2, target_uid: int | None = None,
+                  by_name: bool = True) -> tuple[int, str, int]:
     """Where inside the target node a moved genus belongs (#70): the node, how it was found, and how many
     species of the genus the synthesis places inside the target.
 
@@ -190,27 +214,52 @@ def within_target(synth, taxonomy, genus: str, target_node: int, sampled: set[st
     with fewer, their MRCA (``mrca_in_target``), or the parent of a single
     one (``species_in_target``); with none, the target node itself
     (``target_node``), as before #70.
-    """
-    from .otol_static import majority_clade
 
+    Where OTT gave the genus's name to another taxon without its species, the
+    matched taxon holds none of them. With ``by_name``, the species named
+    after the genus (``"<Genus> ..."``, ``Taxonomy.species_named``) that OTT
+    places within the target taxon ``target_uid`` and the synthesis inside
+    ``target_node`` are then used in the same way, and ``;by_name`` is added
+    to how the node was found (#101). The NCBI ids of those species are then
+    the ones the genus is dated with (:func:`named_species`), since those of
+    the matched taxon belong to the other animal.
+    """
     sizes = synth.subtree_sizes()
     end = target_node + int(sizes[target_node])
-    inside = {uid: synth.index[f"ott{uid}"] for uid, _ in taxonomy.species.get(genus, [])
-              if f"ott{uid}" in synth.index and target_node < synth.index[f"ott{uid}"] < end}
-    if sampled:
-        mine = {taxonomy.species_uid[n] for n in sampled if n in taxonomy.species_uid} & set(inside)
-        if len(mine) >= min_sampled:
-            inside = {uid: inside[uid] for uid in mine}
+
+    def inside_node(uid):
+        node = synth.index.get(f"ott{uid}")
+        return node is not None and target_node < node < end
+
+    inside = {uid: synth.index[f"ott{uid}"] for uid, _ in taxonomy.species.get(genus, []) if inside_node(uid)}
+    mine = {taxonomy.species_uid[n] for n in sampled if n in taxonomy.species_uid} if sampled else set()
+    suffix = ""
+    if not inside and by_name:
+        named = [(uid, name) for uid, name, _ in named_species(taxonomy, genus, target_uid) if inside_node(uid)]
+        if named:
+            inside = {uid: synth.index[f"ott{uid}"] for uid, _ in named}
+            mine = {uid for uid, name in named if name in (sampled or ())}
+            suffix = ";by_name"
+    node, how, n = _attach(synth, inside, mine, share, min_species, min_sampled)
+    return (node, how + suffix, n) if node is not None else (target_node, "target_node", 0)
+
+
+def _attach(synth, inside: Mapping[int, int], sampled_uids: set[int], share: float, min_species: int,
+            min_sampled: int) -> tuple[int | None, str, int]:
+    """The node for species ``inside`` (OTT id to synthesis node), as :func:`within_target` describes."""
+    from .otol_static import majority_clade
+
+    mine = sampled_uids & set(inside)
+    if len(mine) >= min_sampled:
+        inside = {uid: inside[uid] for uid in mine}
     nodes = sorted(inside.values())
     if not nodes:
-        return target_node, "target_node", 0
+        return None, "", 0
     if len(nodes) >= min_species:
-        node, how = majority_clade(synth, nodes, share)[0], "majority_clade_in_target"
-    elif len(nodes) > 1:
-        node, how = synth.mrca(nodes), "mrca_in_target"
-    else:
-        node, how = int(synth.parent[nodes[0]]), "species_in_target"
-    return node, how, len(nodes)
+        return majority_clade(synth, nodes, share)[0], "majority_clade_in_target", len(nodes)
+    if len(nodes) > 1:
+        return synth.mrca(nodes), "mrca_in_target", len(nodes)
+    return int(synth.parent[nodes[0]]), "species_in_target", len(nodes)
 
 
 def decide(concordance: list[dict], overrides: Mapping[str, dict], min_severity: int,
@@ -259,13 +308,15 @@ def plan(synth, taxonomy, names, matches: Mapping[str, dict], anchors: Mapping[s
          reference: Mapping[str, Mapping[str, str]], overrides: Mapping[str, dict], mode: str,
          min_severity: int, within: str = "majority", sampled: Mapping[str, set[str]] | None = None,
          share: float = 0.5, min_species: int = 3,
-         min_sampled: int = 2) -> tuple[dict[str, dict], dict[str, tuple[int, int]]]:
+         min_sampled: int = 2, by_name: bool = True) -> tuple[dict[str, dict], dict[str, tuple[int, int]]]:
     """Decide and locate every correction.
 
     ``within`` (``WITHIN_TARGET``) says where in the target taxon a moved
     genus is attached: ``majority`` places it with :func:`within_target`,
     ``off`` at the target's node; ``sampled``, ``share``, ``min_species`` and
-    ``min_sampled`` are the anchoring settings of #51.
+    ``min_sampled`` are the anchoring settings of #51; ``by_name`` lets
+    :func:`within_target` look for the genus's species by name inside the
+    target where the matched taxon has none there (#101).
 
     Returns the genera.tsv columns (``COLUMNS``) per genus decided on, and,
     with ``mode`` ``apply``, the genera to move with their new synthesis node
@@ -308,7 +359,7 @@ def plan(synth, taxonomy, names, matches: Mapping[str, dict], anchors: Mapping[s
             where = f"{where};enclosing_node"
         elif node is not None and within == "majority":
             node, place, n_inside = within_target(synth, taxonomy, genus, node, (sampled or {}).get(genus),
-                                                  share, min_species, min_sampled)
+                                                  share, min_species, min_sampled, target_uid=uid, by_name=by_name)
             where, inside = f"{where};{place}", str(n_inside)
         row.update(reanchor_target=f"{taxon} (ott{uid})" if uid is not None else taxon,
                    reanchor_how=f"{how};{where}" if uid is not None else how, reanchor_species_inside=inside)
