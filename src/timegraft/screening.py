@@ -46,7 +46,7 @@ from __future__ import annotations
 
 import math
 from collections import defaultdict
-from typing import Iterable, Mapping
+from typing import Iterable, Mapping, Sequence
 
 from . import geneticcode
 from .placement import vsearch_search
@@ -268,6 +268,35 @@ def set_aside(rows: Iterable[Mapping[str, str]]) -> set[str]:
 # Search ----------------------------------------------------------------------
 
 
+def units_to_search_again(units: Sequence[str], hits: Mapping[str, Mapping[str, float]],
+                          genus_of: Mapping[str, str], maxaccepts: int, congener_cap: int | None = 20) -> set[str]:
+    """Which units the second search of :func:`search_units` takes (#55, #85).
+
+    A unit whose first search filled ``maxaccepts`` with one side only: every
+    one whose hits hold no congener, and of those whose hits hold congeners
+    only, at most ``congener_cap`` per genus (None: all), spread evenly over
+    the genus's units in the order of their ids.
+    """
+    chosen, congeners_only = set(), defaultdict(list)
+    for unit in units:
+        found = hits.get(unit, {})
+        sides = {genus_of.get(t) == genus_of.get(unit) for t in found}
+        if len(found) < maxaccepts or len(sides) != 1:
+            continue
+        if sides == {False}:
+            chosen.add(unit)
+        else:
+            congeners_only[genus_of.get(unit)].append(unit)
+    for members in congeners_only.values():
+        members.sort()
+        if congener_cap is None or len(members) <= congener_cap:
+            chosen.update(members)
+        elif congener_cap:
+            step = len(members) / congener_cap
+            chosen.update(members[int(i * step)] for i in range(congener_cap))
+    return chosen
+
+
 def search_units(
     reps: list[tuple[str, str]],
     min_identity: float,
@@ -278,6 +307,7 @@ def search_units(
     genus_of: Mapping[str, str] | None = None,
     alignments: bool | None = None,
     deep: int = 100,
+    congener_cap: int | None = 20,
 ) -> dict[str, list[tuple[str, float]]] | tuple[dict, dict]:
     """All representatives against each other (and the external reference) with VSEARCH.
 
@@ -285,9 +315,20 @@ def search_units(
     query, so in a large genus its congeners can crowd out every unit of
     another genus, or the reverse, and the evidence from that side is lost.
     With ``genus_of`` (genus per unit and per external sequence), queries
-    whose hits fill ``maxaccepts`` while one side (own genus or other genera)
-    is empty are searched again with ``deep`` accepts; the extra hits are
-    added. With ``alignments`` (by default, whenever ``genus_of`` is given),
+    whose hits fill ``maxaccepts`` while one side is empty are searched again
+    with ``deep`` accepts, and the extra hits are added (#55): every list
+    without a congener among its hits, and lists with only congeners for at
+    most ``congener_cap`` units per genus (None: all of them; #85).
+
+    A list without a congener can hide the congener that keeps the unit: the
+    163 wrong decisions of #55. A list of congeners only almost never hides a
+    hit that changes the unit's own decision (``other_genus`` needs a unit of
+    another genus at least ``margin`` closer than the best congener: 0 of
+    11,734 on the Iberian run). But its second search finds the unit's
+    nearest other genus, which the placement check (#47) counts per genus.
+    For that a share is enough, so in a large genus a sample of its units is
+    searched again, spread evenly over them in the order of their ids. On the
+    Iberian run that halves the cost of the second search. With ``alignments`` (by default, whenever ``genus_of`` is given),
     the alignment of each query with its best hit on each side is kept too,
     and ``(hits, alignments)`` is returned; ``alignments`` maps (query,
     target) to (query start, query row, target row).
@@ -317,12 +358,12 @@ def search_units(
                     best[key] = (target, ident)
                     rows[(query, target)] = (int(extra[0]), extra[1], extra[2])
 
+    if congener_cap is not None and congener_cap < 0:
+        raise ValueError(f"congener_cap must be None or at least 0, not {congener_cap}")
     collect(reps, maxaccepts + 1)
     if genus_of is not None and deep > maxaccepts:
-        def one_sided(query):
-            sides = {genus_of.get(t) == genus_of.get(query) for t in hits.get(query, {})}
-            return len(hits.get(query, {})) >= maxaccepts and len(sides) == 1
-        again = [(q, seq) for q, seq in reps if one_sided(q)]
+        chosen = units_to_search_again([q for q, _ in reps], hits, genus_of, maxaccepts, congener_cap)
+        again = [(q, seq) for q, seq in reps if q in chosen]
         if again:
             collect(again, deep + 1)
     out = {q: sorted(h.items(), key=lambda kv: -kv[1]) for q, h in hits.items()}

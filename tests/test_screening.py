@@ -307,12 +307,40 @@ def test_crowded_out_side_is_searched_again():
     genus = {u: ("B" if u == "b1" else "A") for u, _ in reps}
     shallow = search_units(reps, 0.8, maxaccepts=2, genus_of=genus, alignments=False, deep=0)
     assert "b1" not in [t for t, _ in shallow["a0"]]  # crowded out by congeners
-    hits, rows = search_units(reps, 0.8, maxaccepts=2, genus_of=genus, deep=20)
+    hits, rows = search_units(reps, 0.8, maxaccepts=2, genus_of=genus, deep=20, congener_cap=None)
     assert "b1" in [t for t, _ in hits["a0"]]
     assert any(q == "a0" and t == "b1" for q, t in rows)  # its alignment is kept for the other side
     assert hits["a0"] == sorted(hits["a0"], key=lambda h: -h[1])
+    # with a cap of 0, lists of congeners only are not searched again (#85)
+    capped = search_units(reps, 0.8, maxaccepts=2, genus_of=genus, alignments=False, deep=20, congener_cap=0)
+    assert capped["a0"] == shallow["a0"]
     with pytest.raises(ValueError):
         search_units(reps, 0.8, alignments=True)
+    with pytest.raises(ValueError, match="congener_cap"):
+        search_units(reps, 0.8, genus_of=genus, congener_cap=-1)
+
+
+@pytest.mark.skipif(shutil.which("vsearch") is None, reason="needs vsearch")
+def test_list_without_a_congener_is_searched_again():
+    import random
+
+    rng = random.Random(12)
+    base = CODING * 2
+
+    def mutate(seq, n):
+        seq = list(seq)
+        for i in rng.sample(range(len(seq)), n):
+            seq[i] = rng.choice([b for b in "ACGT" if b != seq[i]])
+        return "".join(seq)
+
+    # a0 among many units of genus B that are close to it, and its one congener a little further away
+    reps = [("a0", base)] + [(f"b{i}", mutate(base, 4)) for i in range(1, 9)] + [("a1", mutate(base, 30))]
+    genus = {u: ("A" if u.startswith("a") else "B") for u, _ in reps}
+    shallow = search_units(reps, 0.8, maxaccepts=2, genus_of=genus, alignments=False, deep=0)
+    assert "a1" not in [t for t, _ in shallow["a0"]]  # its congener crowded out by genus B
+    for cap in (0, 20, None):  # always, whatever the cap on lists of congeners only
+        hits = search_units(reps, 0.8, maxaccepts=2, genus_of=genus, alignments=False, deep=20, congener_cap=cap)
+        assert "a1" in [t for t, _ in hits["a0"]]
 
 
 def test_reverse_alignment_uses_the_relatives_genetic_code():
@@ -325,3 +353,23 @@ def test_reverse_alignment_uses_the_relatives_genetic_code():
                        {"A1": 5, "A2": 9})
     by = {r["unit_id"]: r for r in rows}
     assert by["A1"]["codons_changed"] == "4" and by["A1"]["aa_changes"] == "0"
+
+
+def test_selection_for_the_second_search():
+    from timegraft.screening import units_to_search_again
+
+    genus = {**{f"a{i:02d}": "A" for i in range(10)}, **{f"b{i}": "B" for i in range(4)}, "c0": "C", "c1": "C"}
+    only_a = {f"a{i:02d}": 0.9 for i in range(10)}
+    hits = {f"a{i:02d}": {k: v for k, v in only_a.items() if k != f"a{i:02d}"} | {"a00x": 0.9} for i in range(10)}
+    genus["a00x"] = "A"
+    hits["b0"] = {"a00": 0.9, "a01": 0.9, "a02": 0.9}  # full list, no congener: always searched again
+    hits["b1"] = {"a00": 0.9, "b2": 0.9, "a01": 0.9}  # both sides: not searched again
+    hits["c0"] = {"a00": 0.9}  # not full: not searched again
+    units = sorted(genus)
+    # ten units of A with congeners only; a cap of 4 takes four of them, spread over A's units in id order
+    chosen = units_to_search_again(units, hits, genus, maxaccepts=3, congener_cap=4)
+    assert chosen == {"b0", "a00", "a02", "a05", "a07"}
+    assert units_to_search_again(list(reversed(units)), hits, genus, 3, 4) == chosen  # order of the input
+    assert units_to_search_again(units, hits, genus, 3, None) == {"b0"} | {f"a{i:02d}" for i in range(10)}
+    assert units_to_search_again(units, hits, genus, 3, 0) == {"b0"}
+    assert units_to_search_again(units, hits, genus, 3, 20) == {"b0"} | {f"a{i:02d}" for i in range(10)}
