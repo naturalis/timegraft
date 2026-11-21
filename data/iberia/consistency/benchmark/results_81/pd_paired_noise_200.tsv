@@ -1,0 +1,190 @@
+metric	seed	design	legacy	default	difference
+1o	6	150 units at random	0.9581	0.9999	0.0418
+1o	6	100 genera, one unit each	0.9530	0.9999	0.0468
+1o	6	100 genera, five units each	0.9587	1.0000	0.0413
+6e	6	150 units at random	0.8567	0.9259	0.0692
+6e	6	100 genera, one unit each	0.8679	0.9381	0.0702
+6e	6	100 genera, five units each	0.8505	0.9530	0.1025
+6f	6	150 units at random	0.9664	0.9688	0.0024
+6f	6	100 genera, one unit each	0.9588	0.9606	0.0017
+6f	6	100 genera, five units each	0.9300	0.9177	-0.0123
+1o	7	150 units at random	0.9642	0.9999	0.0357
+1o	7	100 genera, one unit each	0.9430	0.9998	0.0568
+1o	7	100 genera, five units each	0.9612	1.0000	0.0388
+6e	7	150 units at random	0.8698	0.9431	0.0733
+6e	7	100 genera, one unit each	0.8628	0.9265	0.0637
+6e	7	100 genera, five units each	0.8699	0.9461	0.0762
+6f	7	150 units at random	0.9621	0.9634	0.0012
+6f	7	100 genera, one unit each	0.9716	0.9738	0.0022
+6f	7	100 genera, five units each	0.9308	0.9254	-0.0054
+1o	8	150 units at random	0.9636	0.9998	0.0363
+1o	8	100 genera, one unit each	0.9434	0.9999	0.0565
+1o	8	100 genera, five units each	0.9626	0.9999	0.0373
+6e	8	150 units at random	0.8684	0.9489	0.0805
+6e	8	100 genera, one unit each	0.8697	0.9334	0.0637
+6e	8	100 genera, five units each	0.8669	0.9535	0.0866
+6f	8	150 units at random	0.9679	0.9688	0.0010
+6f	8	100 genera, one unit each	0.9558	0.9623	0.0065
+6f	8	100 genera, five units each	0.9288	0.9150	-0.0139
+1o	9	150 units at random	0.9647	1.0000	0.0352
+1o	9	100 genera, one unit each	0.9432	0.9997	0.0565
+1o	9	100 genera, five units each	0.9465	0.9999	0.0535
+6e	9	150 units at random	0.8642	0.9482	0.0839
+6e	9	100 genera, one unit each	0.8021	0.9083	0.1062
+6e	9	100 genera, five units each	0.8356	0.9227	0.0872
+6f	9	150 units at random	0.9690	0.9703	0.0014
+6f	9	100 genera, one unit each	0.9546	0.9588	0.0042
+6f	9	100 genera, five units each	0.9332	0.9300	-0.0032
+1o	10	150 units at random	0.9554	0.9999	0.0445
+1o	10	100 genera, one unit each	0.9533	0.9999	0.0466
+1o	10	100 genera, five units each	0.9629	1.0000	0.0371
+6e	10	150 units at random	0.8566	0.9404	0.0839
+6e	10	100 genera, one unit each	0.8742	0.9430	0.0688
+6e	10	100 genera, five units each	0.8581	0.9485	0.0904
+6f	10	150 units at random	0.9721	0.9705	-0.0016
+6f	10	100 genera, one unit each	0.9640	0.9676	0.0036
+6f	10	100 genera, five units each	0.9061	0.9118	0.0058
+1o	11	150 units at random	0.9626	0.9999	0.0374
+1o	11	100 genera, one unit each	0.9516	0.9999	0.0483
+1o	11	100 genera, five units each	0.9562	1.0000	0.0437
+6e	11	150 units at random	0.8303	0.9306	0.1003
+6e	11	100 genera, one unit each	0.8431	0.9289	0.0857
+6e	11	100 genera, five units each	0.8377	0.9333	0.0956
+6f	11	150 units at random	0.9694	0.9719	0.0025
+6f	11	100 genera, one unit each	0.9595	0.9575	-0.0020
+6f	11	100 genera, five units each	0.9255	0.9230	-0.0025
+1o	12	150 units at random	0.9650	0.9999	0.0349
+1o	12	100 genera, one unit each	0.9474	0.9998	0.0525
+1o	12	100 genera, five units each	0.9544	1.0000	0.0456
+6e	12	150 units at random	0.8595	0.9413	0.0818
+6e	12	100 genera, one unit each	0.8507	0.9355	0.0848
+6e	12	100 genera, five units each	0.8764	0.9547	0.0783
+6f	12	150 units at random	0.9729	0.9754	0.0025
+6f	12	100 genera, one unit each	0.9507	0.9535	0.0027
+6f	12	100 genera, five units each	0.9224	0.9177	-0.0047
+1o	13	150 units at random	0.9651	0.9999	0.0348
+1o	13	100 genera, one unit each	0.9449	0.9998	0.0549
+1o	13	100 genera, five units each	0.9553	0.9999	0.0446
+6e	13	150 units at random	0.8428	0.9276	0.0848
+6e	13	100 genera, one unit each	0.8461	0.9265	0.0804
+6e	13	100 genera, five units each	0.8478	0.9356	0.0878
+6f	13	150 units at random	0.9641	0.9652	0.0012
+6f	13	100 genera, one unit each	0.9594	0.9639	0.0045
+6f	13	100 genera, five units each	0.9342	0.9252	-0.0090
+1o	14	150 units at random	0.9680	0.9999	0.0319
+1o	14	100 genera, one unit each	0.9514	0.9999	0.0486
+1o	14	100 genera, five units each	0.9715	1.0000	0.0285
+6e	14	150 units at random	0.8669	0.9510	0.0841
+6e	14	100 genera, one unit each	0.8616	0.9407	0.0792
+6e	14	100 genera, five units each	0.8808	0.9524	0.0715
+6f	14	150 units at random	0.9734	0.9739	0.0005
+6f	14	100 genera, one unit each	0.9579	0.9633	0.0054
+6f	14	100 genera, five units each	0.9357	0.9252	-0.0105
+1o	15	150 units at random	0.9568	0.9999	0.0431
+1o	15	100 genera, one unit each	0.9479	0.9998	0.0519
+1o	15	100 genera, five units each	0.9601	0.9999	0.0398
+6e	15	150 units at random	0.8380	0.9280	0.0899
+6e	15	100 genera, one unit each	0.8597	0.9310	0.0713
+6e	15	100 genera, five units each	0.8648	0.9351	0.0704
+6f	15	150 units at random	0.9669	0.9678	0.0009
+6f	15	100 genera, one unit each	0.9537	0.9572	0.0035
+6f	15	100 genera, five units each	0.9243	0.9252	0.0009
+1o	16	150 units at random	0.9741	0.9999	0.0258
+1o	16	100 genera, one unit each	0.9424	0.9998	0.0574
+1o	16	100 genera, five units each	0.9547	0.9999	0.0452
+6e	16	150 units at random	0.8811	0.9456	0.0645
+6e	16	100 genera, one unit each	0.8549	0.9368	0.0819
+6e	16	100 genera, five units each	0.8362	0.9410	0.1049
+6f	16	150 units at random	0.9680	0.9690	0.0010
+6f	16	100 genera, one unit each	0.9622	0.9642	0.0020
+6f	16	100 genera, five units each	0.9318	0.9242	-0.0076
+1o	17	150 units at random	0.9691	0.9999	0.0309
+1o	17	100 genera, one unit each	0.9480	0.9999	0.0518
+1o	17	100 genera, five units each	0.9658	1.0000	0.0342
+6e	17	150 units at random	0.8842	0.9585	0.0743
+6e	17	100 genera, one unit each	0.8590	0.9215	0.0625
+6e	17	100 genera, five units each	0.8665	0.9526	0.0860
+6f	17	150 units at random	0.9729	0.9687	-0.0042
+6f	17	100 genera, one unit each	0.9662	0.9671	0.0009
+6f	17	100 genera, five units each	0.9188	0.9147	-0.0041
+1o	18	150 units at random	0.9701	0.9999	0.0299
+1o	18	100 genera, one unit each	0.9478	0.9999	0.0521
+1o	18	100 genera, five units each	0.9604	0.9999	0.0395
+6e	18	150 units at random	0.8725	0.9488	0.0763
+6e	18	100 genera, one unit each	0.8543	0.9287	0.0743
+6e	18	100 genera, five units each	0.8703	0.9472	0.0770
+6f	18	150 units at random	0.9737	0.9743	0.0007
+6f	18	100 genera, one unit each	0.9575	0.9660	0.0085
+6f	18	100 genera, five units each	0.9063	0.9142	0.0078
+1o	19	150 units at random	0.9666	0.9999	0.0333
+1o	19	100 genera, one unit each	0.9456	0.9998	0.0542
+1o	19	100 genera, five units each	0.9575	0.9999	0.0425
+6e	19	150 units at random	0.8947	0.9539	0.0592
+6e	19	100 genera, one unit each	0.8797	0.9387	0.0590
+6e	19	100 genera, five units each	0.8463	0.9460	0.0997
+6f	19	150 units at random	0.9686	0.9722	0.0036
+6f	19	100 genera, one unit each	0.9512	0.9524	0.0012
+6f	19	100 genera, five units each	0.9297	0.9242	-0.0055
+1o	20	150 units at random	0.9607	0.9999	0.0392
+1o	20	100 genera, one unit each	0.9342	0.9998	0.0655
+1o	20	100 genera, five units each	0.9617	0.9999	0.0383
+6e	20	150 units at random	0.8478	0.9337	0.0859
+6e	20	100 genera, one unit each	0.8235	0.9200	0.0965
+6e	20	100 genera, five units each	0.8887	0.9573	0.0686
+6f	20	150 units at random	0.9731	0.9715	-0.0016
+6f	20	100 genera, one unit each	0.9527	0.9562	0.0035
+6f	20	100 genera, five units each	0.9181	0.9166	-0.0015
+1o	21	150 units at random	0.9689	0.9999	0.0310
+1o	21	100 genera, one unit each	0.9398	0.9998	0.0600
+1o	21	100 genera, five units each	0.9675	0.9999	0.0325
+6e	21	150 units at random	0.8796	0.9515	0.0719
+6e	21	100 genera, one unit each	0.8550	0.9276	0.0726
+6e	21	100 genera, five units each	0.8672	0.9538	0.0865
+6f	21	150 units at random	0.9656	0.9680	0.0024
+6f	21	100 genera, one unit each	0.9572	0.9622	0.0050
+6f	21	100 genera, five units each	0.9115	0.9135	0.0021
+1o	22	150 units at random	0.9572	0.9999	0.0427
+1o	22	100 genera, one unit each	0.9491	0.9998	0.0507
+1o	22	100 genera, five units each	0.9651	1.0000	0.0349
+6e	22	150 units at random	0.8309	0.9415	0.1106
+6e	22	100 genera, one unit each	0.8346	0.9301	0.0955
+6e	22	100 genera, five units each	0.8742	0.9520	0.0779
+6f	22	150 units at random	0.9658	0.9675	0.0017
+6f	22	100 genera, one unit each	0.9532	0.9539	0.0007
+6f	22	100 genera, five units each	0.9270	0.9259	-0.0011
+1o	23	150 units at random	0.9618	1.0000	0.0381
+1o	23	100 genera, one unit each	0.9319	0.9998	0.0680
+1o	23	100 genera, five units each	0.9534	0.9999	0.0465
+6e	23	150 units at random	0.8605	0.9390	0.0784
+6e	23	100 genera, one unit each	0.8257	0.9220	0.0963
+6e	23	100 genera, five units each	0.8757	0.9471	0.0714
+6f	23	150 units at random	0.9617	0.9633	0.0016
+6f	23	100 genera, one unit each	0.9463	0.9519	0.0056
+6f	23	100 genera, five units each	0.9278	0.9171	-0.0107
+1o	24	150 units at random	0.9673	0.9999	0.0326
+1o	24	100 genera, one unit each	0.9520	0.9998	0.0478
+1o	24	100 genera, five units each	0.9700	1.0000	0.0299
+6e	24	150 units at random	0.8704	0.9473	0.0770
+6e	24	100 genera, one unit each	0.8516	0.9345	0.0829
+6e	24	100 genera, five units each	0.8819	0.9566	0.0747
+6f	24	150 units at random	0.9688	0.9683	-0.0005
+6f	24	100 genera, one unit each	0.9586	0.9611	0.0026
+6f	24	100 genera, five units each	0.9313	0.9263	-0.0050
+1o	25	150 units at random	0.9662	0.9999	0.0337
+1o	25	100 genera, one unit each	0.9449	0.9998	0.0549
+1o	25	100 genera, five units each	0.9521	0.9999	0.0478
+6e	25	150 units at random	0.8679	0.9435	0.0757
+6e	25	100 genera, one unit each	0.8504	0.9303	0.0799
+6e	25	100 genera, five units each	0.8539	0.9392	0.0853
+6f	25	150 units at random	0.9603	0.9652	0.0049
+6f	25	100 genera, one unit each	0.9625	0.9697	0.0072
+6f	25	100 genera, five units each	0.9123	0.9135	0.0013
+1o	all	150 units at random			mean 0.0356, sd 0.0049, below -0.01 in 0 of 20
+1o	all	100 genera, one unit each			mean 0.0541, sd 0.0058, below -0.01 in 0 of 20
+1o	all	100 genera, five units each			mean 0.0401, sd 0.0063, below -0.01 in 0 of 20
+6e	all	150 units at random			mean 0.0803, sd 0.0115, below -0.01 in 0 of 20
+6e	all	100 genera, one unit each			mean 0.0788, sd 0.0129, below -0.01 in 0 of 20
+6e	all	100 genera, five units each			mean 0.0839, sd 0.0109, below -0.01 in 0 of 20
+6f	all	150 units at random			mean 0.0011, sd 0.0020, below -0.01 in 0 of 20
+6f	all	100 genera, one unit each			mean 0.0035, sd 0.0025, below -0.01 in 0 of 20
+6f	all	100 genera, five units each			mean -0.0040, sd 0.0058, below -0.01 in 4 of 20
