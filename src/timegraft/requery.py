@@ -23,7 +23,7 @@ from typing import Mapping, Sequence
 
 CLASSES = ("under_spanning", "pick_specific", "topology", "consistent", "unresolved")
 COLUMNS = ("requery_trigger", "requery_ids", "requery_age", "requery_mrca_ncbi", "requery_n_estimates",
-           "conflict_class", "conflict_detail", "conflict_confidence", "requery_sigma", "requery_applied")
+           "conflict_class", "conflict_detail", "conflict_confidence")
 Z_TRIGGER = 2.0
 RATIO_TRIGGER = 1.5
 MOVE = 1.25  # a re-query age within this factor of the first counts as the same

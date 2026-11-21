@@ -254,7 +254,7 @@ write_tsv(snakemake.output.concordance, concordance, CONCORDANCE_COLUMNS)
 # what the backbone was built from, and in what format the outputs are (#47)
 entries = [v for k, v in cache.data.items() if k.startswith("mrca:") and isinstance(v, dict)]
 metadata = {
-    "output_format": {"genera.tsv": 8, "node_ages.tsv": 5, "crown_ages.tsv": 3, "concordance.tsv": 5,
+    "output_format": {"genera.tsv": 8, "node_ages.tsv": 6, "crown_ages.tsv": 3, "concordance.tsv": 5,
                       "timetree_cache": CACHE_VERSION},
     # which species the TimeTree crown ages are the crowns of (#54)
     "crowns": {"settings": settings.get("crown_query") or {},

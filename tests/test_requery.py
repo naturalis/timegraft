@@ -4,7 +4,7 @@ import dendropy
 import pytest
 
 from timegraft import requery as rq
-from timegraft.backbone_build import age_fit_summary, date_topology
+from timegraft.backbone_build import date_topology
 from timegraft.timetree import TimeTree
 from timegraft.webapi import JsonCache
 
@@ -85,45 +85,33 @@ def _run(mode, cache=None, calls=None):
     return tree, {(r["example_genera"], r["n_genera"]): r for r in report}, report
 
 
-def test_requery_classifies_and_can_apply():
+def test_requery_classifies():
     _, by, report = _run("classify")
     ab = by[("A1;A2;B1", 4)]
     assert ab["timetree_age"] == "20.0000" and ab["requery_ids"] == "2+4"
     assert ab["requery_age"] == "90.0000" and ab["conflict_class"] == "under_spanning"
-    assert ab["conflict_detail"] == "moved_older" and ab["requery_applied"] == ""
+    assert ab["conflict_detail"] == "moved_older"
     assert "z" in ab["requery_trigger"]
     untouched = [r for r in report if not r["requery_trigger"]]
     assert all(r["conflict_class"] == "" for r in untouched)
-    classified_age = float(ab["age"])
-    _, by, report = _run("apply")
-    ab = by[("A1;A2;B1", 4)]
-    assert ab["requery_applied"] == "yes" and float(ab["age"]) > classified_age
-    assert float(ab["age"]) == pytest.approx(90.0, rel=0.1)
-    summary = age_fit_summary(report)
-    assert summary["final_against_requery"]["weighted_rms"] < summary["final"]["weighted_rms"]
     _, by, _ = _run("off")
     assert by[("A1;A2;B1", 4)]["conflict_class"] == "" and by[("A1;A2;B1", 4)]["requery_ids"] == ""
 
 
-def test_apply_keeps_each_age_with_its_own_uncertainty():
+def test_classification_changes_no_age():
+    # a diagnostic only (#86): with or without it, every node has the same age and source
     _, classified, _ = _run("classify")
-    _, applied, report = _run("apply")
-    ab_c, ab_a = classified[("A1;A2;B1", 4)], applied[("A1;A2;B1", 4)]
-    # calibration_sigma still describes the first age (timetree_age); the replacement has requery_sigma
-    assert ab_a["calibration_sigma"] == ab_c["calibration_sigma"] and ab_a["timetree_age"] == ab_c["timetree_age"]
-    assert ab_a["requery_sigma"] and ab_c["requery_sigma"]  # recorded whether applied or not
-    summary = age_fit_summary(report)
-    assert summary["precedence"] == age_fit_summary(_run("classify")[2])["precedence"]
+    _, off, _ = _run("off")
+    assert {k: (r["age"], r["source"]) for k, r in classified.items()} == {
+        k: (r["age"], r["source"]) for k, r in off.items()}
 
 
-def test_requery_sigma_follows_the_fit_settings():
+@pytest.mark.parametrize("method", ["fit", "precedence"])
+def test_apply_was_removed(method):
     tree = dendropy.Tree.get(data=NEWICK, schema="newick", rooting="force-rooted")
-    tt = TimeTree(JsonCache(None), fetch=_fake(AGES))
-    _, report = date_topology(tree, NCBI, tt, per_side=1, per_genus=0, fit={"sigma_floor": 0.4},
-                              requery={"mode": "classify", "z_trigger": 1.0})
-    ab = next(r for r in report if r["conflict_class"] == "under_spanning")
-    # two estimates of 90: no spread, so the floor alone
-    assert float(ab["requery_sigma"]) == pytest.approx(0.4, abs=1e-4)
+    with pytest.raises(ValueError, match="removed"):
+        date_topology(tree, NCBI, TimeTree(JsonCache(None), fetch=_fake(AGES)), per_side=1, per_genus=0,
+                      method=method, requery={"mode": "apply"})
 
 
 def test_sentinel_estimates_do_not_count():
@@ -140,13 +128,6 @@ def test_sentinel_estimates_do_not_count():
                               requery={"mode": "classify", "z_trigger": 1.0})
     ab = next(r for r in report if r["conflict_class"] == "under_spanning")
     assert ab["conflict_confidence"] == "medium"  # decisive move, but the first age rests on one estimate
-
-
-def test_apply_needs_the_fit():
-    tree = dendropy.Tree.get(data=NEWICK, schema="newick", rooting="force-rooted")
-    with pytest.raises(ValueError):
-        date_topology(tree, NCBI, TimeTree(JsonCache(None), fetch=_fake(AGES)), per_side=1, per_genus=0,
-                      method="precedence", requery={"mode": "apply"})
 
 
 def test_requery_is_reproducible_from_the_cache():

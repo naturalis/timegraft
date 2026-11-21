@@ -261,12 +261,13 @@ def date_topology(
     ancestor is dropped, as before #52. Either way the report also gives the
     ages and sources of the precedence rule, for comparison.
 
-    ``requery`` (#53; settings ``mode``: ``classify``, ``apply`` or ``off``;
+    ``requery`` (#53; settings ``mode``: ``classify`` or ``off``;
     ``z_trigger``, ``ratio_trigger``, ``move``) re-asks TimeTree about
     conflicting nodes with picks disjoint from the first query, and
-    classifies the conflict (:mod:`timegraft.requery`). With ``apply`` (fit
-    only) the re-query age replaces the first for nodes classed as
-    ``under_spanning`` or ``pick_specific``, and the ages are fitted again.
+    classifies the conflict (:mod:`timegraft.requery`). The classification is
+    a diagnostic: no age depends on it. (Mode ``apply``, which let a re-query
+    age replace the first, was removed in #86: the fit already discounts the
+    calibrations it would replace.)
     """
     if method not in AGE_METHODS:
         raise ValueError(f"unknown age method {method!r}; use one of {', '.join(AGE_METHODS)}")
@@ -335,29 +336,22 @@ def date_topology(
     calibration_rows = _calibration_rows(calibrations)
     requery = dict(requery or {})
     rq_mode = {False: "off", True: "classify"}.get(requery.get("mode"), requery.get("mode", "classify"))
-    if rq_mode not in ("classify", "apply", "off"):
-        raise ValueError(f"requery mode must be classify, apply or off, not {rq_mode!r}")
+    if rq_mode == "apply":
+        raise ValueError("requery mode 'apply' was removed (#86): the fit already discounts the calibrations it "
+                         "replaced; use classify or off")
+    if rq_mode not in ("classify", "off"):
+        raise ValueError(f"requery mode must be classify or off, not {rq_mode!r}")
     requery_rows: dict[dendropy.Node, dict[str, str]] = {}
     if method == "precedence":
-        if rq_mode == "apply":
-            raise ValueError("requery mode 'apply' requires age method 'fit'")
         age, source, anchors = p_age, p_source, p_anchors
         if rq_mode != "off":
-            requery_rows, _ = _requery(tree, calibrations, {}, set(), conflict, conflict_with, p_age, used, ncbi,
-                                       timetree, per_side, per_genus, requery, fit, synth_nodes, support)
+            requery_rows = _requery(tree, calibrations, {}, set(), conflict, conflict_with, p_age, used, ncbi,
+                                    timetree, per_side, per_genus, requery)
     else:
         age, source, fitted_rows, result = _fit(tree, calibrations, cal_parent, unresolved, source, fit)
         if rq_mode != "off":
-            requery_rows, replace = _requery(tree, calibrations, result.z, result.outlier, conflict, conflict_with,
-                                             result.age, used, ncbi, timetree, per_side, per_genus, requery,
-                                             fit, synth_nodes, support)
-            if rq_mode == "apply" and replace:
-                for node, (value, sigma) in replace.items():
-                    calibrations[node] = agefit.Calibration(value, sigma, calibrations[node].source)
-                    requery_rows[node]["requery_applied"] = "yes"
-                # calibration_sigma keeps describing the first age (timetree_age); the replacement's is
-                # requery_sigma, so that every reported metric pairs an age with its own uncertainty
-                age, source, fitted_rows, result = _fit(tree, calibrations, cal_parent, unresolved, source, fit)
+            requery_rows = _requery(tree, calibrations, result.z, result.outlier, conflict, conflict_with,
+                                    result.age, used, ncbi, timetree, per_side, per_genus, requery)
         for node, row in fitted_rows.items():
             calibration_rows[node].update(row)
         anchors = {}
@@ -596,16 +590,11 @@ def _bracket(node, reference) -> tuple[float | None, float | None]:
 
 
 def _requery(tree, calibrations, z, outliers, conflict, conflict_with, reference, used, ncbi, timetree, per_side,
-             per_genus, settings, fit_settings=None, synth_nodes=None, support=None):
-    """Re-query triggered nodes with disjoint picks and classify them (#53).
-
-    Returns the report columns per triggered node, and for the nodes whose
-    class says the first age was the picks' doing (``under_spanning``,
-    ``pick_specific``) the re-query age with its uncertainty, for ``apply``.
-    """
+             per_genus, settings):
+    """Re-query triggered nodes with disjoint picks and classify them (#53); the report columns per node."""
     todo = rq.triggers(z, outliers, conflict, conflict_with, float(settings.get("z_trigger", rq.Z_TRIGGER)),
                        float(settings.get("ratio_trigger", rq.RATIO_TRIGGER)))
-    rows, replace = {}, {}
+    rows = {}
     for node in tree.preorder_node_iter():
         if node not in todo or node not in calibrations or calibrations[node].fixed or node not in used:
             continue
@@ -643,13 +632,7 @@ def _requery(tree, calibrations, z, outliers, conflict, conflict_with, reference
                    requery_n_estimates=str(n_again) if again is not None else "",
                    conflict_class=cls, conflict_detail=detail, conflict_confidence=confidence)
         rows[node] = row
-        if cls in ("under_spanning", "pick_specific") and again:
-            # the same rules as for the first age: configured floor and single-estimate default, and the
-            # node's synthesis support; disjoint picks are genera and species, never enclosing taxa
-            sigma = _sigma(_cache_entry(timetree, ids), node, False, synth_nodes, support, fit_settings or {})
-            row["requery_sigma"] = f"{sigma:.4f}"
-            replace[node] = (again, sigma)
-    return rows, replace
+    return rows
 
 
 def age_fit_summary(report: list[dict], severe: float = 1.5) -> dict:
@@ -662,12 +645,8 @@ def age_fit_summary(report: list[dict], severe: float = 1.5) -> dict:
         calibrations[row["node"]] = agefit.Calibration(float(row["timetree_age"]), float(row["calibration_sigma"]))
         final[row["node"]] = float(row["age"])
         precedence[row["node"]] = float(row["precedence_age"])
-    # with requery.mode apply, some calibrations were replaced by their re-query age (#53)
-    effective = {n: agefit.Calibration(float(r["requery_age"]), float(r["requery_sigma"]))
-                 for r in report for n in [r["node"]] if n in calibrations and r.get("requery_applied") == "yes"}
     return {
         "final": agefit.misfit(final, calibrations, severe),
-        "final_against_requery": agefit.misfit(final, {**calibrations, **effective}, severe) if effective else None,
         "precedence": agefit.misfit(precedence, calibrations, severe),
         "outliers": sum(1 for r in report if r.get("calibration_outlier") == "yes"),
     }
