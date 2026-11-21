@@ -3,6 +3,7 @@
 import csv
 import gzip
 import math
+import random
 from pathlib import Path
 
 import dendropy
@@ -134,3 +135,41 @@ def spearman(x, y):
     cov = sum((p - ma) * (q - mb) for p, q in zip(a, b))
     va, vb = sum((p - ma) ** 2 for p in a), sum((q - mb) ** 2 for q in b)
     return cov / math.sqrt(va * vb) if va and vb else math.nan
+
+
+DESIGNS = ("150 units at random", "100 genera, one unit each", "100 genera, five units each")
+
+
+def draw_designs(units, unit_genus, seed, draws=200):
+    """The samples of the three PD designs of metric 6a: ``draws`` samples each, drawn with ``seed`` from
+    ``units`` (sorted first, so that the draw does not depend on their order), grouped by ``unit_genus``."""
+    units = sorted(units)
+    by_genus = {}
+    for u in units:
+        if u in unit_genus:
+            by_genus.setdefault(unit_genus[u], []).append(u)
+    r = random.Random(seed)
+    names, many = sorted(by_genus), sorted(g for g, us in by_genus.items() if len(us) >= 5)
+    return {
+        DESIGNS[0]: [r.sample(units, 150) for _ in range(draws)],
+        DESIGNS[1]: [[r.choice(by_genus[g]) for g in r.sample(names, 100)] for _ in range(draws)],
+        DESIGNS[2]: [[u for g in r.sample(many, 100) for u in r.sample(by_genus[g], 5)] for _ in range(draws)],
+    }
+
+
+def paired_pd(clean, runs, unit_genus, seed, draws):
+    """Version 3 of the PD metrics (#104): per design and setting, the mean over replicates of the rank
+    correlation of PD between the clean final tree and the final tree of each replicate.
+
+    ``clean`` maps a setting to its clean ``PDTree``; ``runs`` is a list of replicates, each mapping a setting
+    to the ``PDTree`` of that replicate. Each replicate's samples are drawn once, from the units in all of
+    its trees and in both clean trees, and used for both settings, so that the settings are compared on the
+    same samples."""
+    out = {arm: {d: [] for d in DESIGNS} for arm in clean}
+    for replicate in runs:
+        common = set.intersection(*(set(t.tip) for t in list(clean.values()) + list(replicate.values())))
+        samples = draw_designs(common, unit_genus, seed, draws)
+        for arm, tree in replicate.items():
+            for design, sets in samples.items():
+                out[arm][design].append(spearman([clean[arm].pd(s) for s in sets], [tree.pd(s) for s in sets]))
+    return {arm: {d: sum(v) / len(v) for d, v in per.items()} for arm, per in out.items()}
