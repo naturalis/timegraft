@@ -352,3 +352,87 @@ def test_target_not_in_the_synthesis_is_not_searched(tmp_path):
     assert synth.label[moved["Mytilus"][0]] == "ott3"
     assert row["reanchor_how"] == "reference_lineage;ancestor_in_synthesis;enclosing_node"
     assert row["reanchor_species_inside"] == ""
+
+
+# Only the name moved (#101). OTT gave the name Mytilus to a starfish genus (5) without the mussels' species:
+# those stay in Mytilidae under the mussels' own taxon, renamed (40), as the `name` variant of inject.py does.
+NAME_ONLY_TAXONOMY = "\n".join(
+    line.replace("|\t5\t|\tMytilus edulis", "|\t40\t|\tMytilus edulis")
+        .replace("|\t5\t|\tMytilus trossulus", "|\t40\t|\tMytilus trossulus")
+        .replace("|\t5\t|\tMytilus galloprovincialis", "|\t40\t|\tMytilus galloprovincialis")
+    for line in RESOLVED_TAXONOMY.splitlines()) + "\n40\t|\t4\t|\tMytilus zzmerged\t|\tgenus\t|\tncbi:6548\t|\t\t|\t\t|\n"
+
+
+def _name_only(tmp_path, by_name=True):
+    (tmp_path / "taxonomy.tsv").write_text(NAME_ONLY_TAXONOMY)
+    (tmp_path / "synth.tre").write_text(RESOLVED_SYNTH)
+    taxonomy = Taxonomy(tmp_path / "taxonomy.tsv", set(RESOLVED_GENERA), context="Metazoa", species_by_name=by_name)
+    synth = SynthTree(tmp_path / "synth.tre")
+    anchors, status = genus_anchors(synth, taxonomy, RESOLVED_GENERA, rule="majority")
+    return taxonomy, synth, anchors, status
+
+
+def test_name_only_species_are_indexed(tmp_path):
+    taxonomy, *_ = _name_only(tmp_path)
+    # the matched taxon holds only the starfish; the mussels are found by name, and nothing else is
+    assert {uid for uid, _ in taxonomy.species["Mytilus"]} == {30, 31, 32, 33}
+    assert sorted(taxonomy.species_named["Mytilus"]) == [(6, "Mytilus edulis", 6550), (7, "Mytilus trossulus", 6551),
+                                                         (8, "Mytilus galloprovincialis", 29158)]
+    assert set(taxonomy.species_named) == {"Mytilus"}
+    assert not _name_only(tmp_path, by_name=False)[0].species_named
+
+
+def test_name_only_genus_is_attached_within_the_target(tmp_path):
+    # the genus's species are found by name inside Mytilidae and the genus goes to its own clade: Perna keeps
+    # Mytilus as its sister, as in the merge case of #70
+    row, node, sisters = _move(*_name_only(tmp_path), "majority")
+    assert node == "mrcaott6ott7" and row["reanchor_species_inside"] == "3"
+    assert row["reanchor_how"] == "reference_lineage;taxon_in_synthesis;majority_clade_in_target;by_name"
+    assert sisters["Perna"] == ["Mytilus"] and sisters["Mytilus"] == ["Perna"]
+
+
+def test_name_only_without_the_name_search(tmp_path):
+    # without the search the genus goes to the family's node, as before #101, and Perna loses its sister
+    row, node, sisters = _move(*_name_only(tmp_path, by_name=False), "majority")
+    assert node == "ott4" and row["reanchor_how"].endswith(";target_node")
+    assert set(sisters["Perna"]) == {"Modiolus", "Mytilus"}
+
+
+def test_name_search_stays_within_the_target(tmp_path):
+    taxonomy, synth, *_ = _name_only(tmp_path)
+    # species named after the genus but outside the target taxon in OTT are not taken, even if the synthesis
+    # places them inside the target node
+    node, how, n = ra.within_target(synth, taxonomy, "Mytilus", synth.index["ott4"], target_uid=13)
+    assert how == "target_node" and n == 0
+    # the sampled species are preferred among those found by name
+    node, how, n = ra.within_target(synth, taxonomy, "Mytilus", synth.index["ott4"], target_uid=4,
+                                    sampled={"Mytilus edulis", "Mytilus trossulus"})
+    assert synth.label[node] == "mrcaott6ott7" and how == "mrca_in_target;by_name" and n == 2
+    # where the matched taxon has species inside the target, the name search is not made
+    node, how, n = ra.within_target(synth, taxonomy, "Mytilus", synth.index["ott13"], target_uid=13)
+    assert how == "majority_clade_in_target" and n == 4
+
+
+def test_name_only_genus_is_dated_with_its_own_species(tmp_path):
+    from timegraft.otol_static import lookup_ids
+
+    taxonomy, *_ = _name_only(tmp_path)
+    # the matched taxon has no NCBI ids of the mussels' species; those found by name inside Mytilidae do
+    assert lookup_ids(taxonomy, "Mytilus") == [6548]
+    own = [(u, n) for u, _, n in ra.named_species(taxonomy, "Mytilus", 4)]
+    assert lookup_ids(taxonomy, "Mytilus", species=own) == [6548, 6550, 6551, 29158]
+    assert lookup_ids(taxonomy, "Mytilus", species=own, keep=lambda n: n != 6551) == [6548, 6550, 29158]
+    assert ra.named_species(taxonomy, "Mytilus", 13) == []
+
+
+def test_name_only_ids_without_the_identifier_check(tmp_path):
+    from timegraft.otol_static import lookup_ids
+
+    taxonomy, *_ = _name_only(tmp_path)
+    # with check_ids: false the species ids are still those found by name; the genus id is kept as it is
+    own = [(u, n) for u, _, n in ra.named_species(taxonomy, "Mytilus", 4)]
+    species = lookup_ids(taxonomy, "Mytilus", species=own)[1:]
+    assert ra.with_species(lookup_ids(taxonomy, "Mytilus"), species) == [6548, 6550, 6551, 29158]
+    assert ra.with_species([6548, 999], species) == [6548, 6550, 6551, 29158]
+    assert ra.with_species(6548, species) == [6548, 6550, 6551, 29158]
+    assert ra.with_species([None], []) == [None]

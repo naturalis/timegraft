@@ -57,7 +57,10 @@ try:
         # COL breaks ties between OTT homonyms, and only those (#48)
         prefer = {g: int(r["col_ott_id"]) for g, r in col_rows.items()
                   if r.get("col_ott_id") and r.get("col_confidence") in ("high", "medium")}
-        taxonomy = Taxonomy(snakemake.input.taxonomy, set(genera), context=settings.get("context"), prefer=prefer)
+        # species named after a genus outside its matched taxon, for re-anchoring within the target (#101)
+        by_name = bool((settings.get("reanchor") or {}).get("species_by_name", True))
+        taxonomy = Taxonomy(snakemake.input.taxonomy, set(genera), context=settings.get("context"), prefer=prefer,
+                            species_by_name=by_name)
         synth = SynthTree(snakemake.input.synth)
         # genera that are not a node of the synthesis: anchored on the majority clade of their species,
         # preferably of the species sampled in this run (#51)
@@ -146,7 +149,7 @@ try:
                                             sampled=sampled if an_cfg.get("prefer_sampled", True) else None,
                                             share=float(an_cfg.get("share", 0.5)),
                                             min_species=int(an_cfg.get("min_species", 3)),
-                                            min_sampled=int(an_cfg.get("min_sampled", 2)))
+                                            min_sampled=int(an_cfg.get("min_sampled", 2)), by_name=by_name)
                 if moved:
                     for g, (node, uid) in moved.items():
                         anchors[g], placed[g] = node, f"reanchored:{synth.label[node]}"
@@ -167,6 +170,14 @@ try:
                     for key in ("placement_action", "reanchor_how", "reanchor_species_inside"):
                         row[key] = provenance.get(row["genus"], {}).get(key, "")
                 extra.append(provenance)
+                # a genus whose species were found by name inside its target is dated with their ids, not with
+                # those of the matched taxon, which belong to another animal; its genus id is kept (#101). This
+                # holds with or without the identifier check below, which only filters the ids
+                own = {g: [(u, n) for u, _, n in ra.named_species(taxonomy, g, uid)]
+                       for g, (_, uid) in moved.items() if provenance[g]["reanchor_how"].endswith(";by_name")}
+                if not re_cfg.get("check_ids", True):
+                    for g in sorted(own):
+                        ncbi[g] = ra.with_species(ncbi[g], lookup_ids(taxonomy, g, species=own[g])[1:])
                 # the ids a moved genus is dated with: only those whose NCBI lineage agrees with its new place,
                 # so no species of another animal merged into it by OTT reaches TimeTree (#69)
                 if moved and re_cfg.get("check_ids", True):
@@ -179,8 +190,9 @@ try:
                                                 cc.LEVELS[re_cfg.get("min_severity", "class")])
                         for g in sorted(moved):
                             value = ncbi[g] if isinstance(ncbi[g], (list, tuple)) else [ncbi[g]]
-                            ncbi[g] = id_screen.screen(g, value,
-                                                       lambda keep, g=g: lookup_ids(taxonomy, g, keep=keep)[1:])
+                            ncbi[g] = id_screen.screen(
+                                g, value,
+                                lambda keep, g=g: lookup_ids(taxonomy, g, keep=keep, species=own.get(g))[1:])
                     finally:
                         cache.save()
             extra.append({r["genus"]: {k: r[k] for k in ("lineage_distance", "merged_id_distance",
