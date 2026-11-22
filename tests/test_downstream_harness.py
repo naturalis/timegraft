@@ -65,7 +65,7 @@ def test_memo_reuses_a_result_only_for_the_same_inputs(ds, tmp_path, monkeypatch
     calls = []
 
     def fake(genus, ingroup, outgroup, stem_age, marker_cfg, known_crowns, timetree_crowns=None, rooting=None,
-             rate=None, crown_basis=None):
+             rate=None, crown_basis=None, unit_species=None):
         calls.append(genus)
         return f"tree of {genus} at {stem_age}", {"genus": genus, "stem_age": stem_age}
 
@@ -83,4 +83,10 @@ def test_memo_reuses_a_result_only_for_the_same_inputs(ds, tmp_path, monkeypatch
     build.build_genus(args[0], args[1], [("o2", "TCGT")], *args[3:])
     build.build_genus(*args[:7], {"rule": "strict"}, *args[8:])
     assert len(calls) == 5 and stats["hits"] == 2
+    # the species named in the genus's own units matter (#79); those of other units do not
+    named = {"u1": ["A alpha"], "u2": ["A alpha"]}
+    build.build_genus(*args, named)
+    assert build.build_genus(*args, {**named, "x9": ["B beta"]}) is not None and len(calls) == 6
+    build.build_genus(*args, {**named, "u2": ["A beta"]})
+    assert len(calls) == 7 and stats["hits"] == 3
 

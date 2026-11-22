@@ -1,0 +1,10 @@
+genus	n_units	n_species	root_to_tip	barcode_age	stem_age	crown_before	crown_after	crown_upper_before	crown_upper_after	crown_source_after
+Apseudes	2	1	0.020650	1.7957	244.3877	19.8735	19.3193	219.9489	19.3193	midpoint_barcode_max
+Elona	2	1	0.008562	0.7446	286.3356	13.8519	7.6666	257.7021	7.6666	midpoint_barcode_max
+Euconulus	10	5	0.031452	2.7349	466.3507	33.8805	30.6931	419.7156	30.6931	midpoint_barcode_max
+Gibbulinella	2	1	0.025984	2.2595	466.3507	30.7952	24.8121	419.7156	24.8121	midpoint_barcode_max
+Gittenbergeria	2	1	0.014070	1.2235	286.3356	17.7563	12.8469	257.7021	12.8469	midpoint_barcode_max
+Heptranchias	4	1	0.013696	1.1909	256.3431	16.5757	12.4884	230.7088	12.4884	midpoint_barcode_max
+Marthasterias	2	1	0.014831	1.2897	366.4796	20.6247	13.5799	329.8316	13.5799	midpoint_barcode_max
+Sphaerocoryne	3	1	0.017346	1.5084	276.9455	19.3897	16.0295	249.2510	16.0295	midpoint_barcode_max
+Xerotricha	2	1	0.010145	0.8822	194.4023	12.4238	9.1345	174.9621	9.1345	midpoint_barcode_max

@@ -208,6 +208,9 @@ markers:
         rate_factor: 10      # how much slower than the rate a genus can evolve (sponges, anthozoans)
         saturation: 0.15     # root-to-tip distance at which COI saturates within genera
         young_factor: 3      # a TimeTree crown this many times younger than the barcodes is not used
+        barcode_cap: true    # where only the stem bounds the crown, the barcode age times the allowance
+                             # above bounds it too, and the midpoint is kept below it, unless the units
+                             # lump species (#79)
     dating:
       method: mpl            # mpl (mean path length, built in), lsd2 (least squares, built from source)
                              # or chronos (penalised likelihood, needs R with ape; not the default, as

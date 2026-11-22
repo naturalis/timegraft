@@ -7,7 +7,7 @@ import shutil
 import statistics
 import subprocess
 import tempfile
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from pathlib import Path
 
 import dendropy
@@ -65,6 +65,7 @@ def build_genus(
     rooting: dict | None = None,
     rate: tuple[float | None, str] | None = None,
     crown_basis: dict[str, str] | None = None,
+    unit_species: Mapping[str, Iterable[str]] | None = None,
 ) -> tuple[dendropy.Tree, dict]:
     """Return the dated ingroup subtree and a provenance record.
 
@@ -82,6 +83,9 @@ def build_genus(
     tolerant, mad, true and keep.
     ``crown_basis`` gives per genus which species the TimeTree crown age is
     the crown of (``sampled``, ``global``, ``global_fallback``; #54).
+    ``unit_species`` gives per unit the species named among its records
+    (:func:`species_names`); where the units of the subtree lump species, the
+    barcodes do not cap the crown age (#79).
     """
     rooting = rooting or {}
     if len(ingroup) < 2:
@@ -107,7 +111,7 @@ def build_genus(
             # rebuild without them, once: units misplaced in the rebuilt tree are kept (#75)
             tree, provenance = build_genus(genus, kept, outgroup, stem_age, marker_cfg, known_crowns,
                                            timetree_crowns, {**rooting, "misplaced_action": "keep"}, rate,
-                                           crown_basis)
+                                           crown_basis, unit_species)
             provenance.update(misplaced_set_aside=";".join(rooted["misplaced"]), misplaced_action="set_aside")
             return tree, provenance
         misplaced_action = "kept: fewer than two units would be left"
@@ -129,11 +133,14 @@ def build_genus(
             # rebuild without them; they are placed later like units set aside by screening
             flagged = {**marker_cfg, "screening": {**screening, "rate_outlier_action": "flag"}}
             tree, provenance = build_genus(genus, kept, outgroup, stem_age, flagged, known_crowns, timetree_crowns,
-                                           rooting, rate, crown_basis)
+                                           rooting, rate, crown_basis, unit_species)
             provenance.update(rate_outliers=";".join(outliers["units"]), rate_outlier_z=outliers["max_z"],
                               rate_outlier_action="set_aside")
             return tree, provenance
         outliers["action"] = "kept: fewer than two units would be left"
+
+    # species named among the records of the subtree's units (#79)
+    n_species = len({n for unit in in_names for n in (unit_species or {}).get(unit, ())})
 
     def choose_crown(t: dendropy.Tree):
         return crown_age(
@@ -149,6 +156,8 @@ def build_genus(
             timetree_bound=crown_cfg.get("timetree_bound", "max"),
             estimate=crown_cfg.get("estimate", "minimum"),
             plausibility=crown_cfg.get("plausibility"),
+            n_units=len(in_names),
+            n_species=n_species if unit_species is not None else None,
         )
 
     dating = marker_cfg.get("dating", {"method": "mpl"})
@@ -181,6 +190,7 @@ def build_genus(
     provenance = {
         "genus": genus,
         "n_units": len(ingroup),
+        "n_species": n_species if unit_species is not None else "",
         "stem_age": f"{stem_age:.4f}",
         "crown_age": f"{crown.age:.4f}",
         "crown_source": crown.source,
@@ -251,10 +261,29 @@ def rate_outliers(tree: dendropy.Tree, threshold: float = 3.5, min_units: int = 
     return {"units": sorted(n for n, v in z.items() if v > threshold), "max_z": f"{max(z.values()):.2f}"}
 
 
+def species_names(records: Iterable[Mapping[str, str]]) -> dict[str, set[str]]:
+    """The species named among the records of each unit (``unit_id`` to names), for the barcode cap (#79).
+
+    Only full binomials count: a name of two or more words whose second word
+    is not an open nomenclature marker (``sp.``, ``cf.``, ``aff.`` and the like).
+    """
+    out: dict[str, set[str]] = {}
+    for record in records:
+        name, unit = " ".join((record.get("species") or "").split()), record.get("unit_id")
+        words = name.split(" ")
+        if unit and len(words) >= 2 and words[1].rstrip(".").lower() not in _OPEN:
+            out.setdefault(unit, set()).add(name)
+    return out
+
+
+_OPEN = {"sp", "spp", "cf", "aff", "nr", "gr", "complex", "indet"}
+
+
 def crown_decision(crown, basis: str = "") -> str:
     """How the crown age was decided, in words, for the provenance table (#54)."""
     tt = f"timetree[{basis}]" if basis else "timetree"
-    upper = {"timetree": tt, "stem": "stem cap", "table": "table max"}.get(crown.upper_source, crown.upper_source)
+    upper = {"timetree": tt, "stem": "stem cap", "table": "table max",
+             "barcodes": "barcode cap"}.get(crown.upper_source, crown.upper_source)
     if crown.source in ("table", "table_capped"):
         return "table" if crown.source == "table" else "table, capped by the stem"
     if crown.source == "timetree":
@@ -262,8 +291,12 @@ def crown_decision(crown, basis: str = "") -> str:
     if crown.source == "midpoint_timetree_demoted":
         return (f"{tt} implausible (ratio {crown.timetree_ratio:.1f} > {crown.ratio_allowed:.1f}): "
                 f"midpoint of barcodes and {tt}")
-    if crown.source == "midpoint":
+    if crown.source == "midpoint" and crown.upper_source == "barcodes":
+        how = "midpoint of barcodes and stem cap, below the barcode cap"
+    elif crown.source == "midpoint":
         how = f"midpoint of barcodes and {upper}"
+    elif crown.source == "midpoint_barcode_max":
+        how = "midpoint of barcodes and stem cap, at the barcode cap"
     elif crown.source.endswith(("_capped", "_timetree_max", "_table_max")):
         how = f"{crown.source.split('_')[0]}, at the upper bound ({upper})"
     elif crown.source.endswith("_table_min"):
