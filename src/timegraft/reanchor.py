@@ -199,6 +199,13 @@ def named_species(taxonomy, genus: str, target_uid: int | None) -> list[tuple[in
             if target_uid is None or _in_taxon(taxonomy, s[0], target_uid)]
 
 
+def with_species(ids, species: Sequence) -> list:
+    """A genus's identifier list (genus id first, or a bare genus id) with its species ids replaced by
+    ``species``: for a genus whose species were found by name, when its ids are not checked (#101)."""
+    value = list(ids) if isinstance(ids, (list, tuple)) else [ids]
+    return [value[0] if value else None] + list(species)
+
+
 def within_target(synth, taxonomy, genus: str, target_node: int, sampled: set[str] | None = None,
                   share: float = 0.5, min_species: int = 3, min_sampled: int = 2, target_uid: int | None = None,
                   by_name: bool = True) -> tuple[int, str, int]:

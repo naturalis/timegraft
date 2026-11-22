@@ -423,3 +423,16 @@ def test_name_only_genus_is_dated_with_its_own_species(tmp_path):
     assert lookup_ids(taxonomy, "Mytilus", species=own) == [6548, 6550, 6551, 29158]
     assert lookup_ids(taxonomy, "Mytilus", species=own, keep=lambda n: n != 6551) == [6548, 6550, 29158]
     assert ra.named_species(taxonomy, "Mytilus", 13) == []
+
+
+def test_name_only_ids_without_the_identifier_check(tmp_path):
+    from timegraft.otol_static import lookup_ids
+
+    taxonomy, *_ = _name_only(tmp_path)
+    # with check_ids: false the species ids are still those found by name; the genus id is kept as it is
+    own = [(u, n) for u, _, n in ra.named_species(taxonomy, "Mytilus", 4)]
+    species = lookup_ids(taxonomy, "Mytilus", species=own)[1:]
+    assert ra.with_species(lookup_ids(taxonomy, "Mytilus"), species) == [6548, 6550, 6551, 29158]
+    assert ra.with_species([6548, 999], species) == [6548, 6550, 6551, 29158]
+    assert ra.with_species(6548, species) == [6548, 6550, 6551, 29158]
+    assert ra.with_species([None], []) == [None]

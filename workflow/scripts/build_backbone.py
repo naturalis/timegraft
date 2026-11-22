@@ -170,6 +170,14 @@ try:
                     for key in ("placement_action", "reanchor_how", "reanchor_species_inside"):
                         row[key] = provenance.get(row["genus"], {}).get(key, "")
                 extra.append(provenance)
+                # a genus whose species were found by name inside its target is dated with their ids, not with
+                # those of the matched taxon, which belong to another animal; its genus id is kept (#101). This
+                # holds with or without the identifier check below, which only filters the ids
+                own = {g: [(u, n) for u, _, n in ra.named_species(taxonomy, g, uid)]
+                       for g, (_, uid) in moved.items() if provenance[g]["reanchor_how"].endswith(";by_name")}
+                if not re_cfg.get("check_ids", True):
+                    for g in sorted(own):
+                        ncbi[g] = ra.with_species(ncbi[g], lookup_ids(taxonomy, g, species=own[g])[1:])
                 # the ids a moved genus is dated with: only those whose NCBI lineage agrees with its new place,
                 # so no species of another animal merged into it by OTT reaches TimeTree (#69)
                 if moved and re_cfg.get("check_ids", True):
@@ -182,12 +190,9 @@ try:
                                                 cc.LEVELS[re_cfg.get("min_severity", "class")])
                         for g in sorted(moved):
                             value = ncbi[g] if isinstance(ncbi[g], (list, tuple)) else [ncbi[g]]
-                            # a genus whose species were found by name inside its target is dated with their
-                            # ids, not with those of the matched taxon, which belong to another animal (#101)
-                            own = ([(u, n) for u, _, n in ra.named_species(taxonomy, g, moved[g][1])]
-                                   if provenance[g]["reanchor_how"].endswith(";by_name") else None)
                             ncbi[g] = id_screen.screen(
-                                g, value, lambda keep, g=g, own=own: lookup_ids(taxonomy, g, keep=keep, species=own)[1:])
+                                g, value,
+                                lambda keep, g=g: lookup_ids(taxonomy, g, keep=keep, species=own.get(g))[1:])
                     finally:
                         cache.save()
             extra.append({r["genus"]: {k: r[k] for k in ("lineage_distance", "merged_id_distance",
