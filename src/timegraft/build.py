@@ -139,10 +139,16 @@ def build_genus(
             return tree, provenance
         outliers["action"] = "kept: fewer than two units would be left"
 
-    # species named among the records of the subtree's units (#79)
-    n_species = len({n for unit in in_names for n in (unit_species or {}).get(unit, ())})
+    def species_count(units) -> int:
+        """Species named among the records of ``units`` (#79)."""
+        return len({n for unit in units for n in (unit_species or {}).get(unit, ())})
+
+    n_species = species_count(in_names)
+    in_set = set(in_names)
 
     def choose_crown(t: dendropy.Tree):
+        # counted on the units of this tree: an alternative without the misplaced units has fewer (#79)
+        units = [leaf.taxon.label for leaf in t.leaf_node_iter() if leaf.taxon.label in in_set]
         return crown_age(
             genus,
             stem_age,
@@ -156,8 +162,8 @@ def build_genus(
             timetree_bound=crown_cfg.get("timetree_bound", "max"),
             estimate=crown_cfg.get("estimate", "minimum"),
             plausibility=crown_cfg.get("plausibility"),
-            n_units=len(in_names),
-            n_species=n_species if unit_species is not None else None,
+            n_units=len(units),
+            n_species=species_count(units) if unit_species is not None else None,
         )
 
     dating = marker_cfg.get("dating", {"method": "mpl"})
@@ -264,15 +270,17 @@ def rate_outliers(tree: dendropy.Tree, threshold: float = 3.5, min_units: int = 
 def species_names(records: Iterable[Mapping[str, str]]) -> dict[str, set[str]]:
     """The species named among the records of each unit (``unit_id`` to names), for the barcode cap (#79).
 
-    Only full binomials count: a name of two or more words whose second word
-    is not an open nomenclature marker (``sp.``, ``cf.``, ``aff.`` and the like).
+    Only binomials count, reduced to genus and specific epithet (a subgenus in
+    brackets is skipped), so that a subspecies or an author does not count as
+    another species; a name whose
+    second word is an open nomenclature marker (``sp.``, ``cf.``, ``aff.`` and
+    the like) does not count.
     """
     out: dict[str, set[str]] = {}
     for record in records:
-        name, unit = " ".join((record.get("species") or "").split()), record.get("unit_id")
-        words = name.split(" ")
+        words, unit = [w for w in (record.get("species") or "").split() if not w.startswith("(")], record.get("unit_id")
         if unit and len(words) >= 2 and words[1].rstrip(".").lower() not in _OPEN:
-            out.setdefault(unit, set()).add(name)
+            out.setdefault(unit, set()).add(f"{words[0]} {words[1]}")
     return out
 
 

@@ -13,9 +13,14 @@ PYTHONPATH=$B python $B/downstream.py --repo . --backbone $BENCH70/exp/default_c
     --units $BENCH73/branch/results/iberia/units --out clean_default --memo memo --jobs 2 --threads 2
 ```
 
-The genus stage and grafting ran. Placement did not, as VSEARCH was not on the path of the machine. Placement does not touch the crowns, and 3a to 3d read only `provenance.tsv`, which grafting writes. The run before is `exp/downstream/clean/default` of the benchmark of #70, and legacy is the full run of `main` at `e20fdf6`, as in the gate.
+The run went through to placement: its 1,786 units are placed in the same genera with the same nearest units as before, only their attachment ages follow the crowns. The run before is `exp/downstream/clean/default` of the benchmark of #70, and legacy is the full run of `main` at `e20fdf6`, as in the gate.
 
-The wording of `crown_decision` for midpoints below the barcode cap was corrected after the run ("midpoint of barcodes and stem cap, below the barcode cap"). Only that text column is affected, not any age.
+The run was made twice. The second run, reported here, followed three corrections from the review of #114:
+- the cap is not applied where the table gives the genus only a minimum;
+- species are counted on the units of each tree a crown is chosen for, including the alternative root without misplaced units;
+- species are reduced to genus and specific epithet, so subspecies and authors do not count twice.
+
+Compared with the first run, 84 genera count fewer species. One, *Echinolittorina* (62 units, 68 species named before and 51 after), is no longer exempt; its upper bound is now the barcode cap, but its crown does not change. Nothing else changed apart from the wording of `crown_decision`.
 
 ## Result
 
@@ -44,9 +49,9 @@ The wording of `crown_decision` for midpoints below the barcode cap was correcte
 | *Sphaerocoryne* | 3 | 1 | 1.51 | 276.9 | 19.4 | 16.0 |
 | *Xerotricha* | 2 | 1 | 0.88 | 194.4 | 12.4 | 9.1 |
 
-The upper bound (`crown_upper`, `crown_upper_source` `barcodes`) changes for 227 more genera whose midpoint was already below the cap. That narrows the upper PD bound of the diversity step (`faith_pd_crown_max`), but no crown age. The crown range over alternative roots (`crown_age_min`, `crown_age_max`) changes for the nine and for *Myxilla*, one of whose other roots now meets the cap (minimum 16.8 to 9.8 Ma; its crown, 40.9 Ma, is unchanged). Every other column of `provenance.tsv` is identical in all 1,186 genera.
+The upper bound (`crown_upper`, `crown_upper_source` `barcodes`) changes for 228 more genera whose midpoint was already below the cap. That narrows the upper PD bound of the diversity step (`faith_pd_crown_max`), but no crown age. The crown range over alternative roots (`crown_age_min`, `crown_age_max`) changes for the nine and for *Myxilla*, one of whose other roots now meets the cap (minimum 16.8 to 9.8 Ma; its crown, 40.9 Ma, is unchanged). Every other column of `provenance.tsv` is identical in all 1,186 genera.
 
-**Lumped units.** Ten genera have more species named among the records of their units than units, and a barcode cap below their stem bound (`exempt_lumped.tsv`). For eight of them the midpoint is below the cap anyway. The two it exempts are *Callogorgia* (an octocoral, 4 species in 3 units; crown 19.5 Ma, would have been 18.5) and *Paratimea* (a sponge, 5 species in 3 units; 14.3 Ma, would have been 9.9). In both groups mitochondrial COI evolves very slowly, so an old crown with little divergence can be genuine there. Species are counted as full binomials only, without `sp.`, `cf.` and the like. With that count *Apseudes* and *Xerotricha* have one species each, so they are capped, not exempt, unlike what the comment on the issue expected.
+**Lumped units.** Nine genera have more species named among the records of their units than units, and a barcode cap below their stem bound (`exempt_lumped.tsv`). For seven of them the midpoint is below the cap anyway. The two it exempts are *Callogorgia* (an octocoral, 4 species in 3 units; crown 19.5 Ma, would have been 18.5) and *Paratimea* (a sponge, 5 species in 3 units; 14.3 Ma, would have been 9.9). In both groups mitochondrial COI evolves very slowly, so an old crown with little divergence can be genuine there. Species are counted as binomials only (genus and specific epithet, without `sp.`, `cf.` and the like). With that count *Apseudes* and *Xerotricha* have one species each, so they are capped, not exempt, unlike what the comment on the issue expected.
 
 **Why the midpoint is not centred on the cap.** The first version replaced the stem bound by the barcode bound and took the midpoint against it. That changed 185 crowns in the six shards that had finished, each to about 3.2 times its barcode age (√10.5).
 

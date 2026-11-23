@@ -188,8 +188,9 @@ def crown_age(
     interpolated node). Where the units lump species (``n_species`` above
     ``n_units``), COI evolves too slowly to tell the species apart, the rate
     may be slower than ``rate_factor`` allows, and the cap is not applied.
-    Where a TimeTree crown or the table bounds the crown, it is not applied
-    either: those are evidence about the node itself, tested as above.
+    Where a TimeTree crown bounds the crown, or the table gives the genus any
+    bound (a minimum included), it is not applied either: those are evidence
+    about the node itself.
     """
     if timetree_bound not in ("max", "none"):
         raise ValueError(f"unknown timetree_bound {timetree_bound!r}; use 'max' or 'none'")
@@ -228,7 +229,8 @@ def crown_age(
 
     upper, upper_source = cap, "stem"
     table_min = None
-    if entry["min"] is not None or entry["max"] is not None:
+    tabled = entry["min"] is not None or entry["max"] is not None
+    if tabled:
         if entry["max"] is not None and entry["max"] < upper:
             upper, upper_source = entry["max"], "table"
         table_min = entry["min"]
@@ -239,7 +241,10 @@ def crown_age(
     # it lies above it: centred on the barcode bound, midpoints came out too young against TimeTree
     centre = upper
     lumped = n_species is not None and n_units is not None and n_species > n_units
-    if (upper_source == "stem" and method == "rate" and plausibility and plausibility.get("enabled", True)
+    # not where the table gives the genus any bound, a minimum included: the table's ages are evidence about
+    # the crown itself, and a barcode bound below a table minimum would override it
+    if (upper_source == "stem" and not tabled and method == "rate" and plausibility
+            and plausibility.get("enabled", True)
             and plausibility.get("barcode_cap", False) and not lumped and own > 0):
         allowed = float(plausibility.get("rate_factor", 10.0)) * saturation_factor(
             mean_root_to_tip(tree), float(plausibility.get("saturation", 0.15)))

@@ -212,3 +212,27 @@ def test_crown_decision_with_the_barcode_cap():
     assert crown_decision(mild) == "midpoint of barcodes and stem cap, below the barcode cap"
     capped = crown_age("G", 366.5, _tree(0.0148), {}, **kw)
     assert crown_decision(capped) == "midpoint of barcodes and stem cap, at the barcode cap"
+
+
+def test_barcode_cap_not_where_the_table_gives_only_a_minimum():
+    # barcode age 1 Ma, stem 1,000 Ma, a table minimum of 20 Ma: the table is evidence about the crown, and the
+    # barcode bound (about 10 Ma) would put the crown below it
+    kw = dict(method="rate", rate=0.01, estimate="timetree_midpoint", plausibility=CAP, n_units=2, n_species=1)
+    tabled = crown_age("G", 1000.0, _tree(0.01), {"G": {"min": 20.0}}, **kw)
+    assert tabled.upper_source == "stem" and tabled.age >= 20.0
+    assert tabled.age == pytest.approx(crown_age("G", 1000.0, _tree(0.01), {"G": {"min": 20.0}},
+                                                 **{**kw, "plausibility": ON}).age)
+
+
+def test_species_names_are_reduced_to_binomials():
+    from timegraft.build import species_names
+
+    records = [{"unit_id": "U1", "species": "Genus alpha"},
+               {"unit_id": "U1", "species": "Genus alpha alpha"},
+               {"unit_id": "U2", "species": "Genus alpha beta"},
+               {"unit_id": "U2", "species": "Genus alpha Linnaeus, 1758"},
+               {"unit_id": "U2", "species": "Genus (Subgenus) alpha"},
+               {"unit_id": "U2", "species": "Genus (Subgenus) sp."}]
+    names = species_names(records)
+    assert names == {"U1": {"Genus alpha"}, "U2": {"Genus alpha"}}
+    assert len(set().union(*names.values())) == 1
