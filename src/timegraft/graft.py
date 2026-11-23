@@ -8,6 +8,7 @@ PROVENANCE_COLUMNS = (
     "genus",
     "status",
     "n_units",
+    "n_species",
     "stem_age",
     "crown_age",
     "crown_source",

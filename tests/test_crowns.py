@@ -135,3 +135,104 @@ def test_sampled_species_fallbacks(taxonomy):
     assert (row["crown_age"], row["crown_basis"], row["n_sampled_species"]) == ("5.0000", "global", "")
     with pytest.raises(ValueError):
         crown_ages(taxonomy, tt, ["Mytilus"], basis="regional")
+
+
+CAP = {**ON, "barcode_cap": True}
+
+
+def test_barcode_cap_on_the_midpoint():
+    # Marthasterias (#79): one species in two units, barcode age 1.29 Ma, stem 366.5 Ma, no TimeTree crown
+    rate, d = 0.0115, 0.0148
+    kw = dict(method="rate", rate=rate, estimate="timetree_midpoint", n_units=2, n_species=1)
+    before = crown_age("G", 366.5, _tree(d), {}, plausibility=ON, **kw)
+    assert before.source == "midpoint" and before.upper_source == "stem"
+    assert before.age == pytest.approx(math.sqrt(d / rate * 0.9 * 366.5)) and before.age > 20
+    capped = crown_age("G", 366.5, _tree(d), {}, plausibility=CAP, **kw)
+    allowed = 10 * saturation_factor(d, 0.15)
+    assert capped.upper_source == "barcodes" and capped.upper == pytest.approx(d / rate * allowed)
+    # the midpoint against the stem (20.6 Ma) is more than the barcodes allow: it goes to their bound
+    assert capped.source == "midpoint_barcode_max" and capped.age == pytest.approx(d / rate * allowed)
+    assert 13 < capped.age < 14 and capped.lower == pytest.approx(d / rate)
+    # where the midpoint against the stem is within the barcode bound, it stays: only the bound is reported
+    mild = crown_age("G", 60.0, _tree(d), {}, plausibility=CAP, **kw)
+    assert mild.upper_source == "barcodes" and mild.upper == pytest.approx(d / rate * allowed)
+    assert mild.source == "midpoint" and mild.age == pytest.approx(math.sqrt(d / rate * 54.0))
+    # where the stem is the tighter bound, it stays the bound
+    near = crown_age("G", 10.0, _tree(d), {}, plausibility=CAP, **kw)
+    assert near.upper_source == "stem" and near.upper == pytest.approx(9.0)
+    # off by default, and with the plausibility test off
+    assert crown_age("G", 366.5, _tree(d), {}, plausibility={**CAP, "barcode_cap": False}, **kw).upper_source == "stem"
+    assert crown_age("G", 366.5, _tree(d), {}, plausibility={**CAP, "enabled": False}, **kw).upper_source == "stem"
+    # the minimum estimate is unaffected: the cap is always above the barcode age
+    low = crown_age("G", 366.5, _tree(d), {}, plausibility=CAP, **{**kw, "estimate": "minimum"})
+    assert low.source == "rate" and low.age == pytest.approx(d / rate)
+
+
+def test_barcode_cap_not_where_units_lump_species():
+    # Callogorgia (#79): 9 species named in 3 units, COI too slow to tell them apart
+    kw = dict(method="rate", rate=0.0115, estimate="timetree_midpoint", plausibility=CAP)
+    lumped = crown_age("G", 244.3, _tree(0.0198), {}, n_units=3, n_species=9, **kw)
+    assert lumped.upper_source == "stem" and lumped.age > 19
+    # as many species as units is no lumping; without species counts the cap applies
+    even = crown_age("G", 244.3, _tree(0.0198), {}, n_units=3, n_species=3, **kw)
+    assert even.upper_source == "barcodes" and even.source == "midpoint_barcode_max"
+    assert crown_age("G", 244.3, _tree(0.0198), {}, **kw).upper_source == "barcodes"
+
+
+def test_barcode_cap_not_where_timetree_or_the_table_bound_the_crown():
+    kw = dict(method="rate", rate=0.01, estimate="timetree_midpoint", plausibility=CAP, n_units=2, n_species=1)
+    # a TimeTree crown is evidence about the node: it is tested (#54), not capped
+    tt = crown_age("G", 232, _tree(0.013), {}, suggested={"G": 69.0}, **kw)
+    assert tt.source == "midpoint_timetree_demoted" and tt.upper == 69.0 and tt.upper_source == "timetree"
+    table = crown_age("G", 232, _tree(0.013), {"G": {"max": 100.0}}, **kw)
+    assert table.upper_source == "table" and table.upper == 100.0
+    # saturated distances allow any age, so there is no cap
+    sat = crown_age("G", 400, _tree(0.16), {}, **kw)
+    assert sat.upper_source == "stem"
+
+
+def test_species_names_per_unit():
+    from timegraft.build import species_names
+
+    records = [{"unit_id": "U1", "species": "Marthasterias glacialis"},
+               {"unit_id": "U1", "species": " Marthasterias  glacialis "},
+               {"unit_id": "U1", "species": "Marthasterias sp."},
+               {"unit_id": "U2", "species": "Marthasterias cf. glacialis"},
+               {"unit_id": "U2", "species": "Marthasterias"},
+               {"unit_id": "U2", "species": ""},
+               {"unit_id": "U3", "species": "Callogorgia verticillata"},
+               {"unit_id": "U3", "species": "Callogorgia gilberti"}]
+    assert species_names(records) == {"U1": {"Marthasterias glacialis"},
+                                      "U3": {"Callogorgia gilberti", "Callogorgia verticillata"}}
+
+
+def test_crown_decision_with_the_barcode_cap():
+    kw = dict(method="rate", rate=0.0115, estimate="timetree_midpoint", plausibility=CAP, n_units=2, n_species=1)
+    mild = crown_age("G", 60.0, _tree(0.0148), {}, **kw)
+    assert crown_decision(mild) == "midpoint of barcodes and stem cap, below the barcode cap"
+    capped = crown_age("G", 366.5, _tree(0.0148), {}, **kw)
+    assert crown_decision(capped) == "midpoint of barcodes and stem cap, at the barcode cap"
+
+
+def test_barcode_cap_not_where_the_table_gives_only_a_minimum():
+    # barcode age 1 Ma, stem 1,000 Ma, a table minimum of 20 Ma: the table is evidence about the crown, and the
+    # barcode bound (about 10 Ma) would put the crown below it
+    kw = dict(method="rate", rate=0.01, estimate="timetree_midpoint", plausibility=CAP, n_units=2, n_species=1)
+    tabled = crown_age("G", 1000.0, _tree(0.01), {"G": {"min": 20.0}}, **kw)
+    assert tabled.upper_source == "stem" and tabled.age >= 20.0
+    assert tabled.age == pytest.approx(crown_age("G", 1000.0, _tree(0.01), {"G": {"min": 20.0}},
+                                                 **{**kw, "plausibility": ON}).age)
+
+
+def test_species_names_are_reduced_to_binomials():
+    from timegraft.build import species_names
+
+    records = [{"unit_id": "U1", "species": "Genus alpha"},
+               {"unit_id": "U1", "species": "Genus alpha alpha"},
+               {"unit_id": "U2", "species": "Genus alpha beta"},
+               {"unit_id": "U2", "species": "Genus alpha Linnaeus, 1758"},
+               {"unit_id": "U2", "species": "Genus (Subgenus) alpha"},
+               {"unit_id": "U2", "species": "Genus (Subgenus) sp."}]
+    names = species_names(records)
+    assert names == {"U1": {"Genus alpha"}, "U2": {"Genus alpha"}}
+    assert len(set().union(*names.values())) == 1

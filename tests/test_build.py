@@ -179,3 +179,31 @@ def test_misplaced_action_is_checked(genus):
     ingroup, outgroup = genus
     with pytest.raises(ValueError):
         build_genus("Genus", ingroup, outgroup, 40.0, MARKER, {}, rooting={"misplaced_action": "drop"})
+
+
+def test_species_of_the_units_decide_the_barcode_cap(genus):
+    # an old stem and little divergence: the midpoint is capped by the barcodes, unless the units lump species
+    ingroup, outgroup = genus
+    marker = {**MARKER, "crown_age": {**MARKER["crown_age"], "estimate": "timetree_midpoint",
+                                      "plausibility": {"enabled": True, "barcode_cap": True}}}
+    one = {u: ["Genus alpha"] for u, _ in ingroup}
+    _, prov = build_genus("Genus", ingroup, outgroup, 1e5, marker, {}, unit_species=one)
+    assert prov["n_species"] == 1 and prov["crown_upper_source"] == "barcodes"
+    assert prov["crown_source"] == "midpoint_barcode_max" and "at the barcode cap" in prov["crown_decision"]
+    many = {u: [f"Genus s{i}", f"Genus t{i}"] for i, (u, _) in enumerate(ingroup)}
+    _, prov = build_genus("Genus", ingroup, outgroup, 900.0, marker, {}, unit_species=many)
+    assert prov["n_species"] > prov["n_units"] and prov["crown_upper_source"] == "stem"
+    # without species, as before #79: no count, and the cap applies
+    _, prov = build_genus("Genus", ingroup, outgroup, 900.0, marker, {})
+    assert prov["n_species"] == "" and prov["crown_upper_source"] == "barcodes"
+
+
+def test_species_are_counted_on_the_units_of_the_tree(genus):
+    # names of units that are not in the subtree do not count towards lumping (#79)
+    ingroup, outgroup = genus
+    marker = {**MARKER, "crown_age": {**MARKER["crown_age"], "estimate": "timetree_midpoint",
+                                      "plausibility": {"enabled": True, "barcode_cap": True}}}
+    named = {u: ["Genus alpha"] for u, _ in ingroup}
+    named["not_in_the_tree"] = [f"Genus s{i}" for i in range(20)]
+    _, prov = build_genus("Genus", ingroup, outgroup, 1e5, marker, {}, unit_species=named)
+    assert prov["n_species"] == 1 and prov["crown_upper_source"] == "barcodes"

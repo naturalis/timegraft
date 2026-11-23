@@ -1,0 +1,5 @@
+metric	name	legacy	default_before	default_after	threshold
+3a	crown age more than 20 times the barcode age	7	0	0	0
+3b	crown age more than 10 times the barcode age	40	26	26	fewer than legacy
+3c	TimeTree crown used that is less than a third of the barcode age	5	0	0	0
+3d	root-to-tip below 0.02 and crown above 20 Ma	4	1	0	report

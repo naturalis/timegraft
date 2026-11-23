@@ -17,8 +17,8 @@ unassigned units whose genera are all among them.
 
 ``--memo`` keeps the result of every ``build_genus()`` call in DIR, keyed on everything it reads: the genus, its
 ingroup and outgroup sequences, its stem age, the marker and rooting settings, its own entries of the crown
-tables, its rate, and the source of ``src/timegraft``. A later call with the same inputs takes the result from
-DIR instead of computing it again. ``build_genus()`` is deterministic (``evaluate.py`` checks that the harness
+tables, its rate, the species named in its units (#79), and the source of ``src/timegraft``. A later call with
+the same inputs takes the result from DIR instead of computing it again. ``build_genus()`` is deterministic (``evaluate.py`` checks that the harness
 reproduces the full runs), so this changes nothing but the time; it saves most of the genus stage where an
 experiment leaves most genera's inputs as they were, as an injected misplacement does. The function is wrapped
 from the outside; the workflow script is not changed. ``place_units.py`` is not cached: its time goes into
@@ -113,10 +113,11 @@ def install_memo(repo, memo):
     stats = {"hits": 0, "misses": 0}
 
     def memoised(genus, ingroup, outgroup, stem_age, marker_cfg, known_crowns, timetree_crowns=None, rooting=None,
-                 rate=None, crown_basis=None):
+                 rate=None, crown_basis=None, unit_species=None):
+        species = None if unit_species is None else {u: sorted(unit_species.get(u, ())) for u, _ in ingroup}
         key = json.dumps([version, genus, ingroup, outgroup, repr(float(stem_age)), marker_cfg,
                           repr((known_crowns or {}).get(genus)), repr((timetree_crowns or {}).get(genus)), rooting,
-                          repr(rate), (crown_basis or {}).get(genus)], sort_keys=True, default=repr)
+                          repr(rate), (crown_basis or {}).get(genus), species], sort_keys=True, default=repr)
         path = Path(memo) / f"{hashlib.sha256(key.encode()).hexdigest()}.pickle"
         if path.exists():
             stats["hits"] += 1
@@ -124,7 +125,7 @@ def install_memo(repo, memo):
                 return pickle.load(handle)
         stats["misses"] += 1
         result = original(genus, ingroup, outgroup, stem_age, marker_cfg, known_crowns, timetree_crowns, rooting,
-                          rate, crown_basis)
+                          rate, crown_basis, unit_species)
         partial = path.with_suffix(f".{os.getpid()}.tmp")
         with open(partial, "wb") as handle:
             pickle.dump(result, handle)

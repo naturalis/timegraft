@@ -25,11 +25,13 @@ if snakemake.input.timetree_crowns:
             timetree_crowns[r["genus"]] = float(r["crown_age"])
             crown_basis[r["genus"]] = r.get("crown_basis") or "global"
 
-groups = defaultdict(lambda: {"in": [], "out": [], "stem": None})
+groups = defaultdict(lambda: {"in": [], "out": [], "stem": None, "species": {}})
 for row in read_tsv(snakemake.input.shard):
     group = groups[row["genus"]]
     group[row["role"]].append((row["unit_id"], row["sequence"]))
     group["stem"] = float(row["stem_age"])
+    if row["role"] == "in" and row.get("species"):  # empty without names, or in shards written before #79
+        group["species"][row["unit_id"]] = row["species"].split(";")
 
 marker_cfg = dict(snakemake.params.marker_cfg)
 crown_cfg = marker_cfg["crown_age"]
@@ -47,7 +49,8 @@ for genus in sorted(groups):
     group = groups[genus]
     tree, provenance = build_genus(genus, group["in"], group["out"], group["stem"],
                                    marker_cfg, known, timetree_crowns, rooting=snakemake.params.rooting,
-                                   rate=rates.resolve(taxonomy.get(genus)), crown_basis=crown_basis)
+                                   rate=rates.resolve(taxonomy.get(genus)), crown_basis=crown_basis,
+                                   unit_species=group["species"])
     out.append({**provenance, "newick": tree_to_newick(tree)})
     if provenance.get("rate_outlier_action") == "set_aside":
         # units with a long branch, left out of the subtree (#55): placed later like units set aside by screening

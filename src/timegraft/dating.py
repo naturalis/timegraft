@@ -39,13 +39,13 @@ class CrownAge:
     age: float
     # table | rate | fraction | midpoint | timetree; rate and fraction are followed by the
     # bound that was applied, if any: _capped (stem age), _timetree_max,
-    # _table_max, _table_min
+    # _table_max, _table_min, _barcode_max; midpoint_barcode_max (#79)
     source: str
     timetree: float | None = None  # the TimeTree estimate for the genus, if any
     barcode: float | None = None  # the age from the barcodes before any bound
     lower: float | None = None  # the youngest crown age the sources allow (None: no lower bound)
     upper: float | None = None  # the oldest
-    upper_source: str = ""  # stem | timetree | table
+    upper_source: str = ""  # stem | timetree | table | barcodes (#79)
     # TimeTree crown against the barcodes (#54): plausible | implausible | "" (not tested), the ratio of the
     # TimeTree crown to the age from the barcodes, and the largest ratio rate and saturation can explain
     plausibility: str = ""
@@ -127,6 +127,8 @@ def crown_age(
     timetree_bound: str = "max",
     estimate: str = "minimum",
     plausibility: Mapping | None = None,
+    n_units: int | None = None,
+    n_species: int | None = None,
 ) -> CrownAge:
     """Choose the crown age for one genus, and the range the sources allow.
 
@@ -172,6 +174,23 @@ def crown_age(
     as without TimeTree; ``plausibility`` ``implausible_young``).
     The holistic analysis found such crowns where the genus is not a natural
     group, or where the global genus is far older than the species sampled.
+
+    The same allowance also bounds the crown where nothing but the stem does
+    (``plausibility.barcode_cap``, method ``rate``; #79): the upper bound is
+    then the smaller of ``cap_fraction`` of the stem age and the barcode age
+    times ``rate_factor`` and the saturation factor (``upper_source``
+    ``barcodes``). The midpoint is still that of the barcode age and the stem
+    bound, moved down to the barcode bound only where it lies above it
+    (``midpoint_barcode_max``): the barcode bound is a worst case, and
+    midpoints centred on it came out too young against TimeTree. The crown dated is that of the sampled units, so a genus
+    whose full crown is old but whose units are close is young here; a stem
+    age is a bound on the full genus, often a loose one (a polytomy, an
+    interpolated node). Where the units lump species (``n_species`` above
+    ``n_units``), COI evolves too slowly to tell the species apart, the rate
+    may be slower than ``rate_factor`` allows, and the cap is not applied.
+    Where a TimeTree crown bounds the crown, or the table gives the genus any
+    bound (a minimum included), it is not applied either: those are evidence
+    about the node itself.
     """
     if timetree_bound not in ("max", "none"):
         raise ValueError(f"unknown timetree_bound {timetree_bound!r}; use 'max' or 'none'")
@@ -210,13 +229,28 @@ def crown_age(
 
     upper, upper_source = cap, "stem"
     table_min = None
-    if entry["min"] is not None or entry["max"] is not None:
+    tabled = entry["min"] is not None or entry["max"] is not None
+    if tabled:
         if entry["max"] is not None and entry["max"] < upper:
             upper, upper_source = entry["max"], "table"
         table_min = entry["min"]
     elif tt_bound is not None and timetree_bound == "max" and tt_bound < upper:
         upper, upper_source = tt_bound, "timetree"
-    suffix = {"stem": "capped", "timetree": "timetree_max", "table": "table_max"}[upper_source]
+    # where only the stem bounds the crown, the barcodes bound it too, unless the units lump species (#79); the
+    # midpoint is still taken against the stem bound (``centre``), and only moved down to the barcode bound where
+    # it lies above it: centred on the barcode bound, midpoints came out too young against TimeTree
+    centre = upper
+    lumped = n_species is not None and n_units is not None and n_species > n_units
+    # not where the table gives the genus any bound, a minimum included: the table's ages are evidence about
+    # the crown itself, and a barcode bound below a table minimum would override it
+    if (upper_source == "stem" and not tabled and method == "rate" and plausibility
+            and plausibility.get("enabled", True)
+            and plausibility.get("barcode_cap", False) and not lumped and own > 0):
+        allowed = float(plausibility.get("rate_factor", 10.0)) * saturation_factor(
+            mean_root_to_tip(tree), float(plausibility.get("saturation", 0.15)))
+        if own * allowed < upper:
+            upper, upper_source = own * allowed, "barcodes"
+    suffix = {"stem": "capped", "timetree": "timetree_max", "table": "table_max", "barcodes": "barcode_max"}[upper_source]
 
     lower = own if method == "rate" else None
     if table_min is not None:
@@ -239,7 +273,10 @@ def crown_age(
         if estimate == "minimum":
             return CrownAge(table_min, f"{method}_table_min", tt, own, **bounds, **test)
     if estimate == "midpoint":
-        return CrownAge((lower * upper) ** 0.5, "midpoint", tt, own, **bounds, **test)
+        age = (lower * centre) ** 0.5
+        if age > upper:  # the midpoint against the stem is older than the barcodes allow (#79)
+            return CrownAge(upper, "midpoint_barcode_max", tt, own, **bounds, **test)
+        return CrownAge(age, "midpoint", tt, own, **bounds, **test)
     return CrownAge(own, method, tt, own, **bounds, **test)
 
 
