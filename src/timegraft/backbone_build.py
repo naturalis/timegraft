@@ -338,16 +338,10 @@ def date_topology(
         if value and value > 0:
             adjusted[node] = float(value)
     out_of_order: set[dendropy.Node] = set()
-    if use_time == "adjusted":
-        for node, value in adjusted.items():
-            age[node] = value
-    elif use_time in ("downweight", "replace"):
-        factor = float(tt_time.get("factor", 1.5))
-        out_of_order = {n for n, a in adjusted.items() if max(a / raw[n], raw[n] / a) > factor}
-        if use_time == "replace":
-            for node in out_of_order:
-                age[node] = adjusted[node]
-            out_of_order = set()
+    for node in raw:
+        age[node], differs = choose_time(raw[node], adjusted.get(node), tt_time)
+        if differs and use_time == "downweight":
+            out_of_order.add(node)
 
     root = tree.seed_node
     if root not in age:
@@ -388,12 +382,12 @@ def date_topology(
         age, source, anchors = p_age, p_source, p_anchors
         if rq_mode != "off":
             requery_rows = _requery(tree, calibrations, {}, set(), conflict, conflict_with, p_age, used, ncbi,
-                                    timetree, per_side, per_genus, requery)
+                                    timetree, per_side, per_genus, requery, tt_time)
     else:
         age, source, fitted_rows, result = _fit(tree, calibrations, cal_parent, unresolved, source, fit)
         if rq_mode != "off":
             requery_rows = _requery(tree, calibrations, result.z, result.outlier, conflict, conflict_with,
-                                    result.age, used, ncbi, timetree, per_side, per_genus, requery)
+                                    result.age, used, ncbi, timetree, per_side, per_genus, requery, tt_time)
         for node, row in fitted_rows.items():
             calibration_rows[node].update(row)
         anchors = {}
@@ -641,9 +635,26 @@ def _bracket(node, reference) -> tuple[float | None, float | None]:
     return low, (reference[up] if up is not None else None)
 
 
+def choose_time(raw: float, adjusted: float | None, settings: dict | None) -> tuple[float, bool]:
+    """The time a TimeTree answer calibrates with under ``ages.timetree_time`` (#108), and whether its raw and
+    adjusted times differ by more than ``factor``: the raw time, the adjusted one (``use: adjusted``, or
+    ``replace`` where they differ), or the raw one with less weight (``downweight``, done by the caller)."""
+    settings = settings or {}
+    use = settings.get("use", "raw")
+    if not adjusted or adjusted <= 0:
+        return raw, False
+    differs = max(adjusted / raw, raw / adjusted) > float(settings.get("factor", 1.5))
+    if use == "adjusted" or (use == "replace" and differs):
+        return adjusted, differs
+    return raw, differs
+
+
 def _requery(tree, calibrations, z, outliers, conflict, conflict_with, reference, used, ncbi, timetree, per_side,
-             per_genus, settings):
-    """Re-query triggered nodes with disjoint picks and classify them (#53); the report columns per node."""
+             per_genus, settings, time_settings=None):
+    """Re-query triggered nodes with disjoint picks and classify them (#53); the report columns per node.
+
+    Both answers are taken at the time ``ages.timetree_time`` chooses (``time_settings``, #108), so that the
+    first and the re-query compare like with like."""
     todo = rq.triggers(z, outliers, conflict, conflict_with, float(settings.get("z_trigger", rq.Z_TRIGGER)),
                        float(settings.get("ratio_trigger", rq.RATIO_TRIGGER)))
     rows = {}
@@ -672,6 +683,8 @@ def _requery(tree, calibrations, z, outliers, conflict, conflict_with, reference
             again = timetree.split_age([s for s in sides if s])
             if again is not None:
                 break
+        if again is not None:  # at the same choice of time as the first answer (#108)
+            again = choose_time(again, _cache_entry(timetree, ids).get("adjusted_age"), time_settings)[0]
         evidence = timetree.evidence(ids) if hasattr(timetree, "evidence") else {}
         # only usable estimates count towards confidence, as towards the uncertainty
         n_first = len(_valid_estimates(_cache_entry(timetree, used[node])))
