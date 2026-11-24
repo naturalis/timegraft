@@ -144,3 +144,24 @@ def test_requery_bad_mode():
     with pytest.raises(ValueError):
         _run("sometimes")
     assert _run(False)[1][("A1;A2;B1", 4)]["conflict_class"] == ""  # YAML off
+
+
+def test_requery_takes_the_same_choice_of_time():
+    # both queries of node AB give TimeTree 20 Ma raw and 90 Ma adjusted (#108). With `replace` the first answer
+    # calibrates at 90; the re-query must be read at 90 too, so the node is stable, not moved
+    ages = {**AGES, (2, 4): 20.0}
+
+    def fetch(url, payload=None):
+        answer = _fake(ages)(url, payload)
+        ids = {int(i) for i in url.split("/mrca/id/")[1].split("/")[0].split("+")}
+        if ids in ({1, 3}, {2, 4}):
+            answer["adjusted_age"] = 90.0
+        return answer
+
+    tree = dendropy.Tree.get(data=NEWICK, schema="newick", rooting="force-rooted")
+    _, report = date_topology(tree, NCBI, TimeTree(JsonCache(None), fetch=fetch), per_side=1, per_genus=0,
+                              requery={"mode": "classify", "z_trigger": 0.0},
+                              timetree_time={"use": "replace", "factor": 1.5})
+    ab = {(r["example_genera"], r["n_genera"]): r for r in report}[("A1;A2;B1", 4)]
+    assert ab["requery_ids"] == "2+4" and ab["calibration_age"] == "90.0000" and ab["requery_age"] == "90.0000"
+    assert ab["conflict_detail"] != "moved_younger" and ab["conflict_class"] not in ("contrary", "moving")

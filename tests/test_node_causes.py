@@ -13,11 +13,12 @@ from timegraft.timetree import TimeTree
 COMPARE = Path(__file__).resolve().parents[1] / "data/iberia/consistency/benchmark/compare_backbones.py"
 
 
-def fake_timetree(ages, missing=()):
+def fake_timetree(ages, missing=(), adjusted=None):
     def fetch(url, payload=None):
         ids = [int(i) for i in url.split("/mrca/id/")[1].split("/")[0].split("+")]
         found = [i for i in ids if i not in missing]
-        return {"found_ids": found, "precomputed_age": ages.get(frozenset(found))}
+        return {"found_ids": found, "precomputed_age": ages.get(frozenset(found)),
+                "adjusted_age": (adjusted or {}).get(frozenset(found))}
 
     return TimeTree(fetch=fetch)
 
@@ -84,13 +85,14 @@ def test_query_with_enclosing_taxa_lists_no_genera():
     assert row["timetree_attempt"] == "higher_taxa" and row["query_ids"] and row["query_genera"] == ""
 
 
-def _write_backbone(folder, ncbi, ages):
+def _write_backbone(folder, ncbi, ages, adjusted=None, timetree_time=None, columns=REPORT_COLUMNS):
     folder.mkdir()
     tree = dendropy.Tree.get(data="(((A,B),C),(D,E));", schema="newick", rooting="force-rooted")
-    tree, report = date_topology(tree, ncbi, fake_timetree(ages), interpolation="even")
+    tree, report = date_topology(tree, ncbi, fake_timetree(ages, adjusted=adjusted), interpolation="even",
+                                 timetree_time=timetree_time)
     tree.write(path=str(folder / "backbone.tre"), schema="newick", suppress_rooting=True)
     with open(folder / "node_ages.tsv", "w", newline="") as handle:
-        w = csv.DictWriter(handle, REPORT_COLUMNS, delimiter="\t", lineterminator="\n", extrasaction="ignore")
+        w = csv.DictWriter(handle, columns, delimiter="\t", lineterminator="\n", extrasaction="ignore")
         w.writeheader()
         w.writerows(report)
     with open(folder / "genera.tsv", "w", newline="") as handle:
@@ -192,3 +194,21 @@ def test_a_bare_calibration_change_is_not_traced():
     spec.loader.exec_module(cb)
     assert not cb.traced(["calibration_gained"]) and not cb.traced(["calibration_lost", "anchors"])
     assert cb.traced(["calibration_gained", "no_answer"]) and cb.traced(["richness"])
+
+
+def test_a_change_of_time_is_traced_against_an_older_report(tmp_path):
+    # A is a report before format 7 (no calibration_age: it calibrated with timetree_age); B calibrates ((A,B),C)
+    # with TimeTree's adjusted time (#108). The stem change is the choice of time, not the fit
+    spec = importlib.util.spec_from_file_location("compare_backbones", COMPARE)
+    cb = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cb)
+    ages = {frozenset({1, 2, 4, 5}): 100.0, frozenset({1, 3, 4, 5}): 100.0, frozenset({1, 2, 3}): 30.0}
+    adjusted = {frozenset({1, 2, 3}): 60.0}
+    ncbi = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5}
+    old = [c for c in REPORT_COLUMNS if c not in ("calibration_age", "timetree_adjusted_age")]
+    _write_backbone(tmp_path / "a", ncbi, ages, adjusted, {"use": "raw"}, columns=old)
+    _write_backbone(tmp_path / "b", ncbi, ages, adjusted, {"use": "adjusted"})
+    a, b = cb.Backbone(tmp_path / "a"), cb.Backbone(tmp_path / "b")
+    causes, chain = cb.explain(a, b, b.stem("C"))
+    assert "timetree_time" in causes and "fit" not in causes
+    assert any("calibrated at 30" in step and "60" in step for step in chain)

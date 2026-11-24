@@ -207,11 +207,13 @@ def _compare(a, b, node_a, node_b, here, depth, seen):
                                f"{rb['query_genera'] or '-'})"]
         if ra["timetree_age"] != rb["timetree_age"]:
             return ["timetree_answer"], [f"{step}; the same query, TimeTree {ra['timetree_age']} to {rb['timetree_age']}"]
-        # the same answer, calibrated with its raw time in one run and its adjusted time in the other (#108)
-        if ra.get("calibration_age", "") != rb.get("calibration_age", "") and ra.get("calibration_age") \
-                and rb.get("calibration_age"):
-            return ["timetree_time"], [f"{step}; the same answer, calibrated at {ra['calibration_age']} in A and "
-                                       f"{rb['calibration_age']} in B (raw or adjusted time)"]
+        # the same answer, calibrated with its raw time in one run and its adjusted time in the other (#108);
+        # reports before format 7 calibrated with timetree_age
+        cal_a = ra.get("calibration_age") or ra["timetree_age"]
+        cal_b = rb.get("calibration_age") or rb["timetree_age"]
+        if cal_a and cal_b and float(cal_a) != float(cal_b):
+            return ["timetree_time"], [f"{step}; the same answer, calibrated at {cal_a} in A and {cal_b} in B "
+                                       f"(raw or adjusted time)"]
         return ["fit"], [f"{step}; the same calibration ({rb['timetree_age']}), {ra['age_source']} in A, "
                          f"{rb['age_source']} in B"]
     if cal_a != cal_b:
