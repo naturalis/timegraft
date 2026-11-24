@@ -2,7 +2,7 @@
 
 ## With conda (recommended)
 
-`environment.yml` in the root of the repository defines one conda environment, named `timegraft`, with everything needed to run the workflow, the tests and the benchmark: Python, the package itself (installed in editable mode from your checkout, so changes after a `git pull` take effect without reinstalling), Snakemake, MAFFT, VSEARCH, pytest, matplotlib and Biopython.
+`environment.yml` in the root of the repository defines one conda environment, named `timegraft`, with everything needed to run the workflow, the tests and the benchmark: Python, the package itself (installed in editable mode from your checkout, so changes after a `git pull` take effect without reinstalling), Snakemake, MAFFT, VSEARCH, curl and tar (for downloading the Open Tree of Life release files), pytest, matplotlib and Biopython.
 
 Create it once, from the root of your checkout:
 
@@ -26,7 +26,7 @@ conda env update -n timegraft -f environment.yml --prune
 
 To start again from scratch: `conda env remove -n timegraft`, then `conda env create -f environment.yml`. `mamba` accepts the same commands, and is faster at solving.
 
-With the environment active, the workflow runs as it is (`snakemake --cores 4`); `--use-conda` is not needed, but still works (see [below](#external-tools)).
+With the environment active, the workflow runs as it is (`snakemake --cores 4`); `--use-conda` is not needed, but still works (see [below](#external-tools)). Two optional dating methods are the exception and need `--use-conda`: `dating.method: lsd2`, whose `build_lsd2` rule compiles LSD2 with git, make and a C++ compiler, and `dating.method: chronos`, which needs R and ape. The default, `mpl`, needs neither.
 
 ## With pip
 

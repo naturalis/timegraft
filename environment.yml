@@ -10,7 +10,9 @@
 #   conda env update -n timegraft -f environment.yml --prune
 #
 # The per-rule environments of `snakemake --use-conda` are in workflow/envs/
-# and are separate from this one.
+# and are separate from this one. Two optional methods are not covered here
+# and need --use-conda: dating.method lsd2 (the build_lsd2 rule compiles LSD2
+# with git, make and a C++ compiler) and dating.method chronos (R and ape).
 name: timegraft
 channels:
   - conda-forge
@@ -26,6 +28,8 @@ dependencies:
   - pytest >=7
   - mafft
   - vsearch
+  - curl                  # download_otol, download_otol_annotations
+  - tar
   - pip
   - pip:
       - -e .
