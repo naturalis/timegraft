@@ -114,6 +114,15 @@ With `ages.method: fit` (the default) every TimeTree age is a soft constraint in
 
 A configured root age (`root_age`, where TimeTree has none) is held exactly, as a hard constraint; calibrations that would be older are fitted just below it. A TimeTree age equal to that of its nearest calibrated ancestor still means TimeTree does not resolve the node, and is not used. Nodes without a calibration are interpolated between the fitted ages, as before.
 
+**Which of TimeTree's times a calibration uses** ([#108](https://github.com/naturalis/timegraft/issues/108)). Every TimeTree answer has two times. `age` is its summary over studies, a robust average (the Huber estimator, by TimeTree's FAQ). `adjusted_age` is the time after TimeTree smooths its tree to make it ultrametric, where conflicting studies left an ancestor younger than a descendant. The Iberian answers show that TimeTree then pools the two into one time, as an isotonic fit does. `ages.timetree_time.use` chooses:
+
+- `replace` (the default): the summary, but the adjusted time where the two differ by more than `factor` (1.5). There TimeTree's own tree contradicts the summary; on the Iberian run 8 of the 17 such summaries rest on a single study.
+- `raw`: the summary only, as before #108.
+- `adjusted`: the adjusted time for every calibration. Where TimeTree pooled a node with its parent, both get one time, and the child is then left out as not resolved by TimeTree, as above.
+- `downweight`: the summary, with its sigma multiplied by `sigma_factor` (3) where the two differ by more than `factor`.
+
+On the Iberian backbone `replace` changes 17 of 387 calibrations: 53 node ages and 88 stems move by more than 10%, the stem of *Deosergestes* and *Eusergestes* from 7.7 to 44.6 Ma. `adjusted` moves 220 node ages and 356 stems and leaves 57 calibrations out; ages perturbed by noise then move more (90% quantile 1.535 against 1.487). `downweight` changes nothing that matters: the out-of-order answers conflict with no neighbour, so less weight leaves them where they are (`data/iberia/consistency/benchmark/results_108/`). The re-query diagnostic (#53) reads its second answer at the same choice of time as the first, so `requery_age` compares like with like. The legacy arm of the benchmark (`legacy.yaml`) keeps `use: raw`.
+
 `ages.method: precedence` gives the rule before #52. Whichever method is used, `node_ages.tsv` also gives the precedence ages, so the two can be compared during the validation period.
 
 | Column | Meaning |
@@ -123,6 +132,8 @@ A configured root age (`root_age`, where TimeTree has none) is held exactly, as 
 | `fitted_age` | The fitted age (equal to `age`) |
 | `calibration_residual`, `calibration_z` | log(fitted / TimeTree), and that over sigma |
 | `calibration_outlier` | `yes` beyond `outlier_z` |
+| `timetree_adjusted_age` | TimeTree's adjusted time for the same answer (#108) |
+| `calibration_age` | The age the calibration used: `timetree_age` or `timetree_adjusted_age`, by `ages.timetree_time` (#108). The conflict metrics and the hold-out of the gate use it |
 | `precedence_age`, `precedence_source` | Age and source of the node under the precedence rule, for comparison |
 
 `metadata.json` gives conflict metrics over all calibrations, for the final ages and for the precedence ages: the median, 90th percentile and largest factor between age and TimeTree's, the number off by more than a factor 1.5 (`severe`), the root mean square of residuals over sigma, and the number of outliers.
@@ -315,6 +326,7 @@ New. What the backbone was built from: the format version of each output and of 
 - **`node_ages.tsv` format 4** (#53) fills `conflict_class` and `requery_age` and adds the other `requery_*` and `conflict_*` columns. With the default `requery.mode: classify` no age changes; the first run on a cache asks TimeTree again for the re-queried nodes.
 - **`node_ages.tsv` format 5** (#84) adds `age_source`, `interpolated_from` and `query_genera`. No age changes: every other column and every other output is byte-identical. `data/iberia/consistency/benchmark/compare_backbones.py` reads these columns to trace why a stem age differs between two runs; it refuses format 4 files.
 - **`node_ages.tsv` format 6** (#86) drops `requery_sigma` and `requery_applied`, which only the removed `requery.mode: apply` used, and `metadata.json` drops `ages.final_against_requery`. A configuration with `mode: apply` is refused with a message. No age changes: with the default `classify`, every other column and output is as before.
+- **`node_ages.tsv` format 7** (#108) adds `timetree_adjusted_age` and `calibration_age`. With the default `ages.timetree_time.use: replace`, calibrations whose raw and adjusted TimeTree times differ by more than a factor 1.5 use the adjusted time, and backbone ages change around them (17 calibrations on the Iberian run). `use: raw` gives the ages before #108. Code that reads `timetree_age` as the calibration should read `calibration_age`.
 - **`crown_ages.tsv` format 3** (#54) adds the basis columns and rows with an empty `crown_age` for genera sampled with one species; code that reads `crown_age` as a number must skip those (the genus step does). With the defaults, TimeTree crowns are those of the sampled species, and an implausible one is demoted to an upper bound, so crown ages change. `crown_query.basis: global` and `crown_age.plausibility.enabled: false` give the earlier behaviour. `provenance.tsv` gains `crown_basis`, `crown_plausibility`, `timetree_ratio`, `ratio_allowed` and `crown_decision`, after `timetree_crown`.
 - **The build reads the filtered records** (`units/filtered.tsv`) for the reference lineage, besides the representatives, so it runs again when the records change.
 - **`provenance.tsv`** (#75) gains `misplaced_set_aside` and `misplaced_action`, empty unless `rooting.misplaced_action: set_aside` (the default `keep` changes nothing).

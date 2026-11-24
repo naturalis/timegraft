@@ -203,6 +203,13 @@ def _compare(a, b, node_a, node_b, here, depth, seen):
                                f"{rb['query_genera'] or '-'})"]
         if ra["timetree_age"] != rb["timetree_age"]:
             return ["timetree_answer"], [f"{step}; the same query, TimeTree {ra['timetree_age']} to {rb['timetree_age']}"]
+        # the same answer, calibrated with its raw time in one run and its adjusted time in the other (#108);
+        # reports before format 7 calibrated with timetree_age
+        cal_a = ra.get("calibration_age") or ra["timetree_age"]
+        cal_b = rb.get("calibration_age") or rb["timetree_age"]
+        if cal_a and cal_b and float(cal_a) != float(cal_b):
+            return ["timetree_time"], [f"{step}; the same answer, calibrated at {cal_a} in A and {cal_b} in B "
+                                       f"(raw or adjusted time)"]
         return ["fit"], [f"{step}; the same calibration ({rb['timetree_age']}), {ra['age_source']} in A, "
                          f"{rb['age_source']} in B"]
     if cal_a != cal_b:
@@ -258,8 +265,8 @@ def _compare(a, b, node_a, node_b, here, depth, seen):
     return causes, chain
 
 
-ROOT_CAUSES = ("topology", "identifier", "higher_taxa", "picks", "timetree_answer", "unresolved", "no_answer", "fit",
-               "calibration_gained", "calibration_lost", "richness", "root")
+ROOT_CAUSES = ("topology", "identifier", "higher_taxa", "picks", "timetree_answer", "timetree_time", "unresolved",
+               "no_answer", "fit", "calibration_gained", "calibration_lost", "richness", "root")
 # a calibration gained or lost says what happened, not why: a stem is traced only with a cause besides these
 NOT_A_REASON = {"calibration_gained", "calibration_lost"}
 
