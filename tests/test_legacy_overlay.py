@@ -17,3 +17,8 @@ def _settings(*overlays):
 def test_legacy_calibrates_with_timetree_raw_time():
     assert _settings()["ages"]["timetree_time"]["use"] == "replace"
     assert _settings("legacy.yaml")["ages"]["timetree_time"]["use"] == "raw"
+
+
+def test_legacy_uses_every_timetree_answer():
+    assert _settings()["ages"]["node_check"]["mode"] == "reject"
+    assert _settings("legacy.yaml")["ages"]["node_check"]["mode"] == "off"

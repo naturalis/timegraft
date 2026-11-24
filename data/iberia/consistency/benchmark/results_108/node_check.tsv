@@ -1,0 +1,455 @@
+node	n_genera	example_genera	timetree_mrca_ncbi	timetree_ncbi_ancestor	timetree_node_check	timetree_genera_outside	timetree_genera_missing	timetree_probes	timetree_age	calibration_age	age	source
+n0	1186	Aaptos;Abavopsis;Abida	33208	33208	match	0	0		750.1031	750.1031	750.1031	timetree_higher_taxa_fit
+n1	1158	Abavopsis;Abida;Abludomelita	0	6072	match	0	0	Anthopleura:in;Callogorgia:in;Acanthochitona:in	682.3105	682.3105	703.7520	timetree_higher_taxa_fit
+n2	1122	Abavopsis;Abida;Abludomelita	33213	33213	match	0	0		721.4530	721.4530	696.7841	timetree_higher_taxa_fit
+n3	267	Acantholabrus;Achondrostoma;Alburnus	33511	33511	match	0	0		626.5705	626.5705	626.5705	timetree_fit
+n4	256	Acantholabrus;Achondrostoma;Alburnus	7742	7742	match	0	0		562.8396	562.8396	562.8396	timetree_fit
+n5	254	Acantholabrus;Achondrostoma;Alburnus	7776	7776	match	0	0		463.2425	463.2425	463.2425	timetree_fit
+n6	224	Acantholabrus;Achondrostoma;Alburnus	32443	32443	match	0	0		249.5583	249.5583	249.5583	timetree_fit
+n7	214	Acantholabrus;Achondrostoma;Alburnus	186625	186625	match	0	0		220.3592	220.3592	220.3592	timetree_fit
+n8	27	Achondrostoma;Alburnus;Alepocephalus	186634	186634	match	0	0		200.9210	200.9210	212.5381	timetree_fit
+n9	23	Achondrostoma;Alburnus;Alepocephalus	0	186634	probed_outside	4	0	Alosa:out;Engraulis:out;Sardinella:out;Alburnus:in;Ameiurus:in;Anaecypris:in	222.2510	222.2510	210.4338	timetree_fit
+n10	21	Achondrostoma;Alburnus;Ameiurus	186626	186626	match	0	0		144.3784	144.3784	144.3784	timetree_fit
+n11	17	Achondrostoma;Alburnus;Anaecypris	7952	7952	match	0	0		99.2881	99.2881	99.2881	timetree_fit
+n12	15	Achondrostoma;Alburnus;Anaecypris	0	30727	match	0	0	Alburnus:in;Anaecypris:in;Luciobarbus:in	51.7827	51.7827	61.4261	timetree_fit
+n13	12	Achondrostoma;Alburnus;Anaecypris	0	30727	narrower	3	0	Barbus:out;Carassius:out;Luciobarbus:out;Alburnus:in;Anaecypris:in;Gobio:out	41.4333		32.0024	interpolated_timetree_other_node
+n14	11	Achondrostoma;Alburnus;Anaecypris	0	30727	probed_outside	4	0	Barbus:out;Carassius:out;Luciobarbus:out;Alburnus:in;Anaecypris:in;Iberochondrostoma:in	26.0140	26.0140	30.2008	timetree_fit
+n15	9	Achondrostoma;Alburnus;Anaecypris	2743726	2743726	match	0	0		31.0764	31.0764	29.9018	timetree_fit
+n17	8	Achondrostoma;Alburnus;Anaecypris	0	2743728	match	0	0	Alburnus:in;Anaecypris:in;Parachondrostoma:in	19.1872	19.1872	29.6058	timetree_fit
+n18	7	Achondrostoma;Alburnus;Anaecypris	0	2743728	probed_outside	1	0	Leuciscus:out;Iberochondrostoma:in;Pseudochondrostoma:in;Squalius:in	31.6537	31.6537	29.3126	timetree_fit
+n20	4	Achondrostoma;Iberochondrostoma;Parachondrostoma	0	2743728	probed_outside	4	0	Squalius:out;Anaecypris:out;Alburnus:out;Pseudochondrostoma:in	11.7154	11.7154	11.7154	timetree_fit
+n21	3	Achondrostoma;Parachondrostoma;Pseudochondrostoma	0	2743728	probed_outside	5	0	Iberochondrostoma:out;Squalius:out;Anaecypris:out	8.4085	8.4085	8.4085	timetree_fit
+n22	2	Achondrostoma;Pseudochondrostoma	0	2743728	probed_outside	6	0	Parachondrostoma:out;Iberochondrostoma:out;Squalius:out	7.0637	7.0637	7.0637	timetree_fit
+n31	2	Gobio;Pseudorasbora	0	2743714	match	0	0		23.5926	23.5926	23.5926	timetree_fit
+n35	3	Barbus;Carassius;Luciobarbus	0	7953	match	0	0		84.1552	84.1552	60.8179	timetree_fit
+n36	2	Barbus;Luciobarbus	0	2743693	match	0	0		12.1721	19.8733	19.8733	timetree_fit
+n40	2	Barbatula;Cobitis	0	30725	match	0	0		49.1320	49.1320	49.1320	timetree_fit
+n43	4	Ameiurus;Ictalurus;Pangasianodon	0	1489793	match	0	0		119.9369	64.9449	64.9449	timetree_fit
+n44	2	Pangasianodon;Silurus	0	1489793	wider	2	0	Ameiurus:in	119.9369		64.0457	interpolated_timetree_other_node
+n47	2	Ameiurus;Ictalurus	0	7996	match	0	0		45.6383	45.6383	45.6383	timetree_fit
+n50	2	Alepocephalus;Xenodermichthys	134615	134615	match	0	0		43.4060	43.4060	43.4060	timetree_fit
+n53	4	Alosa;Engraulis;Sardina	1489460	1489460	match	0	0		109.6093	109.6093	109.6093	timetree_fit
+n54	3	Alosa;Sardina;Sardinella	55118	55118	match	0	0		66.7795	66.7795	66.7795	timetree_fit
+n56	2	Alosa;Sardina	55118	55118	wider	1	0		66.7795		24.7148	interpolated_timetree_other_node
+n60	187	Acantholabrus;Alepisaurus;Anthias	0	1489388	match	0	0	Argyropelecus:in;Alepisaurus:in;Maurolicus:in	200.3669	200.3669	200.3669	timetree_fit
+n61	7	Argentina;Argyropelecus;Maurolicus	0	1489388	probed_outside	180	0	Alepisaurus:out;Anthias:out;Antigonia:out;Maurolicus:in;Salvelinus:in;Stomias:in	123.5204	123.5204	136.8305	timetree_fit
+n62	3	Argentina;Salmo;Salvelinus	0	41705	match	0	0		147.3530	147.3530	135.4758	timetree_fit
+n63	2	Salmo;Salvelinus	0	504568	match	0	0		28.5590	28.5590	28.5590	timetree_fit
+n67	4	Argyropelecus;Maurolicus;Polymetme	0	48438	narrower	0	0	Polymetme:out	81.4656		113.3254	interpolated_timetree_other_node
+n68	3	Argyropelecus;Maurolicus;Polymetme	48438	48438	wider	1	0		72.5205		68.4111	interpolated_timetree_other_node
+n74	180	Acantholabrus;Alepisaurus;Anthias	123366	123366	match	0	0		158.3248	158.3248	158.3248	timetree_fit
+n75	175	Acantholabrus;Anthias;Antigonia	123367	123367	match	0	0		147.1035	147.1035	147.5064	timetree_fit
+n76	168	Acantholabrus;Anthias;Antigonia	123368	123368	match	0	0		146.4646	146.4646	146.0460	timetree_fit
+n77	143	Acantholabrus;Anthias;Antigonia	0	123368	probed_outside	25	0	Bregmaceros:out;Coelorinchus:out;Cyttopsis:out;Anthias:in;Antigonia:in;Aphanius:in	124.4437	124.4437	128.1222	timetree_fit
+n78	141	Acantholabrus;Anthias;Antigonia	123369	123369	match	0	0		130.0140	130.0140	126.8537	timetree_fit
+n79	140	Acantholabrus;Anthias;Antigonia	123369	123369	wider	1	0		130.0140		125.6091	interpolated_timetree_other_node
+n80	139	Acantholabrus;Anthias;Antigonia	0	1489872	match	0	0	Anthias:in;Antigonia:in;Aphanius:in	115.5709	115.5709	115.5709	timetree_fit
+n81	138	Acantholabrus;Anthias;Antigonia	0	1489872	unchecked	1	0		107.6746	107.6746	110.2112	timetree_fit
+n82	125	Acantholabrus;Anthias;Antigonia	0	1489872	probed_outside	14	0	Apogon:out;Gobius:out;Lesueurigobius:out;Anthias:in;Auxis:in;Antigonia:in	102.4811	102.4811	109.1200	timetree_fit
+n83	107	Acantholabrus;Anthias;Antigonia	0	1489872	probed_outside	32	0	Aphanopus:out;Auxis:out;Benthodesmus:out;Arnoglossus:in;Anthias:in;Atherina:in	106.7833	106.7833	108.0396	timetree_fit
+n84	45	Aphanius;Arnoglossus;Atherina	0	1489872	wider	94	0	Anthias:in	102.4811		105.9482	interpolated_timetree_other_node
+n85	42	Aphanius;Arnoglossus;Atherina	0	1489872	probed_outside	97	0	Scomber:out;Anthias:out;Antigonia:out;Atherina:in;Australoheros:in;Belone:in	109.1969	109.1969	105.9108	timetree_fit
+n86	20	Aphanius;Atherina;Australoheros	1489908	1489908	match	0	0		91.8435	91.8435	92.4972	timetree_fit
+n87	12	Blennius;Chelon;Chromis	0	1489908	probed_outside	8	0	Aphanius:out;Atherina:out;Australoheros:out;Hypleurochilus:in;Lepadogaster:in;Lipophrys:in	87.7244	87.7244	88.8260	timetree_fit
+n88	10	Blennius;Chromis;Hypleurochilus	0	1489908	probed_outside	10	0	Chelon:out;Mugil:out;Aphanius:out;Hypleurochilus:in;Lepadogaster:in;Lipophrys:in	88.9370	88.9370	87.9465	timetree_fit
+n89	2	Chromis;Similiparma	0	30863	match	0	0		34.6188	34.6188	34.6188	timetree_fit
+n92	8	Blennius;Hypleurochilus;Lepadogaster	1489921	1489921	match	0	0		71.5018	71.5018	71.5018	timetree_fit
+n93	2	Lepadogaster;Tripterygion	1489921	1489921	wider	6	0		71.5018		58.2472	interpolated_timetree_other_node
+n96	6	Blennius;Hypleurochilus;Lipophrys	56718	56718	match	0	0		43.3660	43.3660	43.3660	timetree_fit
+n97	5	Hypleurochilus;Lipophrys;Parablennius	0	703913	match	0	0	Parablennius:in;Scartella:in	38.3700	38.3700	38.3700	timetree_fit
+n98	4	Hypleurochilus;Parablennius;Salaria	0	703913	probed_outside	1	0	Lipophrys:out;Scartella:in	29.2042	29.2042	29.2042	timetree_fit
+n99	3	Hypleurochilus;Parablennius;Scartella	0	703913	wider	2	0	Salaria:in	29.2042		25.8474	interpolated_timetree_other_node
+n107	2	Chelon;Mugil	0	8189	match	0	0		38.7028	38.7028	38.7028	timetree_fit
+n110	8	Aphanius;Atherina;Australoheros	0	1489908	probed_outside	12	0	Blennius:out;Chelon:out;Hypleurochilus:out;Atherina:in;Belone:in;Gambusia:in	92.2060	92.2060	91.5814	timetree_fit
+n112	7	Aphanius;Atherina;Belone	1489913	1489913	match	0	0		83.0258	83.0258	83.0258	timetree_fit
+n113	6	Aphanius;Belone;Cheilopogon	1489913	1489913	wider	1	0		83.0258		79.1561	interpolated_timetree_other_node
+n114	3	Aphanius;Gambusia;Valencia	0	8087	match	0	0		42.3949	42.3949	42.4223	timetree_fit
+n116	2	Aphanius;Valencia	0	8087	probed_outside	1	0	Gambusia:out	42.0301	42.0301	42.0023	timetree_fit
+n119	3	Belone;Cheilopogon;Scomberesox	123731	123731	match	0	0		54.3516	54.3516	54.3516	timetree_fit
+n120	2	Belone;Scomberesox	0	94935	match	0	0		33.3242	33.3242	33.3242	timetree_fit
+n125	22	Arnoglossus;Bathysolea;Buglossidium	0	1489904	match	0	0	Dicologlossa:in;Lepidorhombus:in;Microchirus:in	80.6340	80.6340	80.6340	timetree_fit
+n126	19	Arnoglossus;Bathysolea;Buglossidium	0	1489904	wider	3	0	Remora:in	80.6340		80.3420	interpolated_timetree_other_node
+n127	18	Arnoglossus;Bathysolea;Buglossidium	0	1489904	wider	4	0	Sphyraena:in	80.6340		80.1271	interpolated_timetree_other_node
+n128	13	Arnoglossus;Bathysolea;Buglossidium	30942	30942	match	0	0		58.0914	58.0914	58.0914	timetree_fit
+n129	12	Arnoglossus;Bathysolea;Buglossidium	0	30942	unchecked	1	0		55.4088	55.4088	55.4088	timetree_fit
+n130	5	Arnoglossus;Lepidorhombus;Microstomus	0	30942	probed_outside	8	0	Dicologlossa:out;Microchirus:out;Pegusa:out;Platichthys:in	52.9727	52.9727	52.9727	timetree_fit
+n131	3	Arnoglossus;Microstomus;Platichthys	0	30942	probed_outside	10	0	Lepidorhombus:out;Scophthalmus:out;Dicologlossa:out	42.8023	42.8023	42.8023	timetree_fit
+n133	2	Microstomus;Platichthys	0	8256	match	0	0		14.6738	14.6738	14.6738	timetree_fit
+n136	2	Lepidorhombus;Scophthalmus	52902	52902	match	0	0		28.0432	28.0432	28.0432	timetree_fit
+n139	7	Bathysolea;Buglossidium;Dicologlossa	0	30942	probed_outside	6	0	Arnoglossus:out;Lepidorhombus:out;Microstomus:out;Dicologlossa:in;Pegusa:in;Solea:in	42.7541	42.7541	44.7594	timetree_fit
+n140	6	Bathysolea;Buglossidium;Dicologlossa	0	30948	match	0	0	Dicologlossa:in;Pegusa:in;Solea:in	63.6306	63.6306	44.3162	timetree_fit
+n141	5	Bathysolea;Dicologlossa;Microchirus	0	30948	unchecked	1	0		14.9274	14.9274	14.9274	timetree_fit
+n142	2	Pegusa;Solea	0	30948	probed_outside	4	0	Dicologlossa:out;Microchirus:out	13.6489	13.6489	13.6489	timetree_fit
+n153	5	Lichia;Naucrates;Seriola	0	1489904	wider	17	0	Arnoglossus:in	80.6340		73.4544	interpolated_timetree_other_node
+n154	4	Lichia;Naucrates;Seriola	8157	8157	wider	2	0		52.4168		72.3273	interpolated_timetree_other_node
+n155	2	Naucrates;Seriola	0	8157	probed_outside	4	0	Trachinotus:out;Pseudocaranx:out;Trachurus:out	17.8186	17.8186	17.8186	timetree_fit
+n158	2	Lichia;Trachinotus	0	8157	probed_outside	4	0	Seriola:out;Pseudocaranx:out;Trachurus:out	65.9963	65.9963	65.9963	timetree_fit
+n166	3	Centrolophus;Pomatomus;Scomber	0	1489894	wider	11	0	Aphanopus:in	49.4982		36.8105	interpolated_timetree_other_node
+n167	2	Centrolophus;Scomber	0	1489894	wider	12	0	Aphanopus:in	49.4982		34.3851	interpolated_timetree_other_node
+n171	62	Acantholabrus;Anthias;Antigonia	0	1489922	narrower	0	0	Anthias:out	89.8756		106.6853	interpolated_timetree_other_node
+n172	61	Acantholabrus;Anthias;Antigonia	0	1489922	wider	1	0	Diapterus:in	119.5679		106.6722	interpolated_timetree_other_node
+n173	36	Acantholabrus;Antigonia;Balistes	0	1489922	probed_outside	26	0	Anthias:out;Chelidonichthys:out;Cottus:out;Balistes:in;Coris:in;Callanthias:in	126.5465	126.5465	104.8622	timetree_fit
+n174	26	Antigonia;Balistes;Boops	0	1489922	probed_outside	36	0	Coris:out;Labrus:out;Sparisoma:out;Balistes:in;Callanthias:in;Cepola:in	102.4190	102.4190	102.4190	timetree_fit
+n176	25	Antigonia;Balistes;Boops	0	1489922	wider	37	0	Dicentrarchus:in	102.4190		101.8680	interpolated_timetree_other_node
+n177	20	Antigonia;Balistes;Boops	0	1489922	wider	42	0	Callanthias:out;Cepola:in	87.1611		90.4947	interpolated_timetree_other_node
+n178	10	Antigonia;Balistes;Capros	0	1489922	probed_outside	52	0	Dentex:out;Diplodus:out;Pagellus:out;Lagocephalus:in;Lophius:in;Sphoeroides:in	84.8179	84.8179	84.8179	timetree_fit
+n179	6	Balistes;Ephippion;Lagocephalus	0	31022	match	0	0	Sphoeroides:in	73.2501	73.2501	73.2501	timetree_fit
+n181	2	Lagocephalus;Sphoeroides	0	31031	unchecked	1	0		34.6812	34.6812	34.6812	timetree_fit
+n185	3	Balistes;Mola;Ranzania	0	31022	wider	3	0	Lagocephalus:in	73.2501		63.9068	interpolated_timetree_other_node
+n187	2	Mola;Ranzania	31029	31029	match	0	0		23.6867	23.6867	23.6867	timetree_fit
+n190	4	Antigonia;Capros;Chaunax	0	1489922	wider	58	0	Balistes:in	84.8179		73.7145	interpolated_timetree_other_node
+n191	2	Chaunax;Lophius	8070	8070	match	0	0		73.3783	73.3783	73.3783	timetree_fit
+n194	2	Antigonia;Capros	31098	31098	match	0	0		67.1995	67.1995	67.1995	timetree_fit
+n197	10	Boops;Centracanthus;Dentex	0	1489931	match	0	0	Diplodus:in;Spondyliosoma:in	62.1733	62.1733	62.1733	timetree_fit
+n198	2	Dentex;Pagellus	0	8169	probed_outside	6	0	Diplodus:out;Spondyliosoma:out;Pagrus:out	22.1890	22.1890	22.1890	timetree_fit
+n201	6	Boops;Centracanthus;Diplodus	0	8169	narrower	3	1		29.1699		52.2543	interpolated_timetree_other_node
+n203	4	Boops;Centracanthus;Diplodus	0	1489931	wider	6	0	Spondyliosoma:in	62.1733		46.2326	interpolated_timetree_other_node
+n204	2	Boops;Centracanthus	0	1489931	wider	8	0	Diplodus:in	62.1733		33.3600	interpolated_timetree_other_node
+n214	5	Callanthias;Cepola;Cynoscion	0	1489922	wider	57	0	Antigonia:in	102.4190		85.1285	interpolated_timetree_other_node
+n215	3	Callanthias;Cepola;Pomadasys	0	1489922	wider	59	0	Cynoscion:in	102.4190		75.3086	interpolated_timetree_other_node
+n216	2	Callanthias;Pomadasys	0	1489922	wider	60	0	Cepola:in	102.4190		62.9320	interpolated_timetree_other_node
+n220	2	Cynoscion;Micropogonias	0	30870	match	0	0		21.8428	21.8428	21.8428	timetree_fit
+n223	10	Acantholabrus;Coris;Ctenolabrus	0	1489922	wider	52	0	Antigonia:in	88.6862		93.3257	interpolated_timetree_other_node
+n224	7	Acantholabrus;Coris;Ctenolabrus	0	8247	match	0	0	Sparisoma:in;Symphodus:in	58.1978	58.1978	58.1978	timetree_fit
+n225	5	Acantholabrus;Ctenolabrus;Labrus	0	8247	probed_outside	2	0	Coris:out;Thalassoma:out;Symphodus:in	55.7276	55.7276	55.7276	timetree_fit
+n227	4	Acantholabrus;Ctenolabrus;Labrus	0	8247	probed_outside	3	0	Sparisoma:out;Coris:out;Thalassoma:out;Symphodus:in	23.8434	23.8434	23.8434	timetree_fit
+n228	3	Acantholabrus;Ctenolabrus;Symphodus	0	8247	probed_outside	4	0	Labrus:out;Sparisoma:out;Coris:out	18.3098	18.3098	18.3098	timetree_fit
+n230	2	Acantholabrus;Ctenolabrus	0	8247	probed_outside	5	0	Symphodus:out;Labrus:out;Sparisoma:out	9.6255	9.6255	9.6255	timetree_fit
+n234	2	Coris;Thalassoma	0	8247	probed_outside	5	0	Labrus:out;Sparisoma:out;Symphodus:out	29.5058	29.5058	29.5058	timetree_fit
+n237	3	Gymnammodytes;Hyperoplus;Uranoscopus	1489926	1489926	match	0	0		81.8790	81.8790	81.8790	timetree_fit
+n242	25	Anthias;Chelidonichthys;Cottus	0	1489922	wider	37	0	Antigonia:in	119.5679		87.9200	interpolated_timetree_other_node
+n243	20	Anthias;Chelidonichthys;Cottus	0	8111	match	0	0	Cottus:in;Serranus:in;Gasterosteus:in	71.4983	71.4983	81.8804	timetree_fit
+n244	17	Chelidonichthys;Cottus;Cyclopterus	0	8111	wider	3	0	Anthias:in	75.6341		80.6439	interpolated_timetree_other_node
+n245	15	Chelidonichthys;Cottus;Cyclopterus	0	8111	probed_outside	5	0	Trachinus:out;Anthias:out;Epinephelus:out;Cottus:in;Neomerinthe:in;Scorpaena:in	96.8227	96.8227	80.2670	timetree_fit
+n246	10	Chelidonichthys;Cottus;Cyclopterus	0	8111	probed_outside	10	0	Helicolenus:out;Neomerinthe:out;Pontinus:out;Liparis:in;Peristedion:in;Paraliparis:in	69.0556	69.0556	69.0556	timetree_fit
+n247	5	Cottus;Cyclopterus;Gasterosteus	0	8100	match	0	0	Paraliparis:in	48.8878	48.8878	48.8878	timetree_fit
+n248	4	Cottus;Cyclopterus;Liparis	1490021	1490021	match	0	0		32.9315	32.9315	32.9315	timetree_fit
+n249	3	Cyclopterus;Liparis;Paraliparis	0	1490021	probed_outside	1	0	Cottus:out	22.1130	22.1130	22.1130	timetree_fit
+n250	2	Liparis;Paraliparis	0	183715	match	0	0		12.5097	12.5097	12.5097	timetree_fit
+n256	5	Chelidonichthys;Eutrigla;Lepidotrigla	1489945	1489945	match	0	0		55.5964	55.5964	55.5964	timetree_fit
+n257	4	Chelidonichthys;Eutrigla;Lepidotrigla	0	27774	match	0	0	Lepidotrigla:in	50.3490	50.3490	50.3490	timetree_fit
+n258	3	Chelidonichthys;Eutrigla;Lepidotrigla	0	27774	unchecked	1	0		32.5706	32.5706	32.5706	timetree_fit
+n259	2	Chelidonichthys;Eutrigla	0	27774	probed_outside	2	0	Lepidotrigla:out	10.9526	10.9526	10.9526	timetree_fit
+n265	5	Helicolenus;Neomerinthe;Pontinus	0	8107	match	0	0	Pontinus:in;Trachyscorpia:in	36.4237	36.4237	36.4237	timetree_fit
+n266	4	Helicolenus;Pontinus;Scorpaena	0	8107	wider	1	0	Neomerinthe:in	36.4237		34.1984	interpolated_timetree_other_node
+n267	3	Helicolenus;Pontinus;Trachyscorpia	0	8107	wider	2	0	Scorpaena:in	36.4237		32.5873	interpolated_timetree_other_node
+n268	2	Helicolenus;Trachyscorpia	274692	274692	match	0	0		30.3216	30.3216	30.3216	timetree_fit
+n274	2	Echiichthys;Trachinus	56735	56735	match	0	0		28.1373	28.1373	28.1373	timetree_fit
+n277	3	Anthias;Epinephelus;Serranus	0	8111	wider	17	0	Chelidonichthys:in	71.4983		49.5091	interpolated_timetree_other_node
+n278	2	Anthias;Epinephelus	0	8111	wider	18	0	Serranus:in	71.4983		45.9740	interpolated_timetree_other_node
+n282	5	Epigonus;Kyphosus;Lepomis	0	1489922	probed_outside	57	0	Anthias:out;Chelidonichthys:out;Cottus:out;Micropterus:in	76.9771	76.9771	76.9771	timetree_fit
+n283	3	Kyphosus;Lepomis;Micropterus	1489940	1489940	match	0	0		74.2744	74.2744	74.2744	timetree_fit
+n284	2	Lepomis;Micropterus	0	8180	match	0	0		24.8080	24.8080	24.8080	timetree_fit
+n288	2	Epigonus;Polyprion	0	3051910	match	0	0		74.8889	74.8889	74.8889	timetree_fit
+n292	18	Aphanopus;Auxis;Benthodesmus	0	1489872	probed_outside	121	0	Anthias:out;Antigonia:out;Aphanius:out;Auxis:in;Hippocampus:in;Benthodesmus:in	93.7653	93.7653	93.7653	timetree_fit
+n293	7	Callionymus;Dactylopterus;Hippocampus	0	129912	match	0	0	Hippocampus:in;Synchiropus:in;Syngnathus:in	79.6072	79.6072	79.6072	timetree_fit
+n294	6	Callionymus;Dactylopterus;Hippocampus	129912	129912	wider	1	0		78.0065		73.7344	interpolated_timetree_other_node
+n295	5	Callionymus;Hippocampus;Mullus	0	129912	probed_outside	2	0	Macroramphosus:out;Syngnathus:in	68.8301	68.8301	68.8301	timetree_fit
+n296	3	Hippocampus;Mullus;Syngnathus	0	129912	wider	4	0	Callionymus:in	68.8301		67.8074	interpolated_timetree_other_node
+n297	2	Hippocampus;Syngnathus	72045	72045	match	0	0		33.9420	54.9202	54.9202	timetree_fit
+n301	2	Callionymus;Synchiropus	0	30908	match	0	0		26.2927	26.2927	26.2927	timetree_fit
+n306	11	Aphanopus;Auxis;Benthodesmus	0	1489894	wider	3	0	Scomber:in	49.4982		73.3477	interpolated_timetree_other_node
+n307	7	Auxis;Brama;Sarda	0	1489894	wider	7	0	Aphanopus:in	49.4982		61.7376	interpolated_timetree_other_node
+n308	3	Auxis;Sarda;Thunnus	0	186745	probed_outside	1	0	Scomber:out	23.6311	23.6311	23.6311	timetree_fit
+n310	2	Auxis;Thunnus	0	186749	match	0	0		20.2009	20.2009	20.2009	timetree_fit
+n313	4	Brama;Scombrolabrax;Stromateus	0	1489894	probed_outside	10	0	Auxis:out;Sarda:out;Thunnus:out;Taractichthys:in	50.6583	50.6583	50.6583	timetree_fit
+n316	2	Brama;Taractichthys	0	215350	match	0	0		15.7173	15.7173	15.7173	timetree_fit
+n320	4	Aphanopus;Benthodesmus;Lepidocybium	0	1489894	probed_outside	10	0	Auxis:out;Brama:out;Sarda:out;Lepidopus:in	57.6586	57.6586	57.6586	timetree_fit
+n322	3	Aphanopus;Benthodesmus;Lepidopus	27770	27770	match	0	0		29.8304	29.8304	29.8304	timetree_fit
+n323	2	Aphanopus;Lepidopus	27770	27770	wider	1	0		29.8304		28.2839	interpolated_timetree_other_node
+n327	13	Apogon;Buenia;Chromogobius	1489875	1489875	match	0	0		95.5706	95.5706	95.5706	timetree_fit
+n328	12	Buenia;Chromogobius;Didogobius	0	497223	narrower	0	0	Gobius:in;Vanneaugobius:out	46.2079		90.8983	interpolated_timetree_other_node
+n329	4	Buenia;Gobiusculus;Pomatoschistus	0	497223	probed_outside	8	0	Gobius:out;Lesueurigobius:out;Vanneaugobius:out	39.0524	39.0524	39.0524	timetree_fit
+n330	2	Gobiusculus;Pomatoschistus	0	497223	probed_outside	10	0	Gobius:out;Lesueurigobius:out;Vanneaugobius:out	17.2397	17.2397	17.2397	timetree_fit
+n338	4	Gobius;Mauligobius;Thorogobius	0	497223	wider	8	0	Lesueurigobius:in	37.5560		39.5294	interpolated_timetree_other_node
+n354	2	Desmodema;Zu	81393	81393	match	0	0		36.4675	36.4675	36.4675	timetree_fit
+n357	25	Bregmaceros;Coelorinchus;Cyttopsis	1489841	1489841	match	0	0		108.7745	108.7745	108.7745	timetree_fit
+n358	20	Bregmaceros;Coelorinchus;Gadella	8043	8043	match	0	0		48.0767	48.0767	49.1568	timetree_fit
+n359	19	Coelorinchus;Gadella;Gadiculus	8043	8043	wider	1	0		48.0767		49.1443	interpolated_timetree_other_node
+n360	11	Coelorinchus;Gadella;Gadomus	8043	8043	wider	9	0		48.0767		48.2305	interpolated_timetree_other_node
+n361	9	Coelorinchus;Gadella;Gadomus	8043	8043	wider	11	0		48.0767		48.0201	interpolated_timetree_other_node
+n362	8	Coelorinchus;Gadella;Gadomus	30761	30761	narrower	0	2		64.8378		47.9651	interpolated_timetree_other_node
+n363	7	Coelorinchus;Gadella;Gadomus	8043	8043	wider	13	0		48.0767		47.6125	interpolated_timetree_other_node
+n364	5	Coelorinchus;Gadomus;Hymenogadus	0	30761	probed_outside	1	0	Trachyrincus:out;Nezumia:in	47.2617	47.2617	46.3079	timetree_fit
+n366	4	Coelorinchus;Hymenogadus;Malacocephalus	0	630280	match	0	0		30.4710	30.4710	30.4710	timetree_fit
+n371	2	Gadella;Lepidion	0	30759	match	0	0		44.3464	44.3464	44.3464	timetree_fit
+n379	8	Gadiculus;Gadus;Gaidropsarus	8045	8045	narrower	0	3		68.0715		47.7616	interpolated_timetree_other_node
+n380	7	Gadiculus;Gadus;Gaidropsarus	0	1489845	probed_outside	7	0	Gadella:out;Lepidion:out;Lyconus:out;Gadus:in;Gaidropsarus:in;Molva:in	48.2465	48.2465	47.7111	timetree_fit
+n381	6	Gadiculus;Gadus;Gaidropsarus	0	1489845	probed_outside	8	0	Phycis:out;Gadella:out;Lepidion:out;Gadus:in;Molva:in;Trisopterus:in	27.3342	27.3342	27.9654	timetree_fit
+n383	5	Gadiculus;Gadus;Micromesistius	0	1489845	probed_outside	9	0	Gaidropsarus:out;Phycis:out;Gadella:out;Gadus:in;Trisopterus:in	28.0224	28.0224	27.6885	timetree_fit
+n384	4	Gadiculus;Gadus;Micromesistius	0	8045	unchecked	1	0		22.2715	22.2715	23.2744	timetree_fit
+n386	3	Gadiculus;Micromesistius;Trisopterus	0	8045	probed_outside	2	0	Gadus:out	22.7683	22.7683	23.0440	timetree_fit
+n388	2	Gadiculus;Micromesistius	0	8045	probed_outside	3	0	Trisopterus:out;Gadus:out	23.7158	23.7158	22.8158	timetree_fit
+n395	5	Cyttopsis;Grammicolepis;Zenion	31097	31097	match	0	0		64.8458	64.8458	64.8458	timetree_fit
+n397	4	Cyttopsis;Grammicolepis;Zenopsis	0	31097	probed_outside	1	0	Zenion:out;Zeus:in	46.1086	46.1086	48.7174	timetree_fit
+n398	3	Grammicolepis;Zenopsis;Zeus	0	31097	probed_outside	2	0	Cyttopsis:out;Zenion:out	52.4805	52.4805	48.2350	timetree_fit
+n400	2	Zenopsis;Zeus	31103	31103	match	0	0		32.2541	32.2541	32.2541	timetree_fit
+n404	7	Bolinichthys;Ceratoscopelus;Hygophum	68514	68514	match	0	0		70.9884	70.9884	70.9884	timetree_fit
+n409	2	Ceratoscopelus;Lampanyctus	0	68515	wider	4	0	Lampadena:out;Lobianchia:out;Hygophum:in	44.6308		38.0899	interpolated_timetree_other_node
+n418	2	Alepisaurus;Chlorophthalmus	0	143312	match	0	0		80.4756	80.4756	80.4756	timetree_fit
+n422	2	Synodus;Trachinocephalus	143310	143310	match	0	0		42.8610	66.1024	66.1024	timetree_fit
+n425	10	Anguilla;Conger;Facciolella	0	32521	match	0	0	Conger:in;Facciolella:in;Muraena:in	188.1450	188.1450	188.1450	timetree_fit
+n426	8	Anguilla;Conger;Facciolella	0	7933	match	0	0	Conger:in;Facciolella:in;Nettastoma:in	101.3866	101.3866	101.3866	timetree_fit
+n427	7	Anguilla;Conger;Facciolella	0	7933	narrower	1	0	Synaphobranchus:out;Facciolella:in;Muraena:out	121.9784		97.1343	interpolated_timetree_other_node
+n428	6	Conger;Facciolella;Muraena	0	7933	wider	2	0	Anguilla:in	172.4255		93.1619	interpolated_timetree_other_node
+n429	5	Conger;Facciolella;Nettastoma	0	7933	probed_outside	3	0	Muraena:out;Anguilla:out;Synaphobranchus:out;Nettastoma:in	71.7014	71.7014	73.3445	timetree_fit
+n430	4	Facciolella;Nettastoma;Ophichthus	0	7933	wider	4	0	Conger:in	71.7014		73.2820	interpolated_timetree_other_node
+n431	2	Facciolella;Nettastoma	118175	118175	match	0	0		109.9330	109.9330	71.8993	timetree_fit
+n434	2	Ophichthus;Ophisurus	0	54916	match	0	0		36.4486	36.4486	36.4486	timetree_fit
+n444	30	Apristurus;Bathytoshia;Centrophorus	7777	7777	match	0	0		404.3945	404.3945	404.3945	timetree_fit
+n445	29	Apristurus;Bathytoshia;Centrophorus	7778	7778	match	0	0		273.3075	273.3075	273.3075	timetree_fit
+n446	12	Bathytoshia;Dasyatis;Dipturus	117893	117893	match	0	0		196.5449	196.5449	203.4364	timetree_higher_taxa_fit
+n447	6	Bathytoshia;Dasyatis;Mobula	0	117893	unchecked	6	0		222.3850	222.3850	201.4222	timetree_higher_taxa_fit
+n448	5	Bathytoshia;Dasyatis;Mobula	0	117851	match	0	0		75.2700	75.2700	75.2700	timetree_fit
+n449	2	Bathytoshia;Dasyatis	0	30469	match	0	0		37.0000	37.0000	37.0000	timetree_fit
+n452	3	Mobula;Myliobatis;Rhinoptera	1158979	1158979	match	0	0		58.5250	58.5250	58.5250	timetree_fit
+n454	2	Mobula;Rhinoptera	0	1158979	probed_outside	1	0	Myliobatis:out	26.2250	26.2250	26.2250	timetree_fit
+n469	17	Apristurus;Centrophorus;Centroscymnus	119203	119203	match	0	0		258.4242	258.4242	258.9065	timetree_fit
+n470	8	Apristurus;Galeorhinus;Galeus	0	119195	match	0	0	Galeus:in;Scyliorhinus:in	210.6961	210.6961	210.6961	timetree_fit
+n471	6	Apristurus;Galeorhinus;Galeus	7826	7826	narrower	0	3		212.1464		172.4405	interpolated_timetree_other_node
+n472	5	Apristurus;Galeorhinus;Galeus	30483	30483	wider	1	0		139.3745		156.4282	interpolated_timetree_other_node
+n476	3	Galeorhinus;Mustelus;Prionace	0	30483	probed_outside	3	0	Apristurus:out;Galeus:out;Scyliorhinus:out	114.1757	114.1757	114.1757	timetree_fit
+n477	2	Mustelus;Prionace	0	30483	probed_outside	4	0	Apristurus:out;Galeus:out;Scyliorhinus:out	114.1757		110.4013	interpolated_unresolved_in_timetree
+n482	2	Isurus;Mitsukurina	30496	30496	match	0	0		160.4991	160.4991	160.4991	timetree_higher_taxa_fit
+n485	9	Centrophorus;Centroscymnus;Deania	118040	118040	match	0	0		256.7386	256.7386	256.3431	timetree_fit
+n486	8	Centrophorus;Centroscymnus;Deania	0	118040	unchecked	1	0		182.0310	182.0310	182.0310	timetree_fit
+n487	7	Centrophorus;Centroscymnus;Deania	0	282414	match	0	0	Centroscymnus:in;Deania:in;Somniosus:in	130.0161	130.0161	130.0161	timetree_fit
+n488	6	Centrophorus;Centroscymnus;Deania	0	282414	wider	1	0	Etmopterus:in	130.0161		124.7310	interpolated_timetree_other_node
+n489	4	Centrophorus;Deania;Somniosus	282414	282414	wider	3	0		138.5513		97.6786	interpolated_timetree_other_node
+n490	2	Somniosus;Squalus	282414	282414	wider	5	0		138.5513		78.6977	interpolated_timetree_other_node
+n493	2	Centrophorus;Deania	117924	117924	match	0	0		66.7173	66.7173	66.7173	timetree_fit
+n506	11	Arbacia;Asterina;Astrospartus	133551	133551	match	0	0		515.3771	515.3771	515.3771	timetree_higher_taxa_fit
+n507	6	Arbacia;Holothuria;Paracentrotus	7624	7624	match	0	0		420.4232	420.4232	420.4232	timetree_fit
+n508	4	Arbacia;Paracentrotus;Psammechinus	7674	7674	match	0	0		207.5000	207.5000	207.5000	timetree_fit
+n510	3	Paracentrotus;Psammechinus;Sphaerechinus	0	7674	probed_outside	1	0	Arbacia:out	127.7698	127.7698	127.7699	timetree_fit
+n512	2	Psammechinus;Sphaerechinus	0	7674	probed_outside	2	0	Arbacia:out;Sphaerechinus:in	127.7698		76.6619	interpolated_unresolved_in_timetree
+n515	2	Holothuria;Psolus	7705	7705	match	0	0		266.1743	266.1743	266.1743	timetree_higher_taxa_fit
+n518	5	Asterina;Astrospartus;Coscinasterias	7587	7587	match	0	0		405.7380	405.7380	405.7380	timetree_higher_taxa_fit
+n526	855	Abavopsis;Abida;Abludomelita	33317		unchecked	0	0		608.0744	608.0744	608.0744	timetree_higher_taxa_fit
+n527	572	Abavopsis;Abida;Acanthinula	0	1206795	match	0	0	Bugulina:in;Caberea:in;Acanthochitona:in	582.6916	582.6916	582.6916	timetree_higher_taxa_fit
+n528	25	Amathia;Bugula;Bugulina	10206	10206	match	0	0		418.2232	418.2232	418.2232	timetree_higher_taxa_fit
+n554	2	Bugula;Bugulina	0	10210	match	0	0		80.1879	80.1879	80.1879	timetree_fit
+n557	2	Caberea;Notoplites	97286	97286	match	0	0		108.7704	108.7704	108.7704	timetree_fit
+n576	547	Abavopsis;Abida;Acanthinula	0	1206795	wider	25	0	Bugulina:in	582.6916		579.6128	interpolated_timetree_other_node
+n577	383	Abavopsis;Abida;Acanthinula	6447	6447	match	0	0		534.2564	534.2564	535.9456	timetree_fit
+n578	376	Abavopsis;Abida;Acanthinula	0	6447	probed_outside	7	0	Acanthochitona:out;Leptochiton:out;Bathypolypus:in;Chiroteuthis:in;Illex:in	535.7702	535.7702	530.6392	timetree_higher_taxa_fit
+n579	357	Abavopsis;Abida;Acanthinula	0	6447	probed_outside	26	0	Bathypolypus:out;Chiroteuthis:out;Illex:out;Anodonta:in;Cerastoderma:in;Ensis:in	520.6650	520.6650	520.6650	timetree_higher_taxa_fit
+n580	326	Abavopsis;Abida;Acanthinula	0	6448	match	0	0	Allognathus:in;Clausilia:in;Cymbula:in	466.3507	466.3507	466.3507	timetree_fit
+n581	195	Abavopsis;Aegires;Aeolidia	0	6448	probed_outside	130	0	Cymbula:out;Diodora:out;Emarginula:out;Cochlostoma:in;Coralliophila:in;Corrosella:in	410.1805	410.1805	410.1805	timetree_higher_taxa_fit
+n582	62	Alvania;Aporrhais;Bivetiella	69555	69555	match	0	0		218.2199	218.2199	221.0572	timetree_fit
+n583	4	Cochlostoma;Obscurella;Pomacea	0	75116	match	0	0		122.0000	122.0000	122.0000	timetree_fit
+n589	18	Bivetiella;Columbella;Coralliophila	0	6479	match	0	0	Tritia:in;Nucella:in;Pagodula:in	113.4217	113.4217	113.4217	timetree_fit
+n590	4	Columbella;Fusinus;Nassarius	0	216303	match	0	0	Nassarius:in;Tritia:in	72.0296	72.0296	72.0296	timetree_higher_taxa_fit
+n591	2	Nassarius;Tritia	0	1934898	match	0	0		38.5002	38.5002	38.5002	timetree_fit
+n601	10	Coralliophila;Hexaplex;Hirtomurex	0	39476	match	0	0		82.2100	82.2100	82.2100	timetree_fit
+n605	3	Nucella;Ocenebra;Ocinebrina	0	39476	wider	7	0	Coralliophila:out;Plicopurpura:in	18.6233		51.8295	interpolated_timetree_other_node
+n609	2	Plicopurpura;Stramonita	0	39476	wider	8	0	Coralliophila:out;Nucella:in	85.4096		50.0378	interpolated_timetree_other_node
+n617	38	Alvania;Aporrhais;Botryphallus	216294	216294	match	0	0		288.2545	288.2545	218.8685	timetree_fit
+n622	7	Corrosella;Ecrobia;Hydrobia	0	55731	unchecked	1	0		16.6000	16.6000	16.6000	timetree_fit
+n624	2	Ecrobia;Hydrobia	0	412778	wider	4	0	Corrosella:in	33.9026		8.3000	interpolated_timetree_other_node
+n636	4	Echinolittorina;Littorina;Melarhaphe	31212	31212	match	0	0		127.7420	127.7420	127.7420	timetree_fit
+n670	133	Abavopsis;Aegires;Aeolidia	216307	216307	wider	109	0		251.4570		308.4288	interpolated_timetree_other_node
+n671	119	Abavopsis;Aegires;Aeolidia	216307	216307	wider	123	0		251.4570		292.3345	interpolated_timetree_other_node
+n673	34	Aegires;Aldisa;Baptodoris	0	216331	match	0	0	Phyllidia:in;Hypselodoris:in	65.7000	65.7000	65.7000	timetree_higher_taxa_fit
+n674	16	Aldisa;Baptodoris;Discodoris	0	6514	probed_outside	3	0	Phyllidia:out;Hypselodoris:in	53.5100	53.5100	53.5100	timetree_higher_taxa_fit
+n693	3	Dendrodoris;Doriopsilla;Phyllidia	6514	6514	wider	16	0		67.1800		27.6641	interpolated_timetree_other_node
+n719	35	Aeolidia;Aeolidiella;Anteaeolidiella	0	1707744	match	0	0		62.1200	62.1200	62.1200	timetree_higher_taxa_fit
+n742	16	Aeolidia;Aeolidiella;Anteaeolidiella	71481	71481	wider	1	0		45.9100		50.4795	interpolated_timetree_other_node
+n764	37	Abavopsis;Aglaja;Akera	0	216307	probed_outside	203	0	Hypselodoris:out;Phyllidia:out;Berthella:out;Elysia:in;Bulla:in;Microhedyle:in	227.7002	227.7002	227.7002	timetree_higher_taxa_fit
+n765	14	Bosellia;Caliphylla;Cyerce	977775	977775	wider	123	0		203.2479		158.5358	interpolated_timetree_other_node
+n766	12	Bosellia;Caliphylla;Cyerce	71490	71490	match	0	0		138.7950	138.7950	138.7950	timetree_higher_taxa_fit
+n788	23	Abavopsis;Aglaja;Akera	0	2836391	wider	8	0	Cavolinia:in	148.3942		208.4470	interpolated_timetree_other_node
+n789	16	Abavopsis;Aglaja;Biuve	0	2836391	wider	15	0	Cavolinia:in	148.3942		162.7166	interpolated_timetree_other_node
+n790	15	Abavopsis;Aglaja;Biuve	0	69554	match	0	0	Bulla:in;Scaphander:in	82.0280	82.0280	82.0280	timetree_higher_taxa_fit
+n811	3	Bulla;Haminoea;Weinkauffia	216311	216311	match	0	0		55.4800	55.4800	55.4800	timetree_higher_taxa_fit
+n817	7	Akera;Aplysia;Dolabrifera	6497	6497	match	0	0		99.9900	99.9900	99.9900	timetree_higher_taxa_fit
+n826	4	Berthella;Berthellina;Pleurobranchaea	71291	71291	match	0	0		37.3600	37.3600	37.3600	timetree_fit
+n827	3	Berthella;Berthellina;Pleurobranchus	0	71291	probed_outside	1	0	Pleurobranchaea:out	28.5300	28.5300	28.5300	timetree_fit
+n845	14	Ampullaceana;Ancylus;Bulinus	0	216441	narrower	0	0	Bulinus:out	49.9900		232.7432	interpolated_timetree_other_node
+n846	6	Ancylus;Bulinus;Ferrissia	216441	216441	wider	8	0		136.8400		204.7447	interpolated_timetree_other_node
+n854	8	Ampullaceana;Galba;Lymnaea	216441	216441	wider	6	0		136.8400		180.2056	interpolated_timetree_other_node
+n867	13	Calliostoma;Clanculus;Clelandella	0	6448	probed_outside	310	0	Berthella:out;Berthellina:out;Bulinus:out;Diodora:in;Emarginula:in;Haliotis:in	410.4651	410.4651	410.4651	timetree_fit
+n868	10	Calliostoma;Clanculus;Clelandella	216275	216275	match	0	0		206.3200	206.3200	206.3200	timetree_fit
+n869	2	Diodora;Emarginula	0	54986	match	0	0		96.7928	96.7928	96.7928	timetree_fit
+n874	4	Clelandella;Gibbula;Jujubinus	0	1955429	match	0	0		37.2387	37.2387	37.2387	timetree_fit
+n883	3	Cymbula;Patella;Tectura	0	69675	match	0	0		194.6982	194.6982	194.6982	timetree_fit
+n885	2	Cymbula;Patella	6462	6462	match	0	0		158.7150	158.7150	158.7150	timetree_fit
+n903	2	Orculella;Sphyradium	0	145163	match	0	0		10.2517	10.2517	10.2517	timetree_fit
+n945	9	Allognathus;Cepaea;Cornu	0	6533	unchecked	3	0		34.7427	34.7427	34.9743	timetree_fit
+n946	7	Allognathus;Cepaea;Cornu	0	6533	probed_outside	5	0	Helix:out;Cepaea:in;Theba:in;Iberus:in	34.6378	34.6378	34.6281	timetree_fit
+n947	4	Allognathus;Cepaea;Hemicycla	0	6533	probed_outside	8	0	Cornu:out;Theba:out;Helix:out;Iberus:in	26.9184	26.9184	26.9184	timetree_fit
+n948	3	Allognathus;Hemicycla;Iberus	0	6533	probed_outside	9	0	Cepaea:out;Cornu:out;Theba:out	18.0967	18.0967	18.0967	timetree_fit
+n949	2	Allognathus;Hemicycla	0	6533	probed_outside	10	0	Iberus:out;Cepaea:out;Cornu:out	13.6790	13.6790	13.6790	timetree_fit
+n954	3	Cornu;Eobania;Theba	0	6533	probed_outside	9	0	Allognathus:out;Cepaea:out;Hemicycla:out	27.2852	27.2852	27.2852	timetree_fit
+n955	2	Cornu;Theba	0	6533	probed_outside	10	0	Allognathus:out;Cepaea:out;Hemicycla:out	27.2852		17.7176	interpolated_unresolved_in_timetree
+n993	4	Balea;Clausilia;Cochlodina	0	27818	match	0	0		66.2983	66.2983	66.2983	timetree_fit
+n1035	31	Anodonta;Cerastoderma;Chamelea	2785011	2785011	match	0	0		461.4762	461.4762	461.4762	timetree_fit
+n1036	27	Cerastoderma;Chamelea;Corbicula	2785011	2785011	wider	4	0		461.4762		434.3719	interpolated_timetree_other_node
+n1037	10	Gibbomodiola;Glycymeris;Idas	0	6545	match	0	0	Mimachlamys:in;Idas:in	356.6494	356.6494	356.6494	timetree_fit
+n1038	4	Magallana;Mimachlamys;Ostrea	0	6545	wider	6	0	Idas:in	356.6494		297.0201	interpolated_timetree_other_node
+n1039	2	Mimachlamys;Spondylus	106219	106219	match	0	0		248.8133	248.8133	248.8133	timetree_higher_taxa_fit
+n1042	2	Magallana;Ostrea	6563	6563	match	0	0		158.5499	158.5499	158.5499	timetree_fit
+n1045	4	Gibbomodiola;Idas;Mytilus	0	6547	match	0	0		313.2210	313.2210	313.2210	timetree_fit
+n1053	17	Cerastoderma;Chamelea;Corbicula	735337	735337	match	0	0		355.2789	355.2789	363.1399	timetree_higher_taxa_fit
+n1054	16	Cerastoderma;Chamelea;Corbicula	0	2785015	match	0	0	Parvicardium:in;Ruditapes:in	342.6088	342.6088	359.5445	timetree_fit
+n1055	5	Cerastoderma;Donax;Laevicardium	2783445	2783445	match	0	0		431.3775	431.3775	355.9846	timetree_higher_taxa_fit
+n1056	3	Cerastoderma;Laevicardium;Parvicardium	0	55708	match	0	0		94.1022	94.1022	94.1022	timetree_fit
+n1071	2	Ensis;Solen	106232	106232	match	0	0		221.6046	221.6046	221.6046	timetree_fit
+n1079	4	Anodonta;Margaritifera;Potomida	0	47522	match	0	0	Unio:in	150.7201	150.7201	150.7201	timetree_fit
+n1080	3	Anodonta;Potomida;Unio	47526	47526	match	0	0		61.3373	134.4695	134.4695	timetree_fit
+n1081	2	Anodonta;Unio	47526	47526	wider	1	0		61.3373		63.4276	interpolated_timetree_other_node
+n1086	19	Alloteuthis;Ancistroteuthis;Architeuthis	6606	6606	match	0	0		257.9497	257.9497	257.9497	timetree_fit
+n1087	14	Alloteuthis;Ancistroteuthis;Architeuthis	0	215450	match	0	0	Sepiola:in;Chiroteuthis:in;Todarodes:in	250.1252	250.1252	250.1252	timetree_fit
+n1088	11	Alloteuthis;Ancistroteuthis;Architeuthis	0	215450	wider	3	0	Sepietta:in	250.1252		247.9549	interpolated_timetree_other_node
+n1089	8	Ancistroteuthis;Architeuthis;Chiroteuthis	0	34542	match	0	0	Illex:in	108.4993	108.4993	108.4993	timetree_fit
+n1090	4	Ancistroteuthis;Architeuthis;Chiroteuthis	0	34542	wider	4	0	Illex:in	108.4993		96.1447	interpolated_timetree_other_node
+n1097	4	Dosidicus;Illex;Todarodes	6626	6626	match	0	0		83.5666	83.5666	83.5666	timetree_fit
+n1098	2	Dosidicus;Todarodes	6626	6626	wider	2	0		83.5666		72.6702	interpolated_timetree_other_node
+n1103	3	Alloteuthis;Loligo;Sepia	0	215450	probed_outside	11	0	Chiroteuthis:out;Illex:out;Todarodes:out	223.8991	223.8991	223.8991	timetree_higher_taxa_fit
+n1108	3	Rondeletiola;Sepietta;Sepiola	0	2094723	match	0	0		33.0629	33.0629	33.0629	timetree_fit
+n1113	5	Bathypolypus;Haliphron;Macrotritopus	6638	6638	match	0	0		201.6989	201.6989	201.6989	timetree_higher_taxa_fit
+n1115	4	Bathypolypus;Haliphron;Macrotritopus	6646	6646	match	0	0		135.3984	135.3984	135.3984	timetree_higher_taxa_fit
+n1116	3	Bathypolypus;Macrotritopus;Octopus	6647	6647	match	0	0		89.7501	89.7501	89.7501	timetree_fit
+n1121	7	Acanthochitona;Chaetopleura;Lepidochitona	6651	6651	match	0	0		296.4512	296.4512	296.4512	timetree_fit
+n1122	5	Acanthochitona;Chaetopleura;Lepidochitona	6652	6652	match	0	0		239.7634	239.7634	239.7634	timetree_higher_taxa_fit
+n1123	2	Chaetopleura;Rhyssoplax	0	291862	match	0	0		145.7835	145.7835	145.7835	timetree_higher_taxa_fit
+n1134	164	Achaeta;Aglaophamus;Allolobophora	0	6340	match	0	0	Allolobophora:in;Aporrectodea:in;Bimastos:in	500.6360	500.6360	568.2312	timetree_higher_taxa_fit
+n1135	152	Achaeta;Aglaophamus;Allolobophora	0	6340	unchecked	12	0		500.6360		564.6571	interpolated_unresolved_in_timetree
+n1137	141	Achaeta;Aglaophamus;Allolobophora	0	6340	unchecked	23	0		566.0351	566.0351	551.5196	timetree_fit
+n1140	85	Achaeta;Allolobophora;Ampharete	0	6340	probed_outside	79	0	Sipunculus:out;Allolobophora:in;Aporrectodea:in;Bimastos:in	500.6360	500.6360	500.6360	timetree_higher_taxa_fit
+n1141	70	Achaeta;Allolobophora;Ampharete	0	6340	probed_outside	94	0	Sipunculus:out;Allolobophora:in;Aporrectodea:in;Bimastos:in	500.6360		491.2859	interpolated_unresolved_in_timetree
+n1142	66	Achaeta;Allolobophora;Ampharete	0	6340	probed_outside	98	0	Sipunculus:out;Allolobophora:in;Aporrectodea:in;Bimastos:in	500.6360		407.3190	interpolated_unresolved_in_timetree
+n1143	53	Achaeta;Allolobophora;Aporrectodea	42113	42113	match	0	0		273.2321	273.2321	273.2321	timetree_fit
+n1144	27	Achaeta;Allolobophora;Aporrectodea	42113	42113	wider	23	0		273.2321		261.2234	interpolated_timetree_other_node
+n1145	19	Achaeta;Allolobophora;Aporrectodea	2803884	2803884	narrower	0	1		257.5175		243.7356	interpolated_timetree_other_node
+n1170	6	Barbronia;Batracobdella;Dina	0	55824	unchecked	1	0		204.5010	204.5010	204.5010	timetree_fit
+n1213	2	Lumbriculus;Stylodrilus	0	77569	match	0	0		207.0768	207.0768	207.0768	timetree_fit
+n1216	13	Ampharete;Amphictene;Arenicola	105389	105389	wider	31	0		394.5099		294.7754	interpolated_timetree_other_node
+n1218	6	Ampharete;Amphictene;Auchenoplax	2784887	2784887	wider	1	0		159.9478		274.1227	interpolated_timetree_other_node
+n1219	5	Ampharete;Amphictene;Auchenoplax	2784887	2784887	wider	2	0		159.9478		187.2747	interpolated_timetree_other_node
+n1237	3	Heteromastus;Notomastus;Ophelina	0	105387	unchecked	12	0		399.1278	399.1278	399.1278	timetree_higher_taxa_fit
+n1243	15	Amphiglena;Aphelochaeta;Branchiomma	105389	105389	wider	29	0		394.5099		387.0967	interpolated_timetree_other_node
+n1250	5	Laonice;Prionospio;Sabellaria	105389	105389	wider	39	0		394.5099		275.7489	interpolated_timetree_other_node
+n1349	2	Hipponoe;Sipunculus	0	6340	wider	158	0	Allolobophora:in	566.0351		254.7380	interpolated_timetree_other_node
+n1373	3	Galathowenia;Magelona;Owenia	105389	105389	wider	41	0		394.5099		134.3454	interpolated_timetree_other_node
+n1382	283	Abludomelita;Acaeroplastes;Acanthephyra	0	3701028	narrower	0	4		524.4408		600.9199	interpolated_timetree_other_node
+n1383	53	Acanthocyclops;Acartia;Aetideus	0	3701030	match	0	0	Artemia:in;Daphnia:in;Moina:in	524.4408	524.4408	524.4408	timetree_fit
+n1384	17	Alona;Artemia;Bosmina	6658	6658	match	0	0		432.6838	432.6838	432.6838	timetree_fit
+n1385	13	Alona;Bosmina;Ceriodaphnia	116557	116557	match	0	0		408.2161	408.2161	408.2161	timetree_fit
+n1386	12	Alona;Bosmina;Ceriodaphnia	0	6665	match	0	0	Daphnia:in;Simocephalus:in	196.8250	196.8250	209.5797	timetree_fit
+n1387	11	Alona;Bosmina;Ceriodaphnia	0	116561	match	0	0		209.5250	209.5250	207.5046	timetree_fit
+n1392	4	Ceriodaphnia;Daphnia;Scapholeberis	0	77658	match	0	0		179.0000	179.0000	179.0000	timetree_fit
+n1412	35	Acanthocyclops;Acartia;Aetideus	116569	116569	wider	1	0		308.3587		403.6526	interpolated_timetree_other_node
+n1415	17	Aetideus;Anomalocera;Calanoides	0	6833	unchecked	6	0		191.9444	191.9444	191.9444	timetree_higher_taxa_fit
+n1456	11	Acanthocyclops;Caligus;Eucyclops	0	116571	probed_outside	2	0	Oncaea:out	276.8712	276.8712	276.8712	timetree_fit
+n1457	4	Caligus;Euterpina;Goniopsyllus	0	116571	wider	9	0	Acanthocyclops:in	276.8712		261.9277	interpolated_timetree_other_node
+n1458	2	Caligus;Pennella	72033	72033	match	0	0		167.8200	167.8200	167.8200	timetree_higher_taxa_fit
+n1467	3	Acanthocyclops;Mesocyclops;Thermocyclops	84315	84315	wider	3	0		78.0224		60.8558	interpolated_timetree_other_node
+n1479	230	Abludomelita;Acaeroplastes;Acanthephyra	6657	6657	unchecked	0	0		534.6666	534.6666	534.6666	timetree_fit
+n1480	226	Abludomelita;Acaeroplastes;Acanthephyra	0	3701029	match	0	0	Balanus:in;Chthamalus:in;Conchoderma:in	464.7852	464.7852	464.7852	timetree_fit
+n1481	211	Abludomelita;Acaeroplastes;Acanthephyra	0	72041	match	0	0	Alpheus:in;Austropotamobius:in;Apohyale:in	332.9312	332.9312	348.4840	timetree_fit
+n1482	101	Abludomelita;Acaeroplastes;Agabiformius	6820	6820	match	0	0		392.5203	392.5203	345.0336	timetree_higher_taxa_fit
+n1483	36	Acaeroplastes;Agabiformius;Alpioniscus	0	29979	match	0	0	Joeropsis:in;Natatolana:in;Armadillidium:in	264.2244	264.2244	270.7653	timetree_fit
+n1484	4	Anthura;Cyathura;Eurydice	0	29979	wider	31	0	Armadillidium:in	264.2244		221.8208	interpolated_timetree_other_node
+n1491	18	Acaeroplastes;Agabiformius;Alpioniscus	41116	41116	match	0	0		205.5920	205.5920	205.5920	timetree_fit
+n1493	8	Acaeroplastes;Agabiformius;Leptotrichus	96867	96867	match	0	0		49.4872	49.4872	49.4872	timetree_fit
+n1505	6	Alpioniscus;Androniscus;Catalauniscus	33328	33328	match	0	0		151.0248	151.0248	151.0248	timetree_fit
+n1520	6	Bragasellus;Janira;Joeropsis	63226	63226	match	0	0		298.5000	298.5000	268.0844	timetree_fit
+n1521	4	Bragasellus;Proasellus;Stenasellus	525154	525154	match	0	0		131.4349	131.4349	158.7710	timetree_fit
+n1522	3	Bragasellus;Proasellus;Synasellus	0	63227	match	0	0		244.1641	244.1641	157.1990	timetree_fit
+n1539	54	Abludomelita;Ampelisca;Ampithoe	0	6821	match	0	0	Haustorius:in;Apohyale:in;Leucothoe:in	217.1868	217.1868	217.1868	timetree_higher_taxa_fit
+n1540	11	Ampelisca;Apolochus;Dexamine	2692238	2692238	wider	1	0		22.8887		189.8290	interpolated_timetree_other_node
+n1552	43	Abludomelita;Ampithoe;Aora	0	6821	wider	10	0	Haustorius:in	217.1868		197.6459	interpolated_timetree_other_node
+n1583	7	Apohyale;Hyale;Orchestia	1732206	1732206	match	0	0		125.8872	125.8872	125.8872	timetree_fit
+n1584	3	Orchestia;Platorchestia;Talitrus	92169	92169	match	0	0		26.4138	64.4418	64.4418	timetree_fit
+n1593	11	Bathyporeia;Echinogammarus;Gammarus	0	6821	wider	41	0	Caprella:in	217.1868		127.7369	interpolated_timetree_other_node
+n1594	3	Haploginglymus;Niphargus;Pseudoniphargus	1732303	1732303	match	0	0		60.5756	60.5756	60.5756	timetree_fit
+n1595	2	Haploginglymus;Niphargus	111559	111559	match	0	0		22.5034	22.5034	22.5034	timetree_fit
+n1599	8	Bathyporeia;Echinogammarus;Gammarus	0	6821	wider	44	0	Haploginglymus:in	217.1868		114.5753	interpolated_timetree_other_node
+n1600	7	Echinogammarus;Gammarus;Iberogammarus	0	36939	match	0	0		53.0919	53.0919	53.0919	timetree_fit
+n1610	6	Abludomelita;Elasmopus;Gammarella	936400	936400	match	0	0		210.2794	136.5996	136.5996	timetree_fit
+n1633	107	Acanthephyra;Acanthonyx;Aegaeon	6683	6683	match	0	0		316.7191	316.7191	345.0336	timetree_higher_taxa_fit
+n1634	91	Acanthephyra;Acanthonyx;Aegaeon	0	6692	match	0	0	Alpheus:in;Austropotamobius:in;Calappa:in	396.6354	396.6354	341.6175	timetree_higher_taxa_fit
+n1635	20	Acanthephyra;Aegaeon;Alpheus	0	6694	match	0	0	Alpheus:in;Typhlatya:in;Plesionika:in	185.7900	185.7900	214.0082	timetree_fit
+n1636	3	Atyaephyra;Dugastella;Typhlatya	0	96235	match	0	0		177.0236	177.0236	177.0236	timetree_fit
+n1638	2	Atyaephyra;Dugastella	0	96235	probed_outside	1	0	Typhlatya:out	153.6674	153.6674	153.6674	timetree_fit
+n1641	9	Acanthephyra;Alpheus;Athanas	0	6694	probed_outside	11	0	Dugastella:out;Typhlatya:out;Pandalus:out;Palaemon:in	161.3730	161.3730	211.8893	timetree_fit
+n1642	6	Alpheus;Athanas;Eualus	0	6694	probed_outside	14	0	Oplophorus:out;Dugastella:out;Typhlatya:out	216.8731	216.8731	209.7914	timetree_fit
+n1643	4	Alpheus;Athanas;Palaemon	0	6694	wider	16	0	Hippolyte:in	216.8731		204.7053	interpolated_timetree_other_node
+n1650	2	Eualus;Hippolyte	0	98089	match	0	0		172.9600	172.9600	172.9600	timetree_fit
+n1668	71	Acanthonyx;Afruca;Anapagurus	0	6692	narrower	20	0	Alpheus:out;Dugastella:out;Hippolyte:out;Austropotamobius:in;Palinurus:in;Polycheles:out	294.6391		340.1517	interpolated_timetree_other_node
+n1669	64	Acanthonyx;Afruca;Anapagurus	0	6692	wider	27	0	Austropotamobius:in	294.6391		320.1882	interpolated_timetree_other_node
+n1670	62	Acanthonyx;Afruca;Anapagurus	0	6692	wider	28	0	Austropotamobius:in	287.9995		296.0520	interpolated_timetree_other_node
+n1671	60	Acanthonyx;Afruca;Anapagurus	0	6692	probed_outside	30	0	Austropotamobius:out;Palinurus:out;Polycheles:out;Calcinus:in;Clibanarius:in;Calappa:in	290.8637	290.8637	290.8637	timetree_fit
+n1672	47	Acanthonyx;Afruca;Atelecyclus	0	6752	match	0	0	Latreillia:in;Calappa:in;Callinectes:in	244.0526	244.0526	244.0526	timetree_fit
+n1673	44	Acanthonyx;Afruca;Atelecyclus	0	116704	match	0	0	Cancer:in;Pilumnus:in;Calappa:in	156.7706	156.7706	156.7706	timetree_higher_taxa_fit
+n1674	28	Afruca;Bathynectes;Calappa	0	116706	narrower	16	10		195.5000		119.9867	interpolated_timetree_other_node
+n1675	27	Afruca;Bathynectes;Callinectes	0	6774	narrower	0	19		54.9228		118.9344	interpolated_timetree_other_node
+n1676	18	Afruca;Callinectes;Ebalia	0	116704	wider	26	0	Liocarcinus:in	156.7706		112.6275	interpolated_timetree_other_node
+n1679	2	Nepinnotheres;Pinnotheres	0	84654	match	0	0		26.8049	26.8049	26.8049	timetree_fit
+n1686	3	Grapsus;Pachygrapsus;Planes	0	39556	match	0	0		36.2624	36.2624	36.2624	timetree_fit
+n1693	4	Lophozozymus;Monodaeus;Panopeus	0	6778	probed_outside	1	0	Eriphia:out;Panopeus:in	53.8143	53.8143	53.8143	timetree_higher_taxa_fit
+n1699	3	Callinectes;Ebalia;Geryon	0	116706	wider	31	0	Panopeus:out;Eriphia:out;Liocarcinus:in	195.5000		65.4363	interpolated_timetree_other_node
+n1700	2	Callinectes;Geryon	6774	6774	wider	6	0		65.0006		49.6864	interpolated_timetree_other_node
+n1705	5	Bathynectes;Liocarcinus;Macropipus	1343473	1343473	match	0	0		24.4947	24.4947	24.4947	timetree_fit
+n1711	4	Carcinus;Derilambrus;Parthenopoides	0	116706	wider	30	0	Callinectes:in	195.5000		65.2302	interpolated_timetree_other_node
+n1721	10	Acanthonyx;Ergasticus;Eurynome	6804	6804	match	0	0		83.7489	83.7489	83.7489	timetree_higher_taxa_fit
+n1739	3	Dromia;Homola;Latreillia	6782	6782	match	0	0		151.7097	151.7097	151.7097	timetree_higher_taxa_fit
+n1744	13	Anapagurus;Calcinus;Cestopagurus	0	6738	match	0	0	Calcinus:in;Clibanarius:in;Pagurus:in	250.7970	250.7970	250.7970	timetree_fit
+n1745	8	Anapagurus;Calcinus;Cestopagurus	0	6744	narrower	0	0	Calcinus:in;Dardanus:in;Pagurus:out	166.9500		200.9107	interpolated_timetree_other_node
+n1747	7	Anapagurus;Calcinus;Cestopagurus	0	6744	unchecked	1	0		177.3775	177.3775	177.3775	timetree_fit
+n1752	4	Calcinus;Clibanarius;Dardanus	0	6749	match	0	0		107.5800	107.5800	107.5800	timetree_fit
+n1754	2	Calcinus;Clibanarius	0	6749	wider	2	0	Dardanus:in	107.5800		80.3681	interpolated_timetree_other_node
+n1759	4	Galathea;Munida;Pisidia	0	115588	probed_outside	1	0	Munidopsis:out;Galathea:in;Pisidia:in	158.8255	158.8255	158.8255	timetree_higher_taxa_fit
+n1761	3	Galathea;Pisidia;Porcellana	0	115588	probed_outside	2	0	Munidopsis:out	158.8255		135.3251	interpolated_unresolved_in_timetree
+n1762	2	Pisidia;Porcellana	0	84660	match	0	0		56.7200	56.7200	56.7200	timetree_fit
+n1767	2	Jaxea;Upogebia	1792266	1792266	match	0	0		253.4786	253.4786	253.4786	timetree_higher_taxa_fit
+n1773	7	Austropotamobius;Nephrops;Palinurus	0	6692	wider	83	0	Calappa:in	396.6354		318.1707	interpolated_timetree_other_node
+n1774	6	Austropotamobius;Nephrops;Palinurus	0	6692	probed_outside	84	0	Polycheles:out;Calappa:out;Calcinus:out;Procambarus:in;Scyllarus:in	317.4655	317.4655	317.4655	timetree_fit
+n1775	3	Austropotamobius;Nephrops;Procambarus	6712	6712	match	0	0		266.8914	266.8914	266.8914	timetree_fit
+n1776	2	Austropotamobius;Procambarus	6724	6724	match	0	0		151.8478	151.8478	151.8478	timetree_fit
+n1780	3	Palinurus;Scyllarides;Scyllarus	115587	115587	match	0	0		207.8838	207.8838	207.8838	timetree_fit
+n1782	2	Scyllarides;Scyllarus	59755	59755	match	0	0		173.2118	173.2118	173.2118	timetree_fit
+n1786	16	Aristaeomorpha;Deosergestes;Eusergestes	6684	6684	match	0	0		326.7602	326.7602	326.8600	timetree_fit
+n1787	13	Aristaeomorpha;Funchalia;Gennadas	111520	111520	match	0	0		324.5069	324.5069	323.6238	timetree_fit
+n1788	7	Funchalia;Metapenaeopsis;Metapenaeus	6685	6685	narrower	1	1		218.1600		201.6814	interpolated_timetree_other_node
+n1789	6	Metapenaeopsis;Metapenaeus;Parapenaeus	0	111520	wider	7	0	Funchalia:in	240.9836		183.4865	interpolated_timetree_other_node
+n1790	3	Metapenaeus;Sicyonia;Trachysalambria	0	111520	wider	10	0	Metapenaeopsis:in	240.9836		160.2799	interpolated_timetree_other_node
+n1792	2	Metapenaeus;Trachysalambria	0	6685	probed_outside	5	0	Metapenaeopsis:out;Funchalia:out;Penaeus:out	140.3000	140.3000	140.3000	timetree_fit
+n1795	3	Metapenaeopsis;Parapenaeus;Penaeopsis	0	6685	probed_outside	4	0	Metapenaeus:out;Funchalia:out;Penaeus:out	120.4400	120.4400	120.4400	timetree_fit
+n1801	5	Aristaeomorpha;Gennadas;Hymenopenaeus	0	111520	probed_outside	8	0	Funchalia:out;Metapenaeopsis:out;Metapenaeus:out;Solenocera:in	164.5200	164.5200	174.8860	timetree_fit
+n1802	2	Aristaeomorpha;Gennadas	0	111520	probed_outside	11	0	Hymenopenaeus:out;Solenocera:out;Funchalia:out	221.0949	221.0949	173.1544	timetree_higher_taxa_fit
+n1805	3	Hymenopenaeus;Pleoticus;Solenocera	0	84683	match	0	0		55.3844	55.3844	55.3844	timetree_fit
+n1811	3	Deosergestes;Eusergestes;Sergia	0	111522	match	0	0		7.7027	44.5913	44.5913	timetree_fit
+n1820	15	Amphibalanus;Austrominius;Balanus	0	2899756	match	0	0	Balanus:in;Chthamalus:in;Lepas:in	174.4485	174.4485	174.4485	timetree_fit
+n1821	11	Amphibalanus;Austrominius;Balanus	0	2899756	probed_outside	4	0	Conchoderma:out;Lepas:out;Balanus:in;Chthamalus:in;Conopea:in	136.4337	136.4337	141.7239	timetree_fit
+n1822	10	Amphibalanus;Austrominius;Balanus	0	2899756	probed_outside	5	0	Pollicipes:out;Conchoderma:out;Lepas:out;Balanus:in;Chthamalus:in;Megabalanus:in	144.0059	144.0059	140.3207	timetree_fit
+n1823	9	Amphibalanus;Austrominius;Balanus	2899670	2899670	match	0	0		99.4861	99.4861	99.4861	timetree_fit
+n1824	7	Amphibalanus;Austrominius;Balanus	0	2899670	probed_outside	2	0	Chthamalus:out;Balanus:in;Conopea:in	94.0059	94.0059	94.0059	timetree_fit
+n1826	5	Amphibalanus;Balanus;Conopea	37806	37806	match	0	0		57.0000	57.0000	57.0000	timetree_fit
+n1827	3	Amphibalanus;Conopea;Megabalanus	37806	37806	wider	2	0		57.0000		39.9952	interpolated_timetree_other_node
+n1840	4	Conchoderma;Dosima;Heteralepas	38010	38010	narrower	0	1		105.5885		57.8866	interpolated_timetree_other_node
+n1851	36	Actinia;Antennella;Anthopleura	6073	6073	match	0	0		568.9317	568.9317	568.9317	timetree_higher_taxa_fit
+n1852	16	Actinia;Anthopleura;Callogorgia	0	6101	match	0	0	Callogorgia:in;Anthopleura:in;Caryophyllia:in	546.1592	546.1592	546.1592	timetree_fit
+n1854	8	Actinia;Anthopleura;Caryophyllia	0	6102	match	0	0	Dendrophyllia:in;Stephanocyathus:in	473.8315	473.8315	473.8315	timetree_fit
+n1855	5	Caryophyllia;Dendrophyllia;Oculina	6102	6102	wider	3	0		446.8761		304.0630	interpolated_timetree_other_node
+n1856	4	Caryophyllia;Dendrophyllia;Oculina	0	6125	match	0	0	Stephanocyathus:in	49.6986	188.2063	188.2063	timetree_fit
+n1858	3	Caryophyllia;Oculina;Stephanocyathus	0	3115840	match	0	0		49.6986		164.6978	interpolated_unresolved_in_timetree
+n1859	2	Caryophyllia;Oculina	0	3115840	wider	1	0	Stephanocyathus:in	49.6986		163.4880	interpolated_timetree_other_node
+n1870	7	Callogorgia;Cavernularia;Gyrophyllum	6132	6132	match	0	0		256.6676	256.6676	256.6676	timetree_fit
+n1871	5	Callogorgia;Cavernularia;Gyrophyllum	0	3028851	match	0	0	Callogorgia:in	244.2783	244.2783	244.2783	timetree_higher_taxa_fit
+n1880	2	Leptogorgia;Litophyton	0	3028843	match	0	0	Leptogorgia:in	100.6630	100.6630	100.6630	timetree_higher_taxa_fit
+n1883	20	Antennella;Aurelia;Blackfordia	0	6073	probed_outside	16	0	Anthopleura:out;Callogorgia:out;Caryophyllia:out;Hydra:in;Plumularia:in	547.5811	547.5811	547.5811	timetree_higher_taxa_fit
+n1884	12	Antennella;Blackfordia;Craspedacusta	6074	6074	match	0	0		512.1258	512.1258	512.1258	timetree_higher_taxa_fit
+n1886	11	Antennella;Blackfordia;Hydra	0	37516	match	0	0		449.6157	449.6157	449.6157	timetree_fit
+n1888	7	Antennella;Blackfordia;Macrorhynchia	0	37516	wider	4	0	Hydra:in	449.6157		415.4192	interpolated_timetree_other_node
+n1907	7	Aurelia;Cassiopea;Copula	0	6073	probed_outside	29	0	Hydra:out;Plumularia:out;Anthopleura:out	501.8403	501.8403	501.8403	timetree_higher_taxa_fit
+n1908	6	Aurelia;Cassiopea;Pelagia	6142	6142	match	0	0		205.2263	385.1948	385.1948	timetree_higher_taxa_fit
+n1909	5	Aurelia;Cassiopea;Phacellophora	6142	6142	wider	1	0		205.2263		374.0658	interpolated_timetree_other_node
+n1921	28	Aaptos;Aplysina;Caminella	6042	6042	match	0	0		652.9699	652.9699	652.9699	timetree_fit
+n1922	23	Aaptos;Caminella;Characella	0	1779146	narrower	0	0	Characella:out	518.5000		641.1565	interpolated_timetree_other_node
+n1930	7	Aaptos;Halichondria;Hymeniacidon	0	1779146	probed_outside	16	0	Cliona:out;Tethya:out;Polymastia:out;Hymeniacidon:in;Tedania:in	518.5000	518.5000	518.5000	timetree_fit
+n1938	2	Halichondria;Hymeniacidon	0	6060	match	0	0		105.7826	105.7826	105.7826	timetree_fit
+n1945	6	Caminella;Characella;Geodia	0	1779168	match	0	0		114.1481	114.1481	114.1481	timetree_fit
+n1961	5	Aplysina;Hexadella;Ircinia	0	6042	probed_outside	23	0	Aaptos:out;Characella:out;Cladorhiza:out;Spongia:in	634.3218	634.3218	634.3218	timetree_fit
+n1962	2	Aplysina;Hexadella	1779151	1779151	match	0	0		237.4884	237.4884	237.4884	timetree_fit

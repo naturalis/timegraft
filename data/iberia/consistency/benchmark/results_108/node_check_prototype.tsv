@@ -1,0 +1,455 @@
+node	n_genera	example_genera	timetree_mrca_ncbi	ncbi_common_ancestor	class	n_inside	n_outside	n_missing	outside_examples	missing_examples	timetree_age	calibration_age	age	timetree_n_studies	timetree_attempt
+n0	1186	Aaptos;Abavopsis;Abida	33208	33208	match	1174	0	0			750.1031	750.1031	750.1031	13	higher_taxa
+n1	1158	Abavopsis;Abida;Abludomelita	0	6072	match	1146	0	0			682.3105	682.3105	703.7520	14	higher_taxa
+n2	1122	Abavopsis;Abida;Abludomelita	33213	33213	match	1110	0	0			721.4530	721.4530	696.7841	24	higher_taxa
+n3	267	Acantholabrus;Achondrostoma;Alburnus	33511	33511	match	267	0	0			626.5705	626.5705	626.5705	12	0
+n4	256	Acantholabrus;Achondrostoma;Alburnus	7742	7742	match	256	0	0			562.8396	562.8396	562.8396	16	0
+n5	254	Acantholabrus;Achondrostoma;Alburnus	7776	7776	match	254	0	0			463.2425	463.2425	463.2425	20	0
+n6	224	Acantholabrus;Achondrostoma;Alburnus	32443	32443	match	224	0	0			249.5583	249.5583	249.5583	30	0
+n7	214	Acantholabrus;Achondrostoma;Alburnus	186625	186625	match	214	0	0			220.3592	220.3592	220.3592	49	0
+n8	27	Achondrostoma;Alburnus;Alepocephalus	186634	186634	match	27	0	0			200.9210	200.9210	212.5381	27	0
+n9	23	Achondrostoma;Alburnus;Alepocephalus	0	186634	wider	23	4	0	Alosa;Engraulis;Sardina;Sardinella		222.2510	222.2510	210.4338	5	0
+n10	21	Achondrostoma;Alburnus;Ameiurus	186626	186626	match	21	0	0			144.3784	144.3784	144.3784	31	0
+n11	17	Achondrostoma;Alburnus;Anaecypris	7952	7952	match	17	0	0			99.2881	99.2881	99.2881	26	0
+n12	15	Achondrostoma;Alburnus;Anaecypris	0	30727	match	15	0	0			51.7827	51.7827	61.4261	29	0
+n13	12	Achondrostoma;Alburnus;Anaecypris	0	30727	wider	12	3	0	Barbus;Carassius;Luciobarbus		41.4333	41.4333	41.4333	5	0
+n14	11	Achondrostoma;Alburnus;Anaecypris	0	30727	wider	11	4	0	Barbus;Carassius;Luciobarbus;Tinca		26.0140	26.0140	30.2008	6	0
+n15	9	Achondrostoma;Alburnus;Anaecypris	2743726	2743726	match	9	0	0			31.0764	31.0764	29.9018	12	0
+n17	8	Achondrostoma;Alburnus;Anaecypris	0	2743728	match	8	0	0			19.1872	19.1872	29.6058	3	0
+n18	7	Achondrostoma;Alburnus;Anaecypris	0	2743728	wider	7	1	0	Leuciscus		31.6537	31.6537	29.3126	4	0
+n20	4	Achondrostoma;Iberochondrostoma;Parachondrostoma	0	2743728	wider	4	4	0	Alburnus;Anaecypris;Leuciscus;Squalius		11.7154	11.7154	11.7154	2	0
+n21	3	Achondrostoma;Parachondrostoma;Pseudochondrostoma	0	2743728	wider	3	5	0	Alburnus;Anaecypris;Iberochondrostoma;Leuciscus;Squalius		8.4085	8.4085	8.4085	1	0
+n22	2	Achondrostoma;Pseudochondrostoma	0	2743728	wider	2	6	0	Alburnus;Anaecypris;Iberochondrostoma;Leuciscus;Parachondrostoma		7.0637	7.0637	7.0637	3	0
+n31	2	Gobio;Pseudorasbora	0	2743714	match	2	0	0			23.5926	23.5926	23.5926	5	0
+n35	3	Barbus;Carassius;Luciobarbus	0	7953	match	3	0	0			84.1552	84.1552	60.8179	22	0
+n36	2	Barbus;Luciobarbus	0	2743693	match	2	0	0			12.1721	19.8733	19.8733	6	0
+n40	2	Barbatula;Cobitis	0	30725	match	2	0	0			49.1320	49.1320	49.1320	7	0
+n43	4	Ameiurus;Ictalurus;Pangasianodon	0	1489793	match	4	0	0			119.9369	64.9449	64.9449	2	0
+n44	2	Pangasianodon;Silurus	0	1489793	wider	2	2	0	Ameiurus;Ictalurus		119.9369		64.0457	2	0
+n47	2	Ameiurus;Ictalurus	0	7996	match	2	0	0			45.6383	45.6383	45.6383	5	0
+n50	2	Alepocephalus;Xenodermichthys	134615	134615	match	2	0	0			43.4060	43.4060	43.4060	1	0
+n53	4	Alosa;Engraulis;Sardina	1489460	1489460	match	4	0	0			109.6093	109.6093	109.6093	19	0
+n54	3	Alosa;Sardina;Sardinella	55118	55118	match	3	0	0			66.7795	66.7795	66.7795	3	0
+n56	2	Alosa;Sardina	55118	55118	wider	2	1	0	Sardinella		66.7795		24.7148	3	0
+n60	187	Acantholabrus;Alepisaurus;Anthias	0	1489388	match	187	0	0			200.3669	200.3669	200.3669	32	0
+n61	7	Argentina;Argyropelecus;Maurolicus	0	1489388	wider	7	180	0	Acantholabrus;Alepisaurus;Anthias;Antigonia;Aphanius		123.5204	123.5204	136.8305	9	0
+n62	3	Argentina;Salmo;Salvelinus	0	41705	match	3	0	0			147.3530	147.3530	135.4758	10	0
+n63	2	Salmo;Salvelinus	0	504568	match	2	0	0			28.5590	28.5590	28.5590	19	0
+n67	4	Argyropelecus;Maurolicus;Polymetme	0	48438	match	4	0	0			81.4656	81.4656	81.4656	2	0
+n68	3	Argyropelecus;Maurolicus;Polymetme	48438	48438	wider	3	1	0	Stomias		72.5205	72.5205	72.5205	6	0
+n74	180	Acantholabrus;Alepisaurus;Anthias	123366	123366	match	180	0	0			158.3248	158.3248	158.3248	22	0
+n75	175	Acantholabrus;Anthias;Antigonia	123367	123367	match	175	0	0			147.1035	147.1035	147.5064	16	0
+n76	168	Acantholabrus;Anthias;Antigonia	123368	123368	match	168	0	0			146.4646	146.4646	146.0460	45	0
+n77	143	Acantholabrus;Anthias;Antigonia	0	123368	wider	143	25	0	Bregmaceros;Coelorinchus;Cyttopsis;Gadella;Gadiculus		124.4437	124.4437	128.1222	11	0
+n78	141	Acantholabrus;Anthias;Antigonia	123369	123369	match	141	0	0			130.0140	130.0140	126.8537	30	0
+n79	140	Acantholabrus;Anthias;Antigonia	123369	123369	wider	140	1	0	Hoplostethus		130.0140		125.6091	30	0
+n80	139	Acantholabrus;Anthias;Antigonia	0	1489872	match	139	0	0			115.5709	115.5709	115.5709	18	0
+n81	138	Acantholabrus;Anthias;Antigonia	0	1489872	wider	138	1	0	Halobatrachus		107.6746	107.6746	108.0433	30	0
+n82	125	Acantholabrus;Anthias;Antigonia	0	1489872	wider	125	14	0	Apogon;Buenia;Chromogobius;Didogobius;Gobius		102.4811	102.4811	106.9735	26	0
+n83	107	Acantholabrus;Anthias;Antigonia	0	1489872	wider	107	32	0	Aphanopus;Apogon;Auxis;Benthodesmus;Brama		106.7833	106.7833	105.9144	38	0
+n84	45	Aphanius;Arnoglossus;Atherina	0	1489872	wider	45	94	0	Acantholabrus;Anthias;Antigonia;Aphanopus;Apogon		102.4811	102.4811	104.8657	26	0
+n85	42	Aphanius;Arnoglossus;Atherina	0	1489872	wider	42	97	0	Acantholabrus;Anthias;Antigonia;Aphanopus;Apogon		109.1969	109.1969	103.8275	26	0
+n86	20	Aphanius;Atherina;Australoheros	1489908	1489908	match	20	0	0			91.8435	91.8435	92.4972	18	0
+n87	12	Blennius;Chelon;Chromis	0	1489908	wider	12	8	0	Aphanius;Atherina;Australoheros;Belone;Cheilopogon		87.7244	87.7244	88.8260	10	0
+n88	10	Blennius;Chromis;Hypleurochilus	0	1489908	wider	10	10	0	Aphanius;Atherina;Australoheros;Belone;Cheilopogon		88.9370	88.9370	87.9465	12	0
+n89	2	Chromis;Similiparma	0	30863	match	2	0	0			34.6188	34.6188	34.6188	10	0
+n92	8	Blennius;Hypleurochilus;Lepadogaster	1489921	1489921	match	8	0	0			71.5018	71.5018	71.5018	10	0
+n93	2	Lepadogaster;Tripterygion	1489921	1489921	wider	2	6	0	Blennius;Hypleurochilus;Lipophrys;Parablennius;Salaria		71.5018		58.2472	10	0
+n96	6	Blennius;Hypleurochilus;Lipophrys	56718	56718	match	6	0	0			43.3660	43.3660	43.3660	3	0
+n97	5	Hypleurochilus;Lipophrys;Parablennius	0	703913	match	5	0	0			38.3700	38.3700	38.3700	6	0
+n98	4	Hypleurochilus;Parablennius;Salaria	0	703913	wider	4	1	0	Lipophrys		29.2042	29.2042	29.2042	3	0
+n99	3	Hypleurochilus;Parablennius;Scartella	0	703913	wider	3	2	0	Lipophrys;Salaria		29.2042		25.8474	3	0
+n107	2	Chelon;Mugil	0	8189	match	2	0	0			38.7028	38.7028	38.7028	3	0
+n110	8	Aphanius;Atherina;Australoheros	0	1489908	wider	8	12	0	Blennius;Chelon;Chromis;Hypleurochilus;Lepadogaster		92.2060	92.2060	91.5814	20	0
+n112	7	Aphanius;Atherina;Belone	1489913	1489913	match	7	0	0			83.0258	83.0258	83.0258	25	0
+n113	6	Aphanius;Belone;Cheilopogon	1489913	1489913	wider	6	1	0	Atherina		83.0258		79.1561	25	0
+n114	3	Aphanius;Gambusia;Valencia	0	8087	match	3	0	0			42.3949	42.3949	42.4223	4	0
+n116	2	Aphanius;Valencia	0	8087	wider	2	1	0	Gambusia		42.0301	42.0301	42.0023	2	0
+n119	3	Belone;Cheilopogon;Scomberesox	123731	123731	match	3	0	0			54.3516	54.3516	54.3516	17	0
+n120	2	Belone;Scomberesox	0	94935	match	2	0	0			33.3242	33.3242	33.3242	3	0
+n125	22	Arnoglossus;Bathysolea;Buglossidium	0	1489904	match	22	0	0			80.6340	80.6340	80.6340	6	0
+n126	19	Arnoglossus;Bathysolea;Buglossidium	0	1489904	wider	19	3	0	Pseudocaranx;Remora;Trachurus		80.6340		76.2455	6	0
+n127	18	Arnoglossus;Bathysolea;Buglossidium	0	1489904	wider	18	4	0	Pseudocaranx;Remora;Sphyraena;Trachurus		80.6340		73.0147	6	0
+n128	13	Arnoglossus;Bathysolea;Buglossidium	30942	30942	match	13	0	0			58.0914	58.0914	58.0914	11	0
+n129	12	Arnoglossus;Bathysolea;Buglossidium	0	30942	wider	12	1	0	Citharus		55.4088	55.4088	55.4088	24	0
+n130	5	Arnoglossus;Lepidorhombus;Microstomus	0	30942	wider	5	8	0	Bathysolea;Buglossidium;Citharus;Dicologlossa;Microchirus		52.9727	52.9727	52.9727	7	0
+n131	3	Arnoglossus;Microstomus;Platichthys	0	30942	wider	3	10	0	Bathysolea;Buglossidium;Citharus;Dicologlossa;Lepidorhombus		42.8023	42.8023	42.8023	18	0
+n133	2	Microstomus;Platichthys	0	8256	match	2	0	0			14.6738	14.6738	14.6738	9	0
+n136	2	Lepidorhombus;Scophthalmus	52902	52902	match	2	0	0			28.0432	28.0432	28.0432	4	0
+n139	7	Bathysolea;Buglossidium;Dicologlossa	0	30942	wider	7	6	0	Arnoglossus;Citharus;Lepidorhombus;Microstomus;Platichthys		42.7541	42.7541	44.7594	14	0
+n140	6	Bathysolea;Buglossidium;Dicologlossa	0	30948	match	6	0	0			63.6306	63.6306	44.3162	2	0
+n141	5	Bathysolea;Dicologlossa;Microchirus	0	30948	wider	5	1	0	Buglossidium		14.9274	14.9274	14.9274	2	1
+n142	2	Pegusa;Solea	0	30948	wider	2	4	0	Bathysolea;Buglossidium;Dicologlossa;Microchirus		13.6489	13.6489	13.6489	6	0
+n153	5	Lichia;Naucrates;Seriola	0	1489904	wider	5	17	0	Arnoglossus;Bathysolea;Buglossidium;Citharus;Dicologlossa		80.6340		58.6474	6	higher_taxa
+n154	4	Lichia;Naucrates;Seriola	8157	8157	wider	4	2	0	Pseudocaranx;Trachurus		52.4168	52.4168	56.2207	5	0
+n155	2	Naucrates;Seriola	0	8157	wider	2	4	0	Lichia;Pseudocaranx;Trachinotus;Trachurus		17.8186	17.8186	17.8186	1	0
+n158	2	Lichia;Trachinotus	0	8157	wider	2	4	0	Naucrates;Pseudocaranx;Seriola;Trachurus		65.9963	65.9963	55.6640	3	0
+n166	3	Centrolophus;Pomatomus;Scomber	0	1489894	wider	3	11	0	Aphanopus;Auxis;Benthodesmus;Brama;Lepidocybium		49.4982	49.4982	49.4982	7	higher_taxa
+n167	2	Centrolophus;Scomber	0	1489894	wider	2	12	0	Aphanopus;Auxis;Benthodesmus;Brama;Lepidocybium		49.4982		46.2369	7	0
+n171	62	Acantholabrus;Anthias;Antigonia	0	1489922	match	62	0	0			89.8756	89.8756	103.7530	2	0
+n172	61	Acantholabrus;Anthias;Antigonia	0	1489922	wider	61	1	0	Diapterus		119.5679	119.5679	102.7258	23	0
+n173	36	Acantholabrus;Antigonia;Balistes	0	1489922	wider	36	26	0	Anthias;Chelidonichthys;Cottus;Cyclopterus;Diapterus		126.5465	126.5465	101.7087	6	0
+n174	26	Antigonia;Balistes;Boops	0	1489922	wider	26	36	0	Acantholabrus;Anthias;Chelidonichthys;Coris;Cottus		102.4190	102.4190	100.7017	4	0
+n176	25	Antigonia;Balistes;Boops	0	1489922	wider	25	37	0	Acantholabrus;Anthias;Chelidonichthys;Coris;Cottus		102.4190		100.0760	4	0
+n177	20	Antigonia;Balistes;Boops	0	1489922	wider	20	42	0	Acantholabrus;Anthias;Callanthias;Cepola;Chelidonichthys		87.1611	87.1611	87.1611	9	0
+n178	10	Antigonia;Balistes;Capros	0	1489922	wider	10	52	0	Acantholabrus;Anthias;Boops;Callanthias;Centracanthus		84.8179	84.8179	84.8179	12	0
+n179	6	Balistes;Ephippion;Lagocephalus	0	31022	match	6	0	0			73.2501	73.2501	73.2501	10	0
+n181	2	Lagocephalus;Sphoeroides	0	31031	wider	2	1	0	Ephippion		34.6812	34.6812	34.6812	2	0
+n185	3	Balistes;Mola;Ranzania	0	31022	wider	3	3	0	Ephippion;Lagocephalus;Sphoeroides		73.2501		63.9068	10	0
+n187	2	Mola;Ranzania	31029	31029	match	2	0	0			23.6867	23.6867	23.6867	13	0
+n190	4	Antigonia;Capros;Chaunax	0	1489922	wider	4	58	0	Acantholabrus;Anthias;Balistes;Boops;Callanthias		84.8179		73.7145	12	0
+n191	2	Chaunax;Lophius	8070	8070	match	2	0	0			73.3783	73.3783	73.3783	17	0
+n194	2	Antigonia;Capros	31098	31098	match	2	0	0			67.1995	67.1995	67.1995	6	0
+n197	10	Boops;Centracanthus;Dentex	0	1489931	match	10	0	0			62.1733	62.1733	62.1733	1	0
+n198	2	Dentex;Pagellus	0	8169	wider	2	6	0	Boops;Diplodus;Pagrus;Sarpa;Sparus		22.1890	22.1890	22.1890	2	0
+n201	6	Boops;Centracanthus;Diplodus	0	8169	wider	5	3	1	Dentex;Pagellus;Pagrus	Centracanthus	29.1699	29.1699	43.0121	1	0
+n203	4	Boops;Centracanthus;Diplodus	0	1489931	wider	4	6	0	Dentex;Pagellus;Pagrus;Sparus;Spicara		62.1733	62.1733	42.1646	1	0
+n204	2	Boops;Centracanthus	0	1489931	wider	2	8	0	Dentex;Diplodus;Pagellus;Pagrus;Sarpa		62.1733		30.4246	1	0
+n214	5	Callanthias;Cepola;Cynoscion	0	1489922	wider	5	57	0	Acantholabrus;Anthias;Antigonia;Balistes;Boops		102.4190		83.7114	4	0
+n215	3	Callanthias;Cepola;Pomadasys	0	1489922	wider	3	59	0	Acantholabrus;Anthias;Antigonia;Balistes;Boops		102.4190		74.0549	4	0
+n216	2	Callanthias;Pomadasys	0	1489922	wider	2	60	0	Acantholabrus;Anthias;Antigonia;Balistes;Boops		102.4190		61.8844	4	0
+n220	2	Cynoscion;Micropogonias	0	30870	match	2	0	0			21.8428	21.8428	21.8428	3	0
+n223	10	Acantholabrus;Coris;Ctenolabrus	0	1489922	wider	10	52	0	Anthias;Antigonia;Balistes;Boops;Callanthias		88.6862	88.6862	88.6862	1	0
+n224	7	Acantholabrus;Coris;Ctenolabrus	0	8247	match	7	0	0			58.1978	58.1978	58.1978	8	0
+n225	5	Acantholabrus;Ctenolabrus;Labrus	0	8247	wider	5	2	0	Coris;Thalassoma		55.7276	55.7276	55.7276	17	0
+n227	4	Acantholabrus;Ctenolabrus;Labrus	0	8247	wider	4	3	0	Coris;Sparisoma;Thalassoma		23.8434	23.8434	23.8434	12	0
+n228	3	Acantholabrus;Ctenolabrus;Symphodus	0	8247	wider	3	4	0	Coris;Labrus;Sparisoma;Thalassoma		18.3098	18.3098	18.3098	9	0
+n230	2	Acantholabrus;Ctenolabrus	0	8247	wider	2	5	0	Coris;Labrus;Sparisoma;Symphodus;Thalassoma		9.6255	9.6255	9.6255	11	0
+n234	2	Coris;Thalassoma	0	8247	wider	2	5	0	Acantholabrus;Ctenolabrus;Labrus;Sparisoma;Symphodus		29.5058	29.5058	29.5058	3	0
+n237	3	Gymnammodytes;Hyperoplus;Uranoscopus	1489926	1489926	match	3	0	0			81.8790	81.8790	81.8790	7	0
+n242	25	Anthias;Chelidonichthys;Cottus	0	1489922	wider	25	37	0	Acantholabrus;Antigonia;Balistes;Boops;Callanthias		119.5679		84.7533	23	0
+n243	20	Anthias;Chelidonichthys;Cottus	0	8111	match	20	0	0			71.4983	71.4983	78.9649	5	0
+n244	17	Chelidonichthys;Cottus;Cyclopterus	0	8111	wider	17	3	0	Anthias;Epinephelus;Serranus		75.6341	75.6341	78.1831	16	0
+n245	15	Chelidonichthys;Cottus;Cyclopterus	0	8111	wider	15	5	0	Anthias;Echiichthys;Epinephelus;Serranus;Trachinus		96.8227	96.8227	77.4090	15	0
+n246	10	Chelidonichthys;Cottus;Cyclopterus	0	8111	wider	10	10	0	Anthias;Echiichthys;Epinephelus;Helicolenus;Neomerinthe		69.0556	69.0556	69.0556	5	0
+n247	5	Cottus;Cyclopterus;Gasterosteus	0	8100	match	5	0	0			48.8878	48.8878	48.8878	10	0
+n248	4	Cottus;Cyclopterus;Liparis	1490021	1490021	match	4	0	0			32.9315	32.9315	32.9315	11	0
+n249	3	Cyclopterus;Liparis;Paraliparis	0	1490021	wider	3	1	0	Cottus		22.1130	22.1130	22.1130	8	0
+n250	2	Liparis;Paraliparis	0	183715	match	2	0	0			12.5097	12.5097	12.5097	7	0
+n256	5	Chelidonichthys;Eutrigla;Lepidotrigla	1489945	1489945	match	5	0	0			55.5964	55.5964	55.5964	5	0
+n257	4	Chelidonichthys;Eutrigla;Lepidotrigla	0	27774	match	4	0	0			50.3490	50.3490	50.3490	3	0
+n258	3	Chelidonichthys;Eutrigla;Lepidotrigla	0	27774	wider	3	1	0	Trigla		32.5706	32.5706	32.5706	4	0
+n259	2	Chelidonichthys;Eutrigla	0	27774	wider	2	2	0	Lepidotrigla;Trigla		10.9526	10.9526	10.9526	2	0
+n265	5	Helicolenus;Neomerinthe;Pontinus	0	8107	match	5	0	0			36.4237	36.4237	36.4237	3	0
+n266	4	Helicolenus;Pontinus;Scorpaena	0	8107	wider	4	1	0	Neomerinthe		36.4237		34.1984	3	0
+n267	3	Helicolenus;Pontinus;Trachyscorpia	0	8107	wider	3	2	0	Neomerinthe;Scorpaena		36.4237		32.5873	3	0
+n268	2	Helicolenus;Trachyscorpia	274692	274692	match	2	0	0			30.3216	30.3216	30.3216	9	0
+n274	2	Echiichthys;Trachinus	56735	56735	match	2	0	0			28.1373	28.1373	28.1373	4	0
+n277	3	Anthias;Epinephelus;Serranus	0	8111	wider	3	17	0	Chelidonichthys;Cottus;Cyclopterus;Echiichthys;Eutrigla		71.4983		47.7463	5	0
+n278	2	Anthias;Epinephelus	0	8111	wider	2	18	0	Chelidonichthys;Cottus;Cyclopterus;Echiichthys;Eutrigla		71.4983		44.3370	5	0
+n282	5	Epigonus;Kyphosus;Lepomis	0	1489922	wider	5	57	0	Acantholabrus;Anthias;Antigonia;Balistes;Boops		76.9771	76.9771	76.9771	2	0
+n283	3	Kyphosus;Lepomis;Micropterus	1489940	1489940	match	3	0	0			74.2744	74.2744	74.2744	12	0
+n284	2	Lepomis;Micropterus	0	8180	match	2	0	0			24.8080	24.8080	24.8080	11	0
+n288	2	Epigonus;Polyprion	0	3051910	match	2	0	0			74.8889	74.8889	74.8889	4	0
+n292	18	Aphanopus;Auxis;Benthodesmus	0	1489872	wider	18	121	0	Acantholabrus;Anthias;Antigonia;Aphanius;Apogon		93.7653	93.7653	93.7653	14	0
+n293	7	Callionymus;Dactylopterus;Hippocampus	0	129912	match	7	0	0			79.6072	79.6072	79.6072	15	0
+n294	6	Callionymus;Dactylopterus;Hippocampus	129912	129912	wider	6	1	0	Macroramphosus		78.0065	78.0065	78.0065	12	0
+n295	5	Callionymus;Hippocampus;Mullus	0	129912	wider	5	2	0	Dactylopterus;Macroramphosus		68.8301	68.8301	68.8301	10	0
+n296	3	Hippocampus;Mullus;Syngnathus	0	129912	wider	3	4	0	Callionymus;Dactylopterus;Macroramphosus;Synchiropus		68.8301		67.8074	10	0
+n297	2	Hippocampus;Syngnathus	72045	72045	match	2	0	0			33.9420	54.9202	54.9202	1	0
+n301	2	Callionymus;Synchiropus	0	30908	match	2	0	0			26.2927	26.2927	26.2927	9	0
+n306	11	Aphanopus;Auxis;Benthodesmus	0	1489894	wider	11	3	0	Centrolophus;Pomatomus;Scomber		49.4982	49.4982	55.1920	7	0
+n307	7	Auxis;Brama;Sarda	0	1489894	wider	7	7	0	Aphanopus;Benthodesmus;Centrolophus;Lepidocybium;Lepidopus		49.4982		52.8721	7	0
+n308	3	Auxis;Sarda;Thunnus	0	186745	wider	3	1	0	Scomber		23.6311	23.6311	23.6311	5	0
+n310	2	Auxis;Thunnus	0	186749	match	2	0	0			20.2009	20.2009	20.2009	7	0
+n313	4	Brama;Scombrolabrax;Stromateus	0	1489894	wider	4	10	0	Aphanopus;Auxis;Benthodesmus;Centrolophus;Lepidocybium		50.6583	50.6583	50.6583	2	0
+n316	2	Brama;Taractichthys	0	215350	match	2	0	0			15.7173	15.7173	15.7173	5	0
+n320	4	Aphanopus;Benthodesmus;Lepidocybium	0	1489894	wider	4	10	0	Auxis;Brama;Centrolophus;Pomatomus;Sarda		57.6586	57.6586	54.6455	3	0
+n322	3	Aphanopus;Benthodesmus;Lepidopus	27770	27770	match	3	0	0			29.8304	29.8304	29.8304	5	0
+n323	2	Aphanopus;Lepidopus	27770	27770	wider	2	1	0	Benthodesmus		29.8304		28.2839	5	0
+n327	13	Apogon;Buenia;Chromogobius	1489875	1489875	match	13	0	0			95.5706	95.5706	95.5706	16	0
+n328	12	Buenia;Chromogobius;Didogobius	0	497223	match	12	0	0			46.2079	46.2079	46.2079	7	0
+n329	4	Buenia;Gobiusculus;Pomatoschistus	0	497223	wider	4	8	0	Chromogobius;Didogobius;Gobius;Gymnesigobius;Lesueurigobius		39.0524	39.0524	39.0524	3	0
+n330	2	Gobiusculus;Pomatoschistus	0	497223	wider	2	10	0	Buenia;Chromogobius;Didogobius;Gobius;Gymnesigobius		17.2397	17.2397	17.2397	1	0
+n338	4	Gobius;Mauligobius;Thorogobius	0	497223	wider	4	8	0	Buenia;Chromogobius;Didogobius;Gobiusculus;Gymnesigobius		37.5560	37.5560	37.5560	2	0
+n354	2	Desmodema;Zu	81393	81393	match	2	0	0			36.4675	36.4675	36.4675	3	0
+n357	25	Bregmaceros;Coelorinchus;Cyttopsis	1489841	1489841	match	25	0	0			108.7745	108.7745	108.7745	17	0
+n358	20	Bregmaceros;Coelorinchus;Gadella	8043	8043	match	20	0	0			48.0767	48.0767	55.9821	6	0
+n359	19	Coelorinchus;Gadella;Gadiculus	8043	8043	wider	19	1	0	Bregmaceros		48.0767		55.9151	6	0
+n360	11	Coelorinchus;Gadella;Gadomus	8043	8043	wider	11	9	0	Bregmaceros;Gadiculus;Gadus;Gaidropsarus;Micromesistius		48.0767		54.2742	6	0
+n361	9	Coelorinchus;Gadella;Gadomus	8043	8043	wider	9	11	0	Bregmaceros;Gadiculus;Gadus;Gaidropsarus;Lyconus		48.0767		53.8964	6	0
+n362	8	Coelorinchus;Gadella;Gadomus	30761	30761	narrower	6	0	2		Gadella;Lepidion	64.8378	64.8378	53.7977	8	0
+n363	7	Coelorinchus;Gadella;Gadomus	8043	8043	wider	7	13	0	Bregmaceros;Gadiculus;Gadus;Gaidropsarus;Lyconus		48.0767	48.0767	48.0767	6	0
+n364	5	Coelorinchus;Gadomus;Hymenogadus	0	30761	wider	5	1	0	Trachyrincus		47.2617	47.2617	47.2617	5	0
+n366	4	Coelorinchus;Hymenogadus;Malacocephalus	0	630280	match	4	0	0			30.4710	30.4710	30.4710	5	0
+n371	2	Gadella;Lepidion	0	30759	match	2	0	0			44.3464	44.3464	44.3464	1	0
+n379	8	Gadiculus;Gadus;Gaidropsarus	8045	8045	narrower	5	0	3		Gaidropsarus;Molva;Phycis	68.0715	40.6300	43.8829	2	0
+n380	7	Gadiculus;Gadus;Gaidropsarus	0	1489845	wider	7	7	0	Bregmaceros;Gadella;Lepidion;Lyconus;Melanonus		48.2465	48.2465	43.4484	6	0
+n381	6	Gadiculus;Gadus;Gaidropsarus	0	1489845	wider	6	8	0	Bregmaceros;Gadella;Lepidion;Lyconus;Melanonus		27.3342	27.3342	27.9654	4	0
+n383	5	Gadiculus;Gadus;Micromesistius	0	1489845	wider	5	9	0	Bregmaceros;Gadella;Gaidropsarus;Lepidion;Lyconus		28.0224	28.0224	27.6885	4	0
+n384	4	Gadiculus;Gadus;Micromesistius	0	8045	wider	4	1	0	Raniceps		22.2715	22.2715	23.2744	10	0
+n386	3	Gadiculus;Micromesistius;Trisopterus	0	8045	wider	3	2	0	Gadus;Raniceps		22.7683	22.7683	23.0440	7	0
+n388	2	Gadiculus;Micromesistius	0	8045	wider	2	3	0	Gadus;Raniceps;Trisopterus		23.7158	23.7158	22.8158	2	0
+n395	5	Cyttopsis;Grammicolepis;Zenion	31097	31097	match	5	0	0			64.8458	64.8458	64.8458	3	0
+n397	4	Cyttopsis;Grammicolepis;Zenopsis	0	31097	wider	4	1	0	Zenion		46.1086	46.1086	48.7174	10	0
+n398	3	Grammicolepis;Zenopsis;Zeus	0	31097	wider	3	2	0	Cyttopsis;Zenion		52.4805	52.4805	48.2350	4	0
+n400	2	Zenopsis;Zeus	31103	31103	match	2	0	0			32.2541	32.2541	32.2541	9	0
+n404	7	Bolinichthys;Ceratoscopelus;Hygophum	68514	68514	match	7	0	0			70.9884	70.9884	70.9884	11	0
+n409	2	Ceratoscopelus;Lampanyctus	0	68515	wider	2	4	0	Bolinichthys;Hygophum;Lampadena;Lobianchia		44.6308	44.6308	44.6308	3	0
+n418	2	Alepisaurus;Chlorophthalmus	0	143312	match	2	0	0			80.4756	80.4756	80.4756	2	0
+n422	2	Synodus;Trachinocephalus	143310	143310	match	2	0	0			42.8610	66.1024	66.1024	4	0
+n425	10	Anguilla;Conger;Facciolella	0	32521	match	10	0	0			188.1450	188.1450	188.1450	12	0
+n426	8	Anguilla;Conger;Facciolella	0	7933	match	8	0	0			101.3866	101.3866	139.6889	5	0
+n427	7	Anguilla;Conger;Facciolella	0	7933	wider	7	1	0	Synaphobranchus		121.9784	121.9784	138.3058	9	0
+n428	6	Conger;Facciolella;Muraena	0	7933	wider	6	2	0	Anguilla;Synaphobranchus		172.4255	172.4255	136.9364	9	0
+n429	5	Conger;Facciolella;Nettastoma	0	7933	wider	5	3	0	Anguilla;Muraena;Synaphobranchus		71.7014	71.7014	73.3445	2	0
+n430	4	Facciolella;Nettastoma;Ophichthus	0	7933	wider	4	4	0	Anguilla;Conger;Muraena;Synaphobranchus		71.7014		73.2820	2	0
+n431	2	Facciolella;Nettastoma	118175	118175	match	2	0	0			109.9330	109.9330	71.8993	1	0
+n434	2	Ophichthus;Ophisurus	0	54916	match	2	0	0			36.4486	36.4486	36.4486	2	0
+n444	30	Apristurus;Bathytoshia;Centrophorus	7777	7777	match	30	0	0			404.3945	404.3945	404.3945	7	0
+n445	29	Apristurus;Bathytoshia;Centrophorus	7778	7778	match	29	0	0			273.3075	273.3075	273.3075	11	0
+n446	12	Bathytoshia;Dasyatis;Dipturus	117893	117893	match	12	0	0			196.5449	196.5449	203.4364	5	higher_taxa
+n447	6	Bathytoshia;Dasyatis;Mobula	0	117893	wider	6	6	0	Dipturus;Leucoraja;Neoraja;Raja;Rajella		222.3850	222.3850	201.4222	2	higher_taxa
+n448	5	Bathytoshia;Dasyatis;Mobula	0	117851	match	5	0	0			75.2700	75.2700	75.2700	1	0
+n449	2	Bathytoshia;Dasyatis	0	30469	match	2	0	0			37.0000	37.0000	37.0000	1	0
+n452	3	Mobula;Myliobatis;Rhinoptera	1158979	1158979	match	3	0	0			58.5250	58.5250	58.5250	2	0
+n454	2	Mobula;Rhinoptera	0	1158979	wider	2	1	0	Myliobatis		26.2250	26.2250	26.2250	2	0
+n469	17	Apristurus;Centrophorus;Centroscymnus	119203	119203	match	17	0	0			258.4242	258.4242	258.9065	4	0
+n470	8	Apristurus;Galeorhinus;Galeus	0	119195	match	8	0	0			210.6961	210.6961	212.8880	4	0
+n471	6	Apristurus;Galeorhinus;Galeus	7826	7826	narrower	3	0	3		Galeorhinus;Mustelus;Prionace	212.1464	212.1464	210.7802	2	0
+n472	5	Apristurus;Galeorhinus;Galeus	30483	30483	wider	5	1	0	Scyliorhinus		139.3745	139.3745	139.3745	2	0
+n476	3	Galeorhinus;Mustelus;Prionace	0	30483	wider	3	3	0	Apristurus;Galeus;Scyliorhinus		114.1757	114.1757	114.1757	2	0
+n477	2	Mustelus;Prionace	0	30483	wider	2	4	0	Apristurus;Galeorhinus;Galeus;Scyliorhinus		114.1757		110.4013	2	0
+n482	2	Isurus;Mitsukurina	30496	30496	match	2	0	0			160.4991	160.4991	160.4991	2	higher_taxa
+n485	9	Centrophorus;Centroscymnus;Deania	118040	118040	match	9	0	0			256.7386	256.7386	256.3431	3	0
+n486	8	Centrophorus;Centroscymnus;Deania	0	118040	wider	8	1	0	Heptranchias		182.0310	182.0310	182.0310	4	0
+n487	7	Centrophorus;Centroscymnus;Deania	0	282414	match	7	0	0			130.0161	130.0161	135.4964	2	0
+n488	6	Centrophorus;Centroscymnus;Deania	0	282414	wider	6	1	0	Etmopterus		130.0161		135.0601	2	0
+n489	4	Centrophorus;Deania;Somniosus	282414	282414	wider	4	3	0	Centroscymnus;Etmopterus;Oxynotus		138.5513	138.5513	132.8266	3	0
+n490	2	Somniosus;Squalus	282414	282414	wider	2	5	0	Centrophorus;Centroscymnus;Deania;Etmopterus;Oxynotus		138.5513		107.0157	3	0
+n493	2	Centrophorus;Deania	117924	117924	match	2	0	0			66.7173	66.7173	66.7173	2	0
+n506	11	Arbacia;Asterina;Astrospartus	133551	133551	match	11	0	0			515.3771	515.3771	515.3771	9	higher_taxa
+n507	6	Arbacia;Holothuria;Paracentrotus	7624	7624	match	6	0	0			420.4232	420.4232	420.4232	6	0
+n508	4	Arbacia;Paracentrotus;Psammechinus	7674	7674	match	4	0	0			207.5000	207.5000	207.5000	2	0
+n510	3	Paracentrotus;Psammechinus;Sphaerechinus	0	7674	wider	3	1	0	Arbacia		127.7698	127.7698	127.7699	2	0
+n512	2	Psammechinus;Sphaerechinus	0	7674	wider	2	2	0	Arbacia;Paracentrotus		127.7698		76.6619	2	higher_taxa
+n515	2	Holothuria;Psolus	7705	7705	match	2	0	0			266.1743	266.1743	266.1743	1	higher_taxa
+n518	5	Asterina;Astrospartus;Coscinasterias	7587	7587	match	5	0	0			405.7380	405.7380	405.7380	1	higher_taxa
+n526	855	Abavopsis;Abida;Abludomelita	33317		unknown	0	0	0			608.0744	608.0744	608.0744	15	higher_taxa
+n527	572	Abavopsis;Abida;Acanthinula	0	1206795	match	565	0	0			582.6916	582.6916	582.6916	18	higher_taxa
+n528	25	Amathia;Bugula;Bugulina	10206	10206	match	25	0	0			418.2232	418.2232	418.2232	1	higher_taxa
+n554	2	Bugula;Bugulina	0	10210	match	2	0	0			80.1879	80.1879	80.1879	1	0
+n557	2	Caberea;Notoplites	97286	97286	match	2	0	0			108.7704	108.7704	108.7704	1	0
+n576	547	Abavopsis;Abida;Acanthinula	0	1206795	wider	540	25	0	Amathia;Bugula;Bugulina;Caberea;Celleporaria		582.6916		579.6128	18	2
+n577	383	Abavopsis;Abida;Acanthinula	6447	6447	match	380	0	0			534.2564	534.2564	535.9456	7	0
+n578	376	Abavopsis;Abida;Acanthinula	0	6447	wider	373	7	0	Acanthochitona;Chaetopleura;Lepidochitona;Lepidopleurus;Leptochiton		535.7702	535.7702	530.6392	16	higher_taxa
+n579	357	Abavopsis;Abida;Acanthinula	0	6447	wider	354	26	0	Acanthochitona;Alloteuthis;Ancistroteuthis;Architeuthis;Bathypolypus		520.6650	520.6650	520.6650	15	higher_taxa
+n580	326	Abavopsis;Abida;Acanthinula	0	6448	match	323	0	0			466.3507	466.3507	466.3507	20	0
+n581	195	Abavopsis;Aegires;Aeolidia	0	6448	wider	193	130	0	Abida;Acanthinula;Acteon;Actinella;Aegopinella		410.1805	410.1805	410.1805	15	higher_taxa
+n582	62	Alvania;Aporrhais;Bivetiella	69555	69555	match	62	0	0			218.2199	218.2199	221.0572	7	0
+n583	4	Cochlostoma;Obscurella;Pomacea	0	75116	match	4	0	0			122.0000	122.0000	122.0000	1	0
+n589	18	Bivetiella;Columbella;Coralliophila	0	6479	match	18	0	0			113.4217	113.4217	113.4217	5	0
+n590	4	Columbella;Fusinus;Nassarius	0	216303	match	4	0	0			72.0296	72.0296	72.0296	2	higher_taxa
+n591	2	Nassarius;Tritia	0	1934898	match	2	0	0			38.5002	38.5002	38.5002	2	0
+n601	10	Coralliophila;Hexaplex;Hirtomurex	0	39476	match	10	0	0			82.2100	82.2100	85.6190	1	0
+n605	3	Nucella;Ocenebra;Ocinebrina	0	39476	wider	3	7	0	Coralliophila;Hexaplex;Hirtomurex;Pagodula;Plicopurpura		18.6233	46.7782	46.7782	1	0
+n609	2	Plicopurpura;Stramonita	0	39476	wider	2	8	0	Coralliophila;Hexaplex;Hirtomurex;Nucella;Ocenebra		85.4096	85.4096	84.7713	2	0
+n617	38	Alvania;Aporrhais;Botryphallus	216294	216294	match	38	0	0			288.2545	288.2545	218.8685	3	0
+n622	7	Corrosella;Ecrobia;Hydrobia	0	55731	wider	7	1	0	Moitessieria		16.6000	16.6000	23.8414	1	0
+n624	2	Ecrobia;Hydrobia	0	412778	wider	2	4	0	Corrosella;Mercuria;Peringia;Pseudamnicola		33.9026	33.9026	23.6053	1	0
+n636	4	Echinolittorina;Littorina;Melarhaphe	31212	31212	match	4	0	0			127.7420	127.7420	127.7420	3	0
+n670	133	Abavopsis;Aegires;Aeolidia	216307	216307	wider	131	109	0	Abida;Acanthinula;Actinella;Aegopinella;Allognathus		251.4570	251.4570	251.4570	8	higher_taxa
+n671	119	Abavopsis;Aegires;Aeolidia	216307	216307	wider	117	123	0	Abida;Acanthinula;Actinella;Aegopinella;Allognathus		251.4570		246.7208	8	0
+n673	34	Aegires;Aldisa;Baptodoris	0	216331	match	34	0	0			65.7000	65.7000	66.7672	1	higher_taxa
+n674	16	Aldisa;Baptodoris;Discodoris	0	6514	wider	16	3	0	Dendrodoris;Doriopsilla;Phyllidia		53.5100	53.5100	53.5100	2	higher_taxa
+n693	3	Dendrodoris;Doriopsilla;Phyllidia	6514	6514	wider	3	16	0	Aldisa;Baptodoris;Discodoris;Doris;Felimare		67.1800	67.1800	66.1062	1	higher_taxa
+n719	35	Aeolidia;Aeolidiella;Anteaeolidiella	0	1707744	match	34	0	0			62.1200	62.1200	62.1200	1	higher_taxa
+n742	16	Aeolidia;Aeolidiella;Anteaeolidiella	71481	71481	wider	15	1	0	Babakina		45.9100	45.9100	45.9100	1	higher_taxa
+n764	37	Abavopsis;Aglaja;Akera	0	216307	wider	37	203	0	Abida;Acanthinula;Actinella;Aegires;Aegopinella		227.7002	227.7002	227.7002	13	higher_taxa
+n765	14	Bosellia;Caliphylla;Cyerce	977775	977775	wider	14	123	0	Abida;Acanthinula;Actinella;Aegopinella;Allognathus		203.2479	203.2479	203.2479	7	3
+n766	12	Bosellia;Caliphylla;Cyerce	71490	71490	match	12	0	0			138.7950	138.7950	138.7950	2	higher_taxa
+n788	23	Abavopsis;Aglaja;Akera	0	2836391	wider	23	8	0	Cavolinia;Clio;Corolla;Creseis;Hyalocylis		148.3942	148.3942	148.3942	4	higher_taxa
+n789	16	Abavopsis;Aglaja;Biuve	0	2836391	wider	16	15	0	Akera;Aplysia;Cavolinia;Clio;Corolla		148.3942		124.3871	4	higher_taxa
+n790	15	Abavopsis;Aglaja;Biuve	0	69554	match	15	0	0			82.0280	82.0280	82.0280	2	higher_taxa
+n811	3	Bulla;Haminoea;Weinkauffia	216311	216311	match	3	0	0			55.4800	55.4800	55.4800	1	higher_taxa
+n817	7	Akera;Aplysia;Dolabrifera	6497	6497	match	7	0	0			99.9900	99.9900	99.9900	1	higher_taxa
+n826	4	Berthella;Berthellina;Pleurobranchaea	71291	71291	match	4	0	0			37.3600	37.3600	37.3600	1	0
+n827	3	Berthella;Berthellina;Pleurobranchus	0	71291	wider	3	1	0	Pleurobranchaea		28.5300	28.5300	28.5300	1	0
+n845	14	Ampullaceana;Ancylus;Bulinus	0	216441	match	14	0	0			49.9900	82.8822	121.9347	1	0
+n846	6	Ancylus;Bulinus;Ferrissia	216441	216441	wider	6	8	0	Ampullaceana;Galba;Lymnaea;Orientogalba;Physa		136.8400	136.8400	120.7275	2	0
+n854	8	Ampullaceana;Galba;Lymnaea	216441	216441	wider	8	6	0	Ancylus;Bulinus;Ferrissia;Gyraulus;Menetus		136.8400	136.8400	120.7275	2	higher_taxa
+n867	13	Calliostoma;Clanculus;Clelandella	0	6448	wider	13	310	0	Abavopsis;Abida;Acanthinula;Acteon;Actinella		410.4651	410.4651	410.4651	5	0
+n868	10	Calliostoma;Clanculus;Clelandella	216275	216275	match	10	0	0			206.3200	206.3200	206.3200	4	0
+n869	2	Diodora;Emarginula	0	54986	match	2	0	0			96.7928	96.7928	96.7928	2	0
+n874	4	Clelandella;Gibbula;Jujubinus	0	1955429	match	4	0	0			37.2387	37.2387	37.2387	1	0
+n883	3	Cymbula;Patella;Tectura	0	69675	match	3	0	0			194.6982	194.6982	194.6982	2	0
+n885	2	Cymbula;Patella	6462	6462	match	2	0	0			158.7150	158.7150	158.7150	2	0
+n903	2	Orculella;Sphyradium	0	145163	match	2	0	0			10.2517	10.2517	10.2517	1	0
+n945	9	Allognathus;Cepaea;Cornu	0	6533	wider	9	3	0	Chilostoma;Corneola;Helicigona		34.7427	34.7427	34.9743	1	0
+n946	7	Allognathus;Cepaea;Cornu	0	6533	wider	7	5	0	Chilostoma;Corneola;Helicigona;Helix;Otala		34.6378	34.6378	34.6281	2	0
+n947	4	Allognathus;Cepaea;Hemicycla	0	6533	wider	4	8	0	Chilostoma;Corneola;Cornu;Eobania;Helicigona		26.9184	26.9184	26.9184	1	0
+n948	3	Allognathus;Hemicycla;Iberus	0	6533	wider	3	9	0	Cepaea;Chilostoma;Corneola;Cornu;Eobania		18.0967	18.0967	18.0967	2	0
+n949	2	Allognathus;Hemicycla	0	6533	wider	2	10	0	Cepaea;Chilostoma;Corneola;Cornu;Eobania		13.6790	13.6790	13.6790	2	0
+n954	3	Cornu;Eobania;Theba	0	6533	wider	3	9	0	Allognathus;Cepaea;Chilostoma;Corneola;Helicigona		27.2852	27.2852	27.2852	1	0
+n955	2	Cornu;Theba	0	6533	wider	2	10	0	Allognathus;Cepaea;Chilostoma;Corneola;Eobania		27.2852		17.7176	1	0
+n993	4	Balea;Clausilia;Cochlodina	0	27818	match	4	0	0			66.2983	66.2983	66.2983	1	0
+n1035	31	Anodonta;Cerastoderma;Chamelea	2785011	2785011	match	31	0	0			461.4762	461.4762	461.4762	13	0
+n1036	27	Cerastoderma;Chamelea;Corbicula	2785011	2785011	wider	27	4	0	Anodonta;Margaritifera;Potomida;Unio		461.4762		434.3719	13	0
+n1037	10	Gibbomodiola;Glycymeris;Idas	0	6545	match	10	0	0			356.6494	356.6494	356.6494	18	0
+n1038	4	Magallana;Mimachlamys;Ostrea	0	6545	wider	4	6	0	Gibbomodiola;Glycymeris;Idas;Mytilus;Striarca		356.6494		297.0201	18	0
+n1039	2	Mimachlamys;Spondylus	106219	106219	match	2	0	0			248.8133	248.8133	248.8133	2	higher_taxa
+n1042	2	Magallana;Ostrea	6563	6563	match	2	0	0			158.5499	158.5499	158.5499	6	0
+n1045	4	Gibbomodiola;Idas;Mytilus	0	6547	match	4	0	0			313.2210	313.2210	313.2210	5	0
+n1053	17	Cerastoderma;Chamelea;Corbicula	735337	735337	match	17	0	0			355.2789	355.2789	363.1399	7	higher_taxa
+n1054	16	Cerastoderma;Chamelea;Corbicula	0	2785015	match	16	0	0			342.6088	342.6088	359.5445	2	0
+n1055	5	Cerastoderma;Donax;Laevicardium	2783445	2783445	match	5	0	0			431.3775	431.3775	355.9846	2	higher_taxa
+n1056	3	Cerastoderma;Laevicardium;Parvicardium	0	55708	match	3	0	0			94.1022	94.1022	94.1022	1	0
+n1071	2	Ensis;Solen	106232	106232	match	2	0	0			221.6046	221.6046	221.6046	3	0
+n1079	4	Anodonta;Margaritifera;Potomida	0	47522	match	4	0	0			150.7201	150.7201	150.7201	2	0
+n1080	3	Anodonta;Potomida;Unio	47526	47526	match	3	0	0			61.3373	134.4695	134.4695	3	0
+n1081	2	Anodonta;Unio	47526	47526	wider	2	1	0	Potomida		61.3373		63.4276	3	0
+n1086	19	Alloteuthis;Ancistroteuthis;Architeuthis	6606	6606	match	19	0	0			257.9497	257.9497	257.9497	7	0
+n1087	14	Alloteuthis;Ancistroteuthis;Architeuthis	0	215450	match	14	0	0			250.1252	250.1252	250.1252	4	0
+n1088	11	Alloteuthis;Ancistroteuthis;Architeuthis	0	215450	wider	11	3	0	Rondeletiola;Sepietta;Sepiola		250.1252		247.9549	4	higher_taxa
+n1089	8	Ancistroteuthis;Architeuthis;Chiroteuthis	0	34542	match	8	0	0			108.4993	108.4993	108.4993	5	0
+n1090	4	Ancistroteuthis;Architeuthis;Chiroteuthis	0	34542	wider	4	4	0	Dosidicus;Illex;Todarodes;Todaropsis		108.4993		96.1447	5	higher_taxa
+n1097	4	Dosidicus;Illex;Todarodes	6626	6626	match	4	0	0			83.5666	83.5666	83.5666	2	0
+n1098	2	Dosidicus;Todarodes	6626	6626	wider	2	2	0	Illex;Todaropsis		83.5666		72.6702	2	0
+n1103	3	Alloteuthis;Loligo;Sepia	0	215450	wider	3	11	0	Ancistroteuthis;Architeuthis;Chiroteuthis;Dosidicus;Illex		223.8991	223.8991	223.8991	2	higher_taxa
+n1108	3	Rondeletiola;Sepietta;Sepiola	0	2094723	match	3	0	0			33.0629	33.0629	33.0629	1	0
+n1113	5	Bathypolypus;Haliphron;Macrotritopus	6638	6638	match	5	0	0			201.6989	201.6989	201.6989	4	higher_taxa
+n1115	4	Bathypolypus;Haliphron;Macrotritopus	6646	6646	match	4	0	0			135.3984	135.3984	135.3984	4	higher_taxa
+n1116	3	Bathypolypus;Macrotritopus;Octopus	6647	6647	match	3	0	0			89.7501	89.7501	89.7501	4	0
+n1121	7	Acanthochitona;Chaetopleura;Lepidochitona	6651	6651	match	7	0	0			296.4512	296.4512	296.4512	7	0
+n1122	5	Acanthochitona;Chaetopleura;Lepidochitona	6652	6652	match	5	0	0			239.7634	239.7634	239.7634	4	higher_taxa
+n1123	2	Chaetopleura;Rhyssoplax	0	291862	match	2	0	0			145.7835	145.7835	145.7835	2	higher_taxa
+n1134	164	Achaeta;Aglaophamus;Allolobophora	0	6340	match	160	0	0			500.6360	500.6360	568.2312	5	higher_taxa
+n1135	152	Achaeta;Aglaophamus;Allolobophora	0	6340	wider	148	12	0	Aricidea;Galathowenia;Levinsenia;Magelona;Megadrilus		500.6360		564.6571	5	higher_taxa
+n1137	141	Achaeta;Aglaophamus;Allolobophora	0	6340	wider	137	23	0	Amphiduros;Ancistrosyllis;Aricidea;Chrysopetalum;Dysponetus		566.0351	566.0351	551.5196	2	2
+n1140	85	Achaeta;Allolobophora;Ampharete	0	6340	wider	81	79	0	Aglaophamus;Amblyosyllis;Amphiduros;Ancistrosyllis;Aricidea		500.6360	500.6360	500.6360	5	higher_taxa
+n1141	70	Achaeta;Allolobophora;Ampharete	0	6340	wider	66	94	0	Aglaophamus;Amblyosyllis;Amphiduros;Amphiglena;Ancistrosyllis		500.6360		491.2859	5	higher_taxa
+n1142	66	Achaeta;Allolobophora;Ampharete	0	6340	wider	62	98	0	Aglaophamus;Amblyosyllis;Amphiduros;Amphiglena;Ancistrosyllis		500.6360		485.3988	5	higher_taxa
+n1143	53	Achaeta;Allolobophora;Aporrectodea	42113	42113	match	49	0	0			273.2321	273.2321	273.2321	4	0
+n1144	27	Achaeta;Allolobophora;Aporrectodea	42113	42113	wider	26	23	0	Bothrioneurum;Branchiura;Buchholzia;Cernosvitoviella;Dero		273.2321		265.4473	4	higher_taxa
+n1145	19	Achaeta;Allolobophora;Aporrectodea	2803884	2803884	narrower	18	0	1		Achaeta	257.5175	257.5175	257.5175	2	0
+n1170	6	Barbronia;Batracobdella;Dina	0	55824	wider	6	1	0	Myzobdella		204.5010	204.5010	204.5010	1	0
+n1213	2	Lumbriculus;Stylodrilus	0	77569	match	2	0	0			207.0768	207.0768	207.0768	1	0
+n1216	13	Ampharete;Amphictene;Arenicola	105389	105389	wider	13	31	0	Amphiglena;Aphelochaeta;Aricidea;Branchiomma;Chaetozone		394.5099	394.5099	394.5099	1	higher_taxa
+n1218	6	Ampharete;Amphictene;Auchenoplax	2784887	2784887	wider	6	1	0	Polycirrus		159.9478	159.9478	159.9478	1	higher_taxa
+n1219	5	Ampharete;Amphictene;Auchenoplax	2784887	2784887	wider	5	2	0	Pista;Polycirrus		159.9478		109.2729	1	higher_taxa
+n1237	3	Heteromastus;Notomastus;Ophelina	0	105387	wider	3	12	0	Arenicola;Aricidea;Axiothella;Euclymene;Heteroclymene		399.1278	399.1278	399.1278	1	higher_taxa
+n1243	15	Amphiglena;Aphelochaeta;Branchiomma	105389	105389	wider	15	29	0	Ampharete;Amphictene;Arenicola;Aricidea;Auchenoplax		394.5099	394.5099	394.5099	1	higher_taxa
+n1250	5	Laonice;Prionospio;Sabellaria	105389	105389	wider	5	39	0	Ampharete;Amphictene;Amphiglena;Aphelochaeta;Arenicola		394.5099		281.0296	1	higher_taxa
+n1349	2	Hipponoe;Sipunculus	0	6340	wider	2	158	0	Achaeta;Aglaophamus;Allolobophora;Amblyosyllis;Ampharete		566.0351		254.7380	2	higher_taxa
+n1373	3	Galathowenia;Magelona;Owenia	105389	105389	wider	3	41	0	Ampharete;Amphictene;Amphiglena;Aphelochaeta;Arenicola		394.5099	394.5099	394.5099	1	higher_taxa
+n1382	283	Abludomelita;Acaeroplastes;Acanthephyra	0	3701028	narrower	274	0	4		Cypridopsis;Eucypris;Heterocypris;Potamocypris	524.4408	524.4408	536.7309	17	higher_taxa
+n1383	53	Acanthocyclops;Acartia;Aetideus	0	3701030	match	53	0	0			524.4408		475.5589	17	0
+n1384	17	Alona;Artemia;Bosmina	6658	6658	match	17	0	0			432.6838	432.6838	432.6838	13	2
+n1385	13	Alona;Bosmina;Ceriodaphnia	116557	116557	match	13	0	0			408.2161	408.2161	408.2161	10	2
+n1386	12	Alona;Bosmina;Ceriodaphnia	0	6665	match	12	0	0			196.8250	196.8250	209.5797	2	2
+n1387	11	Alona;Bosmina;Ceriodaphnia	0	116561	match	11	0	0			209.5250	209.5250	207.5046	2	1
+n1392	4	Ceriodaphnia;Daphnia;Scapholeberis	0	77658	match	4	0	0			179.0000	179.0000	179.0000	1	0
+n1412	35	Acanthocyclops;Acartia;Aetideus	116569	116569	wider	35	1	0	Oncaea		308.3587	308.3587	308.3587	8	higher_taxa
+n1415	17	Aetideus;Anomalocera;Calanoides	0	6833	wider	17	6	0	Acartia;Calocalanus;Heterorhabdus;Lucicutia;Metridia		191.9444	191.9444	191.9444	2	higher_taxa
+n1456	11	Acanthocyclops;Caligus;Eucyclops	0	116571	wider	11	2	0	Neoergasilus;Oncaea		276.8712	276.8712	276.8712	2	0
+n1457	4	Caligus;Euterpina;Goniopsyllus	0	116571	wider	4	9	0	Acanthocyclops;Eucyclops;Lernaea;Mesocyclops;Neoergasilus		276.8712		261.9277	2	higher_taxa
+n1458	2	Caligus;Pennella	72033	72033	match	2	0	0			167.8200	167.8200	167.8200	1	higher_taxa
+n1467	3	Acanthocyclops;Mesocyclops;Thermocyclops	84315	84315	wider	3	3	0	Eucyclops;Paracyclops;Tropocyclops		78.0224	78.0224	78.0224	3	0
+n1479	230	Abludomelita;Acaeroplastes;Acanthephyra	6657	197562	wider	225	53	0	Acanthocyclops;Acartia;Aetideus;Alona;Anomalocera		534.6666	534.6666	531.4167	10	0
+n1480	226	Abludomelita;Acaeroplastes;Acanthephyra	0	3701029	match	221	0	0			464.7852	464.7852	464.7852	6	0
+n1481	211	Abludomelita;Acaeroplastes;Acanthephyra	0	72041	match	206	0	0			332.9312	332.9312	371.0746	11	1
+n1482	101	Abludomelita;Acaeroplastes;Agabiformius	6820	6820	match	98	0	0			392.5203	392.5203	367.4006	2	higher_taxa
+n1483	36	Acaeroplastes;Agabiformius;Alpioniscus	0	29979	match	35	0	0			264.2244	264.2244	270.7653	2	0
+n1484	4	Anthura;Cyathura;Eurydice	0	29979	wider	4	31	0	Acaeroplastes;Agabiformius;Alpioniscus;Androniscus;Armadillidium		264.2244		221.8208	2	higher_taxa
+n1491	18	Acaeroplastes;Agabiformius;Alpioniscus	41116	41116	match	17	0	0			205.5920	205.5920	205.5920	3	0
+n1493	8	Acaeroplastes;Agabiformius;Leptotrichus	96867	96867	match	8	0	0			49.4872	49.4872	49.4872	1	0
+n1505	6	Alpioniscus;Androniscus;Catalauniscus	33328	33328	match	5	0	0			151.0248	151.0248	151.0248	1	0
+n1520	6	Bragasellus;Janira;Joeropsis	63226	63226	match	6	0	0			298.5000	298.5000	268.0844	1	0
+n1521	4	Bragasellus;Proasellus;Stenasellus	525154	525154	match	4	0	0			131.4349	131.4349	158.7710	3	0
+n1522	3	Bragasellus;Proasellus;Synasellus	0	63227	match	3	0	0			244.1641	244.1641	157.1990	1	0
+n1539	54	Abludomelita;Ampelisca;Ampithoe	0	6821	match	52	0	0			217.1868	217.1868	217.1868	1	higher_taxa
+n1540	11	Ampelisca;Apolochus;Dexamine	2692238	2692238	wider	10	1	0	Bathyporeia		22.8887	102.0069	102.0069	1	0
+n1552	43	Abludomelita;Ampithoe;Aora	0	6821	wider	42	10	0	Ampelisca;Apolochus;Dexamine;Harpinia;Haustorius		217.1868		197.6459	1	0
+n1583	7	Apohyale;Hyale;Orchestia	1732206	1732206	match	7	0	0			125.8872	125.8872	125.8872	4	0
+n1584	3	Orchestia;Platorchestia;Talitrus	92169	92169	match	3	0	0			26.4138	64.4418	64.4418	2	0
+n1593	11	Bathyporeia;Echinogammarus;Gammarus	0	6821	wider	11	41	0	Abludomelita;Ampelisca;Ampithoe;Aora;Aoroides		217.1868		127.7369	1	0
+n1594	3	Haploginglymus;Niphargus;Pseudoniphargus	1732303	1732303	match	3	0	0			60.5756	60.5756	60.5756	3	0
+n1595	2	Haploginglymus;Niphargus	111559	111559	match	2	0	0			22.5034	22.5034	22.5034	1	0
+n1599	8	Bathyporeia;Echinogammarus;Gammarus	0	6821	wider	8	44	0	Abludomelita;Ampelisca;Ampithoe;Aora;Aoroides		217.1868		114.5753	1	0
+n1600	7	Echinogammarus;Gammarus;Iberogammarus	0	36939	match	7	0	0			53.0919	53.0919	53.0919	3	0
+n1610	6	Abludomelita;Elasmopus;Gammarella	936400	936400	match	6	0	0			210.2794	136.5996	136.5996	1	0
+n1633	107	Acanthephyra;Acanthonyx;Aegaeon	6683	6683	match	105	0	0			316.7191	316.7191	367.4006	17	higher_taxa
+n1634	91	Acanthephyra;Acanthonyx;Aegaeon	0	6692	match	89	0	0			396.6354	396.6354	363.7630	7	higher_taxa
+n1635	20	Acanthephyra;Aegaeon;Alpheus	0	6694	match	20	0	0			185.7900	185.7900	214.0082	1	0
+n1636	3	Atyaephyra;Dugastella;Typhlatya	0	96235	match	3	0	0			177.0236	177.0236	177.0236	2	0
+n1638	2	Atyaephyra;Dugastella	0	96235	wider	2	1	0	Typhlatya		153.6674	153.6674	153.6674	1	0
+n1641	9	Acanthephyra;Alpheus;Athanas	0	6694	wider	9	11	0	Aegaeon;Atyaephyra;Chlorotocus;Cinetorhynchus;Dugastella		161.3730	161.3730	211.8893	1	0
+n1642	6	Alpheus;Athanas;Eualus	0	6694	wider	6	14	0	Acanthephyra;Aegaeon;Atyaephyra;Chlorotocus;Cinetorhynchus		216.8731	216.8731	209.7914	5	0
+n1643	4	Alpheus;Athanas;Palaemon	0	6694	wider	4	16	0	Acanthephyra;Aegaeon;Atyaephyra;Chlorotocus;Cinetorhynchus		216.8731		204.7053	5	0
+n1650	2	Eualus;Hippolyte	0	98089	match	2	0	0			172.9600	172.9600	172.9600	1	1
+n1668	71	Acanthonyx;Afruca;Anapagurus	0	6692	wider	69	20	0	Acanthephyra;Aegaeon;Alpheus;Athanas;Atyaephyra		294.6391	294.6391	360.1614	8	higher_taxa
+n1669	64	Acanthonyx;Afruca;Anapagurus	0	6692	wider	62	27	0	Acanthephyra;Aegaeon;Alpheus;Athanas;Atyaephyra		294.6391		330.0695	8	higher_taxa
+n1670	62	Acanthonyx;Afruca;Anapagurus	0	6692	wider	61	28	0	Acanthephyra;Aegaeon;Alpheus;Athanas;Atyaephyra		287.9995	287.9995	293.6878	1	higher_taxa
+n1671	60	Acanthonyx;Afruca;Anapagurus	0	6692	wider	59	30	0	Acanthephyra;Aegaeon;Alpheus;Athanas;Atyaephyra		290.8637	290.8637	290.7800	6	0
+n1672	47	Acanthonyx;Afruca;Atelecyclus	0	6752	match	46	0	0			244.0526	244.0526	244.0526	2	0
+n1673	44	Acanthonyx;Afruca;Atelecyclus	0	116704	match	43	0	0			156.7706	156.7706	156.7706	7	higher_taxa
+n1674	28	Afruca;Bathynectes;Calappa	0	116706	wider	18	15	10	Acanthonyx;Atelecyclus;Cancer;Ergasticus;Eurynome	Afruca;Eriocheir;Gecarcoidea;Grapsus;Nepinnotheres	195.5000	122.6775	140.0092	3	0
+n1675	27	Afruca;Bathynectes;Callinectes	0	6774	narrower	8	0	19		Afruca;Derilambrus;Ebalia;Eriocheir;Eriphia	54.9228	54.9228	138.6230	5	0
+n1676	18	Afruca;Callinectes;Ebalia	0	116704	wider	18	25	0	Acanthonyx;Atelecyclus;Bathynectes;Calappa;Cancer		156.7706	156.7706	137.2505	7	0
+n1679	2	Nepinnotheres;Pinnotheres	0	84654	match	2	0	0			26.8049	26.8049	26.8049	1	0
+n1686	3	Grapsus;Pachygrapsus;Planes	0	39556	match	3	0	0			36.2624	36.2624	36.2624	3	0
+n1693	4	Lophozozymus;Monodaeus;Panopeus	0	6778	wider	4	1	0	Eriphia		53.8143	53.8143	53.8143	3	higher_taxa
+n1699	3	Callinectes;Ebalia;Geryon	0	116706	wider	3	30	0	Acanthonyx;Atelecyclus;Bathynectes;Calappa;Cancer		195.5000	122.6775	122.6775	3	0
+n1700	2	Callinectes;Geryon	6774	6774	wider	2	6	0	Bathynectes;Carcinus;Liocarcinus;Macropipus;Necora		65.0006	65.0006	65.0006	6	higher_taxa
+n1705	5	Bathynectes;Liocarcinus;Macropipus	1343473	1343473	match	5	0	0			24.4947	24.4947	24.4947	1	0
+n1711	4	Carcinus;Derilambrus;Parthenopoides	0	116706	wider	4	29	0	Acanthonyx;Atelecyclus;Bathynectes;Calappa;Callinectes		195.5000	122.6775	122.6775	3	higher_taxa
+n1721	10	Acanthonyx;Ergasticus;Eurynome	6804	6804	match	9	0	0			83.7489	83.7489	83.7489	3	higher_taxa
+n1739	3	Dromia;Homola;Latreillia	6782	6782	match	3	0	0			151.7097	151.7097	151.7097	2	higher_taxa
+n1744	13	Anapagurus;Calcinus;Cestopagurus	0	6738	match	13	0	0			250.7970	250.7970	250.7970	4	0
+n1745	8	Anapagurus;Calcinus;Cestopagurus	0	6744	match	8	0	0			166.9500	166.9500	177.9834	1	0
+n1747	7	Anapagurus;Calcinus;Cestopagurus	0	6744	wider	7	1	0	Parapagurus		177.3775	177.3775	176.2212	5	1
+n1752	4	Calcinus;Clibanarius;Dardanus	0	6749	match	4	0	0			107.5800	107.5800	107.5800	1	0
+n1754	2	Calcinus;Clibanarius	0	6749	wider	2	2	0	Dardanus;Diogenes		107.5800		80.3681	1	0
+n1759	4	Galathea;Munida;Pisidia	0	115588	wider	4	1	0	Munidopsis		158.8255	158.8255	158.8255	3	higher_taxa
+n1761	3	Galathea;Pisidia;Porcellana	0	115588	wider	3	2	0	Munida;Munidopsis		158.8255		135.3251	3	0
+n1762	2	Pisidia;Porcellana	0	84660	match	2	0	0			56.7200	56.7200	56.7200	1	0
+n1767	2	Jaxea;Upogebia	1792266	1792266	match	2	0	0			253.4786	253.4786	253.4786	4	higher_taxa
+n1773	7	Austropotamobius;Nephrops;Palinurus	0	6692	wider	7	82	0	Acanthephyra;Acanthonyx;Aegaeon;Afruca;Alpheus		396.6354	396.6354	356.5954	7	0
+n1774	6	Austropotamobius;Nephrops;Palinurus	0	6692	wider	6	83	0	Acanthephyra;Acanthonyx;Aegaeon;Afruca;Alpheus		317.4655	317.4655	317.4655	5	0
+n1775	3	Austropotamobius;Nephrops;Procambarus	6712	6712	match	3	0	0			266.8914	266.8914	266.8914	8	0
+n1776	2	Austropotamobius;Procambarus	6724	6724	match	2	0	0			151.8478	151.8478	151.8478	2	0
+n1780	3	Palinurus;Scyllarides;Scyllarus	115587	115587	match	3	0	0			207.8838	207.8838	207.8838	5	0
+n1782	2	Scyllarides;Scyllarus	59755	59755	match	2	0	0			173.2118	173.2118	173.2118	2	0
+n1786	16	Aristaeomorpha;Deosergestes;Eusergestes	6684	6684	match	16	0	0			326.7602	326.7602	326.8600	3	0
+n1787	13	Aristaeomorpha;Funchalia;Gennadas	111520	111520	match	13	0	0			324.5069	324.5069	323.6238	2	0
+n1788	7	Funchalia;Metapenaeopsis;Metapenaeus	6685	6685	wider	6	1	1	Penaeus	Sicyonia	218.1600	218.1600	230.4316	1	0
+n1789	6	Metapenaeopsis;Metapenaeus;Parapenaeus	0	111520	wider	6	7	0	Aristaeomorpha;Funchalia;Gennadas;Hymenopenaeus;Penaeus		240.9836	240.9836	228.1501	1	0
+n1790	3	Metapenaeus;Sicyonia;Trachysalambria	0	111520	wider	3	10	0	Aristaeomorpha;Funchalia;Gennadas;Hymenopenaeus;Metapenaeopsis		240.9836		180.9432	1	0
+n1792	2	Metapenaeus;Trachysalambria	0	6685	wider	2	5	0	Funchalia;Metapenaeopsis;Parapenaeus;Penaeopsis;Penaeus		140.3000	140.3000	140.3000	1	0
+n1795	3	Metapenaeopsis;Parapenaeus;Penaeopsis	0	6685	wider	3	4	0	Funchalia;Metapenaeus;Penaeus;Trachysalambria		120.4400	120.4400	120.4400	1	0
+n1801	5	Aristaeomorpha;Gennadas;Hymenopenaeus	0	111520	wider	5	8	0	Funchalia;Metapenaeopsis;Metapenaeus;Parapenaeus;Penaeopsis		164.5200	164.5200	174.8860	1	0
+n1802	2	Aristaeomorpha;Gennadas	0	111520	wider	2	11	0	Funchalia;Hymenopenaeus;Metapenaeopsis;Metapenaeus;Parapenaeus		221.0949	221.0949	173.1544	1	higher_taxa
+n1805	3	Hymenopenaeus;Pleoticus;Solenocera	0	84683	match	3	0	0			55.3844	55.3844	55.3844	3	0
+n1811	3	Deosergestes;Eusergestes;Sergia	0	111522	match	3	0	0			7.7027	44.5913	44.5913	1	0
+n1820	15	Amphibalanus;Austrominius;Balanus	0	2899756	match	15	0	0			174.4485	174.4485	174.4485	8	0
+n1821	11	Amphibalanus;Austrominius;Balanus	0	2899756	wider	11	4	0	Conchoderma;Dosima;Heteralepas;Lepas		136.4337	136.4337	141.7239	4	0
+n1822	10	Amphibalanus;Austrominius;Balanus	0	2899756	wider	10	5	0	Conchoderma;Dosima;Heteralepas;Lepas;Pollicipes		144.0059	144.0059	140.3207	3	0
+n1823	9	Amphibalanus;Austrominius;Balanus	2899670	2899670	match	9	0	0			99.4861	99.4861	99.4861	9	0
+n1824	7	Amphibalanus;Austrominius;Balanus	0	2899670	wider	7	2	0	Chthamalus;Euraphia		94.0059	94.0059	94.0059	3	0
+n1826	5	Amphibalanus;Balanus;Conopea	37806	37806	match	5	0	0			57.0000	57.0000	57.0000	1	0
+n1827	3	Amphibalanus;Conopea;Megabalanus	37806	37806	wider	3	2	0	Balanus;Perforatus		57.0000		39.9952	1	0
+n1840	4	Conchoderma;Dosima;Heteralepas	38010	38010	narrower	3	0	1		Heteralepas	105.5885	105.5885	105.5885	3	0
+n1851	36	Actinia;Antennella;Anthopleura	6073	6073	match	36	0	0			568.9317	568.9317	568.9317	9	higher_taxa
+n1852	16	Actinia;Anthopleura;Callogorgia	0	6101	match	16	0	0			546.1592	546.1592	546.1592	6	3
+n1854	8	Actinia;Anthopleura;Caryophyllia	0	6102	match	8	0	0			473.8315	473.8315	473.8315	6	0
+n1855	5	Caryophyllia;Dendrophyllia;Oculina	6102	6102	wider	5	3	0	Actinia;Anthopleura;Telmatactis		446.8761	446.8761	446.8761	1	higher_taxa
+n1856	4	Caryophyllia;Dendrophyllia;Oculina	0	6125	match	4	0	0			49.6986	188.2063	188.2063	1	0
+n1858	3	Caryophyllia;Oculina;Stephanocyathus	0	3115840	match	3	0	0			49.6986		164.6978	1	0
+n1859	2	Caryophyllia;Oculina	0	3115840	wider	2	1	0	Stephanocyathus		49.6986		163.4880	1	0
+n1870	7	Callogorgia;Cavernularia;Gyrophyllum	6132	6132	match	7	0	0			256.6676	256.6676	256.6676	2	0
+n1871	5	Callogorgia;Cavernularia;Gyrophyllum	0	3028851	match	5	0	0			244.2783	244.2783	244.2783	2	higher_taxa
+n1880	2	Leptogorgia;Litophyton	0	3028843	match	2	0	0			100.6630	100.6630	100.6630	2	higher_taxa
+n1883	20	Antennella;Aurelia;Blackfordia	0	6073	wider	20	16	0	Actinia;Anthopleura;Callogorgia;Caryophyllia;Cavernularia		547.5811	547.5811	547.5811	5	higher_taxa
+n1884	12	Antennella;Blackfordia;Craspedacusta	6074	6074	match	12	0	0			512.1258	512.1258	512.1258	1	higher_taxa
+n1886	11	Antennella;Blackfordia;Hydra	0	37516	match	11	0	0			449.6157	449.6157	449.6157	2	1
+n1888	7	Antennella;Blackfordia;Macrorhynchia	0	37516	wider	7	4	0	Hydra;Odessia;Sphaerocoryne;Zanclea		449.6157		415.4192	2	higher_taxa
+n1907	7	Aurelia;Cassiopea;Copula	0	6073	wider	7	29	0	Actinia;Antennella;Anthopleura;Blackfordia;Callogorgia		501.8403	501.8403	501.8403	3	higher_taxa
+n1908	6	Aurelia;Cassiopea;Pelagia	6142	6142	match	6	0	0			205.2263	385.1948	385.1948	1	higher_taxa
+n1909	5	Aurelia;Cassiopea;Phacellophora	6142	6142	wider	5	1	0	Pelagia		205.2263		374.0658	1	higher_taxa
+n1921	28	Aaptos;Aplysina;Caminella	6042	6042	match	28	0	0			652.9699	652.9699	652.9699	4	0
+n1922	23	Aaptos;Caminella;Characella	0	1779146	match	23	0	0			518.5000	518.5000	518.5000	2	0
+n1930	7	Aaptos;Halichondria;Hymeniacidon	0	1779146	wider	7	16	0	Caminella;Characella;Chondrocladia;Cladorhiza;Cliona		518.5000		361.9741	2	0
+n1938	2	Halichondria;Hymeniacidon	0	6060	match	2	0	0			105.7826	105.7826	105.7826	1	0
+n1945	6	Caminella;Characella;Geodia	0	1779168	match	6	0	0			114.1481	114.1481	114.1481	1	0
+n1961	5	Aplysina;Hexadella;Ircinia	0	6042	wider	5	23	0	Aaptos;Caminella;Characella;Chondrocladia;Cladorhiza		634.3218	634.3218	634.3218	3	0
+n1962	2	Aplysina;Hexadella	1779151	1779151	match	2	0	0			237.4884	237.4884	237.4884	1	0

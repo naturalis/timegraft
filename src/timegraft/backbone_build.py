@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import logging
 import math
+from collections.abc import Callable, Sequence
+from concurrent.futures import ThreadPoolExecutor
 
 import dendropy
 
@@ -23,10 +25,13 @@ from .col import compare_ids
 from . import agefit
 from . import requery as rq
 from .requery import COLUMNS as REQUERY_COLUMNS
+from . import ttcheck
 from .timetree import EVIDENCE_COLUMNS, TimeTree
 
 # which of TimeTree's two times a calibration uses (#108): see date_topology
 TIMETREE_TIMES = ("raw", "downweight", "replace", "adjusted")
+# whether to check which node TimeTree dated (#108, step 2): see date_topology
+NODE_CHECK_MODES = ("reject", "report", "off")
 
 REPORT_COLUMNS = (
     "node", "parent", "n_genera", "clade_genera", "age", "source", "timetree_age", "conflict_ratio", "query_ids",
@@ -49,6 +54,11 @@ REPORT_COLUMNS = (
     # TimeTree's adjusted time for the same answer (its tree made ultrametric), and the age the calibration
     # used: the raw or the adjusted time, after ages.timetree_time (#108)
     "timetree_adjusted_age", "calibration_age",
+    # whether TimeTree dated the intended node (#108, step 2; see timegraft.ttcheck): the outcome, the NCBI
+    # common ancestor of the ids it recognised, how many genera of the run that ancestor holds outside the node
+    # and lacks of it, and the genera probed for an unnamed answer
+    "timetree_node_check", "timetree_ncbi_ancestor", "timetree_genera_outside", "timetree_genera_missing",
+    "timetree_probes",
 )
 # columns reserved for later issues, written empty until those land
 RESERVED_COLUMNS = ()
@@ -232,6 +242,8 @@ def date_topology(
     fit: dict | None = None,
     requery: dict | None = None,
     timetree_time: dict | None = None,
+    node_check: dict | None = None,
+    lineage: Callable[[str], Sequence[str] | None] | None = None,
 ) -> tuple[dendropy.Tree, list[dict]]:
     """Set branch lengths in Ma on a genus-level topology, in place.
 
@@ -286,7 +298,18 @@ def date_topology(
     ``factor`` the calibration's sigma is multiplied by ``sigma_factor``: the
     answer is out of order in TimeTree's own tree; with ``replace`` the
     summary, but the adjusted time where the two differ by more than
-    ``factor``. Either way the report
+    ``factor``.
+
+    ``node_check`` (#108, step 2; settings ``mode``: ``reject``, ``report``
+    or ``off``; ``probes``) checks with ``lineage`` (a taxon's NCBI ids from
+    the root to itself, or None) whether each TimeTree answer dates the
+    intended node (:mod:`timegraft.ttcheck`): a named answer against the taxon
+    TimeTree reports, an unnamed one against the NCBI common ancestor of the
+    ids it recognised, with probes for genera outside and inside the node.
+    With ``reject`` an answer that dates a wider or a narrower node is not
+    used: the node is interpolated (source
+    ``interpolated_timetree_other_node``). The root keeps its answer whatever
+    the check says. With ``report`` the outcome is only recorded. Either way the report
     gives both times and the age the calibration used.
     """
     if method not in AGE_METHODS:
@@ -331,14 +354,59 @@ def date_topology(
                 raw[node], used[node] = value, sorted({i for side in sides for i in side})
                 attempt_of[node] = "higher_taxa"
 
+    # whether each answer dates the intended node (#108, step 2)
+    nc = dict(node_check or {})
+    # YAML 1.1 reads an unquoted `off` as False
+    nc_mode = {False: "off"}.get(nc.get("mode", "off"), nc.get("mode", "off")) if lineage is not None else "off"
+    if nc_mode not in NODE_CHECK_MODES:
+        raise ValueError(f"ages.node_check.mode must be one of {', '.join(NODE_CHECK_MODES)}, not {nc_mode!r}")
+    checked: dict[dendropy.Node, dict] = {}
+    if nc_mode != "off":
+        genus_ids = {g: (_ids(v) or [None])[0] for g, v in ncbi.items()}
+        # every lineage needed, fetched a few at a time (the lookups are cached by the caller)
+        needed = {str(i) for i in genus_ids.values() if i}
+        needed |= {str(i) for n in raw for i in _cache_entry(timetree, used[n]).get("found") or []}
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            list(pool.map(lineage, sorted(needed)))
+        known = ttcheck.genus_lineages(genus_ids, lineage)
+        for node in tree.preorder_node_iter():
+            if node not in raw:
+                continue
+            entry = _cache_entry(timetree, used[node])
+            genera = {leaf.taxon.label for leaf in node.leaf_iter()}
+            found, reported, ttid = entry.get("found") or [], entry.get("mrca_ncbi") or 0, entry.get("mrca_ttid")
+            result = ttcheck.check(found, genera, known, lineage, reported)
+            tried: list[tuple[str, bool]] = []
+            n_probes = int(nc.get("probes", 3))
+            if not reported and result["outcome"] == "wider":
+                # is any genus outside the node, but within the NCBI ancestor, inside TimeTree's node?
+                within = {g for g, path in known.items() if result["ancestor"] in path}
+                outcome, tried = ttcheck.probe(used[node], ttid, ttcheck.nearest_outside(node, within), genus_ids,
+                                               timetree._query, n_probes, stop_when_inside=True)
+                result["outcome"] = {"wider": "wider", "passed": "probed_outside"}.get(outcome, "unchecked")
+            if not reported and result["outcome"] in ("match", "probed_outside"):
+                # does TimeTree's node hold the genera of the node that no recognised id stands for?
+                stood_for = ttcheck.represented(found, genera, genus_ids, lineage)
+                candidates = [g for g in ttcheck.interleave(node) if g not in stood_for]
+                outcome, more = ttcheck.probe(used[node], ttid, candidates, genus_ids, timetree._query, n_probes,
+                                              stop_when_inside=False)
+                tried += more
+                if outcome == "narrower":
+                    result["outcome"] = "narrower"
+            result["probes"] = tried
+            checked[node] = result
+            if nc_mode == "reject" and result["outcome"] in ttcheck.REJECT and node is not tree.seed_node:
+                del age[node]
+                source[node] = "timetree_other_node"
+
     # TimeTree's adjusted time of each answer, and which time each calibration uses (#108)
     adjusted: dict[dendropy.Node, float] = {}
-    for node in raw:
+    for node in raw:  # recorded for every answer, used or not
         value = _cache_entry(timetree, used[node]).get("adjusted_age")
         if value and value > 0:
             adjusted[node] = float(value)
     out_of_order: set[dendropy.Node] = set()
-    for node in raw:
+    for node in [n for n in raw if n in age]:  # an answer rejected by the node check stays out (#108)
         age[node], differs = choose_time(raw[node], adjusted.get(node), tt_time)
         if differs and use_time == "downweight":
             out_of_order.add(node)
@@ -363,6 +431,7 @@ def date_topology(
         p_source[node] = {
             "dropped_inconsistent": "interpolated_after_drop",
             "timetree_same_as_ancestor": "interpolated_unresolved_in_timetree",
+            "timetree_other_node": "interpolated_timetree_other_node",
         }.get(p_source.get(node), "interpolated")
 
     # the calibrations and their uncertainty, whichever method, so that the conflict metrics of both
@@ -393,8 +462,9 @@ def date_topology(
         anchors = {}
         for node, value in interpolate(tree, age, method=interpolation, richness=richness, anchors=anchors).items():
             age[node] = value
-            source[node] = ("interpolated_unresolved_in_timetree" if source.get(node) == "timetree_same_as_ancestor"
-                            else "interpolated")
+            source[node] = {"timetree_same_as_ancestor": "interpolated_unresolved_in_timetree",
+                            "timetree_other_node": "interpolated_timetree_other_node"}.get(source.get(node),
+                                                                                           "interpolated")
 
     for node in tree.preorder_node_iter():
         if node is root:
@@ -462,6 +532,13 @@ def date_topology(
         row["timetree_adjusted_age"] = f"{adjusted[node]:.4f}" if node in adjusted else ""
         cal = calibrations.get(node)
         row["calibration_age"] = f"{cal.age:.4f}" if cal is not None and not cal.fixed else ""
+        result = checked.get(node)
+        row["timetree_node_check"] = result["outcome"] if result else ""
+        row["timetree_ncbi_ancestor"] = result["ancestor"] if result else ""
+        row["timetree_genera_outside"] = str(len(result["outside"])) if result else ""
+        row["timetree_genera_missing"] = str(len(result["missing"])) if result else ""
+        row["timetree_probes"] = ";".join(f"{g}:{'in' if inside else 'out'}"
+                                          for g, inside in result["probes"]) if result else ""
         row.update({c: "" for c in REQUERY_COLUMNS})
         row.update(requery_rows.get(node, {}))
         row.update({c: "" for c in RESERVED_COLUMNS})
@@ -595,6 +672,8 @@ def _fit(tree, calibrations, parent, unresolved, source, settings):
         depth[node] = 0 if node.parent_node is None else depth[node.parent_node] + 1
     new_source = {n: s for n, s in source.items() if n.is_leaf()}
     new_source.update({n: "timetree_same_as_ancestor" for n in unresolved})
+    # answers that date another node than intended (#108): kept out of the fit, and interpolated
+    new_source.update({n: s for n, s in source.items() if s == "timetree_other_node"})
     result = agefit.fit_ages(parent, depth, calibrations, min_gap=float(settings.get("min_gap", agefit.MIN_GAP)),
                              huber_k=float(settings.get("huber_k", agefit.HUBER_K)),
                              outlier_z=float(settings.get("outlier_z", agefit.OUTLIER_Z)))

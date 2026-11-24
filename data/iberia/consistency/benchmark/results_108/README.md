@@ -1,4 +1,8 @@
-# Which of TimeTree's two times to calibrate with (#108, step 1)
+# TimeTree's times and the nodes it dated (#108)
+
+Step 1 chooses which of TimeTree's two times to calibrate with; step 2 checks which node each answer dates.
+
+# Step 1: which of TimeTree's two times to calibrate with
 
 Every TimeTree answer has two times:
 - **`age`:** the summary over studies, a robust average (the Huber estimator, by TimeTree's FAQ).
@@ -89,3 +93,111 @@ The default is `replace` with factor 1.5:
 - **Whether the adjusted times are right.** The gate has no external truth for backbone ages. The adjusted times are TimeTree's own consistent estimate, and several are more plausible than the raw ones, for example a stony-coral split of 188 rather than 50 Ma. But that is TimeTree's judgement, not an independent check.
 - **Whether TimeTree dated the intended node.** That is step 2 of #108, and it may change some of these calibrations again.
 - **The downstream metrics.** 88 stems change, so genus crowns and PD move. They are measured in the full gate run after step 2.
+
+# Which node TimeTree dated (#108, step 2)
+
+## Step 2.1: TimeTree's tree refines the NCBI taxonomy
+
+`ncbi_refinement.py` tests this on every named TimeTree answer:
+- the 165 answers calibrating the backbone (`refinement_backbone.tsv`);
+- the 2,195 in the benchmark cache (`refinement_cache.tsv`).
+
+If TimeTree's tree only resolves polytomies of the NCBI taxonomy, a named node must be the NCBI common ancestor of the ids it recognised. NCBI lineages come from ChecklistBank's copy of the NCBI taxonomy (dataset 2169).
+
+| | Same node | TimeTree's node deeper | Lineage unknown |
+| --- | --- | --- | --- |
+| Backbone | 163 | 0 | 2 |
+| Whole cache | 2,158 | 6 | 31 |
+
+The six deeper answers are NCBI release differences, not departures from NCBI:
+- **Five name Pancrustacea** where ChecklistBank's NCBI has *Allotriocarida* or *Altocrustacea* (ids above 3,700,000, added recently) in between.
+- **One names the genus *Halichondria*** where NCBI now has a subgenus of the same name in between.
+
+So TimeTree's tree refines a somewhat older NCBI taxonomy. For every answer, named or not, the node TimeTree dated therefore lies within the NCBI common ancestor of the ids it recognised.
+
+## Step 2.2: the check
+
+`timegraft.ttcheck`, run by the backbone build with `ages.node_check`, compares the genera of the run in TimeTree's node with those of the backbone node.
+
+**Named answers** are compared through the taxon TimeTree reports (`mrca_ncbi`). By step 2.1 that taxon is the node it dated, so its genera are those whose NCBI lineage passes through it. If today's NCBI places a recognised id outside the reported taxon, the answer is left `unchecked`.
+
+**Unnamed answers** lie within the NCBI common ancestor of the ids TimeTree recognised, and are compared through that. The outcomes:
+- `narrower`: the taxon lacks a genus of the node, whether or not it also holds genera outside it.
+- `wider`: it holds genera outside the node and lacks none.
+- `match`: the same genera.
+- `unchecked`: a lineage is missing.
+
+**Probes** settle the unnamed answers, using TimeTree's own id of the node it dated (`mrca_ttid`). TimeTree is asked again with one genus added, up to three genera it knows (answers without a node id are skipped). If the node id stays the same, the genus is inside TimeTree's node.
+- **Outside probes**, for an unnamed `wider`: genera outside the node but inside the NCBI ancestor, nearest first. One inside keeps it `wider`; all outside make it `probed_outside`.
+- **Coverage probes**, for an unnamed `match` or `probed_outside`: genera of the node that no recognised id stands for, one from each child in turn. A TimeTree clade within the NCBI ancestor can leave some of them out; one outside makes the answer `narrower`.
+
+**The outside probe was validated** on the named `wider` answers (`probe_validation_named.tsv`, made with `probe_check.py ... named`). For those, NCBI already says the outside genera are inside TimeTree's node. All 31 the probe could decide came back inside, none falsely outside; 10 could not be decided.
+
+`node_check.tsv` gives the outcome per answer on the Iberian backbone (step 1's default `replace`, with `node_check.mode: reject`):
+
+| Outcome | Named | Unnamed | Used as calibration |
+| --- | --- | --- | --- |
+| `match` | 118 | 106 | yes |
+| `probed_outside` | | 94 | yes |
+| `unchecked` | 2 | 16 | yes |
+| `wider` | 39 | 60 | no |
+| `narrower` | 6 | 13 | no |
+
+**118 of the 454 answers are rejected**, and their nodes are interpolated.
+
+**The coverage probes earn their keep.** Of the 13 unnamed `narrower` answers, 9 were found by a coverage probe, which the NCBI comparison alone would have accepted. Of the 200 unnamed answers kept:
+- 106 had a coverage probe come back inside;
+- 57 needed none, or had none that TimeTree knows;
+- the other 37 had outside probes only, and no genus of the node left to probe for coverage.
+
+Before this check, the named comparison of the issue found 83 of 117 answers dating the intended node. Checked against the reported taxon, 118 of 165 named answers match. After the check every named calibration matches, or is unchecked.
+
+(`node_check_prototype.tsv` and `probe_check_prototype.tsv` are a first version of the check, made outside the pipeline with `node_check.py` and `probe_check.py`, before the review of #116. They compared named answers with today's NCBI ancestor and had no coverage probes.)
+
+`ages.node_check.mode: reject` is the default; `legacy.yaml` sets it `off`.
+
+**Not done: querying with more ids per side.** The issue's step 2 also proposed this. With the check, whether an answer is used no longer depends on which few ids TimeTree recognises, only on which node it dated. Re-asking every node with new picks would change all 454 answers at once and hide the effect of the check.
+
+## Result
+
+`step2.tsv`, measured as in step 1 (`check2` is `replace` with the node check):
+
+| | `raw` (before #108) | `replace` (step 1) | `replace` + check |
+| --- | --- | --- | --- |
+| Calibrations | 387 | 387 | 328 |
+| 2a calibrations off by more than 1.5 | 5 | 4 | 3 |
+| 2b weighted RMS of residuals | 0.384 | 0.354 | 0.225 |
+| 2c nodes older than their parent | 0 | 0 | 0 |
+| 4a / 4b hold-out | 1.318 / 2.485 | 1.309 / 2.324 | 1.305 / 2.395 |
+| 5a / 5b noise | 1.487 / 0.093 | 1.492 / 0.092 | 1.483 / 0.087 |
+| Nodes moved from `raw` by more than 10% / 1.5 | | 53 / 22 | 137 / 49 |
+| Stems moved from `raw` by more than 10% | | 88 | 187 |
+
+The noise builds of the check use the perturbed caches of #73, with the probe queries and lineages of the clean build added. Only TimeTree's node ids matter for the check, so the same answers are rejected with and without noise.
+
+`stem_causes.tsv` (`compare_backbones.py` between `raw` and the check) traces all 187 stems that move by more than 10%:
+- 132 to `node_check`;
+- 35 to `timetree_time` (step 1);
+- 19 to the fit around them;
+- 12 to `unresolved`: nodes whose answer was the same as an ancestor's, now calibrated because that ancestor's answer is rejected.
+
+## Test cases
+
+| Node | Genera | TimeTree (Ma) | Check | Before (Ma) | After |
+| --- | --- | --- | --- | --- | --- |
+| `n1373` | *Galathowenia*, *Magelona*, *Owenia* | 394.5 | `wider` (41 genera outside) | 394.5 | 134.3 |
+| `n1811` | *Deosergestes*, *Eusergestes*, *Sergia* (#78) | 7.7 (adjusted 44.6) | `match` | 7.7 | 44.6 |
+| `n490` | *Somniosus*, *Squalus* | 138.6 | `wider` | 107.0 | 78.7 |
+| `n360` to `n363` | grenadiers (11, 9, 8, 7 genera) | 48.1, 48.1, 64.8, 48.1 | `wider`, `wider`, `narrower`, `wider` | 54.3, 53.9, 53.8, 48.1 | 48.2, 48.0, 48.0, 47.6 |
+
+**The shrimp node** matches through NCBI. Its coverage cannot be probed, because TimeTree knows no *Eusergestes* id.
+
+**The grenadiers** no longer take TimeTree's answer for one 20-genus taxon. They are interpolated now, but their neighbours bound them closely (46.3 Ma below, about 48 above), so their ages stay close together.
+
+**The *Lepadogaster* and barnacle nodes of the issue** do not change. Their TimeTree age equals their parent's, so they were already interpolated before #108; they are now recorded as `wider` as well.
+
+## What this does not show
+
+- **Whether the interpolated ages are better than the rejected answers.** The gate has no external truth for backbone ages. Each rejected answer is TimeTree's age for another node, so it cannot be the age of the node asked about. For example, the annelid node got the age of a taxon holding 44 genera of the run.
+- **The 18 unchecked answers,** and the unnamed answers whose coverage could not be probed. These are still used.
+- **The downstream metrics and the rest of the gate.** They are left to the full gate run with both steps merged.

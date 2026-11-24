@@ -1,0 +1,42 @@
+node	n_genera	example_genera	ttid	probe_result	probes	probe_ttids
+n56	2	Alosa;Sardina	216123	wider	Sardinella	216123
+n68	3	Argyropelecus;Maurolicus;Polymetme	227179	wider	Stomias	227179
+n79	140	Acantholabrus;Anthias;Antigonia	228290	wider	Hoplostethus	228290
+n93	2	Lepadogaster;Tripterygion	242864	wider	Blennius	242864
+n113	6	Aphanius;Belone;Cheilopogon	239567	wider	Atherina	239567
+n154	4	Lichia;Naucrates;Seriola	245078	wider	Pseudocaranx	245078
+n294	6	Callionymus;Dactylopterus;Hippocampus	245324	wider	Macroramphosus	245324
+n323	2	Aphanopus;Lepidopus	246199	wider	Benthodesmus	246199
+n359	19	Coelorinchus;Gadella;Gadiculus	227808	wider	Bregmaceros	227808
+n360	11	Coelorinchus;Gadella;Gadomus	227808	wider	Gadus	227808
+n361	9	Coelorinchus;Gadella;Gadomus	227808	wider	Lyconus	227808
+n363	7	Coelorinchus;Gadella;Gadomus	227808	wider	Trachyrincus	227808
+n472	5	Apristurus;Galeorhinus;Galeus	215663	wider	Scyliorhinus	215663
+n489	4	Centrophorus;Deania;Somniosus	215357	wider	Centroscymnus	215357
+n490	2	Somniosus;Squalus	215357	wider	Centrophorus	215357
+n670	133	Abavopsis;Aegires;Aeolidia	398796	wider	Orculella	398796
+n671	119	Abavopsis;Aegires;Aeolidia	398796	wider	Bulinus	398796
+n693	3	Dendrodoris;Doriopsilla;Phyllidia	398802	wider	Hypselodoris	398802
+n742	16	Aeolidia;Aeolidiella;Anteaeolidiella	398855	inconclusive		
+n765	14	Bosellia;Caliphylla;Cyerce	398897	wider	Bulinus	398897
+n846	6	Ancylus;Bulinus;Ferrissia	400011	wider	Physa	400011
+n854	8	Ampullaceana;Galba;Lymnaea	400011	wider	Bulinus	400011
+n1036	27	Cerastoderma;Chamelea;Corbicula	400413	wider	Anodonta	400413
+n1081	2	Anodonta;Unio	401056	wider	Potomida	401056
+n1098	2	Dosidicus;Todarodes	394567	wider	Illex	394567
+n1144	27	Achaeta;Allolobophora;Aporrectodea	393018	wider	Mesenchytraeus	393018
+n1216	13	Ampharete;Amphictene;Arenicola	392865	inconclusive		
+n1218	6	Ampharete;Amphictene;Auchenoplax	392974	inconclusive		
+n1219	5	Ampharete;Amphictene;Auchenoplax	392974	inconclusive		
+n1243	15	Amphiglena;Aphelochaeta;Branchiomma	392865	inconclusive		
+n1250	5	Laonice;Prionospio;Sabellaria	392865	inconclusive		
+n1373	3	Galathowenia;Magelona;Owenia	392865	inconclusive		
+n1412	35	Acanthocyclops;Acartia;Aetideus	309028	wider	Oncaea	309028
+n1467	3	Acanthocyclops;Mesocyclops;Thermocyclops	309041	inconclusive		
+n1479	230	Abludomelita;Acaeroplastes;Acanthephyra	308596	wider	Acanthocyclops	308596
+n1540	11	Ampelisca;Apolochus;Dexamine	310338	inconclusive		
+n1700	2	Callinectes;Geryon	313300	wider	Liocarcinus	313300
+n1788	7	Funchalia;Metapenaeopsis;Metapenaeus	311244	wider	Penaeus	311244
+n1827	3	Amphibalanus;Conopea;Megabalanus	314804	wider	Balanus	314804
+n1855	5	Caryophyllia;Dendrophyllia;Oculina	212931	wider	Anthopleura	212931
+n1909	5	Aurelia;Cassiopea;Phacellophora	214533	inconclusive		
