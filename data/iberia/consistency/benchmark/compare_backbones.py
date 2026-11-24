@@ -172,6 +172,10 @@ def _why_calibrated(a, b, with_cal, without, node_without, run_without, backbone
         causes.append("unresolved")
         notes.append(f"TimeTree's age in {run_without} ({without['timetree_age']}) is that of an ancestor: "
                      f"its MRCA lies above the node")
+    if "timetree_other_node" in without["source"]:
+        causes.append("node_check")
+        notes.append(f"TimeTree's answer in {run_without} dates another node than intended "
+                     f"({without.get('timetree_node_check') or '-'}; #108), and is not used")
     if "drop" in without["source"] or (without["timetree_age"] and "dropped" in without["precedence_source"]):
         causes.append("fit")
         notes.append(f"{run_without} has the calibration ({without['timetree_age']}) but dropped it as "
@@ -263,8 +267,8 @@ def _compare(a, b, node_a, node_b, here, depth, seen):
     return causes, chain
 
 
-ROOT_CAUSES = ("topology", "identifier", "higher_taxa", "picks", "timetree_answer", "timetree_time", "unresolved",
-               "no_answer", "fit", "calibration_gained", "calibration_lost", "richness", "root")
+ROOT_CAUSES = ("topology", "identifier", "higher_taxa", "picks", "timetree_answer", "timetree_time", "node_check",
+               "unresolved", "no_answer", "fit", "calibration_gained", "calibration_lost", "richness", "root")
 # a calibration gained or lost says what happened, not why: a stem is traced only with a cause besides these
 NOT_A_REASON = {"calibration_gained", "calibration_lost"}
 

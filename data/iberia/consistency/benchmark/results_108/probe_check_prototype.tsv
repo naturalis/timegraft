@@ -1,0 +1,176 @@
+node	n_genera	example_genera	ttid	probe_result	probes	probe_ttids
+n9	23	Achondrostoma;Alburnus;Alepocephalus	216512	outside	Alosa;Engraulis;Sardinella	216116;216116;216116
+n13	12	Achondrostoma;Alburnus;Anaecypris	222955	outside	Barbus;Carassius;Luciobarbus	222945;222945;222945
+n14	11	Achondrostoma;Alburnus;Anaecypris	222954	outside	Barbus;Carassius;Luciobarbus	222945;222945;222945
+n18	7	Achondrostoma;Alburnus;Anaecypris	223583	outside	Leuciscus	223572
+n20	4	Achondrostoma;Iberochondrostoma;Parachondrostoma	223753	outside	Squalius;Anaecypris;Alburnus	223584;223583;223583
+n21	3	Achondrostoma;Parachondrostoma;Pseudochondrostoma	223763	outside	Iberochondrostoma;Squalius;Anaecypris	223753;223584;223583
+n22	2	Achondrostoma;Pseudochondrostoma	223771	outside	Parachondrostoma;Iberochondrostoma;Squalius	223763;223753;223584
+n44	2	Pangasianodon;Silurus	221482	wider	Ameiurus	221482
+n61	7	Argentina;Argyropelecus;Maurolicus	227098	outside	Alepisaurus;Anthias;Antigonia	227097;227097;227097
+n77	143	Acantholabrus;Anthias;Antigonia	228289	outside	Bregmaceros;Coelorinchus;Cyttopsis	227803;227803;227803
+n81	138	Acantholabrus;Anthias;Antigonia	228537	inconclusive		
+n82	125	Acantholabrus;Anthias;Antigonia	230351	outside	Apogon;Gobius;Lesueurigobius	228537;228537;228537
+n83	107	Acantholabrus;Anthias;Antigonia	230352	outside	Aphanopus;Auxis;Benthodesmus	230351;230351;230351
+n84	45	Aphanius;Arnoglossus;Atherina	230351	wider	Anthias	230351
+n85	42	Aphanius;Arnoglossus;Atherina	237424	outside	Scomber;Anthias;Antigonia	230351;230352;230352
+n87	12	Blennius;Chelon;Chromis	242089	outside	Aphanius;Atherina;Australoheros	237425;237425;237425
+n88	10	Blennius;Chromis;Hypleurochilus	242090	outside	Chelon;Mugil;Aphanius	242089;242089;237425
+n98	4	Hypleurochilus;Parablennius;Salaria	242979	outside	Lipophrys	242963
+n99	3	Hypleurochilus;Parablennius;Scartella	242979	wider	Salaria	242979
+n110	8	Aphanius;Atherina;Australoheros	237426	outside	Blennius;Chelon;Hypleurochilus	237425;237425;237425
+n116	2	Aphanius;Valencia	240010	outside	Gambusia	239570
+n126	19	Arnoglossus;Bathysolea;Buglossidium	244253	wider	Remora	244253
+n127	18	Arnoglossus;Bathysolea;Buglossidium	244253	wider	Sphyraena	244253
+n129	12	Arnoglossus;Bathysolea;Buglossidium	244345	inconclusive		
+n130	5	Arnoglossus;Lepidorhombus;Microstomus	244655	outside	Dicologlossa;Microchirus;Pegusa	244345;244345;244345
+n131	3	Arnoglossus;Microstomus;Platichthys	244671	outside	Lepidorhombus;Scophthalmus;Dicologlossa	244655;244655;244345
+n139	7	Bathysolea;Buglossidium;Dicologlossa	244434	outside	Arnoglossus;Lepidorhombus;Microstomus	244345;244345;244345
+n141	5	Bathysolea;Dicologlossa;Microchirus	244601	inconclusive		
+n142	2	Pegusa;Solea	244609	outside	Dicologlossa;Microchirus	244564;244601
+n153	5	Lichia;Naucrates;Seriola	244253	wider	Arnoglossus	244253
+n155	2	Naucrates;Seriola	245259	outside	Trachinotus;Pseudocaranx;Trachurus	245078;245079;245079
+n158	2	Lichia;Trachinotus	245277	outside	Seriola;Pseudocaranx;Trachurus	245078;245078;245078
+n166	3	Centrolophus;Pomatomus;Scomber	246021	wider	Aphanopus	246021
+n167	2	Centrolophus;Scomber	246021	wider	Aphanopus	246021
+n172	61	Acantholabrus;Anthias;Antigonia	230357	wider	Diapterus	230357
+n173	36	Acantholabrus;Antigonia;Balistes	230560	outside	Anthias;Chelidonichthys;Cottus	230357;230357;230357
+n174	26	Antigonia;Balistes;Boops	230564	outside	Coris;Labrus;Sparisoma	230560;230560;230560
+n176	25	Antigonia;Balistes;Boops	230564	wider	Dicentrarchus	230564
+n177	20	Antigonia;Balistes;Boops	230566	wider	Callanthias;Cepola	230564;230566
+n178	10	Antigonia;Balistes;Capros	230569	outside	Dentex;Diplodus;Pagellus	230566;230566;230566
+n181	2	Lagocephalus;Sphoeroides	231211	inconclusive		
+n185	3	Balistes;Mola;Ranzania	230981	wider	Lagocephalus	230981
+n190	4	Antigonia;Capros;Chaunax	230569	wider	Balistes	230569
+n198	2	Dentex;Pagellus	231715	outside	Diplodus;Spondyliosoma;Pagrus	231611;231604;231693
+n201	6	Boops;Centracanthus;Diplodus	231604	wider	Dentex	231604
+n203	4	Boops;Centracanthus;Diplodus	231601	wider	Spondyliosoma	231601
+n204	2	Boops;Centracanthus	231601	wider	Diplodus	231601
+n214	5	Callanthias;Cepola;Cynoscion	230564	wider	Antigonia	230564
+n215	3	Callanthias;Cepola;Pomadasys	230564	wider	Cynoscion	230564
+n216	2	Callanthias;Pomadasys	230564	wider	Cepola	230564
+n223	10	Acantholabrus;Coris;Ctenolabrus	230559	wider	Antigonia	230559
+n225	5	Acantholabrus;Ctenolabrus;Labrus	233691	outside	Coris;Thalassoma	233243;233243
+n227	4	Acantholabrus;Ctenolabrus;Labrus	233692	outside	Sparisoma;Coris;Thalassoma	233691;233243;233243
+n228	3	Acantholabrus;Ctenolabrus;Symphodus	233702	outside	Labrus;Sparisoma;Coris	233692;233691;233243
+n230	2	Acantholabrus;Ctenolabrus	233732	outside	Symphodus;Labrus;Sparisoma	233702;233692;233691
+n234	2	Coris;Thalassoma	233253	outside	Labrus;Sparisoma;Symphodus	233243;233243;233243
+n242	25	Anthias;Chelidonichthys;Cottus	230357	wider	Antigonia	230357
+n244	17	Chelidonichthys;Cottus;Cyclopterus	234698	wider	Anthias	234698
+n245	15	Chelidonichthys;Cottus;Cyclopterus	235988	outside	Trachinus;Anthias;Epinephelus	234698;235590;235164
+n246	10	Chelidonichthys;Cottus;Cyclopterus	235989	outside	Helicolenus;Neomerinthe;Pontinus	235988;235988;235988
+n249	3	Cyclopterus;Liparis;Paraliparis	236402	outside	Cottus	236397
+n258	3	Chelidonichthys;Eutrigla;Lepidotrigla	236962	inconclusive		
+n259	2	Chelidonichthys;Eutrigla	236990	outside	Lepidotrigla	236962
+n266	4	Helicolenus;Pontinus;Scorpaena	237071	wider	Neomerinthe	237071
+n267	3	Helicolenus;Pontinus;Trachyscorpia	237071	wider	Scorpaena	237071
+n277	3	Anthias;Epinephelus;Serranus	235164	wider	Chelidonichthys	235164
+n278	2	Anthias;Epinephelus	235164	wider	Serranus	235164
+n282	5	Epigonus;Kyphosus;Lepomis	230358	outside	Anthias;Chelidonichthys;Cottus	230357;230357;230357
+n292	18	Aphanopus;Auxis;Benthodesmus	245323	outside	Anthias;Antigonia;Aphanius	230351;230351;230351
+n295	5	Callionymus;Hippocampus;Mullus	245352	outside	Macroramphosus	245334
+n296	3	Hippocampus;Mullus;Syngnathus	245352	wider	Callionymus	245352
+n306	11	Aphanopus;Auxis;Benthodesmus	246021	wider	Scomber	246021
+n307	7	Auxis;Brama;Sarda	246021	wider	Aphanopus	246021
+n308	3	Auxis;Sarda;Thunnus	246314	outside	Scomber	246256
+n313	4	Brama;Scombrolabrax;Stromateus	246022	outside	Auxis;Sarda;Thunnus	246021;246021;246021
+n320	4	Aphanopus;Benthodesmus;Lepidocybium	246163	outside	Auxis;Brama;Sarda	246021;246133;246021
+n329	4	Buenia;Gobiusculus;Pomatoschistus	230043	outside	Gobius;Lesueurigobius;Vanneaugobius	229317;229317;229283
+n330	2	Gobiusculus;Pomatoschistus	230067	outside	Gobius;Lesueurigobius;Vanneaugobius	229317;229317;229283
+n338	4	Gobius;Mauligobius;Thorogobius	229283	wider	Lesueurigobius	229283
+n364	5	Coelorinchus;Gadomus;Hymenogadus	227816	outside	Trachyrincus	227810
+n380	7	Gadiculus;Gadus;Gaidropsarus	228107	outside	Gadella;Lepidion;Lyconus	228015;228015;228015
+n381	6	Gadiculus;Gadus;Gaidropsarus	228125	outside	Phycis;Gadella;Lepidion	228107;228015;228015
+n383	5	Gadiculus;Gadus;Micromesistius	228137	outside	Gaidropsarus;Phycis;Gadella	228125;228107;228015
+n384	4	Gadiculus;Gadus;Micromesistius	228140	inconclusive		
+n386	3	Gadiculus;Micromesistius;Trisopterus	228141	outside	Gadus	228140
+n388	2	Gadiculus;Micromesistius	228142	outside	Trisopterus;Gadus	228141;228140
+n397	4	Cyttopsis;Grammicolepis;Zenopsis	228214	outside	Zenion	228204
+n398	3	Grammicolepis;Zenopsis;Zeus	228215	outside	Cyttopsis;Zenion	228214;228204
+n409	2	Ceratoscopelus;Lampanyctus	246633	wider	Lampadena;Lobianchia;Hygophum	246603;246632;246633
+n427	7	Anguilla;Conger;Facciolella	247292	outside	Synaphobranchus	247268
+n428	6	Conger;Facciolella;Muraena	247286	wider	Anguilla	247286
+n429	5	Conger;Facciolella;Nettastoma	247295	outside	Muraena;Anguilla;Synaphobranchus	247286;247292;247268
+n430	4	Facciolella;Nettastoma;Ophichthus	247295	wider	Conger	247295
+n447	6	Bathytoshia;Dasyatis;Mobula	215196	inconclusive		
+n454	2	Mobula;Rhinoptera	215309	outside	Myliobatis	215305
+n476	3	Galeorhinus;Mustelus;Prionace	215825	outside	Apristurus;Galeus;Scyliorhinus	215663;215663;215663
+n477	2	Mustelus;Prionace	215825	outside	Apristurus;Galeus;Scyliorhinus	215663;215663;215663
+n486	8	Centrophorus;Centroscymnus;Deania	215356	inconclusive		
+n488	6	Centrophorus;Centroscymnus;Deania	215399	wider	Etmopterus	215399
+n510	3	Paracentrotus;Psammechinus;Sphaerechinus	301337	outside	Arbacia	301336
+n512	2	Psammechinus;Sphaerechinus	301337	outside	Arbacia	301336
+n576	547	Abavopsis;Abida;Acanthinula	392761	wider	Bugulina	392761
+n578	376	Abavopsis;Abida;Acanthinula	394447	outside	Acanthochitona;Leptochiton	394446;394446
+n579	357	Abavopsis;Abida;Acanthinula	394810	outside	Bathypolypus;Chiroteuthis;Illex	394447;394447;394447
+n581	195	Abavopsis;Aegires;Aeolidia	395950	outside	Cymbula;Diodora;Emarginula	394813;394813;394813
+n605	3	Nucella;Ocenebra;Ocinebrina	398562	wider	Coralliophila;Plicopurpura	398373;398562
+n609	2	Plicopurpura;Stramonita	398430	wider	Coralliophila;Nucella	398373;398430
+n622	7	Corrosella;Ecrobia;Hydrobia	396653	inconclusive		
+n624	2	Ecrobia;Hydrobia	397068	wider	Corrosella	397068
+n674	16	Aldisa;Baptodoris;Discodoris	398824	outside	Phyllidia	398802
+n764	37	Abavopsis;Aglaja;Akera	398896	outside	Hypselodoris;Phyllidia;Berthella	398796;398796;398796
+n788	23	Abavopsis;Aglaja;Akera	400246	wider	Cavolinia	400246
+n789	16	Abavopsis;Aglaja;Biuve	400246	wider	Cavolinia	400246
+n827	3	Berthella;Berthellina;Pleurobranchus	398869	outside	Pleurobranchaea	398863
+n867	13	Calliostoma;Clanculus;Clelandella	394814	outside	Berthella;Berthellina;Bulinus	394813;394813;394813
+n945	9	Allognathus;Cepaea;Cornu	399501	inconclusive		
+n946	7	Allognathus;Cepaea;Cornu	399502	outside	Helix	399501
+n947	4	Allognathus;Cepaea;Hemicycla	399503	outside	Cornu;Theba;Helix	399502;399502;399501
+n948	3	Allognathus;Hemicycla;Iberus	399507	outside	Cepaea;Cornu;Theba	399503;399502;399502
+n949	2	Allognathus;Hemicycla	399511	outside	Iberus;Cepaea;Cornu	399507;399503;399502
+n954	3	Cornu;Eobania;Theba	399530	outside	Allognathus;Cepaea;Hemicycla	399502;399502;399502
+n955	2	Cornu;Theba	399530	outside	Allognathus;Cepaea;Hemicycla	399502;399502;399502
+n1038	4	Magallana;Mimachlamys;Ostrea	400427	wider	Idas	400427
+n1088	11	Alloteuthis;Ancistroteuthis;Architeuthis	394453	wider	Sepietta	394453
+n1090	4	Ancistroteuthis;Architeuthis;Chiroteuthis	394565	wider	Illex	394565
+n1103	3	Alloteuthis;Loligo;Sepia	394454	outside	Chiroteuthis;Illex;Todarodes	394453;394453;394453
+n1135	152	Achaeta;Aglaophamus;Allolobophora	392860	inconclusive		
+n1137	141	Achaeta;Aglaophamus;Allolobophora	392765	inconclusive		
+n1140	85	Achaeta;Allolobophora;Ampharete	392860	inconclusive		
+n1141	70	Achaeta;Allolobophora;Ampharete	392860	inconclusive		
+n1142	66	Achaeta;Allolobophora;Ampharete	392860	inconclusive		
+n1170	6	Barbronia;Batracobdella;Dina	393651	inconclusive		
+n1237	3	Heteromastus;Notomastus;Ophelina	393015	inconclusive		
+n1349	2	Hipponoe;Sipunculus	392765	wider	Allolobophora	392765
+n1415	17	Aetideus;Anomalocera;Calanoides	309055	inconclusive		
+n1456	11	Acanthocyclops;Caligus;Eucyclops	309033	outside	Oncaea	309029
+n1457	4	Caligus;Euterpina;Goniopsyllus	309033	wider	Acanthocyclops	309033
+n1484	4	Anthura;Cyathura;Eurydice	310595	wider	Armadillidium	310595
+n1552	43	Abludomelita;Ampithoe;Aora	309108	wider	Haustorius	309108
+n1593	11	Bathyporeia;Echinogammarus;Gammarus	309108	wider	Caprella	309108
+n1599	8	Bathyporeia;Echinogammarus;Gammarus	309108	wider	Haploginglymus	309108
+n1638	2	Atyaephyra;Dugastella	311472	outside	Typhlatya	311471
+n1641	9	Acanthephyra;Alpheus;Athanas	311530	outside	Dugastella;Typhlatya;Pandalus	311364;311364;311339
+n1642	6	Alpheus;Athanas;Eualus	311589	outside	Oplophorus;Dugastella;Typhlatya	311530;311364;311364
+n1643	4	Alpheus;Athanas;Palaemon	311589	wider	Hippolyte	311589
+n1668	71	Acanthonyx;Afruca;Anapagurus	311875	outside	Alpheus;Dugastella;Hippolyte	311323;311323;311323
+n1669	64	Acanthonyx;Afruca;Anapagurus	311875	wider	Austropotamobius	311875
+n1670	62	Acanthonyx;Afruca;Anapagurus	311867	wider	Austropotamobius	311867
+n1671	60	Acanthonyx;Afruca;Anapagurus	311876	outside	Austropotamobius;Palinurus;Polycheles	311875;311875;311323
+n1674	28	Afruca;Bathynectes;Calappa	312392	wider	Cancer	312392
+n1676	18	Afruca;Callinectes;Ebalia	312343	wider	Liocarcinus	312343
+n1693	4	Lophozozymus;Monodaeus;Panopeus	313536	outside	Eriphia	313514
+n1699	3	Callinectes;Ebalia;Geryon	312392	wider	Panopeus;Eriphia;Liocarcinus	312384;312384;312392
+n1711	4	Carcinus;Derilambrus;Parthenopoides	312392	wider	Callinectes	312392
+n1747	7	Anapagurus;Calcinus;Cestopagurus	312133	inconclusive		
+n1754	2	Calcinus;Clibanarius	312148	wider	Dardanus	312148
+n1759	4	Galathea;Munida;Pisidia	311979	outside	Munidopsis	311881
+n1761	3	Galathea;Pisidia;Porcellana	311979	outside	Munidopsis	311881
+n1773	7	Austropotamobius;Nephrops;Palinurus	311323	wider	Calappa	311323
+n1774	6	Austropotamobius;Nephrops;Palinurus	314011	outside	Polycheles;Calappa;Calcinus	311323;311875;311875
+n1789	6	Metapenaeopsis;Metapenaeus;Parapenaeus	311243	wider	Funchalia	311243
+n1790	3	Metapenaeus;Sicyonia;Trachysalambria	311243	wider	Metapenaeopsis	311243
+n1792	2	Metapenaeus;Trachysalambria	311255	outside	Metapenaeopsis;Funchalia;Penaeus	311245;311244;311244
+n1795	3	Metapenaeopsis;Parapenaeus;Penaeopsis	311246	outside	Metapenaeus;Funchalia;Penaeus	311245;311244;311244
+n1801	5	Aristaeomorpha;Gennadas;Hymenopenaeus	311201	outside	Funchalia;Metapenaeopsis;Metapenaeus	311200;311200;311200
+n1802	2	Aristaeomorpha;Gennadas	311219	outside	Hymenopenaeus;Solenocera;Funchalia	311201;311201;311200
+n1821	11	Amphibalanus;Austrominius;Balanus	314717	outside	Conchoderma;Lepas	314639;314639
+n1822	10	Amphibalanus;Austrominius;Balanus	314729	outside	Pollicipes;Conchoderma;Lepas	314717;314639;314639
+n1824	7	Amphibalanus;Austrominius;Balanus	314798	outside	Chthamalus	314730
+n1859	2	Caryophyllia;Oculina	212938	wider	Stephanocyathus	212938
+n1883	20	Antennella;Aurelia;Blackfordia	214531	outside	Anthopleura;Callogorgia;Caryophyllia	212924;212924;212924
+n1888	7	Antennella;Blackfordia;Macrorhynchia	214545	wider	Hydra	214545
+n1907	7	Aurelia;Cassiopea;Copula	214532	outside	Hydra;Plumularia;Anthopleura	214531;214531;212924
+n1930	7	Aaptos;Halichondria;Hymeniacidon	212255	outside	Cliona;Tethya;Polymastia	212063;212063;212181
+n1961	5	Aplysina;Hexadella;Ircinia	212701	outside	Aaptos;Characella;Cladorhiza	212062;212062;212062

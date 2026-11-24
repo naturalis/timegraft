@@ -73,6 +73,12 @@ def compact_classification(value) -> list[dict]:
             if isinstance(c, dict) and c.get("rank") in keep]
 
 
+def compact_lineage(value) -> list[str] | None:
+    """The ids of a classification, root first; None for an empty one."""
+    ids = [str(c["id"]) for c in value or [] if isinstance(c, dict) and c.get("id")] if isinstance(value, list) else []
+    return ids or None
+
+
 def compact_match(value) -> dict:
     """The parts of a match answer that timegraft reads; keeps the cache small."""
     if not isinstance(value, dict):
@@ -152,6 +158,13 @@ class ChecklistBank:
         value = self._get(cache_key, f"/dataset/{dataset}/taxon/{usage_id}/classification", default=[],
                           compact=compact_classification)
         return value if isinstance(value, list) else []
+
+    def ncbi_lineage(self, taxon) -> list[str] | None:
+        """NCBI ids from the root to ``taxon`` itself, in ChecklistBank's copy of the NCBI taxonomy, or None
+        where it does not know the taxon (#108: which node TimeTree dated, :mod:`timegraft.ttcheck`)."""
+        value = self._get(f"col:ncbi_lineage:{taxon}", f"/dataset/{NCBI_DATASET}/taxon/{taxon}/classification",
+                          default=None, compact=compact_lineage)
+        return value + [str(taxon)] if value else None
 
     def sector_mode(self, sector: int | None) -> str:
         """``attach`` or ``union`` for the base release, ``merge`` for sources added in XR."""

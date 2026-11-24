@@ -244,6 +244,13 @@ try:
         higher = None
         richness = None
 
+    # which node TimeTree dated, from NCBI lineages in ChecklistBank (#108, step 2)
+    node_check = (settings.get("ages") or {}).get("node_check") or {}
+    lineage = None
+    if node_check.get("mode", "off") != "off":
+        from timegraft.col import ChecklistBank
+
+        lineage = (clb or ChecklistBank(col_cfg.get("release", 316691), cache)).ncbi_lineage
     tree, report = date_topology(tree, ncbi, timetree, per_side=int(settings.get("per_side", 2)),
                                  root_age=settings.get("root_age"),
                                  per_genus=int(settings.get("species_per_genus", 3)), higher=higher,
@@ -252,7 +259,8 @@ try:
                                  method=(settings.get("ages") or {}).get("method", "fit"),
                                  fit=(settings.get("ages") or {}).get("fit") or {},
                                  requery=(settings.get("ages") or {}).get("requery") or {},
-                                 timetree_time=(settings.get("ages") or {}).get("timetree_time") or {})
+                                 timetree_time=(settings.get("ages") or {}).get("timetree_time") or {},
+                                 node_check=node_check, lineage=lineage)
 finally:
     cache.save()
 
