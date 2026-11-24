@@ -117,10 +117,69 @@ def k2p_matrix(seqs: Sequence[str], max_distance: float = DEFAULT_MAX_DISTANCE) 
     return out
 
 
+def _kmer_codes(seq: str, k: int) -> np.ndarray:
+    """The distinct k-mers of ``seq`` without gaps, as integers (base 4), skipping those with an ambiguity code;
+    the same k-mers as :func:`_kmers`."""
+    codes = _CODE[np.frombuffer(seq.replace("-", "").encode(), dtype=np.uint8)].astype(np.int64)
+    if len(codes) < k:
+        return np.zeros(0, dtype=np.int64)
+    windows = np.lib.stride_tricks.sliding_window_view(codes, k)
+    windows = windows[(windows < 4).all(axis=1)]
+    return np.unique(windows @ (4 ** np.arange(k - 1, -1, -1, dtype=np.int64)))
+
+
+# above this many cells (sequences times distinct k-mers) the records-by-k-mers matrix of kmer_matrix() is not
+# built, and intersections come from the k-mer sets instead: the same counts in less memory
+DENSE_CELLS = 50_000_000  # 200 MB of float32
+
+
+def kmer_matrix(seqs: Sequence[str], k: int = 8, max_distance: float = DEFAULT_MAX_DISTANCE,
+                dense_cells: int = DENSE_CELLS) -> np.ndarray:
+    """All pairwise k-mer distances at once; the same result as ``kmer`` per pair, bit for bit (#112).
+
+    Each sequence's k-mer set is built once. The intersections are exact counts: from one product of a
+    records-by-k-mers matrix, or from the sets where that matrix would exceed ``dense_cells`` cells (large
+    genera with many distinct k-mers). The Mash formula is applied as in ``kmer``.
+    """
+    n = len(seqs)
+    if n < 2:
+        return np.zeros((n, n))
+    sets = [_kmer_codes(s, k) for s in seqs]
+    if any(len(x) == 0 for x in sets):
+        raise ValueError("sequence shorter than k")
+    columns, index = np.unique(np.concatenate(sets), return_inverse=True)
+    if n * len(columns) <= dense_cells:
+        present = np.zeros((n, len(columns)), dtype=np.float32)  # exact for counts below 2**24
+        rows = np.repeat(np.arange(n), [len(x) for x in sets])
+        present[rows, index] = 1.0
+        inter = (present @ present.T).astype(np.int64)
+    else:
+        as_sets = [set(x.tolist()) for x in sets]
+        inter = np.zeros((n, n), dtype=np.int64)
+        for i in range(n):
+            inter[i, i] = len(as_sets[i])
+            for j in range(i + 1, n):
+                inter[i, j] = inter[j, i] = len(as_sets[i] & as_sets[j])
+    size = np.array([len(x) for x in sets], dtype=np.int64)
+    union = size[:, None] + size[None, :] - inter
+    jaccard = inter / union  # true division of exact counts: correctly rounded, as in kmer()
+    ratio = 2.0 * jaccard / (1.0 + jaccard)
+    # math.log, not numpy.log, which can differ in the last bit and so change which record is the medoid; taken
+    # once per distinct value
+    values, where = np.unique(ratio, return_inverse=True)
+    logs = np.array([math.log(v) if v > 0 else -math.inf for v in values])[where].reshape(ratio.shape)
+    d = -1.0 / k * logs
+    out = np.where(jaccard == 0, max_distance, np.minimum(d, max_distance))
+    np.fill_diagonal(out, 0.0)
+    return out
+
+
 def matrix(seqs: Sequence[str], method: str = "k2p", **options) -> np.ndarray:
     """Symmetric distance matrix for a list of sequences."""
     if method == "k2p":
         return k2p_matrix(seqs, **{k: v for k, v in options.items() if k == "max_distance"})
+    if method == "kmer":
+        return kmer_matrix(seqs, **{k: v for k, v in options.items() if k in ("k", "max_distance")})
     func = get_method(method)
     n = len(seqs)
     out = np.zeros((n, n))
