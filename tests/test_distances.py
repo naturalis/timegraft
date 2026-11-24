@@ -55,3 +55,14 @@ def test_kmer_matrix_edge_cases():
         distances.kmer_matrix(["ACGTACGTAC", "ACG"], k=8)  # shorter than k, as kmer() raises
     with pytest.raises(ValueError):
         distances.kmer_matrix(["ACGTACGTAC", "NNNNNNNNNNNN"], k=8)  # no valid k-mer
+
+
+def test_kmer_matrix_beyond_integer_codes():
+    # k above 31 would overflow the base-4 codes: 'A' * 33 and 'C' + 'A' * 32 would both be 0 (review of #117)
+    seqs = ["A" * 33, "C" + "A" * 32, "A" * 40]
+    for k in (31, 32, 33):
+        assert np.array_equal(distances.kmer_matrix(seqs, k=k), _pairwise(seqs, k=k))
+    assert distances.kmer_matrix(seqs, k=33)[0, 1] == distances.DEFAULT_MAX_DISTANCE
+    assert distances.kmer_matrix(seqs, k=33)[0, 2] == 0.0
+    with pytest.raises(ValueError):
+        distances.kmer_matrix(["A" * 40, "A" * 20], k=33)

@@ -128,6 +128,10 @@ def _kmer_codes(seq: str, k: int) -> np.ndarray:
     return np.unique(windows @ (4 ** np.arange(k - 1, -1, -1, dtype=np.int64)))
 
 
+# the largest k whose base-4 codes fit in a signed 64-bit integer (4**31 = 2**62); above it kmer_matrix() works
+# on the k-mers as strings
+MAX_CODED_K = 31
+
 # above this many cells (sequences times distinct k-mers) the records-by-k-mers matrix of kmer_matrix() is not
 # built, and intersections come from the k-mer sets instead: the same counts in less memory
 DENSE_CELLS = 50_000_000  # 200 MB of float32
@@ -139,11 +143,19 @@ def kmer_matrix(seqs: Sequence[str], k: int = 8, max_distance: float = DEFAULT_M
 
     Each sequence's k-mer set is built once. The intersections are exact counts: from one product of a
     records-by-k-mers matrix, or from the sets where that matrix would exceed ``dense_cells`` cells (large
-    genera with many distinct k-mers). The Mash formula is applied as in ``kmer``.
+    genera with many distinct k-mers). k-mers are coded as integers up to ``MAX_CODED_K``, and kept as strings
+    above it. The Mash formula is applied as in ``kmer``.
     """
     n = len(seqs)
     if n < 2:
         return np.zeros((n, n))
+    if k > MAX_CODED_K:
+        # base-4 codes would overflow int64 and merge distinct k-mers: use the k-mers as strings, as kmer() does
+        sets = [_kmers(s.replace("-", ""), k) for s in seqs]
+        if any(len(x) == 0 for x in sets):
+            raise ValueError("sequence shorter than k")
+        return _from_intersections(_set_intersections(sets), np.array([len(x) for x in sets], dtype=np.int64),
+                                   k, max_distance)
     sets = [_kmer_codes(s, k) for s in seqs]
     if any(len(x) == 0 for x in sets):
         raise ValueError("sequence shorter than k")
@@ -154,13 +166,23 @@ def kmer_matrix(seqs: Sequence[str], k: int = 8, max_distance: float = DEFAULT_M
         present[rows, index] = 1.0
         inter = (present @ present.T).astype(np.int64)
     else:
-        as_sets = [set(x.tolist()) for x in sets]
-        inter = np.zeros((n, n), dtype=np.int64)
-        for i in range(n):
-            inter[i, i] = len(as_sets[i])
-            for j in range(i + 1, n):
-                inter[i, j] = inter[j, i] = len(as_sets[i] & as_sets[j])
-    size = np.array([len(x) for x in sets], dtype=np.int64)
+        inter = _set_intersections([set(x.tolist()) for x in sets])
+    return _from_intersections(inter, np.array([len(x) for x in sets], dtype=np.int64), k, max_distance)
+
+
+def _set_intersections(sets: Sequence[set]) -> np.ndarray:
+    """The sizes of all pairwise intersections of ``sets``, the sets' own sizes on the diagonal."""
+    n = len(sets)
+    inter = np.zeros((n, n), dtype=np.int64)
+    for i in range(n):
+        inter[i, i] = len(sets[i])
+        for j in range(i + 1, n):
+            inter[i, j] = inter[j, i] = len(sets[i] & sets[j])
+    return inter
+
+
+def _from_intersections(inter: np.ndarray, size: np.ndarray, k: int, max_distance: float) -> np.ndarray:
+    """The Mash distances from exact intersection and set sizes, computed as in ``kmer``."""
     union = size[:, None] + size[None, :] - inter
     jaccard = inter / union  # true division of exact counts: correctly rounded, as in kmer()
     ratio = 2.0 * jaccard / (1.0 + jaccard)
