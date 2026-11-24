@@ -64,6 +64,9 @@ with open(out, "w") as h:
         first = timetree._query(ids)
         ttid = first.get("mrca_ttid")
         found = set(first.get("found") or [])
+        if ttid in (None, "", 0):  # without TimeTree's node id nothing can be compared
+            w.writerow([r["node"], r["n_genera"], r["example_genera"], "", "inconclusive", "", ""])
+            continue
         node = nodes[r["node"]]
         # candidate probes: genera outside the node with an NCBI id, nearest first
         in_lca = {g for g, path in genus_lineage.items() if r["ncbi_common_ancestor"] in path}
@@ -71,8 +74,8 @@ with open(out, "w") as h:
         result, tried, ttids = "inconclusive", [], []
         for g in candidates:
             entry = timetree._query(sorted(set(ids) | {ncbi[g]}))
-            if ncbi[g] not in (entry.get("found") or []):
-                continue  # TimeTree does not know the probe: try the next
+            if ncbi[g] not in (entry.get("found") or []) or entry.get("mrca_ttid") in (None, "", 0):
+                continue  # TimeTree does not know the probe, or gives no node id: try the next
             tried.append(g)
             ttids.append(str(entry.get("mrca_ttid")))
             if entry.get("mrca_ttid") == ttid:

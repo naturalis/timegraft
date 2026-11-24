@@ -6,17 +6,28 @@ node it dates need not be the one meant.
 
 TimeTree's tree refines the NCBI taxonomy: on the Iberian run, every named node TimeTree reported (2,158 of
 2,164 whose lineages are known; the other six are NCBI clades added since TimeTree's NCBI release) is the NCBI
-common ancestor of the ids it recognised. So the node it dated always lies within that common ancestor, and its
-genera in the run can be compared with those of the backbone node (:func:`check`):
+common ancestor of the ids it recognised. The genera of the run within a taxon (by their NCBI lineages) are then
+compared with those of the backbone node (:func:`check`):
 
+- a **named** answer is checked against the taxon TimeTree reports (``mrca_ncbi``), which is the node it dated;
+- an **unnamed** answer (a clade TimeTree made when resolving an NCBI polytomy) lies within the NCBI common
+  ancestor of the ids TimeTree recognised, and is checked against that.
+
+The outcomes:
+
+- ``narrower``: the taxon lacks genera of the backbone node, so TimeTree dated a node within it. This holds
+  whether or not the taxon also holds genera outside the node;
+- ``wider``: the taxon holds genera outside the node, and none of the node is missing. For a named answer that
+  settles it; an unnamed one may still not hold them, so :func:`probe` asks again with one such genus added.
+  TimeTree reports its own id of the node it dated (``mrca_ttid``) for every answer: the same id means the genus
+  is inside that node (``wider``); another for every probe tried means it is outside (``probed_outside``);
 - ``match``: the same genera;
-- ``narrower``: the common ancestor lacks genera of the backbone node, so TimeTree dated a node within it;
-- ``wider``: the common ancestor also holds genera outside the backbone node. For a named answer, TimeTree's node
-  is that common ancestor, so it dated a deeper node. For an unnamed one (a clade TimeTree made when resolving an
-  NCBI polytomy) it may not have: :func:`probe` asks again with one such genus added. TimeTree reports its own id
-  of the node it dated (``mrca_ttid``) for every answer; the same id means the genus is inside that node, so the
-  answer dates a wider node (``wider``); another for every probe tried means it does not (``probed_outside``);
-- ``unchecked``: a lineage is missing, or no probe could be made (TimeTree knows none of the candidate genera).
+- ``unchecked``: a lineage is missing, or no probe could be made.
+
+An unnamed answer that passes (``match``, ``probed_outside``) can still date a node that leaves out genera of the
+backbone node: the NCBI taxon holds them, but TimeTree's clade within it may not. :func:`probe` therefore also
+asks with genera of the node that none of the recognised ids stand for; one outside TimeTree's node makes the
+answer ``narrower``.
 
 Genera without an NCBI id, or whose lineage is unknown, are left out of the comparison on both sides.
 """
@@ -47,49 +58,82 @@ def genus_lineages(genus_ids: Mapping[str, int | None],
 
 
 def check(found: Iterable[int], node_genera: Iterable[str], known: Mapping[str, set[str]],
-          lineage: Callable[[str], Sequence[str] | None]) -> dict:
-    """Compare the genera within the NCBI common ancestor of ``found`` with ``node_genera``.
+          lineage: Callable[[str], Sequence[str] | None], reported=None) -> dict:
+    """Compare the genera of the run within TimeTree's node with ``node_genera``.
 
     ``known`` gives the NCBI lineage of each genus of the run (:func:`genus_lineages`); ``lineage(taxon)`` the
-    NCBI ids of a taxon from the root to the taxon itself, or None where unknown. Returns ``outcome``
-    (``match``, ``narrower``, ``wider`` or ``unchecked``), ``ancestor`` (the NCBI common ancestor), and the
-    genera ``outside`` it is wider by and ``missing`` from it.
+    NCBI ids of a taxon from the root to the taxon itself, or None where unknown. ``reported`` is the NCBI taxon
+    TimeTree reports for the answer (``mrca_ncbi``), or 0 or None for an unnamed node. Returns ``outcome``
+    (``match``, ``narrower``, ``wider`` or ``unchecked``), ``ancestor`` (the taxon compared: the reported one,
+    or for an unnamed answer the NCBI common ancestor of ``found``), and the genera ``outside`` it is wider by
+    and ``missing`` from it.
     """
+    none = {"outcome": "unchecked", "ancestor": "", "outside": set(), "missing": set()}
     paths = [lineage(str(i)) for i in found]
     if not paths or any(not p for p in paths):
-        return {"outcome": "unchecked", "ancestor": "", "outside": set(), "missing": set()}
-    ancestor = common_ancestor(paths)
+        return none
+    if reported:
+        ancestor = str(reported)
+        # TimeTree's taxon must hold every recognised id; where today's NCBI disagrees (another NCBI release),
+        # the answer cannot be checked safely
+        if not lineage(ancestor) or any(ancestor not in p for p in paths):
+            return {**none, "ancestor": ancestor}
+    else:
+        ancestor = common_ancestor(paths)
     within = {g for g, path in known.items() if ancestor in path}
     node = set(node_genera) & set(known)
     outside, missing = within - node, node - within
-    outcome = "wider" if outside else ("narrower" if missing else "match")
+    outcome = "narrower" if missing else ("wider" if outside else "match")
     return {"outcome": outcome, "ancestor": ancestor, "outside": outside, "missing": missing}
 
 
+def represented(found: Iterable[int], node_genera: Iterable[str], genus_ids: Mapping[str, int],
+                lineage: Callable[[str], Sequence[str] | None]) -> set[str]:
+    """The genera of the node that a recognised id stands for: the genus itself, or one of its species."""
+    ids = {str(i) for f in found for i in (lineage(str(f)) or [str(f)])}
+    return {g for g in node_genera if genus_ids.get(g) and str(genus_ids[g]) in ids}
+
+
 def probe(ids: Sequence[int], ttid, candidates: Sequence[str], genus_ids: Mapping[str, int],
-          query: Callable[[list[int]], dict], probes: int = 3) -> tuple[str, list[str]]:
-    """Whether TimeTree's node ``ttid`` for the query ``ids`` holds any of ``candidates`` (nearest first).
+          query: Callable[[list[int]], dict], probes: int = 3, stop_when_inside: bool = True
+          ) -> tuple[str, list[tuple[str, bool]]]:
+    """Whether genera are inside TimeTree's node ``ttid`` for the query ``ids``, nearest ``candidates`` first.
 
     ``query(ids)`` returns TimeTree's answer (with ``found`` and ``mrca_ttid``). Candidates TimeTree does not
-    know are skipped; up to ``probes`` known ones are tried. Returns ``wider`` (a candidate is inside),
-    ``probed_outside`` (every one tried is outside) or ``unchecked`` (none could be tried), and the genera tried.
+    know, or whose answer has no node id, are skipped; up to ``probes`` others are tried. With
+    ``stop_when_inside`` (genera outside the backbone node) the first one inside ends the probe: ``wider``;
+    otherwise (genera of the node not yet stood for) the first one outside does: ``narrower``. Returns that
+    outcome, ``passed`` where every genus tried came out as it should, or ``unchecked`` where none could be
+    tried, and the genera tried with whether each is inside.
     """
     if ttid in (None, "", 0):
         return "unchecked", []
-    tried: list[str] = []
+    tried: list[tuple[str, bool]] = []
     for genus in candidates:
         extra = genus_ids.get(genus)
         if not extra or extra in ids:
             continue
         answer = query(sorted(set(ids) | {extra}))
-        if extra not in (answer.get("found") or []):
+        if extra not in (answer.get("found") or []) or answer.get("mrca_ttid") in (None, "", 0):
             continue
-        tried.append(genus)
-        if answer.get("mrca_ttid") == ttid:
+        inside = answer.get("mrca_ttid") == ttid
+        tried.append((genus, inside))
+        if inside and stop_when_inside:
             return "wider", tried
+        if not inside and not stop_when_inside:
+            return "narrower", tried
         if len(tried) >= probes:
             break
-    return ("probed_outside" if tried else "unchecked"), tried
+    return ("passed" if tried else "unchecked"), tried
+
+
+def interleave(node) -> list[str]:
+    """The genera of the dendropy ``node``, one from each child in turn, so that probes spread over the node."""
+    lists = [sorted(leaf.taxon.label for leaf in child.leaf_iter()) for child in node.child_node_iter()]
+    out: list[str] = []
+    for k in range(max((len(x) for x in lists), default=0)):
+        out += [x[k] for x in lists if k < len(x)]
+    return out
 
 
 def nearest_outside(node, allowed: set[str]) -> list[str]:

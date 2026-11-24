@@ -18,6 +18,8 @@ backbone_build:
       mode: "off"            # no re-queries (#53)
     timetree_time:
       use: raw               # TimeTree's summary over studies, never its adjusted time (#108)
+    node_check:
+      mode: "off"            # every TimeTree answer used, whichever node it dates (#108)
   crown_query:
     basis: global            # TimeTree crown of the whole genus (#54)
 markers:

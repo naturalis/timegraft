@@ -247,7 +247,7 @@ try:
     # which node TimeTree dated, from NCBI lineages in ChecklistBank (#108, step 2)
     node_check = (settings.get("ages") or {}).get("node_check") or {}
     lineage = None
-    if node_check.get("mode", "off") != "off":
+    if node_check.get("mode", "off") not in ("off", False):  # YAML 1.1 reads an unquoted off as False
         from timegraft.col import ChecklistBank
 
         lineage = (clb or ChecklistBank(col_cfg.get("release", 316691), cache)).ncbi_lineage
@@ -275,7 +275,7 @@ write_tsv(snakemake.output.concordance, concordance, CONCORDANCE_COLUMNS)
 # what the backbone was built from, and in what format the outputs are (#47)
 entries = [v for k, v in cache.data.items() if k.startswith("mrca:") and isinstance(v, dict)]
 metadata = {
-    "output_format": {"genera.tsv": 8, "node_ages.tsv": 7, "crown_ages.tsv": 3, "concordance.tsv": 5,
+    "output_format": {"genera.tsv": 8, "node_ages.tsv": 8, "crown_ages.tsv": 3, "concordance.tsv": 5,
                       "timetree_cache": CACHE_VERSION},
     # which species the TimeTree crown ages are the crowns of (#54)
     "crowns": {"settings": settings.get("crown_query") or {},
