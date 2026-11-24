@@ -60,7 +60,7 @@ Since the harness exists, `evaluate.py` (version 2) counts a downstream metric w
 
 ## Rerunning it
 
-Needed: the OTT 3.7.3 taxonomy, the synthesis 16.1 tree and its `annotations.json` (as the workflow downloads them to `resources/otol`), MAFFT, VSEARCH, Snakemake, and network access to TimeTree for the injected and subsampled builds (their picks are not in the cache). About three hours on two cores.
+Needed: the OTT 3.7.3 taxonomy, the synthesis 16.1 tree and its `annotations.json` (as the workflow downloads them to `resources/otol`), MAFFT, VSEARCH and Snakemake (all in the `timegraft` conda environment: `conda activate timegraft`, see [installation](../../../../docs/technical/installation.md#with-conda-recommended)), and network access to TimeTree for the injected and subsampled builds (their picks are not in the cache). About three hours on two cores.
 
 ```bash
 BENCH=/path/to/work                       # scratch folder, about 5 GB

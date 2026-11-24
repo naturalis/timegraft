@@ -7,7 +7,8 @@ config/config.yaml            settings, including one block per marker
 workflow/Snakefile            entry point; decides which optional rules run
 workflow/rules/*.smk          tools, units, backbone, genus, graft, placement, diversity, validation
 workflow/scripts/*.py         thin wrappers: read inputs, call the package, write outputs
-workflow/envs/*.yaml          conda environments
+environment.yml               the conda environment `timegraft` for running and developing
+workflow/envs/*.yaml          conda environments per rule (snakemake --use-conda)
 src/timegraft/                the package (all logic lives here, so it can be tested without Snakemake)
 tests/                        unit tests, a toy workflow test, small fixtures
 docs/technical/                using and developing timegraft

@@ -32,11 +32,12 @@ timegraft builds a time-calibrated tree with barcode reference units at the tips
 ```bash
 git clone https://github.com/naturalis/timegraft.git
 cd timegraft
-pip install -e ".[dev]"
-snakemake --cores 4 --use-conda     # runs the toy example in config/config.yaml
+conda env create -f environment.yml   # once; afterwards: conda env update -n timegraft -f environment.yml --prune
+conda activate timegraft
+snakemake --cores 4                   # runs the toy example in config/config.yaml
 ```
 
-The dated tree is written to `results/toy/timegraft.tre`. To run on your own data, see [running timegraft](docs/technical/running.md).
+Without conda, `pip install -e ".[dev]"` and `snakemake --cores 4 --use-conda` do the same ([installation](docs/technical/installation.md)). The dated tree is written to `results/toy/timegraft.tre`. To run on your own data, see [running timegraft](docs/technical/running.md).
 
 ## Documentation
 
