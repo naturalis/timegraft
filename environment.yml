@@ -1,0 +1,31 @@
+# The conda environment to run timegraft in: the package (installed in
+# editable mode from this checkout), Snakemake, the external tools of the
+# workflow and the test dependencies.
+#
+#   conda env create -f environment.yml
+#   conda activate timegraft
+#
+# After a pull that changes this file:
+#
+#   conda env update -n timegraft -f environment.yml --prune
+#
+# The per-rule environments of `snakemake --use-conda` are in workflow/envs/
+# and are separate from this one.
+name: timegraft
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python >=3.10
+  - numpy >=1.24
+  - dendropy >=4.6
+  - python-duckdb >=1.0
+  - matplotlib-base >=3.7
+  - biopython >=1.80
+  - snakemake-minimal >=8
+  - pytest >=7
+  - mafft
+  - vsearch
+  - pip
+  - pip:
+      - -e .

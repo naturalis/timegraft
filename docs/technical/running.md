@@ -2,6 +2,14 @@
 
 ## Running
 
+Run from the root of your checkout, in the `timegraft` conda environment ([installation](installation.md#with-conda-recommended)):
+
+```bash
+conda activate timegraft
+```
+
+Then:
+
 ```bash
 snakemake --cores 4 --use-conda                                   # toy example
 snakemake --cores 8 --use-conda --configfile config/config.yaml my_run.yaml

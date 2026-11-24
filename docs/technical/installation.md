@@ -1,6 +1,34 @@
 # Installation
 
-## The package and Snakemake
+## With conda (recommended)
+
+`environment.yml` in the root of the repository defines one conda environment, named `timegraft`, with everything needed to run the workflow, the tests and the benchmark: Python, the package itself (installed in editable mode from your checkout, so changes after a `git pull` take effect without reinstalling), Snakemake, MAFFT, VSEARCH, pytest, matplotlib and Biopython.
+
+Create it once, from the root of your checkout:
+
+```bash
+git clone https://github.com/naturalis/timegraft.git
+cd timegraft
+conda env create -f environment.yml
+```
+
+Activate it in every new shell before running anything:
+
+```bash
+conda activate timegraft
+```
+
+When a `git pull` changes `environment.yml`, bring the environment up to date (`--prune` removes packages the file no longer lists):
+
+```bash
+conda env update -n timegraft -f environment.yml --prune
+```
+
+To start again from scratch: `conda env remove -n timegraft`, then `conda env create -f environment.yml`. `mamba` accepts the same commands, and is faster at solving.
+
+With the environment active, the workflow runs as it is (`snakemake --cores 4`); `--use-conda` is not needed, but still works (see [below](#external-tools)).
+
+## With pip
 
 ```bash
 git clone https://github.com/naturalis/timegraft.git
@@ -8,7 +36,7 @@ cd timegraft
 pip install -e ".[dev]"     # timegraft, Snakemake, pytest, matplotlib
 ```
 
-Python 3.10 or later. The package depends on NumPy, DendroPy and DuckDB.
+Python 3.10 or later. The package depends on NumPy, DendroPy and DuckDB. This installs neither MAFFT nor VSEARCH: install them yourself, or run the workflow with `--use-conda`.
 
 ## External tools
 
@@ -19,7 +47,7 @@ Python 3.10 or later. The package depends on NumPy, DendroPy and DuckDB.
 | LSD2 | `dating.method: lsd2` | built from source by the `build_lsd2` rule, in a conda environment with a C++ compiler |
 | curl, tar | downloading the Open Tree of Life release files | usually present; `--use-conda` provides them |
 
-The simplest route is to let Snakemake create one conda environment per rule:
+The `timegraft` conda environment above has MAFFT and VSEARCH. Without it, let Snakemake create one conda environment per rule:
 
 ```bash
 snakemake --cores 4 --use-conda
@@ -32,7 +60,7 @@ The environments are defined in `workflow/envs/`. LSD2 is not packaged for conda
 Everything runs on macOS. Two things to watch:
 
 - Shell examples in this documentation use only commands that behave the same in BSD and GNU versions; if you adapt them, note that `paste -sd, -` needs the trailing `-` on macOS.
-- On Apple silicon, check that MAFFT and VSEARCH from conda are available for your architecture (`conda install` will say if not).
+- On Apple silicon, MAFFT comes from conda-forge (bioconda has no build for `osx-arm64`) and VSEARCH from bioconda; `environment.yml` lists conda-forge first, so `conda env create` finds both. Keep that channel order if you add packages.
 
 ## Network access
 
