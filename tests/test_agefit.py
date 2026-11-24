@@ -215,3 +215,67 @@ def test_date_topology_unknown_method():
     tree = dendropy.Tree.get(data="(A,B);", schema="newick", rooting="force-rooted")
     with pytest.raises(ValueError):
         date_topology(tree, {"A": 1, "B": 2}, TimeTree(fetch=_fake({frozenset({1, 2}): 5.0})), method="vote")
+
+
+def _fake_adjusted(ages, adjusted):
+    def fetch(url, payload=None):
+        ids = [int(i) for i in url.split("/mrca/id/")[1].split("/")[0].split("+")]
+        age = ages.get(frozenset(ids))
+        return {"found_ids": ids, "precomputed_age": age, "adjusted_age": adjusted.get(frozenset(ids)),
+                "time_estimates": "{" + str(age) + "}" if age else None}
+
+    return fetch
+
+
+def _three_times(use, **extra):
+    # ((A,B),C): TimeTree's raw time for (A,B) is 8, its adjusted time 45; the root is 100 either way
+    ages = {frozenset({1, 2, 3}): 100.0, frozenset({1, 2}): 8.0}
+    adjusted = {frozenset({1, 2, 3}): 100.0, frozenset({1, 2}): 45.0}
+    tree = dendropy.Tree.get(data="((A,B),C);", schema="newick", rooting="force-rooted")
+    _, report = date_topology(tree, {"A": 1, "B": 2, "C": 3}, TimeTree(fetch=_fake_adjusted(ages, adjusted)),
+                              timetree_time={"use": use, **extra})
+    return {r["example_genera"]: r for r in report}
+
+
+def test_timetree_time_raw_is_the_default():
+    by = _three_times("raw")
+    ab = by["A;B"]
+    assert ab["timetree_age"] == "8.0000" and ab["timetree_adjusted_age"] == "45.0000"
+    assert ab["calibration_age"] == "8.0000" and float(ab["age"]) == pytest.approx(8.0)
+    tree = dendropy.Tree.get(data="((A,B),C);", schema="newick", rooting="force-rooted")
+    _, report = date_topology(tree, {"A": 1, "B": 2, "C": 3}, TimeTree(fetch=_fake_adjusted(
+        {frozenset({1, 2, 3}): 100.0, frozenset({1, 2}): 8.0}, {frozenset({1, 2}): 45.0})))
+    assert {r["example_genera"]: r for r in report}["A;B"]["calibration_age"] == "8.0000"
+
+
+def test_timetree_time_adjusted():
+    by = _three_times("adjusted")
+    ab = by["A;B"]
+    # the raw time stays in timetree_age; the calibration and the age are the adjusted time
+    assert ab["timetree_age"] == "8.0000" and ab["calibration_age"] == "45.0000"
+    assert float(ab["age"]) == pytest.approx(45.0)
+    summary = age_fit_summary(list(by.values()))
+    assert summary["final"]["severe"] == 0  # measured against the adjusted calibration
+
+
+def test_timetree_time_downweight():
+    raw, down = _three_times("raw"), _three_times("downweight", factor=1.5, sigma_factor=3.0)
+    assert down["A;B"]["calibration_age"] == "8.0000"
+    assert float(down["A;B"]["calibration_sigma"]) == pytest.approx(3.0 * float(raw["A;B"]["calibration_sigma"]))
+    # where the two times agree, nothing changes
+    assert down["A;B;C"]["calibration_sigma"] == raw["A;B;C"]["calibration_sigma"]
+    # below the factor, nothing changes either
+    loose = _three_times("downweight", factor=10.0)
+    assert loose["A;B"]["calibration_sigma"] == raw["A;B"]["calibration_sigma"]
+
+
+def test_timetree_time_unknown():
+    with pytest.raises(ValueError):
+        _three_times("median")
+
+
+def test_timetree_time_replace():
+    # the adjusted time only where it differs from the raw one by more than the factor
+    by = _three_times("replace", factor=1.5)
+    assert by["A;B"]["calibration_age"] == "45.0000" and float(by["A;B"]["age"]) == pytest.approx(45.0)
+    assert _three_times("replace", factor=10.0)["A;B"]["calibration_age"] == "8.0000"

@@ -43,7 +43,8 @@ calibrations, source, n_estimates = {}, {}, {}
 for key, r in rows.items():
     if r["calibration_sigma"] or r["source"] == "configured":
         node = names[key]
-        calibrations[node] = agefit.Calibration(float(r["timetree_age"] or r["age"]),
+        # the age the calibration used (#108): raw or adjusted; reports before #108 have only the raw
+        calibrations[node] = agefit.Calibration(float(r.get("calibration_age") or r["timetree_age"] or r["age"]),
                                                 float(r["calibration_sigma"] or 1.0),
                                                 r["source"].replace("_fit", "").replace("_outlier", ""),
                                                 fixed=r["source"] == "configured")

@@ -251,7 +251,8 @@ try:
                                  synth_nodes=synth_nodes, support=support,
                                  method=(settings.get("ages") or {}).get("method", "fit"),
                                  fit=(settings.get("ages") or {}).get("fit") or {},
-                                 requery=(settings.get("ages") or {}).get("requery") or {})
+                                 requery=(settings.get("ages") or {}).get("requery") or {},
+                                 timetree_time=(settings.get("ages") or {}).get("timetree_time") or {})
 finally:
     cache.save()
 

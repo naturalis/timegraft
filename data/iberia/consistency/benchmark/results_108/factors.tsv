@@ -1,0 +1,5 @@
+variant	calibrations	severe_2a	rms_2b	negative_2c	holdout_median_4a	holdout_p90_4b	noise_p90_5a	noise_over_1_5_5b	noise_stem_p90	nodes_moved_10pc	nodes_moved_1_5	stems_moved_10pc	shrimp_stem
+raw	387	5	0.3837	0	1.318	2.485	1.487	0.093	1.489	0	0	0	7.7
+replace_f1.25	384	1	0.2822	0	1.282	2.272	1.492	0.092	1.496	100	23	164	44.6
+replace	387	4	0.3542	0	1.309	2.324	1.492	0.092	1.492	53	22	88	44.6
+replace_f2.0	387	5	0.3837	0	1.314	2.371	1.487	0.093	1.489	9	9	27	44.6

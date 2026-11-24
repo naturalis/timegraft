@@ -25,6 +25,9 @@ from . import requery as rq
 from .requery import COLUMNS as REQUERY_COLUMNS
 from .timetree import EVIDENCE_COLUMNS, TimeTree
 
+# which of TimeTree's two times a calibration uses (#108): see date_topology
+TIMETREE_TIMES = ("raw", "downweight", "replace", "adjusted")
+
 REPORT_COLUMNS = (
     "node", "parent", "n_genera", "clade_genera", "age", "source", "timetree_age", "conflict_ratio", "query_ids",
     "example_genera",
@@ -43,6 +46,9 @@ REPORT_COLUMNS = (
     # where the final age comes from (#84): its own calibration, the fit, interpolation (between which dated
     # nodes) or the root; and the genera whose identifiers were sent to TimeTree for it
     "age_source", "interpolated_from", "query_genera",
+    # TimeTree's adjusted time for the same answer (its tree made ultrametric), and the age the calibration
+    # used: the raw or the adjusted time, after ages.timetree_time (#108)
+    "timetree_adjusted_age", "calibration_age",
 )
 # columns reserved for later issues, written empty until those land
 RESERVED_COLUMNS = ()
@@ -225,6 +231,7 @@ def date_topology(
     method: str = "fit",
     fit: dict | None = None,
     requery: dict | None = None,
+    timetree_time: dict | None = None,
 ) -> tuple[dendropy.Tree, list[dict]]:
     """Set branch lengths in Ma on a genus-level topology, in place.
 
@@ -268,10 +275,27 @@ def date_topology(
     a diagnostic: no age depends on it. (Mode ``apply``, which let a re-query
     age replace the first, was removed in #86: the fit already discounts the
     calibrations it would replace.)
+
+    ``timetree_time`` (#108; settings ``use``, ``factor``, ``sigma_factor``)
+    chooses which of TimeTree's two times a calibration uses. Every answer
+    has a summary over studies (``age``) and an ``adjusted_age``, the time
+    after TimeTree smooths its tree to make it ultrametric, where conflicting
+    studies left an ancestor younger than its descendants. With ``raw`` (as
+    before) the summary is used; with ``adjusted`` the adjusted time; with
+    ``downweight`` the summary, but where the two differ by more than
+    ``factor`` the calibration's sigma is multiplied by ``sigma_factor``: the
+    answer is out of order in TimeTree's own tree; with ``replace`` the
+    summary, but the adjusted time where the two differ by more than
+    ``factor``. Either way the report
+    gives both times and the age the calibration used.
     """
     if method not in AGE_METHODS:
         raise ValueError(f"unknown age method {method!r}; use one of {', '.join(AGE_METHODS)}")
     fit = dict(fit or {})
+    tt_time = dict(timetree_time or {})
+    use_time = tt_time.get("use", "raw")
+    if use_time not in TIMETREE_TIMES:
+        raise ValueError(f"ages.timetree_time.use must be one of {', '.join(TIMETREE_TIMES)}, not {use_time!r}")
     age: dict[dendropy.Node, float] = {}
     source: dict[dendropy.Node, str] = {}
     raw: dict[dendropy.Node, float] = {}  # TimeTree's answer, kept even when it is later dropped
@@ -307,6 +331,24 @@ def date_topology(
                 raw[node], used[node] = value, sorted({i for side in sides for i in side})
                 attempt_of[node] = "higher_taxa"
 
+    # TimeTree's adjusted time of each answer, and which time each calibration uses (#108)
+    adjusted: dict[dendropy.Node, float] = {}
+    for node in raw:
+        value = _cache_entry(timetree, used[node]).get("adjusted_age")
+        if value and value > 0:
+            adjusted[node] = float(value)
+    out_of_order: set[dendropy.Node] = set()
+    if use_time == "adjusted":
+        for node, value in adjusted.items():
+            age[node] = value
+    elif use_time in ("downweight", "replace"):
+        factor = float(tt_time.get("factor", 1.5))
+        out_of_order = {n for n, a in adjusted.items() if max(a / raw[n], raw[n] / a) > factor}
+        if use_time == "replace":
+            for node in out_of_order:
+                age[node] = adjusted[node]
+            out_of_order = set()
+
     root = tree.seed_node
     if root not in age:
         if root_age is None:
@@ -332,7 +374,7 @@ def date_topology(
     # the calibrations and their uncertainty, whichever method, so that the conflict metrics of both
     # methods are computed with the same weights
     calibrations, cal_parent, unresolved = _calibrations(tree, age, source, used, timetree, synth_nodes, support,
-                                                         fit)
+                                                         fit, out_of_order, float(tt_time.get("sigma_factor", 3.0)))
     calibration_rows = _calibration_rows(calibrations)
     requery = dict(requery or {})
     rq_mode = {False: "off", True: "classify"}.get(requery.get("mode"), requery.get("mode", "classify"))
@@ -423,6 +465,9 @@ def date_topology(
                                     "calibration_z", "calibration_outlier")})
         row.update(calibration_rows.get(node, {}))
         row.update(precedence_age=f"{p_age[node]:.4f}", precedence_source=p_source[node])
+        row["timetree_adjusted_age"] = f"{adjusted[node]:.4f}" if node in adjusted else ""
+        cal = calibrations.get(node)
+        row["calibration_age"] = f"{cal.age:.4f}" if cal is not None and not cal.fixed else ""
         row.update({c: "" for c in REQUERY_COLUMNS})
         row.update(requery_rows.get(node, {}))
         row.update({c: "" for c in RESERVED_COLUMNS})
@@ -501,8 +546,13 @@ def _sigma(entry: dict, node, higher_taxa: bool, synth_nodes, support, settings)
         taxonomy_factor=float(settings.get("taxonomy_only_factor", agefit.TAXONOMY_ONLY_FACTOR)))
 
 
-def _calibrations(tree, age, source, used, timetree, synth_nodes, support, settings):
+def _calibrations(tree, age, source, used, timetree, synth_nodes, support, settings, out_of_order=(),
+                  out_of_order_factor=3.0):
     """Every usable calibration with its uncertainty, whichever age method is used (#52).
+
+    The sigma of a calibration in ``out_of_order`` (TimeTree's raw and
+    adjusted times differ too much, #108) is multiplied by
+    ``out_of_order_factor``.
 
     Returns the calibrations, each one's nearest calibrated ancestor (None
     for the root), and the nodes left out because their TimeTree age equals
@@ -531,6 +581,8 @@ def _calibrations(tree, age, source, used, timetree, synth_nodes, support, setti
         else:
             sigma = _sigma(_cache_entry(timetree, used[node]), node, source[node] == "timetree_higher_taxa",
                            synth_nodes, support, settings)
+            if node in out_of_order:
+                sigma *= out_of_order_factor
             calibrations[node] = agefit.Calibration(age[node], sigma, source[node])
         parent[node] = anc
     return calibrations, parent, unresolved
@@ -642,7 +694,9 @@ def age_fit_summary(report: list[dict], severe: float = 1.5) -> dict:
         # the calibrations of the fit, which carry their uncertainty in either method
         if not row.get("timetree_age") or not row.get("calibration_sigma"):
             continue
-        calibrations[row["node"]] = agefit.Calibration(float(row["timetree_age"]), float(row["calibration_sigma"]))
+        # the age the calibration used: TimeTree's raw or adjusted time (#108); older reports have only the raw
+        used_age = row.get("calibration_age") or row["timetree_age"]
+        calibrations[row["node"]] = agefit.Calibration(float(used_age), float(row["calibration_sigma"]))
         final[row["node"]] = float(row["age"])
         precedence[row["node"]] = float(row["precedence_age"])
     return {

@@ -54,6 +54,9 @@ Nested blocks are merged, so a second file only needs the keys it changes.
 | `backbone_build.ages.requery.ratio_trigger` | 1.5 | ... and both nodes of a precedence conflict of this ratio or more |
 | `backbone_build.ages.requery.move` | 1.25 | A re-query age within this factor of the first counts as the same |
 | `backbone_build.ages.requery.attempts` | 3 | Disjoint pick sets to try until TimeTree finds taxa on two sides |
+| `backbone_build.ages.timetree_time.use` | `replace` | Which of TimeTree's two times a calibration uses: `replace` (its summary over studies, but its adjusted time where the two differ by more than `factor`), `raw` (the summary; before #108), `adjusted` (the adjusted time throughout) or `downweight` (the summary, with less weight where they differ) ([provenance](provenance.md#backbone-ages-from-a-weighted-fit), #108) |
+| `backbone_build.ages.timetree_time.factor` | 1.5 | `replace`, `downweight`: the two times differ by more than this factor |
+| `backbone_build.ages.timetree_time.sigma_factor` | 3.0 | `downweight`: multiply the calibration's sigma by this |
 | `backbone_build.crown_query.basis` | `sampled` | TimeTree crown ages of the species sampled in the run (`sampled`) or of the whole genus in OTT (`global`; before #54) ([provenance](provenance.md#crown-ages-from-the-sampled-species)) |
 | `backbone_build.crown_query.min_sampled` | 2 | Sampled species with an NCBI id needed; with fewer, the global crown |
 | `backbone_build.crown_query.single_species` | `none` | A genus sampled with one species: no TimeTree crown (`none`) or the global one (`global`) |
