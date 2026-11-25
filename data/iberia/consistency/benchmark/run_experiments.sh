@@ -99,7 +99,7 @@ done
   # reproducibility: the default again from the cache it left, with and without the network
   echo "bb repro/again $U $E/default_clean/cache.json"
   echo "bb repro/offline $U $E/default_clean/cache.json --offline"
-} | xargs -P "$JOBS" -I{} bash -c "{}" || true  # xargs runs every job; failures are collected below
+} | tr '\n' '\0' | xargs -0 -n 1 -P "$JOBS" bash -c 'eval "$1"' _ || true  # xargs runs every job; failures are collected below
 if [ -e "$E/failed.txt" ]; then
   echo "some builds failed; rerun this script to retry them:" >&2
   cat "$E/failed.txt" >&2

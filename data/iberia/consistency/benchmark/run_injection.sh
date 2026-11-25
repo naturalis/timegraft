@@ -43,5 +43,5 @@ done
     echo "bb inject/s$s/default $U $CACHE --taxonomy $E/inject/s$s/taxonomy.tsv"
     echo "bb inject_control/s$s/default $U $CACHE --taxonomy $E/inject/s$s/taxonomy.tsv --set backbone_build.reanchor.check_ids=false"
   done
-} | xargs -P "$JOBS" -I{} bash -c "{}" || true
+} | tr '\n' '\0' | xargs -0 -n 1 -P "$JOBS" bash -c 'eval "$1"' _ || true
 [ -e "$E/failed.txt" ] && { cat "$E/failed.txt" >&2; exit 1; } || true
