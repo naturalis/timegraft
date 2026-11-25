@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "timegraft"
 version = "0.1.0"
-description = "Dated barcode trees for phylogenetic diversity: per-genus subtrees grafted onto a dated backbone"
+description = "Per-genus DNA barcode subtrees grafted on a dated backbone topology"
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.10"
