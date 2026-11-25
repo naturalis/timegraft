@@ -45,5 +45,5 @@ done
       echo "bb $mode/s$s/control $U $CACHE --taxonomy $E/$mode/s$s/taxonomy.tsv $OFF"
     done
   done
-} | xargs -P "$JOBS" -I{} bash -c "{}" || true
+} | tr '\n' '\0' | xargs -0 -n 1 -P "$JOBS" bash -c 'eval "$1"' _ || true
 if [ -e "$E/failed.txt" ]; then cat "$E/failed.txt" >&2; exit 1; fi

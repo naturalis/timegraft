@@ -40,7 +40,7 @@ done
       echo "bb inject_$mode/s$s/legacy $E/legacy_units $CACHE --overlay $H/legacy.yaml --taxonomy $E/inject_$mode/s$s/taxonomy.tsv"
     done
   done
-} | xargs -P "$JOBS" -I{} bash -c "{}" || true
+} | tr '\n' '\0' | xargs -0 -n 1 -P "$JOBS" bash -c 'eval "$1"' _ || true
 if [ -e "$E/failed.txt" ]; then
   echo "some builds failed; rerun this script to retry them:" >&2
   cat "$E/failed.txt" >&2
