@@ -64,14 +64,19 @@ Needed: the OTT 3.7.3 taxonomy, the synthesis 16.1 tree and its `annotations.jso
 
 ```bash
 BENCH=/path/to/work                       # scratch folder, about 5 GB
-git worktree add $BENCH/main main         # e20fdf6
-git worktree add $BENCH/branch consistency-layer
+git worktree add --detach $BENCH/main e20fdf6     # legacy: the pipeline before the consistency layer
+git worktree add --detach $BENCH/branch main      # the code under test
 for w in main branch; do (
   cd $BENCH/$w
   mkdir -p resources/iberia
   ln -s /path/to/otol resources/otol      # opentree16.1/{labelled_supertree.tre,annotations.json}, ott3.7.3/taxonomy.tsv
   gunzip -c data/iberia/records.tsv.gz > resources/iberia/records.tsv
-  cp data/iberia/timetree_cache.json resources/api_cache.json
+  if [ $w = main ]; then                  # legacy: its own cache (format 1, #47)
+    cp data/iberia/timetree_cache.json resources/api_cache.json
+  else                                    # default: the Iberian cache together with the benchmark cache
+    python data/iberia/consistency/benchmark/merge_caches.py resources/api_cache.json \
+        data/iberia/timetree_cache.json data/iberia/consistency/benchmark/timetree_cache.json.gz
+  fi
   # the full run, with wall time and peak memory (monitor.py is in this folder)
   python /path/to/this/folder/monitor.py $BENCH/${w}_run.json \
       snakemake --cores 2 --configfile config/config.yaml config/iberia.yaml
@@ -88,7 +93,7 @@ The two full runs must not overlap with each other or with anything else, or the
 ## Seeds and inputs
 
 - Records: `data/iberia/records.tsv.gz`. Configuration: `config/config.yaml` with `config/iberia.yaml`.
-- TimeTree and ChecklistBank answers: `data/iberia/timetree_cache.json` of each branch for the full runs, and `timetree_cache.json.gz` in this folder for the builds of `run_experiments.sh` ([#87](https://github.com/naturalis/timegraft/issues/87)). The benchmark cache holds every answer that the builds of the gate and the full default run asked for: 23,563 (11,119 TimeTree, 12,444 ChecklistBank), 0.87 MB gzipped. It started at 19,084; #101 added the 401 answers its injection builds asked for (`results_101/`), and #108 the 4,078 NCBI lineages and probe queries of the node check (`results_108/`). It was merged by `merge_caches.py` from 101 caches: those of all builds of the reruns of #73 and #70, the clean builds of #84, and the full default run; not the perturbed copies of the noise runs, and not the run of `main` at `e20fdf6`, whose cache predates cache format 2 (#47) and which is only ever reused. No two caches answered a question differently. `run_experiments.sh` starts every build from it together with the cache of the full run (`exp/start_cache.json`). With `offline` as its fifth argument, any request to TimeTree or ChecklistBank fails the build: on 17 November 2026 all 62 builds ran that way, with the network also blocked, and every backbone (tree, crown ages and every column of `node_ages.tsv`) and the default screening came out identical to the builds made online; `evaluate.py` gave the same value for every metric. A change to the pipeline that asks new questions needs the network once; add its answers afterwards with `python merge_caches.py timetree_cache.json.gz timetree_cache.json.gz $BENCH/exp/*/cache.json ...` (leave out `exp/noise/`, which the script refuses).
+- TimeTree and ChecklistBank answers: for the full runs, `data/iberia/timetree_cache.json` of `e20fdf6` for the legacy run, and that of the code under test merged with the benchmark cache for the default run; and `timetree_cache.json.gz` in this folder for the builds of `run_experiments.sh` ([#87](https://github.com/naturalis/timegraft/issues/87)). The benchmark cache holds every answer that the builds of the gate and the full default run asked for: 23,563 (11,119 TimeTree, 12,444 ChecklistBank), 0.87 MB gzipped. It started at 19,084; #101 added the 401 answers its injection builds asked for (`results_101/`), and #108 the 4,078 NCBI lineages and probe queries of the node check (`results_108/`). It was merged by `merge_caches.py` from 101 caches: those of all builds of the reruns of #73 and #70, the clean builds of #84, and the full default run; not the perturbed copies of the noise runs, and not the run of `main` at `e20fdf6`, whose cache predates cache format 2 (#47) and which is only ever reused. No two caches answered a question differently. The default full run starts from the benchmark cache as well, because `data/iberia/timetree_cache.json` (9,820 answers) never received the answers that #101 and #108 added to it. Started from that cache alone, the default run of 25 November 2026 asked about 13,700 questions online: its backbone step took 2 h 22 min instead of minutes, which voids the time comparison (7a), and one live TimeTree answer differed from the one in the benchmark cache, so `run_experiments.sh` stopped when it merged the caches. `run_experiments.sh` starts every build from it together with the cache of the full run (`exp/start_cache.json`). With `offline` as its fifth argument, any request to TimeTree or ChecklistBank fails the build: on 17 November 2026 all 62 builds ran that way, with the network also blocked, and every backbone (tree, crown ages and every column of `node_ages.tsv`) and the default screening came out identical to the builds made online; `evaluate.py` gave the same value for every metric. A change to the pipeline that asks new questions needs the network once; add its answers afterwards with `python merge_caches.py timetree_cache.json.gz timetree_cache.json.gz $BENCH/exp/*/cache.json ...` (leave out `exp/noise/`, which the script refuses).
 - Replicates 1 to 5 everywhere; the seed of a replicate is its number. Injection: `inject.py` (which genera, which hosts). Noise: `perturb_cache.py` (factor per query from the seed and the query key). Subsampling: `subsample.py`. Sample draws for PD: seeds 6 and 56 in `evaluate.py`. Hold-out: seed 52 in `../agefit/holdout.py`.
 
 ## Tables in `results/`
