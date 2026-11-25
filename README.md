@@ -10,7 +10,7 @@
 
 **Dated phylogenies of DNA barcode reference libraries, for phylogenetic diversity of metabarcoding samples.**
 
-timegraft builds a time-calibrated tree with barcode reference units at the tips (BINs for COI, UNITE species hypotheses for ITS), places metabarcoding sequences on it, and computes phylogenetic diversity per sample. Deep relationships and ages come from Open Tree of Life and TimeTree; barcodes are used only within genera, where they carry reliable signal. Branch lengths are in millions of years, so diversity is comparable across sites, studies and markers.
+`timegraft` builds a time-calibrated tree with barcode reference units at the tips (BINs for COI, UNITE species hypotheses for ITS), places metabarcoding sequences on it, and computes phylogenetic diversity per sample. Deep relationships and ages come from Open Tree of Life and TimeTree; barcodes are used only within genera, where they carry reliable signal. Branch lengths are in millions of years, so diversity is comparable across sites, studies and markers.
 
 [**Documentation**](docs/README.md) · [**Quick start**](#quick-start) · [**How it works**](docs/science/how-it-works.md) · [**Roadmap**](docs/technical/roadmap.md) · [**Issues**](https://github.com/naturalis/timegraft/issues)
 
@@ -37,11 +37,12 @@ conda activate timegraft
 snakemake --cores 4                   # runs the toy example in config/config.yaml
 ```
 
-Without conda, `pip install -e ".[dev]"` and `snakemake --cores 4 --use-conda` do the same ([installation](docs/technical/installation.md)). The dated tree is written to `results/toy/timegraft.tre`. To run on your own data, see [running timegraft](docs/technical/running.md).
+(Or, without conda, `pip install -e ".[dev]"` and `snakemake --cores 4 --use-conda` do the same ([installation](docs/technical/installation.md)).)
+
+The dated tree is written to `results/toy/timegraft.tre`. To run on your own data, see [running timegraft](docs/technical/running.md).
 
 ## Documentation
 
-| | |
 | --- | --- |
 | **Technical** | [Installation](docs/technical/installation.md) · [Configuration](docs/technical/configuration.md) · [Running and outputs](docs/technical/running.md) · [Development](docs/technical/development.md) · [Roadmap](docs/technical/roadmap.md) |
 | **Scientific** | [Background](docs/science/background.md) · [Prior art](docs/science/prior-art.md) · [How it works](docs/science/how-it-works.md) · [Assumptions and limitations](docs/science/limitations.md) · [First results](docs/science/results/2026-11-iberia.md) · [Benchmark](data/iberia/consistency/benchmark/REPORT.md) |
