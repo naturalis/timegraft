@@ -56,4 +56,4 @@ A preprint is in preparation ([draft](docs/manuscript/manuscript.md)). Until the
 
 Code: [Apache-2.0](LICENSE). Trees and tables produced by timegraft: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-Developed at the [Naturalis Biodiversity Center](https://www.naturalis.nl). The design builds on [Bactria](https://github.com/naturalis/barcode-constrained-phylogeny) and [evospaice](https://github.com/naturalis/evospaice).
+Developed at the [Naturalis Biodiversity Center](https://www.naturalis.nl). The design includes lessons learned from [bactria](https://github.com/naturalis/barcode-constrained-phylogeny), [evospaice](https://github.com/naturalis/evospaice), and [MDDB-phylogeny](https://github.com/naturalis/MDDB-phylogeny).
