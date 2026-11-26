@@ -20,5 +20,5 @@ def test_legacy_calibrates_with_timetree_raw_time():
 
 
 def test_legacy_uses_every_timetree_answer():
-    assert _settings()["ages"]["node_check"]["mode"] == "reject"
+    assert _settings()["ages"]["node_check"]["mode"] == "report"
     assert _settings("legacy.yaml")["ages"]["node_check"]["mode"] == "off"

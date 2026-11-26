@@ -201,3 +201,33 @@ The noise builds of the check use the perturbed caches of #73, with the probe qu
 - **Whether the interpolated ages are better than the rejected answers.** The gate has no external truth for backbone ages. Each rejected answer is TimeTree's age for another node, so it cannot be the age of the node asked about. For example, the annelid node got the age of a taxon holding 44 genera of the run.
 - **The 18 unchecked answers,** and the unnamed answers whose coverage could not be probed. These are still used.
 - **The downstream metrics and the rest of the gate.** They are left to the full gate run with both steps merged.
+
+# The gate with the node check rejecting, and the default chosen
+
+The full gate (version 3) ran on `main` at `53a0630`, with both steps at their defaults then: `timetree_time.use: replace` and `node_check.mode: reject`. Its metrics are in `gate_reject/metrics.tsv`. 40 of the 41 must metrics passed. The decision was *hold*, because 6f failed.
+
+## What failed
+
+**6f**, the rank correlation of PD on the final tree with half the genera dropped, in the design with 100 genera of five units each: 0.9196 against a threshold of 0.9212 (legacy 0.9312 minus 0.01). The default before #79, #101 and #108 already passed it narrowly, at 0.9219.
+
+**5c**, the 90% quantile of the factor by which clade ages move with half the genera dropped, still passed (limit 1.50), but rose from 1.271 to 1.391.
+
+## Which step caused it
+
+The clean backbone and the five subsampled ones were built again with each step on its own, on the same code, and the downstream runs that 6f uses (clean, subsamples 1 and 2) were repeated on them. `step_attribution.tsv` has the result; `gate_reject/subsample_by_step.py` computes 5c and 5d for any setting.
+
+| Setting | 5c | 5d | 6f (100 genera, five units each) | 2b |
+|---|---|---|---|---|
+| Before #108 (`raw`, `off`) | 1.271 | 1.604 | 0.9233 | 0.384 |
+| Step 1 only (`replace`, `off`) | 1.255 | 1.495 | 0.9276 | 0.354 |
+| Step 2 only (`raw`, `reject`) | 1.437 | 1.564 | 0.9195 | 0.225 |
+| Both (`replace`, `reject`) | 1.391 | 1.535 | 0.9196 | 0.225 |
+| Legacy | 1.429 | 1.866 | 0.9312 | 1.387 |
+
+Step 1 improves every one of these. Step 2 causes both the drop in 6f and the rise in 5c. Whether an answer is `wider` or `narrower` depends on which genera are in the backbone, so dropping half of them changes the outcome. Of the clades that the subsampled and clean backbones share, about 7% (132 of some 2,000) are used in one and rejected in the other. A switch replaces a TimeTree age by an interpolation over a long gap, or the reverse. Such clades are about twice as common among those that move by more than 1.5 as among all clades.
+
+Part of step 2's gain on 2b is built in: it removes the rejected answers from the calibrations it is measured on (328 instead of 387). The hold-out ages of 4a and 4b are drawn from the same calibrations, so their values cannot be compared between the settings either.
+
+## Decision
+
+`node_check.mode` is `report` by default: the check runs and records its outcome in `node_ages.tsv`, but no answer is rejected. With `report` the backbone, its crown ages and every other output are identical to those of step 1 alone (checked on the clean Iberian backbone). `reject` stays available. Making the check stable under sampling, so that it can reject again without making ages depend on the sample, is #123.

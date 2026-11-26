@@ -1,0 +1,52 @@
+metric	name	legacy	default	threshold	status	note
+0	legacy settings reproduce main		clades same; largest age difference 0.0000 Ma; 0 of 24882 screening decisions differ; 0 of 312 TimeTree crowns differ	identical	pass	backbone.tre byte-identical: True
+1a	Onchidella: genera next to the clade of all units of its subtree, in the final tree	{'Echinodermata': 1} (26 units, a clade)	{'Mollusca': 325} (26 units, a clade)	all Mollusca	pass	with the units set aside by screening too: legacy {'Mollusca': 389, 'Arthropoda': 282, 'Annelida': 166, 'Bryozoa': 25, 'Chordata': 255, 'Echinodermata': 11, 'Cnidaria': 1} (28 units, not a clade), default {'Mollusca': 332, 'Annelida': 1, 'Echinodermata': 1} (28 units, not a clade); backbone: legacy {'Echinodermata': 1}, default {'Mollusca': 325}
+1b	injected misplacements with two checks: flagged	0 (no check)	1.000 (118 of 118)	>= 0.90	pass	
+1c	injected misplacements, all: flagged	0 (no check)	1.000 (120 of 120)	>= 0.50	pass	
+1d	flagged injected genera back in their own class	16 of 120 in own class	1.000 (120 of 120)	>= 0.90	pass	
+1e	genera without an injected error flagged, per replicate		0.0 ([0, 0, 0, 0, 0])	<= 1	pass	
+1f	corrected genera with a stem age within 1.5 of the one without the error	21 of 120 injected within 1.5	1.000 (120 of 120)	>= 0.80	pass	
+1g	other genera whose stem age moves by more than 10%, five replicates together	248	3	<= half of legacy	pass	
+1h	inject_own: injected misplacements flagged	0 (no check)	1.000 (120 of 120)	>= 0.90	pass	118 with two checks that can be evaluated
+1i	inject_own: flagged genera back in their own class	16 of 120 in own class	1.000 (120 of 120)	>= 0.90	pass	
+1j	inject_own: corrected genera with a stem age within 1.5 of the one without the error	19 of 120 injected within 1.5	1.000 (120 of 120)	>= 0.80	pass	other stems moved: legacy 251, default 3
+1k	inject_name: injected misplacements flagged	0 (no check)	1.000 (120 of 120)	>= 0.50	pass	69 with two checks that can be evaluated
+1l	inject_name: flagged genera back in their own class	16 of 120 in own class	1.000 (120 of 120)	>= 0.90	pass	
+1m	inject_name: corrected genera with a stem age within 1.5 of the one without the error	15 of 120 injected within 1.5	0.983 (118 of 120)	none	report	other stems moved: legacy 184, default 13
+1n	injection carried through: corrected genera with a crown age within 1.5 of the clean run		1.000 (42 of 42)	>= 0.80	pass	6 corrected genera without a crown age in both runs
+1o	injection carried through: PD rank correlation with the clean final tree (paired samples, 1000 per design)	150 units at random: 0.9635; 100 genera, one unit each: 0.9487; 100 genera, five units each: 0.9600	150 units at random: 1.0000; 100 genera, one unit each: 0.9999; 100 genera, five units each: 1.0000	>= legacy - 0.01 per design	pass	
+2a	TimeTree calibrations off from the final age by more than 1.5	26 of 381	3 of 328	<= half of legacy	pass	largest factor: legacy 6.4901, default 1.5532; 90%: 1.3225, 1.0494
+2b	RMS of calibration residuals over their uncertainty	1.387	0.2247	lower than legacy	pass	
+2c	nodes older than their parent	backbone 0	backbone 0, final tree 0	0	pass	
+3a	crown age more than 20 times the barcode age	7	0	0	pass	of 1036 and 1039 genera with a subtree
+3b	crown age more than 10 times the barcode age	40	29	fewer than legacy	pass	
+3c	TimeTree crown used that is less than a third of the barcode age	5	0	0	pass	
+3d	root-to-tip below 0.02 and crown above 20 Ma	4	0	none	report	
+4a	held-out TimeTree ages: median error factor	1.303	1.305	<= legacy x 1.02	pass	8150 held-out ages
+4b	held-out TimeTree ages: 90% quantile of the error factor	2.374	2.391	<= legacy x 1.02	pass	
+5a	ages perturbed: 90% quantile of the factor by which node ages move	1.769	1.483	<= legacy x 1.05	pass	medians 1.218, 1.169; default without re-queries differs from the default by at most 0.0000 Ma
+5b	ages perturbed: share of node ages that move by more than 1.5	0.210	0.087	<= legacy + 0.01	pass	stems, 90% quantile: 1.750, 1.485
+5c	half the genera dropped: 90% quantile of the factor by which clade ages move	1.429	1.391	<= legacy x 1.05	pass	share over 1.5: 0.092, 0.080
+5d	half the genera dropped: the same for genus stem ages	1.866	1.535	<= legacy x 1.05	pass	
+5e	ages perturbed, carried through: 90% quantile of the factor by which crown ages move	1.479	1.364	<= legacy x 1.05	pass	
+5f	half the genera dropped, carried through: the same	1.677	1.567	<= legacy x 1.05	pass	
+6a	PD of the same samples on the two final trees: rank correlation		150 units at random: 0.9661; 100 genera, one unit each: 0.9750; 100 genera, five units each: 0.9493	>= 0.90 in each design	pass	24904 units in both trees; 24909 and 24924 tips
+6b	stem ages that differ by more than 10% (clean backbones): share traced to a cause		1.000 (265 of 265)	>= 0.95	pass	causes: {'unresolved': 13, 'calibration_gained': 88, 'timetree_time': 29, 'fit': 82, 'node_check': 121, 'calibration_lost': 126, 'richness': 7, 'identifier': 39, 'topology': 28, 'picks': 17, 'no_answer': 4, 'higher_taxa': 1}; untraced: none
+6c	backbone PD of genus samples: rank correlation with and without perturbed ages	0.9118	0.9414	>= legacy - 0.01	pass	
+6d	PD ratio default over legacy, and total tree length	638002	645936 (+1.2%); 150 units at random: 1.0194; 100 genera, one unit each: 1.0201; 100 genera, five units each: 1.0127	none	report	
+6e	ages perturbed, carried through: PD rank correlation with the clean final tree (paired samples, 1000 per design)	150 units at random: 0.8586; 100 genera, one unit each: 0.8611; 100 genera, five units each: 0.8519	150 units at random: 0.9356; 100 genera, one unit each: 0.9203; 100 genera, five units each: 0.9399	>= legacy - 0.01 per design	pass	
+6f	half the genera dropped, carried through: the same (paired samples, 1000 per design)	150 units at random: 0.9659; 100 genera, one unit each: 0.9590; 100 genera, five units each: 0.9312	150 units at random: 0.9624; 100 genera, one unit each: 0.9580; 100 genera, five units each: 0.9196	>= legacy - 0.01 per design	FAIL	
+7a	wall time of the full run (minutes)	53.4	57.6	<= 1.5 x legacy	pass	ratio 1.08
+7b	peak memory of the full run (MB)	832	1052	< 2000	pass	largest single process 703 and 924; process tree sampled every 0.2 s 832 and 1052
+7c	backbone and screening rebuilt: byte-identical		backbone again: 5 of 5 files; harness against workflow: 5 of 5; screening: identical	identical	pass	
+7d	backbone rebuilt with the network blocked		built; 5 of 5 files identical	succeeds, identical	pass	
+7e	test suite		"........................................................................ [ 20%]
+.....................................s.................................. [ 41%]
+................................................................s.....s. [ 62%]
+........................................................................ [ 83%]
+................s............s..ss......................s                [100%]
+337 passed, 8 skipped in 13.32s"	passes	pass	
+7f	peak memory of the full run, default over legacy		1.26	none	report	
+8a	genera with units on the wrong side of the root	366	346	<= legacy x 1.05	pass	
+8b	units of a genus among its outgroup	276	253	<= legacy x 1.05	pass	
+8c	crowns that depend strongly on the root (range of 1.25 or more)	20	11	none	report	
