@@ -1,0 +1,13 @@
+rule	legacy_seconds	default_seconds
+build_backbone	29.0	22.6
+build_shard	3224.3	3260.5
+filter_records	14.8	10.0
+graft	16.4	18.4
+place_units	1074.2	832.2
+representatives	177.6	9.7
+screen_units	119.3	173.0
+shard_genera	53.3	35.6
+whole run (wall)	3201.1	2822.2
+peak memory (MB)	832	1072
+peak memory of the process tree, sampled every 0.2 s (MB)	832	1072
+peak memory of the largest single process, exact (MB)	703	943

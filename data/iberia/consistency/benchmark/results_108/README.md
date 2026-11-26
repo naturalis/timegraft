@@ -231,3 +231,26 @@ Part of step 2's gain on 2b is built in: it removes the rejected answers from th
 ## Decision
 
 `node_check.mode` is `report` by default: the check runs and records its outcome in `node_ages.tsv`, but no answer is rejected. With `report` the backbone, its crown ages and every other output are identical to those of step 1 alone (checked on the clean Iberian backbone). `reject` stays available. Making the check stable under sampling, so that it can reject again without making ages depend on the sample, is #123.
+
+## The gate with the default chosen
+
+The full gate (version 3) ran again with `node_check.mode: report`, on `bf58ca6` (the branch of this change; the pipeline is that of `main` at `53a0630` apart from the default). Its tables are in `gate/`. **All 41 must metrics pass; the decision is *ship as default*.**
+
+| Metric | Legacy | Reject (`53a0630`) | Report |
+|---|---|---|---|
+| 2a, calibrations off by more than 1.5 | 26 of 381 | 3 of 328 | 4 of 387 |
+| 2b, RMS of calibration residuals | 1.387 | 0.225 | 0.354 |
+| 4a, 4b, hold-out error factor (median, 90%) | 1.308, 2.321 | 1.305, 2.391 | 1.309, 2.321 |
+| 5a, 5b, ages perturbed | 1.769, 0.210 | 1.483, 0.087 | 1.492, 0.092 |
+| 5c, 5d, half the genera dropped | 1.429, 1.866 | 1.391, 1.535 | 1.255, 1.495 |
+| 5e, 5f, carried through | 1.479, 1.677 | 1.364, 1.567 | 1.359, 1.561 |
+| 6f, 100 genera with five units each | 0.9312 | 0.9196 | 0.9276 |
+| 7a, wall time of the full run (minutes) | 53.4 | 57.6 | 47.0 |
+| 7b, peak memory (MB) | 832 | 1,052 | 1,072 |
+| 8a, 8b, rooting | 366, 276 | 346, 253 | 346, 253 |
+
+The hold-out values of legacy depend on the default's calibrations, so they differ between the two runs. Against the gate before #108 (`results_89/` for the backbone metrics; the downstream ones from the downstream runs of the rerun of #70, evaluated under version 3): 2b goes from 0.384 to 0.354, 4b from 2.485 to 2.321, 5c from 1.271 to 1.255, 5d from 1.604 to 1.495, 5f from 1.653 to 1.561, and 6f, the design that failed with `reject`, from 0.9219 to 0.9276. 5a (1.487 to 1.492) and 5b (0.093 to 0.092) are unchanged within a hundredth, far inside their thresholds (1.857 and 0.220). 6a, the agreement of PD between the final trees of the default and of legacy, is lower (0.9810, 0.9870 and 0.9541 in the three designs, against 0.9891, 0.9895 and 0.9721): it measures how much the default differs from legacy, not how robust either is, and stays well above its threshold of 0.90. No must metric of families 5 to 8 fails.
+
+How it was run, besides the README of the benchmark: the legacy arm was not built again. Its builds use `legacy.yaml`, which sets `node_check.mode: off`, so they do not depend on the new default. The units of the full run and the inputs of the experiments (`genera.tsv` of the clean default, the answers it asked) were checked to be identical to those of the run at `53a0630`, so its legacy builds, experiment inputs and legacy downstream runs were reused. The subsampled default builds asked TimeTree about 5,000 new questions, and took about an hour each. The time limit of a session stopped two of them, which were then built from the benchmark cache together with the answers that the other three had collected; that only changes where the answers came from. These answers are now in the benchmark cache (28,644 answers), so a rerun of the gate needs no network.
+
+The full default run of this gate is the reference run of #77.

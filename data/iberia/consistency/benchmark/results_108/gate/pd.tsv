@@ -1,0 +1,4 @@
+design	samples	rank_correlation	median_pd_legacy	median_pd_default	median_ratio	ratio_p05	ratio_p95
+150 units at random	200	0.9810	34393.3	34771.2	1.0100	0.9986	1.0246
+100 genera, one unit each	200	0.9870	29178.8	29509.8	1.0106	0.9994	1.0250
+100 genera, five units each	200	0.9541	42306.5	42415.0	1.0040	0.9826	1.0326
