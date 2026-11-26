@@ -1,6 +1,40 @@
 # Consistency layer: evidence on the Iberian run
 
-> Each section below was measured on the state of the pipeline at its own issue; later issues changed some of the earlier numbers (for example, the screening fix of #55 changed 175 decisions). The numbers for the pipeline as merged into `main` are in `benchmark/` (#56), mainly `benchmark/results/end_to_end.tsv` and `benchmark/REPORT.md`.
+## The pipeline now
+
+The reference run of the current pipeline is `../iberia-reference.tar.gz` ([#77](https://github.com/naturalis/timegraft/issues/77); how it was made: `../README.md`, "The reference run"). It is the full default run of the latest release gate (`benchmark/results_108/gate/`, where all 41 must metrics pass). Its headline numbers, from `benchmark/results_108/gate/end_to_end.tsv`, against the pipeline before the consistency layer (legacy):
+
+| | Legacy | Now |
+|---|---|---|
+| Genera in the backbone (nodes) | 1,183 (779) | 1,186 (784) |
+| Genus subtrees; single-unit genera | 1,036; 147 | 1,039; 147 |
+| Units set aside by screening | 1,294 | 1,136 |
+| Units in genus subtrees | 23,259 | 23,003 |
+| Genera with units on the wrong side of the root | 366 | 346 |
+| Units of a genus among its outgroup | 276 | 253 |
+| Crown ages from TimeTree; demoted to a bound | 261; none | 262; 16 |
+| Median crown age (Ma) | 24.76 | 24.96 |
+| Units placed next to their nearest unit; on the stem of their genus; not placed | 1,029; 474; 6 | 1,253; 521; 9 |
+| Tips of the final tree | 24,909 | 24,924 |
+| Total branch length of the final tree (Ma) | 638,002 | 643,604 |
+| TimeTree calibrations off from the final age by more than 1.5 | 26 of 381 | 4 of 387 |
+
+The comparison of the two, metric by metric, is `benchmark/results_108/gate/metrics.tsv`; `benchmark/REPORT.md` is the report of the first gate (#56), whose numbers later gate runs have replaced.
+
+## The sections below
+
+Each section below is **the record of its own stage**: it was measured on the pipeline as it was at its issue, and later issues changed some of its numbers. They are kept as the evidence for each decision, not as a description of the pipeline now. The later issues that change what a section measured:
+
+| Section | Changed since by |
+|---|---|
+| `backbone/` (#47), `backbone-col/` (#48) | every later backbone change: #50 to #54, re-anchoring (#69, #70, #101), TimeTree's adjusted times (#108) |
+| `concordance/` (#49) | the screening (#55, #85) and the lineage check flagging on its own (#71) |
+| `reanchor/` (#50), `anchoring/` (#51) | re-anchoring within the target family (#70), with the genus's own species (#69) found by name (#101) |
+| `agefit/` (#52), `requery/` (#53) | the re-anchoring changes; re-query only as a diagnostic (#86); TimeTree's adjusted times, and the node check recorded but not applied (#108) |
+| `crowns/` (#54) | the species sent to TimeTree (#69, #101) and the barcode cap on midpoint crowns (#79) |
+| `screening/` (#55) | the cheaper second search (#85); rate outliers set aside in the genus stage (#73) |
+| `benchmark/` (#56) | each later gate run (`results_73/` to `results_108/`), the latest being `results_108/gate/` |
+| `rooting/` (#75), `options/` (#73) | the defaults chosen in #73, and #79, #101 and #108 |
 
 Material for the consistency layer ([#46](https://github.com/naturalis/timegraft/issues/46)) on the Iberian run. Each issue of the epic adds what it needs here, so that the benchmark of [#56](https://github.com/naturalis/timegraft/issues/56) can compare every step with the same starting point.
 

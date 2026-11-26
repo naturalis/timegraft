@@ -36,7 +36,7 @@ python -m timegraft.bcdm BOLD.parquet records.tsv --taxon genus=@genera.txt --ma
 
 ### The Iberian run
 
-The run in [the first results](../science/results/2026-11-iberia.md) used the BOLD public data package of 27 March 2026 and `config/iberia.yaml`. The records, the TimeTree answers and the outputs are in `data/iberia/` (see its README to rebuild the run without the data package); to cut the records yourself:
+The run in [the first results](../science/results/2026-11-iberia.md) used the BOLD public data package of 27 March 2026 and `config/iberia.yaml`. The records, the TimeTree answers and the outputs are in `data/iberia/`; the run of the current pipeline is `iberia-reference.tar.gz` (#77), and its README says how to rebuild it without the data package and without querying TimeTree or ChecklistBank; to cut the records yourself:
 
 ```bash
 python -m timegraft.bcdm BOLD_Public.27-Mar-2026.parquet regional.tsv \
@@ -170,7 +170,7 @@ The root uncertainty columns of `provenance.tsv` ([#34](https://github.com/natur
 
 ## Run times
 
-The full Iberian run of November 2026 (102,794 records, 24,882 units with a genus, 1,186 genera in the backbone; the largest genus has 1,035 units) takes 48 to 53 minutes on 2 cores with a filled TimeTree cache, and at most 1.3 GB of memory ([benchmark](../../data/iberia/consistency/benchmark/REPORT.md), `results/runtime.tsv`); the peak was the backbone step, which since [#72](https://github.com/naturalis/timegraft/issues/72) takes 0.91 GB instead of 1.19 GB (`results/memory.tsv`). Of that, the genus subtrees with MAFFT take about 25 minutes (51 minutes of CPU on two cores), placing units without a genus or set aside 15 to 17, screening 5 (the second search for one-sided hits nearly triples it, [#85](https://github.com/naturalis/timegraft/issues/85)), the representatives 2 (under 10 seconds since [#112](https://github.com/naturalis/timegraft/issues/112), with the same output) and the backbone half a minute. A first run without a cache spends several minutes more on TimeTree and ChecklistBank.
+The full Iberian run of November 2026 (102,794 records, 24,882 units with a genus, 1,186 genera in the backbone; the largest genus has 1,035 units) takes about 47 minutes on 2 cores with a filled TimeTree cache, and at most 1.1 GB of memory (the reference run of 26 November 2026, `data/iberia/consistency/benchmark/results_108/gate/runtime.tsv`; earlier gate runs took 48 to 58 minutes and up to 1.3 GB, [benchmark](../../data/iberia/consistency/benchmark/REPORT.md)); the peak was the backbone step, which since [#72](https://github.com/naturalis/timegraft/issues/72) takes 0.91 GB instead of 1.19 GB (`results/memory.tsv`). Of that, the genus subtrees with MAFFT take about 25 minutes (51 minutes of CPU on two cores), placing units without a genus or set aside 14 to 17, screening 5 (the second search for one-sided hits nearly triples it, [#85](https://github.com/naturalis/timegraft/issues/85)), the representatives 2 (under 10 seconds since [#112](https://github.com/naturalis/timegraft/issues/112), with the same output) and the backbone half a minute. A first run without a cache takes much longer: the node check of [#108](https://github.com/naturalis/timegraft/issues/108) asks ChecklistBank for NCBI lineages and TimeTree for probe queries, which take TimeTree several seconds each, and a default run started from a cache without those answers spent 2 h 22 min on the backbone step alone (#122). Start from `data/iberia/timetree_cache.json` where the run is the Iberian one.
 
 ## Rooting diagnostics
 
