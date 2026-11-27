@@ -1,5 +1,7 @@
 # Release gate for the consistency layer: outcome
 
+> **This is the record of the first gate run (#56).** The gate has been run again for each later change of the defaults (`results_73/` to `results_108/`), with versions 2 and 3 of `GATE.md`, and the pipeline's numbers have changed since. For the pipeline now, see `results_108/gate/` and the reference run, `../../iberia-reference.tar.gz` (#77).
+
 Run on 13 November 2026 for [#56](https://github.com/naturalis/timegraft/issues/56), on the Iberian data. `consistency-layer` at `b2e30a8` against `main` at `e20fdf6`. The metrics, thresholds and decision rule are in `GATE.md`, committed before the run; how to rerun it is in `README.md`; the numbers are in `results/`.
 
 ## Verdict
