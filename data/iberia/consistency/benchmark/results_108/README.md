@@ -230,7 +230,7 @@ Part of step 2's gain on 2b is built in: it removes the rejected answers from th
 
 ## Decision
 
-`node_check.mode` is `report` by default: the check runs and records its outcome in `node_ages.tsv`, but no answer is rejected. With `report` the backbone, its crown ages and every other output are identical to those of step 1 alone (checked on the clean Iberian backbone). `reject` stays available. Making the check stable under sampling, so that it can reject again without making ages depend on the sample, is #123.
+`node_check.mode` is `report` by default: the check runs and records its outcome in `node_ages.tsv`, but no answer is rejected. With `report`, `backbone.tre` and `crown_ages.tsv` are byte-identical to those of step 1 alone (`node_check.mode: off`), checked on the clean Iberian backbone, and so are `genera.tsv`, `concordance.tsv` and `col_species.tsv`. Two outputs differ, and only in what records the check: in `node_ages.tsv` the five check columns (`timetree_node_check`, `timetree_ncbi_ancestor`, `timetree_genera_outside`, `timetree_genera_missing`, `timetree_probes`) are filled in, with every age column the same, and `metadata.json` records the mode. `reject` stays available. Making the check stable under sampling, so that it can reject again without making ages depend on the sample, is #123.
 
 ## The gate with the default chosen
 
