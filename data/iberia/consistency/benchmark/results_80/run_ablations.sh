@@ -7,12 +7,14 @@
 # exp/union_cache.json, exp/sub/s*/units, the units of the full run in REPO/results/iberia/units and its cache
 # in REPO/resources/api_cache.json. The builds start from that cache merged with the benchmark cache and the
 # caches of exp/ablate/*. Builds go to BENCH/exp80/<ablation>/{clean_norequery,noise/s*,sub/s*}.
-# A build with seconds.txt is skipped, so the script can be run again after an interruption.
+# A build with seconds.txt is skipped, so the script can be run again after an interruption or a failure;
+# it exits non-zero if any build of this attempt failed (listed in exp80/failed.txt).
 set -u
 BENCH=$1; REPO=$2; OTOL=$3; JOBS=${4:-2}
 H=$(cd "$(dirname "$0")/.." && pwd); E=$BENCH/exp; O=$BENCH/exp80; U=$REPO/results/iberia/units
 export PYTHONPATH=$H:$REPO/src
 mkdir -p "$O"
+rm -f "$O/failed.txt"  # failures of an earlier attempt are retried below, as in run_experiments.sh
 START=$O/start_cache.json
 # with the caches of the gate's clean ablation builds, which hold the questions only those settings ask
 [ -s "$START" ] || python "$H/merge_caches.py" "$START" "$H/timetree_cache.json.gz" "$REPO/resources/api_cache.json" "$E"/ablate/*/cache.json
