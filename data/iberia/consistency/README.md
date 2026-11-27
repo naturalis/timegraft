@@ -36,6 +36,8 @@ Each section below is **the record of its own stage**: it was measured on the pi
 | `benchmark/` (#56) | each later gate run (`results_73/` to `results_108/`), the latest being `results_108/gate/` |
 | `rooting/` (#75), `options/` (#73) | the defaults chosen in #73, and #79, #101 and #108 |
 
+The last section, on which part gives the robustness (#80), was measured on the gate run of #108 and is current.
+
 Material for the consistency layer ([#46](https://github.com/naturalis/timegraft/issues/46)) on the Iberian run. Each issue of the epic adds what it needs here, so that the benchmark of [#56](https://github.com/naturalis/timegraft/issues/56) can compare every step with the same starting point.
 
 ## `backbone/` (#47)
@@ -367,3 +369,15 @@ What the numbers say:
 - **`requery.mode` stays `classify`** (no effect), **`translation.action` stays `flag`** (rooting slightly worse), and **`mutual_pairs` stays `both`** (rooting mixed). (`apply` itself was removed afterwards, in #86.)
 
 The gate was rerun with the new default; see `benchmark/REPORT.md`.
+
+## Robustness by part of the layer (#80)
+
+Which part of the layer makes the backbone ages robust ([#80](https://github.com/naturalis/timegraft/issues/80); `benchmark/results_80/`). Measured on the gate run of #108 by switching back one part at a time, and comparing each setting's perturbed backbones with its own clean one:
+
+- **Noisy TimeTree ages (5a, 5b): the weighted fit (#52) alone.** With precedence instead of the fit, the 90% quantile of the move is 1.775 and 22% of node ages move by more than 1.5. That is legacy's level (1.769, 21%), against 1.492 and 9% for the default. The other five ablations stay within 0.01 of the default.
+- **Half the genera dropped (5c, 5d): several parts, the fit the largest.**
+  - 5c: switching the fit back loses about 40% of the gain over legacy (1.329 against 1.255, legacy 1.429), in every seed. Anchoring (#51), TimeTree's adjusted times (#108) and re-anchoring (#50) each account for less.
+  - 5d: the fit and anchoring each account for about 0.15 of the 0.37 gained, and the adjusted times for about 0.11. These shares are rough, because the stem quantile varies as much between seeds.
+- **No effect:** the crown queries of #54 (identical backbones), and the COL identifiers of #48, which are as robust as OTT's or slightly less (5c 1.255 against 1.238).
+
+So the fit, no better than precedence on held-out ages (4a), is the main source of the layer's robustness, and stays.

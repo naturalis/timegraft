@@ -84,6 +84,8 @@ The fit leaves 5 calibrations more than a factor 1.5 from their final age, where
 
 ### Robustness (5a to 5d)
 
+> Which part of the layer gives this robustness is measured in `results_80/` (#80): the weighted fit accounts for all of the gain against noisy ages and for the largest share of the gain against subsampling.
+
 This is the strongest new result, and it was blind.
 
 - **Noise in TimeTree.** With every TimeTree age multiplied by a random factor (sigma 0.3), 21% of backbone node ages move by more than a factor 1.5 under `main` and 9% under the default; the 90% quantile of the move falls from 1.77 to 1.49. The default is better in each of the five replicates.
