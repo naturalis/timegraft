@@ -79,8 +79,8 @@ backbone_build:
       factor: 1.5            # replace, downweight: raw and adjusted differ by more than this factor
       sigma_factor: 3.0      # downweight: multiply the calibration's sigma by this
     node_check:              # does each TimeTree answer date the intended node? (#108, step 2)
-      mode: reject           # reject: answers dating a wider or narrower node are not used (the node is
-                             # interpolated); report: only record the outcome; off
+      mode: report           # report: only record the outcome; reject: answers dating a wider or narrower
+                             # node are not used (the node is interpolated; less robust to sampling, #108); off
       probes: 3              # genera to add, one at a time, to test an unnamed answer
   crown_query:               # TimeTree crown ages (#54)
     basis: sampled           # sampled: the crown of the species sampled in the run; global: of the genus
